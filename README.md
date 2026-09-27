@@ -6,7 +6,8 @@ The full product goal and review standard are in [VISION.md](VISION.md).
 
 ## Quick start
 
-1. Download this folder (or clone it) anywhere on your computer
+1. Clone it anywhere on your computer:
+   `git clone https://github.com/luka-commits/upwork-blueprint.git`
 2. Open a terminal in the folder and run `./setup.sh` once. It creates your own
    files, writes `.env` from the example and builds the audit report template
 3. Run `claude`, then type `/context`. It asks about your background once, and
@@ -75,7 +76,8 @@ application; you record the Loom, paste its link and submit on Upwork. Replies
 are drafts you copy and send on Upwork yourself. The details are in
 [references/upwork-rules.md](references/upwork-rules.md).
 
-Stuck? Post in the community. The Help board answers same-day.
+Stuck? Open an issue on the repository, or ask in the community you got this
+from. Include what you ran and what it printed; both are usually enough.
 
 What in here is not ours, and under which licence, is listed in
 [references/attribution.md](references/attribution.md). Everything else is the

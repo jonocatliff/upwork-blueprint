@@ -93,9 +93,12 @@ Keep the whole report under 90 words. The verdict gets one outcome sentence, nev
 **Shipped (updated by `git pull`)**
 - `.claude/commands/` - the commands, the only entry points
 - `code/` - all scripts, `pipeline.py` the one writer; `tools/check_repo.py` gates a
-  release with fourteen static checks, and every rule that used to live in a test
-  now sits in the file it governs
-- `references/` - one topic per file: `upwork-rules`, `upwork-mcp`, `copy`, `follow-ups`, `profile-formula`, `lead-magnet*`
-- `templates/` - pitch page and audit report designs
+  release with fourteen static checks. There is no test suite: each rule lives in
+  the file it governs, and a run proves itself by building the report and starting
+  the cockpit
+- `references/` - one topic per file, twenty of them plus `upwork-facts.json`. The
+  ones every command touches: `upwork-rules`, `upwork-mcp`, `copy`, `follow-ups`,
+  `profile-formula`, `lead-magnet*`. Read the folder before claiming it lacks something
+- `templates/` - three designs: the pitch page, the audit report and the proposal
 - `starters/` - your files, empty; `cockpit/` - the read-only dashboard
 - `setup.sh` - the optional setup step; `tools/` - the maintainer's gate
