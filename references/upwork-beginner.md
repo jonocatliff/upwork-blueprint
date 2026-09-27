@@ -14,9 +14,11 @@ Without a JSS the member starts structurally behind, by Upwork's own account. Th
 four things visible before the click are therefore the four that must be right:
 photo, title, rate, and the badge line that is empty at the start.
 
-**Rising Talent** wants a 100% complete profile, an application or work inside 90
-days, an average of 4.8 stars and at least $250 earned in twelve months, and a
-JSS of 90% or better if one exists. Its measurable benefit is 30 Connects, about
+**Rising Talent** comes either by Upwork's own invitation or by meeting the
+published bar: a 100% complete profile, an application or work inside 90 days, an
+average of 4.8 stars and at least $250 earned in twelve months, and a JSS of 90%
+or better if one exists (article 360049702614). The invitation path matters most
+to the reader of this file, who has none of those numbers yet. Its measurable benefit is 30 Connects, about
 $4.50, plus the badge and consultations. No ranking weight is published and no
 before-and-after numbers exist, so treat it as a side effect of doing the work,
 never as a goal.

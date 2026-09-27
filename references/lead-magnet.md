@@ -23,6 +23,12 @@ The audit resolves the exact Google profile by its website and derives the city,
 country and map coordinate from that confirmed profile. The member supplies a
 place ID only when more than one profile uses the same website.
 
+Three spending limits stop a run before it starts, all fail-closed: Apify must
+have at least 3 US dollars left against its monthly cap and DataForSEO at least 1,
+and the review chapter refuses to begin when its own share would pass 50 cents.
+None of them is Upwork's rule; they exist so that a misread budget costs a stopped
+run instead of a surprise invoice.
+
 The engine uses the member's own keys from `.env`, with
 `~/.config/credentials.env` as the local fallback: Firecrawl for the rendered
 website, Apify for the exact public Google profile, and DataForSEO for search,
@@ -110,9 +116,9 @@ permanent. If yes, update `references/lead-magnet-report.md` for report decision
 or the relevant deterministic script for measurement logic. Save no client
 example in the shipped skill.
 
-## Measuring rules taken from the larger engine, 27 September 2026
+## Five measuring rules, ported 27 September 2026
 
-Four rules that cost nothing and prevent a wrong number, ported from the larger engine that
+Five rules that cost nothing and prevent a wrong number, ported from the larger engine that
 produces the same kind of report. The machinery around them stays there; these are measurement,
 not infrastructure.
 
@@ -124,9 +130,10 @@ outage into a finding is worse than a report with a gap in it.
 brand string. Two firms share a name more often than anyone expects, and a name match quietly
 credits a competitor's ranking to your client.
 
-**Zoom belongs to the radius.** A grid drawn for a five-mile radius uses a different zoom than
-one for twenty, or the points sample the same block repeatedly and the map lies in the client's
-favour.
+**Zoom belongs to the radius.** A grid drawn for a five-kilometre radius uses a different zoom
+than one for twenty, or the points sample the same block repeatedly and the map lies in the
+client's favour. `--radius` is in kilometres, default 5.0, and `--zoom` is a separate flag the
+collector does not set, so the two are matched by hand when either is changed.
 
 **A refusal ends the run, it never picks another place.** When DataForSEO refuses
 a location or a language, the next call is not the same question about a

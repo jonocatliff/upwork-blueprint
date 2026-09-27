@@ -96,7 +96,9 @@ python3 code/pricing.py <id> --hours <low> <likely> <high> \
 ```
 
 This is the internal price guide for the member. It uses the current
-Upwork profile rate and a visible scope-risk buffer. It never becomes the bid,
+Upwork profile rate and a visible scope-risk buffer of 5 percent on high
+confidence, 15 on medium and 25 on low: the less the scope is pinned down, the
+more the estimate carries the risk instead of the member. It never becomes the bid,
 never appears on the client pitch page and never overrides a client-approved
 commercial term.
 
@@ -189,7 +191,7 @@ python3 code/pitch_generate.py <id> --hook "..." \
   Name it as a free audit in the headline or CTA. Do not make the client decode
   euphemisms such as review, insights or opportunity scan.
   Use a headline of at most eight words, one sentence of at most 20 words and these three compact deliverables: a 25-point
-  Google Maps grid, a full Google Business Profile review, and a 15-point
+  Google Maps grid, a full Google Business Profile review, and a 21-point
   website review with a prioritized action plan. Adapt the nouns to the job,
   but do not replace the deliverables with a vague custom audit. Use
   `--showcase "job-specific title|short delivery promise|#next|Send your website on Upwork"`

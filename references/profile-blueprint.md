@@ -66,8 +66,11 @@ least one other experience 5%.
 A beginner reaches 100% without a single Upwork contract: four portfolio items, two
 employment entries, two education entries, a linked account, one other experience,
 and the video. **What is documented is the completeness percentage, not a ranking
-effect per field.** Upwork says a complete profile ranks better; it never says the
-video or a certificate does. Fill them because a buyer uses them, and because 100% is
+effect per field.** Upwork says a complete profile ranks better, and says nothing about
+the video. A partner certification is the one exception: Upwork's own partner
+certification page, read 22 September 2026, says it is "factored into Upwork's
+search and matching" (see section 12 and
+[upwork-measure.md](upwork-measure.md)). Fill them because a buyer uses them, and because 100% is
 a precondition for Rising Talent and Top Rated.
 
 ## Appear where the strong profiles appear
@@ -127,9 +130,12 @@ paste version always comes with them.
 
 **1. Title.** The line under the name, and its own search field: clients can
 restrict a search to titles alone (1500007918681), so a title without the words a
-client types drops out of that search. **Upwork documents no character limit**; the
-70-character target and the three or four blocks split by `|` come from practice
-and from the measured profiles, not from Upwork. Finished when every block is a
+client types drops out of that search. **The limit is 70 characters**, from
+Upwork's own connector tool description of `update_title` (see
+[upwork-mcp.md](upwork-mcp.md)) and confirmed by a real title that came back cut
+at exactly 70. The help articles are silent on it, which is why this file used to
+say there was no documented limit. How the line is split, two to five blocks
+divided by `|`, comes from the measured profiles rather than from Upwork. Finished when every block is a
 service, tool or audience, and none is a benefit phrase.
 
 **2. Overview.** Upwork states that **only the first 250 or so characters appear in

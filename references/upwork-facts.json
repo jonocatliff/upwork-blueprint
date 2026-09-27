@@ -92,21 +92,21 @@
     {
       "id": "profile.title.char_limit",
       "topic": "profile",
-      "value": null,
-      "unit": "count",
+      "value": 70,
+      "unit": "characters",
       "note": "Upwork documents no limit. The 70 characters this Blueprint targets come from practice and the three measured top profiles.",
-      "source": "absence checked in article 360016252373",
-      "source_kind": "upwork_docs",
-      "measured_at": "2026-09-26"
+      "source": "Upwork's connector tool description for update_title, and a real title returned cut at exactly 70",
+      "source_kind": "measured",
+      "measured_at": "2026-09-12"
     },
     {
       "id": "profile.skills.cap",
       "topic": "profile",
-      "value": "15 or 20, unresolved",
-      "unit": "count",
+      "value": 20,
+      "unit": "skills",
       "note": "article 360016252373 says up to 15, article 211060318 says up to 20, the connector's set_skills documents 20, and two of three measured top profiles carry 20",
-      "source": "support.upwork.com articles 360016252373 and 211060318",
-      "source_kind": "upwork_docs",
+      "source": "Upwork's connector tool description for set_skills, and four profiles measured with all twenty slots filled",
+      "source_kind": "measured",
       "measured_at": "2026-09-26"
     },
     {

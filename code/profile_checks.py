@@ -144,8 +144,10 @@ def run_checks(p):
         ('skills_cover_title', 'Every tool or field in your title is also one of your skills', 'upwork',
          not uncovered,
          'all covered' if not uncovered else 'in the title but not in skills: ' + ', '.join(uncovered)),
-        ('title_blocks', 'Title is three or four searchable blocks split by |', 'top-earners',
-         3 <= len(blocks) <= 4, f'{len(blocks)} block(s) split by |'),
+        # Sixteen measured profiles carry two to five blocks, and four of them use no
+        # pipe at all. A check that demanded three or four failed four strong profiles.
+        ('title_blocks', 'Title is two to five searchable blocks split by |', 'top-earners',
+         2 <= len(blocks) <= 5, f'{len(blocks)} block(s) split by |'),
         ('opening_no_greeting', 'First line states what the client gets, not a greeting or "I am"',
          'top-earners', not GREETING.search(first_line), f'starts: "{first_line[:60]}"'),
         ('opening_has_number', 'A hard number within the first 250 characters', 'top-earners',
@@ -167,7 +169,10 @@ def run_checks(p):
         ('portfolio_outcomes', 'At least half the portfolio titles name a measurable result',
          'top-earners', bool(portfolio) and len(outcome_titles) * 2 >= len(portfolio),
          f'{len(outcome_titles)} of {len(portfolio)} carry a number'),
-        ('certificates', 'At least one certificate', 'top-earners',
+        # Only one of forty measured postings asked for a certificate, so this is not
+        # about what clients want. It is here because Upwork's own partner
+        # certification page says the certification feeds search and matching.
+        ('certificates', 'A certification, which Upwork says feeds search and matching', 'upwork',
          len(certificates) >= 1, f'{len(certificates)} certificate(s)'),
         ('rate_set', 'An hourly rate is set', 'upwork', bool(p['rate']), f'rate: {p["rate"] or "none"}'),
         ('complete', 'Employment, education and languages all filled in', 'upwork',

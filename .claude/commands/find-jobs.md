@@ -197,7 +197,7 @@ Write `data/fit.json`: per job id `{"fit": 0-40, "rationale": "<what the score b
 
 ## Step 5 · Score and log
 
-Run `python3 code/jobs.py score`. It adds the four parts, logs every job with fit at least 20 and score at least 50 into your pipeline, and prints the ranking as a grade out of 10 with the points behind it. Everything it turns down is written to `data/decisions.jsonl` with the points and the reason, which costs the member nothing and is what the next run learns from. Report grades to the member, never the raw points: the hundred exists for ranking and for the lessons, the grade is what a person decides on.
+Run `python3 code/jobs.py score`. It adds the four parts, logs every job with fit at least 20 and score at least 50 into your pipeline, caps any job you named a trap at 60 so a generous client cannot lift a disguised full-time or operator role above a real build, and prints the ranking as a grade out of 10 with the points behind it. Everything it turns down is written to `data/decisions.jsonl` with the points and the reason, which costs the member nothing and is what the next run learns from. Report grades to the member, never the raw points: the hundred exists for ranking and for the lessons, the grade is what a person decides on.
 
 ## Step 6 · Open the best five
 

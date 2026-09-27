@@ -75,6 +75,13 @@ def problems(draft, proof_text):
     skip = set(NOT_FOR_DRAFTS)
     if draft['portfolio'] is None:
         skip |= {'portfolio_count', 'portfolio_outcomes'}
+    # A first profile has no verified result, and the command tells it to lead with
+    # the offer and the background instead of a number. Demanding a number anyway
+    # left exactly one way out, inventing one, which the next check would catch and
+    # the client would not. No digit anywhere in the proof file means there is
+    # nothing to lead with, and the two number checks stand down.
+    if not re.search(r'\d', proof_text or ''):
+        skip |= {'opening_has_number', 'results_with_numbers'}
     for r in pc.run_checks(draft):
         if r['id'] not in skip and not r['passed']:
             found.append(f'{r["label"]}: {r["detail"]}')
