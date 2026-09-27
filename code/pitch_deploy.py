@@ -15,6 +15,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from pipeline import jobs_dir
 import urllib.parse
 import urllib.request
 
@@ -123,7 +124,7 @@ def verify_public(url, expected_title=''):
 def publish(job_id):
     if not re.fullmatch(r'[0-9]{6,25}', job_id):
         abort('the job id is not valid.')
-    source = ROOT / 'jobs' / job_id / 'pitch.html'
+    source = jobs_dir() / job_id / 'pitch.html'
     if not source.is_file():
         abort(f'jobs/{job_id}/pitch.html does not exist.')
 
@@ -142,13 +143,13 @@ def publish(job_id):
         records = []
     for record in records:
         published_id = str(record.get('id') or '')
-        published = ROOT / 'jobs' / published_id / 'pitch.html'
+        published = jobs_dir() / published_id / 'pitch.html'
         if record.get('pitch_url') and published_id != job_id and published.is_file():
             old_problems = pitch_check.check_page(published)
             if old_problems:
                 abort(f'the previously published pitch {published_id} failed its gate: ' + '; '.join(old_problems))
             pages[published_id] = published
-        audit = ROOT / 'jobs' / published_id / 'lead-magnet.html'
+        audit = jobs_dir() / published_id / 'lead-magnet.html'
         if record.get('lead_magnet_url') and audit.is_file():
             audit_problems = lead_magnet_check.check_page(
                 audit, website=lead_magnet_deploy.saved_website(record))

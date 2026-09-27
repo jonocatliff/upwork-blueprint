@@ -10,6 +10,7 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+from pipeline import jobs_dir, shown
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
@@ -28,7 +29,7 @@ def browser_path():
 def paths(job_id):
     if not job_id.isdigit():
         raise ValueError('job id must contain digits only.')
-    folder = ROOT / 'jobs' / job_id
+    folder = jobs_dir() / job_id
     return folder / 'pitch.html', folder / '.pitch-preview.png'
 
 
@@ -50,10 +51,10 @@ def main(argv=None):
         parser.error(str(exc))
     if args.clean:
         output.unlink(missing_ok=True)
-        print(f'Removed {output.relative_to(ROOT)}.')
+        print(f'Removed {shown(output)}.')
         return 0
     if not page.is_file():
-        parser.error(f'pitch page not found: {page.relative_to(ROOT)}')
+        parser.error(f'pitch page not found: {shown(page)}')
     browser = browser_path()
     if not browser:
         parser.error('Chrome or Chromium is not installed.')
@@ -72,7 +73,7 @@ def main(argv=None):
     if not preview_ready(output) or (result is not None and result.returncode):
         detail = (result.stderr or result.stdout or '').strip().splitlines()
         parser.error(f'Chrome did not create the preview{f": {detail[-1]}" if detail else "."}')
-    print(f'Preview: {output.relative_to(ROOT)}')
+    print(f'Preview: {shown(output)}')
     return 0
 
 

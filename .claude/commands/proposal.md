@@ -128,8 +128,10 @@ twice, and it is the same content in a shape that shows the plan instead of desc
 It takes the roadmap rows as the stages and draws the way through the work, in the client's own
 trade, as one sketch. **The drawing carries no text and no number**: a generated image invents a
 digit sooner or later, and a proposal whose figures argue with each other costs more than a nice
-picture is worth. The command refuses a stage that contains a digit, and the run prints what it
-cost. Without `KIE_AI_API_KEY` it says so and stops, which is not a blocker: the page is complete
+picture is worth. The command refuses a stage that contains a digit, it checks the key with kie.ai before it
+draws anything, and the run prints what it cost. A dry run costs nothing:
+`python3 code/preflight.py proposal` answers whether the key is accepted, and
+`--dry-run` prints the prompt without calling the service. Without `KIE_AI_API_KEY` it says so and stops, which is not a blocker: the page is complete
 without it.
 
 Then write the fields as JSON and run `python3 code/proposal_generate.py <id> --file -`. It fills

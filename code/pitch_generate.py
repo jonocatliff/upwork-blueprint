@@ -32,6 +32,7 @@ import pathlib
 import re
 import subprocess
 import sys
+from pipeline import jobs_dir
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 ASSETS = ROOT / 'templates' / 'pitch'
@@ -595,7 +596,7 @@ def main(argv=None):
     if left:
         abort(f'unfilled placeholders: {", ".join(left)}')
 
-    out = pathlib.Path(args.out) if args.out else ROOT / 'jobs' / args.job_id / 'pitch.html'
+    out = pathlib.Path(args.out) if args.out else jobs_dir() / args.job_id / 'pitch.html'
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(page, encoding='utf-8')
     LIBRARY.mkdir(parents=True, exist_ok=True)

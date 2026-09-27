@@ -16,6 +16,7 @@ sys.path.insert(0, str(ROOT / 'code'))
 import lead_magnet_check
 import pitch_check
 import pitch_deploy
+from pipeline import jobs_dir
 
 
 def abort(message):
@@ -34,13 +35,13 @@ def pages_for(current_id, source, records):
     pages = {route: source}
     for record in records:
         job_id = str(record.get('id') or '')
-        pitch = ROOT / 'jobs' / job_id / 'pitch.html'
+        pitch = jobs_dir() / job_id / 'pitch.html'
         if record.get('pitch_url') and pitch.is_file():
             problems = pitch_check.check_page(pitch)
             if problems:
                 abort(f'the previously published pitch {job_id} failed its gate: ' + '; '.join(problems))
             pages[job_id] = pitch
-        audit = ROOT / 'jobs' / job_id / 'lead-magnet.html'
+        audit = jobs_dir() / job_id / 'lead-magnet.html'
         if record.get('lead_magnet_url') and job_id != current_id and audit.is_file():
             problems = lead_magnet_check.check_page(audit, website=saved_website(record))
             if problems:
@@ -52,7 +53,7 @@ def pages_for(current_id, source, records):
 def publish(job_id):
     if not re.fullmatch(r'[0-9]{6,25}', job_id):
         abort('the job id is not valid.')
-    source = ROOT / 'jobs' / job_id / 'lead-magnet.html'
+    source = jobs_dir() / job_id / 'lead-magnet.html'
     if not source.is_file():
         abort(f'jobs/{job_id}/lead-magnet.html does not exist.')
     try:

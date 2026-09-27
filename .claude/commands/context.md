@@ -61,6 +61,10 @@ because something is missing.
 4. When the Upwork tools happen to be connected, `list_contracts` action
    `search` on closed contracts names what clients hired the member for. Skip it
    without a word when they are not: this command runs before the connector.
+   Nothing from that answer is saved as a file. What the member confirms about
+   their own history goes into `context/proof.md` as their record, the way a CV
+   entry would, and the response itself is not kept, so there is nothing for
+   `prune` to expire and no cached Upwork content sitting on disk.
 
 Never ask for anything one of these already answers.
 

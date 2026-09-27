@@ -27,6 +27,7 @@ import html
 import json
 import pathlib
 import sys
+from pipeline import jobs_dir, shown
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / 'templates' / 'proposal' / 'template.html'
@@ -112,7 +113,7 @@ def benefits(items):
 
 def sketch(job_id):
     """The illustrated sheet, inlined so the page travels as one file. Absent is fine."""
-    path = ROOT / 'jobs' / job_id / 'proposal-sketch.png'
+    path = jobs_dir() / job_id / 'proposal-sketch.png'
     if not path.is_file():
         return ''
     try:
@@ -207,11 +208,11 @@ def main(argv=None):
     if left:
         abort('the template still holds unfilled markers; the field list and the template drifted.')
 
-    out = ROOT / 'jobs' / args.job_id / 'proposal.html'
+    out = jobs_dir() / args.job_id / 'proposal.html'
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(page, encoding='utf-8')
     opens = page.count('class="missing"')
-    print(f'{out.relative_to(ROOT)} written, {opens} value(s) still open.')
+    print(f'{shown(out)} written, {opens} value(s) still open.')
     return 0
 
 

@@ -86,6 +86,19 @@ def jobs_dir():
     return pathlib.Path(os.environ.get('BLUEPRINT_JOBDIR') or ROOT / 'jobs')
 
 
+def shown(path):
+    """A path as the member should read it: short inside the repo, whole outside.
+
+    `relative_to` raises when a job folder lives somewhere else, which BLUEPRINT_JOBDIR
+    allows, and a line of output is never worth ending a run over.
+    """
+    path = pathlib.Path(path)
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def data_dir():
     """Where disposable connector caches live."""
     return pathlib.Path(os.environ.get('BLUEPRINT_DATA') or ROOT / 'data')
@@ -765,6 +778,11 @@ def cmd_prune(args):
                if datetime.datetime.fromtimestamp(t.stat().st_mtime, datetime.timezone.utc) < cutoff]
     # The saved profile and highlights are Upwork's answers about the member, so they
     # expire like any other response. Every reader treats them as optional.
+    #
+    # data/fit.json is deliberately not in this list. It holds the member's own
+    # judgement of how well each candidate fits their niche, which is their work and
+    # not Upwork's content, and deleting it every day would throw away the input
+    # /find-jobs learns from. The same goes for the skip reasons.
     raw_cache = [p for pattern in ('search/*.json', 'details/*.json', 'candidates.json',
                                    'profile.json', 'highlights.json')
                  for p in data_dir().glob(pattern)

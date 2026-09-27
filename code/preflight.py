@@ -105,6 +105,33 @@ def dataforseo_error(env, *, fetch=get_json):
     return ''
 
 
+def kie_error(env, *, fetch=get_json):
+    """The image service, checked the only way it can be checked for free.
+
+    kie.ai publishes no balance endpoint this repo has measured, so this asks the
+    endpoint the generator itself polls, with a task id that does not exist. A key
+    that is wrong comes back as a rejection; a key that is right comes back as
+    anything else, including "no such task", which is the answer we want. Guessing
+    at a credit figure would be worse than admitting there is none: the run still
+    reports what it spent when it is done.
+    """
+    key = str(env.get('KIE_AI_API_KEY') or '').strip()
+    if not key:
+        return 'Add KIE_AI_API_KEY to .env.'
+    try:
+        answer = fetch('https://api.kie.ai/api/v1/jobs/recordInfo?taskId=preflight-no-such-task',
+                       {'Authorization': f'Bearer {key}'})
+    except RuntimeError as error:
+        return f'kie.ai did not answer: {error}'
+    # Measured 28 September 2026: the service answers HTTP 200 either way and puts
+    # the verdict in the body. A rejected key is code 401, an accepted key asking
+    # for a task that does not exist is 422 "recordInfo is null". Reading the HTTP
+    # status instead would wave a revoked key straight through to the first bill.
+    if answer.get('code') in (401, 403):
+        return f'kie.ai refused the key: {answer.get("msg") or answer.get("code")}'
+    return ''
+
+
 def vercel_error(env, *, which=shutil.which, runner=subprocess.run, ensure_project=True):
     vercel = which('vercel')
     if not vercel:
@@ -135,6 +162,8 @@ def vercel_error(env, *, which=shutil.which, runner=subprocess.run, ensure_proje
 def checks(profile, env, *, fetch=get_json, which=shutil.which, runner=subprocess.run):
     if profile == 'vercel':
         return [('Vercel', vercel_error(env, which=which, runner=runner))]
+    if profile == 'proposal':
+        return [('kie.ai', kie_error(env, fetch=fetch))]
     if profile == 'lead-magnet':
         return [
             ('Firecrawl', firecrawl_error(env, fetch=fetch)),
@@ -147,7 +176,7 @@ def checks(profile, env, *, fetch=get_json, which=shutil.which, runner=subproces
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('profile', choices=('vercel', 'lead-magnet'))
+    parser.add_argument('profile', choices=('vercel', 'lead-magnet', 'proposal'))
     args = parser.parse_args(argv)
     env = dict(os.environ)
     pitch_deploy.load_dotenv(ROOT / '.env', env)

@@ -25,6 +25,7 @@ import pathlib
 import subprocess
 import sys
 import time
+from pipeline import jobs_dir, shown
 import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -75,10 +76,10 @@ def browser():
 
 def foundation(job_id):
     """The page as a PNG. It is the palette reference, never the content of the drawing."""
-    page = ROOT / 'jobs' / job_id / 'proposal.html'
+    page = jobs_dir() / job_id / 'proposal.html'
     if not page.is_file():
-        abort(f'{page.relative_to(ROOT)} does not exist. Run proposal_generate.py first.')
-    out = ROOT / 'jobs' / job_id / '.proposal-foundation.png'
+        abort(f'{shown(page)} does not exist. Run proposal_generate.py first.')
+    out = jobs_dir() / job_id / '.proposal-foundation.png'
     subprocess.run([browser(), '--headless=new', '--disable-gpu', '--hide-scrollbars',
                     '--window-size=900,1400', f'--screenshot={out}', '--virtual-time-budget=2500',
                     page.resolve().as_uri()], capture_output=True, timeout=120)
@@ -158,14 +159,21 @@ def main(argv=None):
             abort(f'the stage "{step}" carries a number. Numbers live on the page, not in the drawing.')
 
     prompt = prompt_for(args.niche, args.scene, args.step, args.outcome)
-    out = ROOT / 'jobs' / args.job_id / 'proposal-sketch.png'
+    out = jobs_dir() / args.job_id / 'proposal-sketch.png'
     if args.dry_run:
         print(prompt)
         return 0
     if out.exists():
-        abort(f'{out.relative_to(ROOT)} exists already and is never overwritten.')
+        abort(f'{shown(out)} exists already and is never overwritten.')
 
     key = api_key()
+    # Fail closed before the first paid call, the same way the audit does. Until
+    # this ran, a key that had been revoked or mistyped was discovered after the
+    # foundation image had already been uploaded.
+    import preflight
+    trouble = preflight.kie_error({'KIE_AI_API_KEY': key})
+    if trouble:
+        abort(trouble)
     references = [upload(foundation(args.job_id), key)] if args.with_foundation else []
     task = request(f'{API}/api/v1/jobs/createTask', key, {'model': args.model, 'input': {
         'prompt': prompt, 'image_input': references, 'aspect_ratio': '3:4',
@@ -196,7 +204,7 @@ def main(argv=None):
         'prompt_sha256': hashlib.sha256(prompt.encode()).hexdigest(),
         'rule': 'no text, no numbers: every figure lives on proposal.html',
     }, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-    print(f'{out.relative_to(ROOT)} written, {spent:g} credits, task {task_id}.')
+    print(f'{shown(out)} written, {spent:g} credits, task {task_id}.')
     print('Look at it before it goes out: any letter or digit in the drawing means it is not usable.')
     return 0
 
