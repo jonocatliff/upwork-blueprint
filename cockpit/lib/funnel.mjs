@@ -1,0 +1,41 @@
+// The one number set the cockpit tracks: how many leads ever reached each
+// stage, and how many of the step before made it. code/cockpit.py counts them.
+// A stage with no earlier stage to measure against shows no rate at all: a zero
+// is a measurement, null is the absence of one. An empty funnel still draws at
+// the minimum width, so the shape reads as a funnel and not as a missing chart.
+const STEPS = [['applied', 'Applications sent'], ['replied', 'Client replies'], ['call', 'Calls'], ['offer', 'Offers'], ['won', 'Won']];
+
+export function funnelSteps(counts = {}) {
+  const value = key => Number((counts || {})[key]) || 0;
+  return STEPS.map(([key, label], index) => {
+    // Against the nearest earlier stage that actually happened. Not every deal has
+    // a call, and an empty stage in the middle must not swallow the rate below it.
+    let before = 0;
+    let of = null;
+    for (let back = index - 1; back >= 0 && !before; back -= 1) {
+      before = value(STEPS[back][0]);
+      if (before) of = STEPS[back][1];
+    }
+    // Two readings per stage: what the step before it converted, and what the whole
+    // funnel converted. A good reply rate hides a bad close, and the other way round.
+    const entry = value(STEPS[0][0]);
+    return { key, label, count: value(key), of,
+             rate: before ? Math.round(100 * value(key) / before) : null,
+             overall: index && entry ? Math.round(100 * value(key) / entry) : null };
+  });
+}
+
+const round = n => Math.round(n * 10) / 10;
+
+/** Trapezoids for a vertical funnel: each step's top edge is its own width, its bottom edge the next step's. */
+export function funnelShapes(steps, { width = 600, height = 84, gap = 2, minShare = 0.16 } = {}) {
+  const max = Math.max(1, ...steps.map(step => step.count));
+  const widthOf = count => width * Math.max(minShare, count / max);
+  return steps.map((step, index) => {
+    const top = widthOf(step.count);
+    const bottom = index + 1 < steps.length ? widthOf(steps[index + 1].count) : top * 0.82;
+    const y = index * (height + gap);
+    const corners = [[(width - top) / 2, y], [(width + top) / 2, y], [(width + bottom) / 2, y + height], [(width - bottom) / 2, y + height]];
+    return { ...step, y, points: corners.map(([x, cy]) => `${round(x)},${round(cy)}`).join(' ') };
+  });
+}
