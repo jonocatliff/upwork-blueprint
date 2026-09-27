@@ -19,18 +19,14 @@ Python: the commands call `python3`. On Windows use `python` or `py` instead.
 
 ## The path (THE order, matches the course 1:1)
 
-1. `/context` - your background, offer, terms and provable results; every later command reads it
-2. `/audit` - scores the live profile. Needs only the connector
-3. `/profile` - writes the profile, paste-ready, from your facts and the audit
-4. `/find-jobs` - searches, filters and scores jobs against your finished profile
-5. `/pitch-page` - the pitch site plus cover letter and bid; the member records the Loom and submits on Upwork
-6. `/brief` - the morning ritual: what changed on Upwork, where each lead stands, and the drafts that are due
-7. `/lead-magnet` - a checked SEO audit once a local business sends its website
-8. `/proposal` - the post-call proposal from the transcript or notes
-9. `/won` - a started contract becomes the handover brief for delivery
+`/context` · `/audit` · `/profile` · `/find-jobs` · `/pitch-page` · `/brief` ·
+`/lead-magnet` · `/proposal` · `/won`, plus the helpers `/cockpit` and `/skip`.
 
-Helpers: `/cockpit` shows the leads and the next command to copy, read only;
-`/skip` drops a lead with a reason `/find-jobs` learns from.
+What each one does is in its own frontmatter and, for the member, in `README.md`.
+Only two facts about the order belong here: `/audit` needs nothing but the
+connector, and everything after `/context` reads `context/me.md` and
+`context/proof.md`, so a command that finds them empty says so before it writes
+anything a client will read.
 
 **Commands with a focus argument honor it.** `/audit title` runs only the title
 part, at full depth. An input matching no listed focus value gets that list and
