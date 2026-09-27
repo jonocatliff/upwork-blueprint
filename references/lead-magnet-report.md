@@ -34,9 +34,8 @@ The local report includes the pull date and states that rankings are a snapshot,
 traffic estimates are not first-party analytics, and the website check covers
 what a visitor can see rather than what happens after an enquiry.
 
-Thresholds and their limits live in `lead-magnet-benchmarks.md`. Report copy
-must label them as operating heuristics, never Google requirements
-or causal proof.
+Every threshold, and how report copy may describe it, lives in
+[lead-magnet-benchmarks.md](lead-magnet-benchmarks.md).
 
 ## It runs on your machine, and only yours
 
