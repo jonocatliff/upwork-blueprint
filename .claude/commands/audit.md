@@ -15,8 +15,7 @@ Read before judging anything: [references/profile-blueprint.md](../../references
 
 1. Run `python3 code/workspace.py`.
 2. Call `list_accounts`. **If the Upwork tools are not there**, walk the member through it and stop:
-   - In a terminal: `claude mcp add --transport http upwork https://mcp.upwork.com/mcp`
-   - Quit Claude and start it again in this folder. Connecting without the restart looks fine and leaves the connector invisible, the one mistake that throws no error.
+   - This folder ships the connector in `.mcp.json`. Quit Claude, start it again here, and approve it when it asks whether to trust this project's MCP server. If it never asks, add it by hand: `claude mcp add --transport http upwork https://mcp.upwork.com/mcp`, then restart again. Connecting without the restart looks fine and leaves the connector invisible, the one mistake that throws no error.
    - Type `/mcp`, pick upwork, log in to Upwork in the browser window that opens.
    - Then `/audit` again.
 3. Take the `org_uid` of the Freelancer account. Never write it into a file. More than one freelancer account: ask which.

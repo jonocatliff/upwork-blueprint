@@ -39,8 +39,9 @@ list. Then **do not paste the list**. Walk it by when each item first matters:
 - **Nothing here blocks this command.** `/context` writes two local files and
   touches no service. Say that first, so a member with an empty `.env` keeps going.
 - **The connector is the only thing needed for step 2.** `setup.sh` cannot do it:
-  `claude mcp add --transport http upwork https://mcp.upwork.com/mcp`, then `/mcp`
-  in this folder and log in. Name it now, because `/audit` stops without it.
+  the folder ships it in `.mcp.json`, so Claude asks to trust it on the next start
+  here; approve, then `/mcp`, pick upwork and log in. Name it now, because
+  `/audit` stops without it.
 - **Node and the Python packages** are needed at `/pitch-page` and `/lead-magnet`,
   not today. Give the one command per gap, in the order the gap list prints.
 - **The API keys cost money and are needed at step 7 at the earliest.** Tell them

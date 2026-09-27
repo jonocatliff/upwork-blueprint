@@ -15,7 +15,13 @@ python3 code/workspace.py
 
 [ -f .env ] || { cp .env.example .env; echo "created .env from the example."; }
 
-env_has() { grep -qE "^$1=.+" .env 2>/dev/null; }
+# The commands read .env first and ~/.config/credentials.env after it, so a key kept
+# centrally is a key the run will find. Checking only .env reported gaps that were not
+# there, and a member who trusts that list buys a second key they already own.
+env_has() {
+  grep -qE "^$1=.+" .env 2>/dev/null && return 0
+  grep -qE "^$1=.+" "$HOME/.config/credentials.env" 2>/dev/null
+}
 missing=0
 note() { echo "  · $1"; missing=$((missing + 1)); }
 
@@ -67,9 +73,9 @@ env_has OPENAI_API_KEY || note "OPENAI_API_KEY in .env: /lead-magnet adds two ch
 echo
 echo "Your context, data and job files are yours now; git will not touch them."
 echo
-echo "One thing this script cannot do for you: connect Upwork. Run"
-echo "  claude mcp add --transport http upwork https://mcp.upwork.com/mcp"
-echo "then start claude in this folder, type /mcp, pick upwork and log in."
+echo "Upwork itself: this folder ships the connector in .mcp.json, so the first time"
+echo "you start claude here it asks whether to trust it. Say yes, then type /mcp,"
+echo "pick upwork and log in. Nothing reaches Upwork until you do."
 echo
 echo "Next: /context. It reads this same list and tells you which of it you need"
 echo "now and which can wait, then asks about your background. After that: /audit"

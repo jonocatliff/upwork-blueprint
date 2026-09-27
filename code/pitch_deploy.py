@@ -49,6 +49,9 @@ def load_dotenv(path, env):
 def deployment_config(env=None):
     env = dict(os.environ if env is None else env)
     load_dotenv(ROOT / '.env', env)
+    # The same second place the audit and the preflight read. Without it a member
+    # who keeps their keys centrally passes every check and then fails to publish.
+    load_dotenv(pathlib.Path.home() / '.config' / 'credentials.env', env)
     project = env.get('VERCEL_PITCH_PROJECT', 'upwork-pitches').strip()
     if not PROJECT_RE.fullmatch(project):
         abort('VERCEL_PITCH_PROJECT must use lowercase letters, numbers and hyphens.')
