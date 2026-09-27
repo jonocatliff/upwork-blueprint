@@ -61,8 +61,11 @@ Nothing until you run `/lead-magnet` or publish a pitch page. One full client
 audit, measured on a real run on 27 September 2026: 48 API calls, $0.25, under
 nine minutes. The keys are yours and the bills are yours; the package holds none.
 `OPENAI_API_KEY` and `KIE_AI_API_KEY` are optional, and what they buy is named in
-`.env.example`. Without them the report and the proposal are built without those
-two parts, and nothing else changes.
+`.env.example`. Without `OPENAI_API_KEY` two chapters of the report say "not
+measured" and the rest is unaffected. `KIE_AI_API_KEY` only saves a detour:
+`/proposal` prints a prompt written for that client, and the page embeds whatever
+image is saved as `jobs/<id>/proposal-sketch.png`, drawn by any model you already
+use.
 
 ## What this will never do
 

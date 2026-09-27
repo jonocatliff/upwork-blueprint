@@ -121,18 +121,28 @@ characters, so emphasis comes from words and order, never from symbols.
 The markdown is what the member pastes into Upwork chat. The page is what a client reads
 twice, and it is the same content in a shape that shows the plan instead of describing it.
 
-**First the drawing, because the page embeds it.** Run
+**First the drawing, because the page embeds it.** The page takes it from
+`jobs/<id>/proposal-sketch.png`, and it does not care who drew it. Any image model the
+member already pays for works: the one built into their chat assistant, a design tool, a
+local model. There is nothing to configure and no key to buy for that route.
 
-`python3 code/proposal_illustrate.py <id> --niche "<their trade, in their words>" --from-proposal <the JSON> --outcome "<what they are left with>" --scene "<the everyday objects of that trade>"`
+Get the prompt, which is written for this client and this plan, with
 
-It takes the roadmap rows as the stages and draws the way through the work, in the client's own
-trade, as one sketch. **The drawing carries no text and no number**: a generated image invents a
-digit sooner or later, and a proposal whose figures argue with each other costs more than a nice
-picture is worth. The command refuses a stage that contains a digit, it checks the key with kie.ai before it
-draws anything, and the run prints what it cost. A dry run costs nothing:
-`python3 code/preflight.py proposal` answers whether the key is accepted, and
-`--dry-run` prints the prompt without calling the service. Without `KIE_AI_API_KEY` it says so and stops, which is not a blocker: the page is complete
-without it.
+`python3 code/proposal_illustrate.py <id> --niche "<their trade, in their words>" --from-proposal <the JSON> --outcome "<what they are left with>" --scene "<the everyday objects of that trade>" --dry-run`
+
+`--dry-run` prints the prompt and calls nothing. The member pastes it into whatever draws
+for them and saves the result as `jobs/<id>/proposal-sketch.png`, portrait, and that is the
+whole integration.
+
+Dropping `--dry-run` uses kie.ai instead, which is one convenience and not a requirement: it
+needs `KIE_AI_API_KEY`, checks that key with the service before it draws, and prints what the
+image cost. Without the key it says so and stops, which blocks nothing, because a proposal
+without a sketch is complete.
+
+**However it is drawn, it carries no text and no number**: a generated image invents a digit
+sooner or later, and a proposal whose figures argue with each other costs more than a nice
+picture is worth. The prompt says so in four ways, the command refuses a stage that contains a
+digit, and the member looks at the result before it goes out.
 
 Then write the fields as JSON and run `python3 code/proposal_generate.py <id> --file -`. It fills
 `templates/proposal/template.html` and writes `jobs/<id>/proposal.html`: the header band with the

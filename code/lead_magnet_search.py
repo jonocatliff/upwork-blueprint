@@ -766,8 +766,7 @@ def gbp_from_summary(profile: dict, fallback_name: str,
     }
 
 
-def map_image(lat: float, lng: float, half_lat: float, half_lng: float,
-              out_dir: Path | None, embed: bool = False) -> str | None:
+def map_image(lat: float, lng: float, half_lat: float, half_lng: float) -> str | None:
     """Return a Google basemap when configured, otherwise stitch OSM tiles.
 
     The ranking grid is twenty-five coloured badges. On plain paper they are an
@@ -839,16 +838,11 @@ def map_image(lat: float, lng: float, half_lat: float, half_lng: float,
         return None
     canvas = canvas.crop((left, top, right, bottom))
 
-    if embed:
-        encoded = io.BytesIO()
-        canvas.convert("RGB").save(encoded, "JPEG", quality=78, optimize=True)
-        return "data:image/jpeg;base64," + base64.b64encode(encoded.getvalue()).decode()
-    if out_dir is None:
-        return None
-    out_dir.mkdir(parents=True, exist_ok=True)
-    path = out_dir / "geo-grid-map.jpg"
-    canvas.convert("RGB").save(path, "JPEG", quality=78, optimize=True)
-    return f"/images/proposal/{path.name}"
+    # Always embedded: the report is one file that a client opens from a link, so a
+    # map written next to it would arrive as a broken image.
+    encoded = io.BytesIO()
+    canvas.convert("RGB").save(encoded, "JPEG", quality=78, optimize=True)
+    return "data:image/jpeg;base64," + base64.b64encode(encoded.getvalue()).decode()
 
 
 def main() -> int:
@@ -1031,8 +1025,7 @@ def main() -> int:
         # squares floating on paper, and the whole point of this exhibit is that
         # the reader recognises their own town in it.
         if a.embed_map:
-            img = map_image(lat0, lng0, step_lat * 2.6, step_lng * 2.6,
-                            None, embed=a.embed_map)
+            img = map_image(lat0, lng0, step_lat * 2.6, step_lng * 2.6)
             if img:
                 out["geoGrid"]["mapImage"] = img
                 if "maps.googleapis.com/maps/api/staticmap" in img:

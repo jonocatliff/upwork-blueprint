@@ -59,7 +59,7 @@ env_has FIRECRAWL_API_KEY || note "FIRECRAWL_API_KEY in .env: /lead-magnet reads
 env_has APIFY_API_TOKEN || note "APIFY_API_TOKEN in .env: /lead-magnet reads the Google Business Profile with it. apify.com"
 env_has DATAFORSEO_LOGIN || note "DATAFORSEO_LOGIN and DATAFORSEO_PASSWORD in .env: /lead-magnet reads rankings with them. dataforseo.com, one dollar of free credit, no card"
 env_has PAGESPEED_API_KEY || command -v lighthouse >/dev/null || note "PAGESPEED_API_KEY in .env, or Lighthouse installed locally: /lead-magnet measures how fast the client's page loads with one of them. pagespeed is free from Google Cloud"
-env_has KIE_AI_API_KEY || note "KIE_AI_API_KEY in .env: /proposal draws the plan for the client's trade with it. kie.ai"
+env_has KIE_AI_API_KEY || note "KIE_AI_API_KEY in .env: lets /proposal draw the plan for the client's trade without leaving the terminal. kie.ai. Skip it if you already have an image model: /proposal prints the prompt for you to paste anywhere, and the page picks the picture up from jobs/<id>/proposal-sketch.png whoever drew it."
 env_has OPENAI_API_KEY || note "OPENAI_API_KEY in .env: /lead-magnet adds two chapters with it, whether AI search names the business and what its worst reviews complain about. Without it both say 'not measured' and the rest of the report is unaffected. platform.openai.com"
 
 [ "$missing" -eq 0 ] && echo "  nothing. Every command can run."
