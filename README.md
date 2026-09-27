@@ -78,4 +78,6 @@ are drafts you copy and send on Upwork yourself. The details are in
 Stuck? Post in the community. The Help board answers same-day.
 
 What in here is not ours, and under which licence, is listed in
-[references/attribution.md](references/attribution.md).
+[references/attribution.md](references/attribution.md). Everything else is the
+author's: it ships to members to use in their own freelancing, not to republish or
+resell.

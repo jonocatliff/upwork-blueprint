@@ -65,7 +65,17 @@ point at nothing.
 
 The renderer uses the bundled React template in `templates/lead-magnet/src/`. It
 carries the report's whole visual system, so a change there changes every report
-you have ever sent. After any template edit, rebuild the single-file runtime with:
+you have ever sent. `src/main.tsx` hands it the report data and Vite builds
+everything into the single file `dist/index.html`.
+
+**That built file stays self-contained.** It may carry images as data URIs and run
+its own bundled script, and it makes no network request of any kind: the client
+opens a page that cannot phone home, and `lead_magnet_check.py` refuses one that
+tries. Keep the illustrations, the scorecard, the interactions and the visual
+system when you change it; the component structure is not frozen, and a component
+the generator stops feeding is dead weight in every report that ships after it.
+
+After any template edit, rebuild the single-file runtime with:
 
 ```bash
 cd templates/lead-magnet
