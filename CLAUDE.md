@@ -96,7 +96,7 @@ Keep the whole report under 90 words. The verdict gets one outcome sentence, nev
   release with fourteen static checks. There is no test suite: each rule lives in
   the file it governs, and a run proves itself by building the report and starting
   the cockpit
-- `references/` - one topic per file, twenty of them plus `upwork-facts.json`. The
+- `references/` - one topic per file, nineteen of them plus `upwork-facts.json`. The
   ones every command touches: `upwork-rules`, `upwork-mcp`, `copy`, `follow-ups`,
   `profile-formula`, `lead-magnet*`. Read the folder before claiming it lacks something
 - `templates/` - three designs: the pitch page, the audit report and the proposal
