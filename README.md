@@ -68,6 +68,18 @@ measured" and the rest is unaffected. `KIE_AI_API_KEY` only saves a detour:
 image is saved as `jobs/<id>/proposal-sketch.png`, drawn by any model you already
 use.
 
+## What appears in your folder
+
+Everything below is yours and gitignored, so `git pull` never touches it.
+
+- `context/me.md` and `context/proof.md` - who you are and what you can back up
+- `audit-report.md`, `profile.md` - where your profile stands and the version to paste
+- `data/jobs.json` - your pipeline, written only by `code/pipeline.py`
+- `jobs/<id>/` - one folder per job: the pitch page, the application, the audit,
+  the proposal, the threads and the drafts
+- `follow-ups.md` - what is due, what is coming and what you parked
+- `clients/<slug>/` - a won job: the brief, the inputs, the work, what you delivered
+
 ## What this will never do
 
 It never submits a proposal, never sends a message, never buys Connects, and
