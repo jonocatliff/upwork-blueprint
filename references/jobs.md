@@ -33,6 +33,42 @@ the client's stack the quiet ones. Zapier and n8n lead the postings by a distanc
 Make falling through 2026, Power Automate barely present, while GoHighLevel and generic CRM wording
 carry a quarter to nearly half of the automation set alone. Current shares are in the report.
 
+## Ready-made tracks
+
+A first run does not have to invent terms from nothing. Two lanes are written out below, each
+already split across the four branches. Offer the matching lane, let the member cut what they
+cannot deliver, and treat the rest as the exploration set: the ones that produce nothing twice
+still get dropped.
+
+**Lane A, getting found and getting enquiries.** SEO, Google Ads and the website that carries
+them. One buyer, a local business owner who wants the phone to ring, and the lane this repo
+already delivers for: the lead magnet is a local SEO audit and both roadmap templates are SEO
+and Google Ads.
+
+```
+- Local SEO: Google Business Profile · Google Maps ranking · local SEO
+- SEO problem: not showing on Google · organic traffic · keyword research
+- Google Ads: Google Ads · Performance Max · conversion tracking
+- Ads problem: wasted ad spend · cost per lead · Google Ads audit
+- Website: Webflow · WordPress · Elementor · landing page
+- Industry: dentist SEO · plumber leads · law firm marketing · med spa ads
+```
+
+**Lane B, what happens to an enquiry after it arrives.** CRM, follow-up and booking, sold to
+agencies and to owners who already have traffic. A different promise from lane A, so it is a
+lane of its own rather than three more terms.
+
+```
+- GoHighLevel: GoHighLevel · GHL · HighLevel snapshot
+- CRM problem: missed call text back · appointment booking · CRM setup
+- Role: GoHighLevel expert · marketing automation specialist
+```
+
+**One lane at a time.** Every track is one search call per page, so six tracks cost twelve of a
+run's roughly two dozen calls. Two lanes at once buys twice the coverage at half the depth per
+term, which is how a run stops finding the fresh postings that are the whole point. The rotating
+slot for a new candidate term is the place to test across lanes, not a second lane.
+
 ## Judging the client
 
 Three signals, from the search row and then from `find_jobs` action `get`:

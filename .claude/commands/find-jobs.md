@@ -44,10 +44,13 @@ yet, or no application in the pipeline, means the first run**, and the first run
 different job: it does not hunt the best five, it finds out which searches are alive in
 this member's direction. Say which mode is running in one line.
 
-**The first run explores.** Build ten to twelve candidate terms across all four branches
-below, from `context/me.md`: the tools the member can work with, the roles clients hire
-for, the problem words, and the industries they have actually worked in. When the
-direction is still open, cover two candidate lanes rather than one. Then one call per
+**The first run explores.** When what the member sells matches one of the ready-made lanes
+in [references/jobs.md](../../references/jobs.md), offer that lane's terms and let them cut
+what they cannot deliver: it is the same four branches, already written, and it saves the
+member a run spent guessing. Otherwise build ten to twelve candidate terms across all four
+branches below, from `context/me.md`: the tools the member can work with, the roles clients
+hire for, the problem words, and the industries they have actually worked in. Either way one
+lane at a time, never two, because two lanes halve the depth per term. Then one call per
 term, `limit` 10, `sort` `recency`, and **no window filter**, because the point is
 density, not freshness. Measure them with Step 3a, and report per term what it costs in
 Connects, what the postings pay against the member's own rate in `context/me.md`,
