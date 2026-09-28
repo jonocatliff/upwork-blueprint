@@ -193,8 +193,11 @@
   <h2 class="group"><span class="num" aria-hidden="true">1</span>Who I am</h2>
   <section class="who" aria-labelledby="who">
     <!-- The member's own photo, the same one their Upwork profile shows, so the
-         client recognises who they already replied to. Save it beside this file
-         and replace this whole div with:  <img class="photo" src="photo.jpg" alt="">
+         client recognises who they already replied to. It has to be embedded,
+         because the deploy uploads this one HTML file and nothing beside it, so a
+         src="photo.jpg" is a 404 the member only finds after sending the link:
+           python3 -c "import base64,pathlib;print('data:image/jpeg;base64,'+base64.b64encode(pathlib.Path('photo.jpg').read_bytes()).decode())"
+         then replace this whole div with  <img class="photo" src="PASTE" alt="">
          Never a stock portrait and never a face that is not theirs. -->
     <div class="photo placeholder"><span>photo</span></div>
     <h2 id="who">&lt;Your name&gt;</h2>

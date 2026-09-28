@@ -26,6 +26,9 @@ CONTACT_LINKS = re.compile(
 EMAIL = re.compile(r'\b[\w.+-]+@[\w-]+\.[a-z]{2,}\b', re.I)
 PHONE = re.compile(r'(?<![\w.])\+?\d[\d ().-]{8,}\d(?![\w.])')
 BOOKING_WORDS = re.compile(r'\b(book a call|schedule a call|book a meeting|email me|call me|whatsapp me)\b', re.I)
+# A blank a human is meant to replace, written the way the roadmap templates
+# write them: <Your name>, <A result you can back up>.
+TEMPLATE_BLANK = re.compile(r'<[A-Za-z][^<>]{3,80}>')
 
 
 def visible_text(page):
@@ -62,6 +65,23 @@ def check_page(path, *, require_hero=False):
     left = re.findall(r'\{\{[A-Z_]+\}\}', page)
     if left:
         problems.append(f'unfilled placeholders: {", ".join(sorted(set(left)))}')
+    # The roadmap templates mark their blanks in the prose a client reads, not in
+    # the {{BRACES}} the generator fills, so the rule above walked straight past a
+    # page still saying "<Your name>" and passed it for publishing.
+    for m in TEMPLATE_BLANK.finditer(text):
+        problems.append(f'still carries a template blank: {m.group(0)[:60]}')
+    for m in re.finditer(r'PUT-YOUR-[A-Z-]+', page):
+        problems.append(f'still carries a template blank: {m.group(0)}')
+    # write_site copies the HTML and nothing beside it, so any file the page points
+    # at by a relative path is a 404 the member only sees after sending the link.
+    # Outside comments only: a commented-out tag cannot 404, and the roadmap
+    # templates spell the wrong form inside a comment in order to warn against it.
+    live = re.sub(r'<!--.*?-->', ' ', page, flags=re.S)
+    for src in re.findall(r'(?:src|href)\s*=\s*["\']([^"\']+)["\']', live):
+        if re.match(r'(?:https?:)?//|data:|#|mailto:|tel:', src):
+            continue
+        if re.search(r'\.(?:jpe?g|png|gif|webp|svg|avif|css|js)$', src, re.I):
+            problems.append(f'points at a file that is not embedded: {src[:60]}')
     hero = re.search(r'<div class="hero-art"[^>]*>\s*<img\s+[^>]*src="data:image/', page, re.I)
     # Only when the caller says a hero was drawn for this page. The gate exists to
     # catch an image that failed to embed, not to refuse a member who has no way
