@@ -7,7 +7,9 @@ export const LABEL = {
 };
 // The board is the part where a conversation is alive. Applied is not a stage a
 // member works, it is waiting, and Lost is history; both are counted in Analytics
-// and neither earns a column here. Not applied, Applied and Skipped live in the list.
+// and neither earns a column here. The list holds Not applied and Applied. A lead
+// that is Lost or Skipped leaves both surfaces: it stays in the pipeline file and
+// in the funnel, and nothing asks the member to look at it again.
 export const BOARD = ['replied', 'call', 'offer', 'won'];
 // The list decides: what has not been sent, and what was sent and is still silent.
 export const LIST = ['new', 'applied'];

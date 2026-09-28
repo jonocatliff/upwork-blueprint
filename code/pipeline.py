@@ -4,7 +4,7 @@
 This script is the only thing that writes data/jobs.json. Commands, the cockpit
 and you all go through it, so there is exactly one place a status can change.
 
-A job moves  new -> applied -> replied -> offer -> won
+A job moves  new -> applied -> replied -> call -> offer -> won
 and can leave at any point as  lost  (they hired someone else, or went silent)
 or  skipped  (not a fit, you decided against it).
 

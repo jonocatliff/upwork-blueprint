@@ -9,8 +9,7 @@ Turn a real contract into the handover brief the delivery pipeline starts from.
 This command never accepts an offer, starts a contract or sends a message.
 
 Read first: the job pipeline record, the saved thread, `jobs/<id>/proposal.md`
-when it exists, and the final Upwork contract, plus `context/me.md` and
-the evidence sections of `context/me.md`.
+when it exists, and the final Upwork contract, plus `context/me.md`.
 
 ## ROADMAP
 
@@ -70,5 +69,5 @@ thread, and name in the report how many are still open. A fact nobody wrote down
 the client gets asked twice.
 
 Use the completion report from `CLAUDE.md` and link the handover brief. The next
-action is to start delivery from it. End with `Upwork calls: N`, which is 0 unless the member ran
-`/brief` first as a separate command.
+action is to start delivery from it. End with `Upwork calls: 0`. Nothing here touches the connector, and a `/brief`
+run before this one counts its own calls in its own report.

@@ -36,7 +36,9 @@ nothing client-facing is written yet.
 ## Step 1: Evidence gate
 
 Run `python3 code/workspace.py` and `python3 code/pipeline.py get <job id>`.
-Require stage replied or offer. The second argument is the call record: read it
+Require stage `replied` or `call`. A call that already happened is exactly what
+this command writes from, and once the lead is at `offer` the proposal has been
+sent: at that point `/brief` owns the thread. The second argument is the call record: read it
 as a file when it is a path, otherwise treat the rest of the input as pasted
 notes. Without a call record, ask for the transcript or notes and stop.
 
@@ -128,7 +130,7 @@ local model. There is nothing to configure and no key to buy for that route.
 
 Get the prompt, which is written for this client and this plan, with
 
-`python3 code/proposal_illustrate.py <id> --niche "<their trade, in their words>" --from-proposal <the JSON> --outcome "<what they are left with>" --scene "<the everyday objects of that trade>" --dry-run`
+`python3 code/proposal_illustrate.py <id> --niche "<their trade, in their words>" --outcome "<what they are left with>" --scene "<the everyday objects of that trade>" --dry-run`
 
 `--dry-run` prints the prompt and calls nothing. The member pastes it into whatever draws
 for them and saves the result as `jobs/<id>/proposal-sketch.png`, portrait, and that is the

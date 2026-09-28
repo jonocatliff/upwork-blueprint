@@ -6,7 +6,7 @@
 // <reason>` stays available on every new lead. `applied` waits. `replied`, `call` and `offer`
 // answer a waiting client first and a due follow-up second, where due means
 // `next_follow_up <= today`; a future date stays Waiting. `/proposal` is offered
-// only in conversation and before the call, never once an offer exists. `won`
+// in conversation and after the call, never once an offer exists. `won`
 // writes the handover once and then carries nothing. `lost` and `skipped` carry
 // no task even when a date is set and a client is waiting.
 //
@@ -39,7 +39,7 @@ function daysSince(stamp, today) {
 
 /** The chase a member owes when nothing else is scheduled: due every two days. */
 function chase(job, today, command, extras) {
-  const silent = daysSince(job.last_touch || job.status_updated_at, today);
+  const silent = daysSince(job.status_updated_at, today);
   if (silent == null) return step('Waiting', WAITING, null, extras);
   const over = silent - CHASE_DAYS;
   if (over >= 0) {

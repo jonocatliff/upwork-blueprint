@@ -36,7 +36,10 @@ sys.path.insert(0, str(ROOT / 'code'))
 import pipeline  # noqa: E402  (read-only use: load, jobs_dir)
 import threads as thread_io  # noqa: E402  (cleans raw Upwork messages)
 
-RANK = {'new': 0, 'applied': 1, 'replied': 2, 'offer': 3, 'won': 4}
+RANK = {'new': 0, 'applied': 1, 'replied': 2, 'call': 3, 'offer': 4, 'won': 5}
+# A lead the member closed stays closed. Upwork keeps serving the thread and the
+# proposal that got it there, so without this it climbs back every morning.
+EXITS = ('lost', 'skipped')
 # Upwork's proposal words. "Accepted" means submitted, not that the client said yes.
 PROPOSAL_STAGE = {'accepted': 'applied', 'pending': 'applied', 'activated': 'applied',
                   'offered': 'offer', 'hired': 'won', 'declined': 'lost', 'withdrawn': 'lost'}
@@ -141,6 +144,9 @@ def target(current, stages):
     best = max((s for s in stages if s in RANK), key=RANK.get, default=None)
     if 'lost' in stages and not ({'offer', 'won'} & stages) and current not in ('won', 'lost'):
         return 'lost'
+    if current in EXITS:
+        # Only real movement reopens a closed lead: an offer or a started contract.
+        return best if best in ('offer', 'won') else None
     if best and (current not in RANK or RANK[best] > RANK[current]):
         return best
     return None
@@ -211,7 +217,7 @@ def cmd_apply(args):
         if t.get('awaiting_reply_from') == 'you' and job.get('status') not in ('lost', 'skipped'):
             if job.get('follow_up_plan'):
                 run_pipeline('follow-up', jid, 'clear', '--reason', 'The client replied; review the new message first.')
-            if job.get('status') in ('replied', 'offer', 'won') and run_pipeline('set', jid, job['status'], '--follow-up', today):
+            if job.get('status') in ('replied', 'call', 'offer', 'won') and run_pipeline('set', jid, job['status'], '--follow-up', today):
                 waiting.append(jid)
 
     # Expiration needs fresh evidence that this exact proposal was checked and
