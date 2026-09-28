@@ -65,10 +65,24 @@ proves the member drew a diagram.
 
 - **The posting is mainly SEO, local SEO, Google Business Profile or Google Ads:**
   copy `templates/roadmap/seo.html` or `templates/roadmap/google-ads.html` to
-  `jobs/<id>/roadmap.html` and edit it to this client: the header, the four step
-  cards, and the `ROWS` and `MS` lists in the script at the bottom, which draw the
-  weeks. Use their city, their trade and their words for what they end up with.
-  Keep the four tracks and the week count; change the row wording, and the note at
+  `jobs/<id>/roadmap.html` and edit it to this client. The file's own comment
+  lists what to rewrite; three of them decide whether it lands:
+
+  - **The h1 is the outcome this client asked for, in their words**, never the
+    name of a service. A posting about missed calls gets a headline about missed
+    calls.
+  - **Tag the rows they named.** A fifth entry on any `ROWS` row is what they
+    asked for, quoted from the posting, and it prints as a tag on that row. It is
+    the whole argument of the page in one line: their request sitting inside the
+    system rather than answered beside it. Tag only what they actually wrote, and
+    delete the placeholder tag the template ships with.
+  - **Add a row for anything they asked for that the plan does not carry**, rather
+    than letting it go unanswered. A request with no row reads as a request you
+    missed.
+
+  Keep the three groups, the four tracks and the week count. They are the reason
+  to send a roadmap at all: the client sees that the whole funnel is covered, not
+  one piece of it. Change the row wording to their trade and city, and the note at
   the foot if the scope is narrower. Then assemble with `--roadmap` instead of `--graph`, and skip the rest
   of this step. `pitch_deploy.py` publishes it at `<id>/roadmap`, which is the
   route `--roadmap` points at.

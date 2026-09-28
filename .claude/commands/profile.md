@@ -1,6 +1,6 @@
 ---
 description: Measures your live Upwork profile, then writes the version that fixes it, ready to paste. Every number in it is backed by your own evidence.
-argument-hint: "[audit | title | overview | skills | portfolio | video | fields]"
+argument-hint: "[title | overview | skills | portfolio | video | fields]"
 ---
 
 # /profile
@@ -10,13 +10,13 @@ Follow `references/copy.md`. The member described in
 or identity from outside this repository.
 
 This command does both halves of the job: it measures what is live today, then
-writes the version that fixes what it found. Measuring without writing is
-`/profile audit`.
+writes the version that fixes what it found. It never stops at the measurement:
+a report about a profile helps nobody, the written profile is the deliverable.
 
 Read first: [references/profile.md](../../references/profile.md), which holds every field, what finishes it, the filters a client can close, how strong profiles are written and what has to be on the table before you start; and the profile sections of [references/upwork.md](../../references/upwork.md) for what the connector may write. Then `context/me.md` and `data/profile.json`.
 
-**Focus:** $ARGUMENTS. `audit` measures and stops, writing nothing. Any other
-focus writes only that section of `profile.md` and leaves the rest as it is.
+**Focus:** $ARGUMENTS. A focus writes only that section of `profile.md` and
+leaves the rest as it is. Every run writes something.
 
 ## Step 0 · The connector, and what is live right now
 
@@ -90,9 +90,6 @@ one message, with where to look ("open your profile on Upwork, the Job Success
 badge sits under your name"), and do not wait on the answer: an unanswered one
 is named as not measured and never estimated. `/context` asks the same two, so
 skip this when they are already answered in `context/me.md`.
-
-**With focus `audit`, stop here.** Report what is live, worst problem first, and
-what each fix is worth. Write no file. Next step: `/profile` without the focus.
 
 ## Step 3 · Read your facts
 
@@ -219,8 +216,9 @@ Run `python3 code/pipeline.py prune` first, then the completion report as
 CLAUDE.md defines it. Say the score from Step 1 and what changed because of it,
 worst problem first, in three lines at most. Link [profile.md](../../profile.md).
 
-Next step: paste, then `/profile audit` in a day or two, which measures the live
-profile again and says what is still open. End with `Upwork calls: N`, measured,
+Next step: paste it on Upwork, in the order Step 6 gives. Run this command again
+once something real changes, a delivered result or a new direction, not on a
+schedule. End with `Upwork calls: N`, measured,
 never estimated. Reading costs four on a first run: the account, the profile, its
 highlights and the one job search that measures the skills clients type, and
 fewer when `/context` already read the profile within the day. Every field put
