@@ -465,8 +465,6 @@ export interface GbpProfileView {
 }
 
 export interface GbpExhibit {
-  /** English is the default when omitted. */
-  locale?: "en" | "de";
   /** New proposal shape. Both views come from one factual source dataset. */
   current?: GbpProfileView;
   prepared?: GbpProfileView;
@@ -595,15 +593,12 @@ export interface ProposalData {
   /** Fixed public-report contract. Lead-specific builders may fill slots, but
    * must not select a different layout or silently omit required sections. */
   templateVersion?: "lead-magnet-v1";
-  /** Lead magnets default to English. German remains a first-class render
-   * option for DACH campaigns without maintaining a second template. */
-  language?: "en" | "de";
   copy?: ProposalCopy;
   /** Every source this proposal rests on, registered once. Figures point at an
    * id from here; the ledger at the end of the page prints the list.
    *
-   * Why this exists: "bitte die Quellen auch immer dort
-   * reinpacken." Until then the proposal marked what was measured and what was
+   * Why this exists: "always pack the sources in there too."
+   * Until then the proposal marked what was measured and what was
    * not, but never where anything came from. That holds until the first person
    * asks, and the first person asks in the room where the deal is decided. */
   quellen?: Quelle[];

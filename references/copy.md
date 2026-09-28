@@ -13,10 +13,11 @@ still reads their own tooling in the one the repository speaks. A member who
 writes to Claude in German gets an English answer, and that is deliberate.
 
 Client-facing copy follows the client instead. A job posted in German gets a
-German cover letter, a German thread gets German replies, and the audit follows
-[lead-magnet-language.md](lead-magnet-language.md), which starts in English and
-switches when the business does. Answering a client in a language they did not
-use loses the job, and that is the one thing this rule may not cost.
+German cover letter and a German thread gets German replies: answering a client in
+a language they did not use loses the job, and that is the one thing this rule may
+not cost. The audit is the exception, and it is English only. It is a built page
+rather than a written sentence, so a second edition doubles every string somebody
+has to check, and it is sold to an English-speaking market.
 
 ## Load the person and the situation
 

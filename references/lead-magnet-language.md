@@ -1,7 +1,7 @@
 # Owner-language contract
 
-Write for a busy local-business owner, not for an SEO specialist. English is the default; use
-German only when the report language explicitly requests it.
+Write for a busy local-business owner, not for an SEO specialist. The report is English, and
+only English: a second edition doubles every sentence anybody has to check.
 
 ## Voice before vocabulary
 
@@ -51,7 +51,7 @@ column heading or internal checklist to explain it, rewrite it.
 
 Use the confirmed country and Google Business Profile primary category. Do not infer them from a
 name. UK English uses `enquiry`, `postcode`, `mobile` and `quote`; US English uses `inquiry`, `ZIP
-code`, `phone` and `estimate`. German uses direct, plain `Sie` language.
+code`, `phone` and `estimate`.
 
 - Trades and home services: job, call-out, quote, homeowner, recent work.
 - Health and wellness: appointment, consultation, client, reassurance. Use `patient` only when the

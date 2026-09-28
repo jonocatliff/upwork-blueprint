@@ -1,5 +1,3 @@
-/* # multilingual-data: the locale tables below are what a client reads,
-   so a German value there is the German report and not a German comment. */
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
@@ -57,82 +55,42 @@ const Phone = profileIcon("Phone");
 const Star = profileIcon("Star");
 
 const copy = {
-  en: {
-    title: "Google Business Profile review",
-    subtitle: "Recommendation, first draft and proof in one place.",
-    current: "Today",
-    prepared: "Prepared",
-    switcher: "Switch Google Business Profile view",
-    verified: "Profile verified",
-    publicPhotos: "public photos",
-    actions: { website: "Website", directions: "Directions", save: "Save", call: "Call", booking: "Book" },
-    legend: ["Good", "Check", "Missing", "Check inside account", "Prepared"],
-    businessDetails: "Business details",
-    categories: "Categories",
-    primaryCategory: "Primary category",
-    otherCategories: "Other categories",
-    description: "Description",
-    services: "Services",
-    photos: "Photos",
-    updates: "Business updates",
-    reviews: "Reviews",
-    additional: "Additional profile details",
-    freeSlot: "free",
-    reviewsSuffix: "Google reviews",
-    ownerResponse: "Owner response",
-    noOwnerResponse: "No owner response visible",
-    draft: "Draft, not live",
-    ourTake: "Our recommendation",
-    currentSnapshot: "Currently shown",
-    preparedDraft: "Suggested first draft",
-    currentEntry: "See the current entry",
-    currentProof: "See the current proof",
-    noChange: "No change proposed",
-    openDraft: "View suggestion",
-    profileAudit: "Your live Google profile",
-    liveNow: "What is live now",
-    doNext: "What to do",
-    fullProfile: "We finish the profile with you",
-    fullProfileBody: "Final categories, description, services and review replies are prepared in the working session.",
-  },
-  de: {
-    title: "Google-Unternehmensprofil geprüft",
-    subtitle: "Empfehlung, erster Entwurf und Nachweis an einem Ort.",
-    current: "Heute",
-    prepared: "Vorbereitet",
-    switcher: "Google-Profil Ansicht wechseln",
-    verified: "Profil bestätigt",
-    publicPhotos: "öffentliche Fotos",
-    actions: { website: "Website", directions: "Route", save: "Speichern", call: "Anrufen", booking: "Termin" },
-    legend: ["Passt", "Prüfen", "Fehlt", "Im Profil prüfen", "Vorbereitet"],
-    businessDetails: "Unternehmensangaben",
-    categories: "Kategorien",
-    primaryCategory: "Hauptkategorie",
-    otherCategories: "Weitere Kategorien",
-    description: "Beschreibung",
-    services: "Leistungen",
-    photos: "Fotos",
-    updates: "Aktuelles vom Unternehmen",
-    reviews: "Rezensionen",
-    additional: "Weitere Profilangaben",
-    freeSlot: "frei",
-    reviewsSuffix: "Google-Rezensionen",
-    ownerResponse: "Antwort der Inhaberin",
-    noOwnerResponse: "Keine Antwort der Inhaberin sichtbar",
-    draft: "Entwurf, noch nicht live",
-    ourTake: "Unsere Empfehlung",
-    currentSnapshot: "Aktuell eingetragen",
-    preparedDraft: "Vorgeschlagener erster Entwurf",
-    currentEntry: "Aktuellen Eintrag ansehen",
-    currentProof: "Aktuellen Nachweis ansehen",
-    noChange: "Keine Änderung vorgeschlagen",
-    openDraft: "Vorschlag ansehen",
-    profileAudit: "Ihr aktuelles Google-Profil",
-    liveNow: "Was aktuell sichtbar ist",
-    doNext: "Was zu tun ist",
-    fullProfile: "Wir stellen das Profil mit Ihnen fertig",
-    fullProfileBody: "Finale Kategorien, Beschreibung, Leistungen und Antworten entstehen im Arbeitstermin.",
-  },
+  title: "Google Business Profile review",
+  subtitle: "Recommendation, first draft and proof in one place.",
+  current: "Today",
+  prepared: "Prepared",
+  switcher: "Switch Google Business Profile view",
+  verified: "Profile verified",
+  publicPhotos: "public photos",
+  actions: { website: "Website", directions: "Directions", save: "Save", call: "Call", booking: "Book" },
+  legend: ["Good", "Check", "Missing", "Check inside account", "Prepared"],
+  businessDetails: "Business details",
+  categories: "Categories",
+  primaryCategory: "Primary category",
+  otherCategories: "Other categories",
+  description: "Description",
+  services: "Services",
+  photos: "Photos",
+  updates: "Business updates",
+  reviews: "Reviews",
+  additional: "Additional profile details",
+  freeSlot: "free",
+  reviewsSuffix: "Google reviews",
+  ownerResponse: "Owner response",
+  noOwnerResponse: "No owner response visible",
+  draft: "Draft, not live",
+  ourTake: "Our recommendation",
+  currentSnapshot: "Currently shown",
+  preparedDraft: "Suggested first draft",
+  currentEntry: "See the current entry",
+  currentProof: "See the current proof",
+  noChange: "No change proposed",
+  openDraft: "View suggestion",
+  profileAudit: "Your live Google profile",
+  liveNow: "What is live now",
+  doNext: "What to do",
+  fullProfile: "We finish the profile with you",
+  fullProfileBody: "Final categories, description, services and review replies are prepared in the working session.",
 } as const;
 
 const findingStyles: Record<GbpFieldStatus, string> = {
@@ -189,7 +147,7 @@ function FindingNote({ finding, className = "" }: { finding?: GbpInlineFinding; 
 }
 
 function normaliseLabel(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9äöüß]+/g, " ").trim();
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
 function auditRowFor(rows: GbpAuditRow[] | undefined, aliases: string[]) {
@@ -204,12 +162,10 @@ function evidenceFinding({
   explicit,
   rows,
   aliases,
-  locale,
 }: {
   explicit?: GbpInlineFinding;
   rows?: GbpAuditRow[];
   aliases: string[];
-  locale: "en" | "de";
 }): GbpInlineFinding {
   if (explicit) return explicit;
   const row = auditRowFor(rows, aliases);
@@ -217,25 +173,21 @@ function evidenceFinding({
   if (status === "good") {
     return {
       status,
-      label: locale === "de" ? "Passt" : "Good",
-      text: locale === "de" ? "Keine Änderung nötig." : "No change needed.",
+      label: "Good",
+      text: "No change needed.",
     };
   }
   if (status === "open" || !row) {
     return {
       status: "open",
-      label: locale === "de" ? "Im Konto prüfen" : "Check inside the account",
-      text: locale === "de"
-        ? "Die öffentliche Quelle reicht für eine sichere Empfehlung nicht aus. Vor einer Änderung im Profil prüfen."
-        : "The public source is not enough for a safe recommendation. Check the field inside the profile before changing it.",
+      label: "Check inside the account",
+      text: "The public source is not enough for a safe recommendation. Check the field inside the profile before changing it.",
     };
   }
   return {
     status,
-    label: locale === "de" ? "Beleg fehlt" : "Evidence missing",
-    text: locale === "de"
-      ? "Der gespeicherte Befund markiert dieses Feld, enthält aber noch keine sichere konkrete Änderung."
-      : "The stored finding flags this field but does not yet support a safe, specific change.",
+    label: "Evidence missing",
+    text: "The stored finding flags this field but does not yet support a safe, specific change.",
   };
 }
 
@@ -344,6 +296,10 @@ function legacyView(data: GbpExhibit): GbpProfileView | null {
       Reviews: "Ask every happy customer, answer each review personally, and keep them coming every month.",
       Description: "Explain the main service, area and next step in plain language, with the point made inside the first 100 characters.",
       Categories: "Fill the ten category slots with services customers can actually book, primary first.",
+      Services: "List every service a customer can book, in their words, with a price where you have one.",
+      Attributes: "Set the attributes a customer filters on, such as on-site service, parking or payment.",
+      "Booking link": "Add the link a customer books on, so the profile takes the appointment itself.",
+      Updates: "Post something real every week or two: a job finished, an offer, a seasonal note.",
     };
     return {
       status: row.status,
@@ -368,8 +324,8 @@ function legacyView(data: GbpExhibit): GbpProfileView | null {
   };
 }
 
-function ProfileView({ view, locale }: { view: GbpProfileView; locale: "en" | "de" }) {
-  const t = copy[locale];
+function ProfileView({ view }: { view: GbpProfileView }) {
+  const t = copy;
   const actionIcons = { website: Globe2, directions: Navigation, save: Bookmark, call: Phone, booking: CalendarDays } as const;
   const actions: GbpProfileAction[] = view.actions ?? (["website", "directions", "save", "call", "booking"] as const).map((kind) => ({ kind }));
   const reviewCount = view.reviewsCount;
@@ -390,7 +346,7 @@ function ProfileView({ view, locale }: { view: GbpProfileView; locale: "en" | "d
       </div>
       {!view.draft ? <div className="flex flex-wrap gap-x-4 gap-y-2 border-y border-slate-200 bg-slate-50 px-7 py-3 text-[11px] font-bold text-slate-600 max-sm:px-4">
         {(["good", "warn", "bad", "open"] as GbpFieldStatus[]).map((status, index) => <span key={status} className="inline-flex items-center gap-1.5"><i className={`size-2 rounded-full ${dotStyles[status]}`} aria-hidden />{t.legend[index]}</span>)}
-      </div> : <div className="border-y border-emerald-100 bg-emerald-50 px-7 py-3 text-[12px] font-bold text-emerald-900 max-sm:px-4">✓ {locale === "de" ? "Grün zeigt die vorbereiteten Änderungen" : "Green shows the prepared changes"}</div>}
+      </div> : <div className="border-y border-emerald-100 bg-emerald-50 px-7 py-3 text-[12px] font-bold text-emerald-900 max-sm:px-4">✓ Green shows the prepared changes</div>}
       <ProfileSection label={t.businessDetails} headline={view.fieldsHeadline}>
         {view.fields.map((field, index) => <ProfileField key={`${field.label}-${index}`} field={field} prepared={view.draft} />)}
       </ProfileSection>
@@ -433,7 +389,7 @@ function ProfileView({ view, locale }: { view: GbpProfileView; locale: "en" | "d
       ) : null}
 
       {view.description ? <ProfileSection label={t.description} headline={view.description.headline}><div className="grid grid-cols-[minmax(260px,0.9fr)_minmax(280px,1.1fr)] items-center gap-5 max-md:grid-cols-1 max-md:gap-3"><p className={`m-0 text-[15px] leading-relaxed ${view.draft ? "text-emerald-900" : "text-slate-700"}`}>{view.description.text}</p>{!view.draft ? <FindingNote finding={view.description.finding} /> : null}</div></ProfileSection> : null}
-      {view.services ? <ProfileSection label={t.services} headline={view.services.headline}>{view.services.items.length ? <><div className="flex flex-wrap gap-2">{view.services.items.slice(0, 8).map((service) => <span key={service} className="rounded-full bg-emerald-50 px-2.5 py-1.5 text-[13px] font-bold text-emerald-900">{service}</span>)}</div>{view.services.items.length > 8 ? <details className="mt-3 rounded-xl border border-slate-200 px-3.5 py-3 text-[14px] text-slate-700"><summary className="cursor-pointer font-bold text-blue-800">{locale === "de" ? `Alle ${view.services.items.length} Leistungen ansehen` : `View all ${view.services.items.length} services`}</summary><div className="mt-3 flex flex-wrap gap-2">{view.services.items.slice(8).map((service) => <span key={service} className="rounded-full bg-slate-100 px-2.5 py-1.5 text-[13px] font-semibold">{service}</span>)}</div></details> : null}</> : <p className="m-0 text-[15px] text-slate-600">{locale === "de" ? "Keine öffentlich lesbaren Leistungen gefunden." : "No publicly readable services were found."}</p>}{!view.draft ? <FindingNote finding={view.services.finding} className="mt-3" /> : null}</ProfileSection> : null}
+      {view.services ? <ProfileSection label={t.services} headline={view.services.headline}>{view.services.items.length ? <><div className="flex flex-wrap gap-2">{view.services.items.slice(0, 8).map((service) => <span key={service} className="rounded-full bg-emerald-50 px-2.5 py-1.5 text-[13px] font-bold text-emerald-900">{service}</span>)}</div>{view.services.items.length > 8 ? <details className="mt-3 rounded-xl border border-slate-200 px-3.5 py-3 text-[14px] text-slate-700"><summary className="cursor-pointer font-bold text-blue-800">{`View all ${view.services.items.length} services`}</summary><div className="mt-3 flex flex-wrap gap-2">{view.services.items.slice(8).map((service) => <span key={service} className="rounded-full bg-slate-100 px-2.5 py-1.5 text-[13px] font-semibold">{service}</span>)}</div></details> : null}</> : <p className="m-0 text-[15px] text-slate-600">No publicly readable services were found.</p>}{!view.draft ? <FindingNote finding={view.services.finding} className="mt-3" /> : null}</ProfileSection> : null}
 
       {(view.photos?.length || view.plannedPhotos?.length || view.photoFinding) ? (
         <ProfileSection label={t.photos} headline={view.photoHeadline}>
@@ -450,7 +406,7 @@ function ProfileView({ view, locale }: { view: GbpProfileView; locale: "en" | "d
       {view.reviews || view.reviewsCount >= 0 ? (
         <ProfileSection label={t.reviews} headline={view.reviewsHeadline}>
           <div className="grid grid-cols-[72px_minmax(150px,0.6fr)_minmax(280px,1.4fr)] items-center gap-4 pb-3 max-md:grid-cols-1 max-md:gap-2"><strong className="text-[36px] leading-none">{view.ratingValue.toFixed(1)}</strong><div><Stars rating={view.ratingValue} size={16} /><small className="mt-1 block text-[11px] sm:text-[10px] text-slate-500">{reviewCount} {t.reviewsSuffix}</small></div><FindingNote finding={view.reviewsFinding} /></div>
-          {view.reviews?.length ? view.reviews.map((review, index) => <article key={`${review.author}-${index}`} className="border-t border-slate-100 py-4"><div className="flex flex-wrap justify-between gap-1.5"><strong className="text-[14px]">{review.author}</strong><span className="inline-flex items-center gap-1 text-[12px] text-amber-700"><Stars rating={review.rating} size={11} />{review.when}</span></div><p className="my-2 max-w-[92ch] text-[14px] leading-relaxed text-slate-700">{review.text}</p>{view.draft && review.responseAction ? <small className="inline-flex rounded-lg bg-blue-50 px-3 py-2 text-[13px] font-bold leading-relaxed text-blue-900">{review.responseAction}</small> : review.ownerResponse ? <small className="inline-flex rounded-lg bg-emerald-50 px-3 py-2 text-[13px] font-bold leading-relaxed text-emerald-900">{t.ownerResponse}: {review.ownerResponse}</small> : review.responseAction ? <small className="inline-flex rounded-lg bg-blue-50 px-3 py-2 text-[13px] font-bold leading-relaxed text-blue-900">{review.responseAction}</small> : <small className="inline-flex rounded-lg bg-red-50 px-3 py-2 text-[13px] font-bold text-red-800">{t.noOwnerResponse}</small>}</article>) : <p className="m-0 border-t border-slate-100 py-4 text-[14px] leading-relaxed text-slate-600">{locale === "de" ? "Anzahl und Bewertung sind belegt; einzelne Rezensionstexte waren in der gespeicherten Quelle nicht enthalten." : "The rating and review count are evidenced; individual review text was not included in the stored source."}</p>}
+          {view.reviews?.length ? view.reviews.map((review, index) => <article key={`${review.author}-${index}`} className="border-t border-slate-100 py-4"><div className="flex flex-wrap justify-between gap-1.5"><strong className="text-[14px]">{review.author}</strong><span className="inline-flex items-center gap-1 text-[12px] text-amber-700"><Stars rating={review.rating} size={11} />{review.when}</span></div><p className="my-2 max-w-[92ch] text-[14px] leading-relaxed text-slate-700">{review.text}</p>{view.draft && review.responseAction ? <small className="inline-flex rounded-lg bg-blue-50 px-3 py-2 text-[13px] font-bold leading-relaxed text-blue-900">{review.responseAction}</small> : review.ownerResponse ? <small className="inline-flex rounded-lg bg-emerald-50 px-3 py-2 text-[13px] font-bold leading-relaxed text-emerald-900">{t.ownerResponse}: {review.ownerResponse}</small> : review.responseAction ? <small className="inline-flex rounded-lg bg-blue-50 px-3 py-2 text-[13px] font-bold leading-relaxed text-blue-900">{review.responseAction}</small> : <small className="inline-flex rounded-lg bg-red-50 px-3 py-2 text-[13px] font-bold text-red-800">{t.noOwnerResponse}</small>}</article>) : <p className="m-0 border-t border-slate-100 py-4 text-[14px] leading-relaxed text-slate-600">The rating and review count are evidenced; individual review text was not included in the stored source.</p>}
         </ProfileSection>
       ) : null}
 
@@ -465,13 +421,13 @@ function strongestFinding(findings: GbpInlineFinding[]) {
   return findings.reduce((strongest, finding) => auditStatusRank[finding.status] > auditStatusRank[strongest.status] ? finding : strongest);
 }
 
-function AuditIcon({ finding, locale }: { finding: GbpInlineFinding; locale: "en" | "de" }) {
+function AuditIcon({ finding }: { finding: GbpInlineFinding }) {
   const status = finding.status === "new" ? "warn" : finding.status;
   const config = {
-    good: { label: locale === "de" ? "Passt" : "Good", styles: "border-emerald-200 bg-emerald-50 text-emerald-700", glyph: <path d="m5.5 12.5 4 4 9-9" /> },
-    warn: { label: locale === "de" ? "Verbessern" : "Improve", styles: "border-amber-200 bg-amber-50 text-amber-700", glyph: <><path d="m5 16 4.5-4.5 3 3L19 8" /><path d="M14.5 8H19v4.5" /></> },
-    bad: { label: locale === "de" ? "Fehlt" : "Missing", styles: "border-red-200 bg-red-50 text-red-700", glyph: <><path d="m7 7 10 10" /><path d="m17 7-10 10" /></> },
-    open: { label: locale === "de" ? "Prüfen" : "Check", styles: "border-slate-200 bg-slate-50 text-slate-600", glyph: <><circle cx="10.5" cy="10.5" r="4.5" /><path d="m14 14 4 4" /></> },
+    good: { label: "Good", styles: "border-emerald-200 bg-emerald-50 text-emerald-700", glyph: <path d="m5.5 12.5 4 4 9-9" /> },
+    warn: { label: "Improve", styles: "border-amber-200 bg-amber-50 text-amber-700", glyph: <><path d="m5 16 4.5-4.5 3 3L19 8" /><path d="M14.5 8H19v4.5" /></> },
+    bad: { label: "Missing", styles: "border-red-200 bg-red-50 text-red-700", glyph: <><path d="m7 7 10 10" /><path d="m17 7-10 10" /></> },
+    open: { label: "Check", styles: "border-slate-200 bg-slate-50 text-slate-600", glyph: <><circle cx="10.5" cy="10.5" r="4.5" /><path d="m14 14 4 4" /></> },
   }[status];
   return (
     <span className={`grid size-10 place-items-center rounded-[12px] border max-md:size-9 max-sm:size-8 max-sm:rounded-[10px] ${config.styles}`} aria-label={config.label} title={config.label}>
@@ -480,14 +436,14 @@ function AuditIcon({ finding, locale }: { finding: GbpInlineFinding; locale: "en
   );
 }
 
-function AuditRow({ label, current, recommendation, finding, locale }: { label: string; current: ReactNode; recommendation: ReactNode; finding: GbpInlineFinding; locale: "en" | "de" }) {
+function AuditRow({ label, current, recommendation, finding }: { label: string; current: ReactNode; recommendation: ReactNode; finding: GbpInlineFinding }) {
   const statusLabel = finding.status === "good"
-    ? (locale === "de" ? "Passt" : "Good")
+    ? "Good"
     : finding.status === "bad"
-      ? (locale === "de" ? "Fehlt" : "Missing")
+      ? "Missing"
       : finding.status === "open"
-        ? (locale === "de" ? "Prüfen" : "Check")
-        : (locale === "de" ? "Verbessern" : "Improve");
+        ? "Check"
+        : "Improve";
   return (
     <details className="group border-t border-slate-200 bg-white first:border-t-0">
       {/* THREE THINGS FOUGHT OVER THE SAME ATTENTION:
@@ -497,7 +453,7 @@ function AuditRow({ label, current, recommendation, finding, locale }: { label: 
           text colours, the colour lives in the marker beside it. The status word
           is small and grey: it sorts things during a skim without shouting. */}
       <summary className="grid cursor-pointer list-none grid-cols-[32px_minmax(0,1fr)_auto] items-start gap-x-2.5 gap-y-1 px-4 py-2.5 sm:grid-cols-[36px_minmax(0,1fr)_auto] md:grid-cols-[40px_minmax(118px,.26fr)_minmax(0,1.74fr)_auto] md:gap-x-7 md:px-5 md:py-3.5 [&::-webkit-details-marker]:hidden">
-        <AuditIcon finding={finding} locale={locale} />
+        <AuditIcon finding={finding} />
         <span className="self-center">
           <strong className="block text-[14px] leading-tight text-ink sm:text-[14.5px]">{label}</strong>
           <small className={`mt-0.5 block text-[11px] sm:text-[9.5px] font-bold uppercase tracking-[.06em] ${
@@ -519,7 +475,7 @@ function AuditRow({ label, current, recommendation, finding, locale }: { label: 
         <ChevronDown className="col-start-3 row-start-1 size-4 self-center text-pewter transition-transform group-open:rotate-180 md:col-start-4" aria-hidden />
       </summary>
       <div className="border-t border-slate-100 bg-slate-50 px-4 py-3.5 sm:pl-[54px] md:px-5 md:py-4 md:pl-[199px]">
-        <span className="mb-1.5 block text-[11px] sm:text-[10px] font-extrabold uppercase tracking-[.07em] text-slate-400">{copy[locale].currentSnapshot}</span>
+        <span className="mb-1.5 block text-[11px] sm:text-[10px] font-extrabold uppercase tracking-[.07em] text-slate-400">{copy.currentSnapshot}</span>
         <div className="text-[14px] font-semibold leading-[1.5] text-slate-600">{current}</div>
       </div>
     </details>
@@ -554,7 +510,7 @@ function CurrentValues({ items, disclosureLabel }: { items: { label: string; val
    kind of thing from the first, with no headline needed to say so. A green row
    has no action and stays on one line. */
 function Recommendation({ finding, goodText }: { finding: GbpInlineFinding; goodText: string }) {
-  const genericGood = /^(no change needed|keine änderung nötig)\.?$/i.test(finding.text.trim());
+  const genericGood = /^no change needed\.?$/i.test(finding.text.trim());
   const zustand = finding.status === "good" ? (genericGood ? goodText : finding.text) : finding.text;
   return (
     <>
@@ -569,29 +525,26 @@ function Recommendation({ finding, goodText }: { finding: GbpInlineFinding; good
   );
 }
 
-function displayDate(value: string, locale: "en" | "de") {
+function displayDate(value: string) {
   if (!value.includes("T")) return value;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat(locale === "de" ? "de-DE" : "en-GB", { day: "numeric", month: "long", year: "numeric" }).format(date);
+  return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" }).format(date);
 }
 
 function IntegratedProfileView({
   current,
   auditRows,
-  locale,
 }: {
   current: GbpProfileView;
   prepared: GbpProfileView;
   auditRows?: GbpAuditRow[];
-  locale: "en" | "de";
 }) {
-  const t = copy[locale];
+  const t = copy;
   const rawCategoryFinding = evidenceFinding({
     explicit: current.categories?.secondaryFinding ?? current.categories?.primaryFinding,
     rows: auditRows,
-    aliases: ["categories", "category", "kategorien", "kategorie"],
-    locale,
+    aliases: ["categories", "category"],
   });
   const categoryFinding = rawCategoryFinding;
   /* WHAT IS GOOD, WITH A NUMBER. The green rows said
@@ -604,63 +557,63 @@ function IntegratedProfileView({
   const gemessen = (aliases: string[], rueckfall: string) =>
     auditRowFor(auditRows, aliases)?.value?.trim() || rueckfall;
 
-  const descriptionFinding = evidenceFinding({ explicit: current.description?.finding, rows: auditRows, aliases: ["description", "beschreibung"], locale });
-  const servicesFinding = evidenceFinding({ explicit: current.services?.finding, rows: auditRows, aliases: ["services", "service", "leistungen", "leistung"], locale });
-  const photoFinding = evidenceFinding({ explicit: current.photoFinding, rows: auditRows, aliases: ["photos", "photo", "fotos", "bilder"], locale });
-  const postFinding = evidenceFinding({ explicit: current.post?.finding, rows: auditRows, aliases: ["updates", "posts", "beiträge", "aktuelles"], locale });
-  const reviewsFinding = evidenceFinding({ explicit: current.reviewsFinding, rows: auditRows, aliases: ["reviews", "review", "bewertungen", "rezensionen"], locale });
-  const phoneFirstBusiness = /emergency|locksmith|notdienst|schlüsseldienst/i.test(`${current.subtitle} ${current.categories?.primary ?? ""}`);
+  const descriptionFinding = evidenceFinding({ explicit: current.description?.finding, rows: auditRows, aliases: ["description"] });
+  const servicesFinding = evidenceFinding({ explicit: current.services?.finding, rows: auditRows, aliases: ["services", "service"] });
+  const photoFinding = evidenceFinding({ explicit: current.photoFinding, rows: auditRows, aliases: ["photos", "photo"] });
+  const postFinding = evidenceFinding({ explicit: current.post?.finding, rows: auditRows, aliases: ["updates", "posts"] });
+  const reviewsFinding = evidenceFinding({ explicit: current.reviewsFinding, rows: auditRows, aliases: ["reviews", "review"] });
+  const phoneFirstBusiness = /emergency|locksmith/i.test(`${current.subtitle} ${current.categories?.primary ?? ""}`);
   const businessFieldFindings = current.fields.map((field) => {
-    const bookingWithoutLink = /booking|termin/i.test(field.label) && /no booking|kein termin/i.test(field.value);
+    const bookingWithoutLink = /booking/i.test(field.label) && /no booking/i.test(field.value);
     const explicit = phoneFirstBusiness && bookingWithoutLink ? {
       status: "good" as const,
-      label: locale === "de" ? "Passt" : "Good",
-      text: locale === "de" ? "Der Anruf ist für dringende Hilfe der passende Hauptweg." : "Calling is the right primary route for urgent work.",
+      label: "Good",
+      text: "Calling is the right primary route for urgent work.",
     } : field.finding;
-    return { field, finding: evidenceFinding({ explicit, rows: auditRows, aliases: [field.label], locale }) };
+    return { field, finding: evidenceFinding({ explicit, rows: auditRows, aliases: [field.label] }) };
   });
   const businessIssues = businessFieldFindings.filter(({ finding }) => finding.status !== "good");
   const businessFinding = businessIssues.length ? strongestFinding(businessIssues.map(({ finding }) => finding)) : {
     status: "good" as const,
-    label: locale === "de" ? "Passt" : "Good",
-    text: locale === "de" ? "Kontaktangaben und Öffnungszeiten sind veröffentlicht." : "Contact details and opening hours are published.",
+    label: "Good",
+    text: "Contact details and opening hours are published.",
   };
-  const noPublicValue = locale === "de" ? "Nicht öffentlich gefunden" : "Not found publicly";
+  const noPublicValue = "Not found publicly";
   const secondaryCategories = current.categories?.secondary ?? [];
   const services = current.services?.items ?? [];
   const visibleAdditionalFields = (current.additionalFields ?? []).filter((field) => !/^(available|unavailable)_attributes$/i.test(field.label));
   const evidencePhotos = (current.photos ?? []).filter((photo) => !/googleusercontent\.com|ggpht\.com/i.test(photo.src));
   const normalizedAdditionalFields: GbpProfileField[] = visibleAdditionalFields.length ? visibleAdditionalFields : [{
-    label: locale === "de" ? "Attribute" : "Attributes",
-    value: locale === "de" ? "Öffentlich nicht vollständig sichtbar" : "Not fully visible publicly",
+    label: "Attributes",
+    value: "Not fully visible publicly",
     icon: "info" as const,
   }];
-  const additionalFindings = normalizedAdditionalFields.map((field) => evidenceFinding({ explicit: field.finding, rows: auditRows, aliases: [field.label], locale }));
-  const additionalFinding = additionalFindings.length ? strongestFinding(additionalFindings) : evidenceFinding({ rows: auditRows, aliases: ["attributes", "details", "attribute", "angaben"], locale });
+  const additionalFindings = normalizedAdditionalFields.map((field) => evidenceFinding({ explicit: field.finding, rows: auditRows, aliases: [field.label] }));
+  const additionalFinding = additionalFindings.length ? strongestFinding(additionalFindings) : evidenceFinding({ rows: auditRows, aliases: ["attributes", "details"] });
   const sections = [
     {
       label: t.businessDetails,
       finding: businessFinding,
-      current: <CurrentValues disclosureLabel={locale === "de" ? "Adresse, Zeiten und Kontakt ansehen" : "View address, hours and contact details"} items={current.fields.map((field) => ({ label: field.label, value: field.value }))} />,
+      current: <CurrentValues disclosureLabel="View address, hours and contact details" items={current.fields.map((field) => ({ label: field.label, value: field.value }))} />,
       recommendation: businessIssues.length ? <ul className="m-0 grid list-none gap-1.5 p-0">{businessIssues.map(({ field, finding }) => <li key={field.label}><strong>{field.label}:</strong> {finding.text}</li>)}</ul> : <Recommendation finding={businessFinding} goodText={businessFinding.text} />,
     },
     {
       label: t.categories,
       finding: categoryFinding,
       current: <CurrentValues items={[{ label: t.primaryCategory, value: current.categories?.primary ?? noPublicValue }, { label: t.otherCategories, value: secondaryCategories.length ? secondaryCategories.join(" · ") : noPublicValue }]} />,
-      recommendation: <Recommendation finding={categoryFinding} goodText={locale === "de" ? "Die Kategorien passen zu den Leistungen, die Kunden buchen können." : "The categories match the services customers can book."} />,
+      recommendation: <Recommendation finding={categoryFinding} goodText="The categories match the services customers can book." />,
     },
     {
       label: t.description,
       finding: descriptionFinding,
       current: current.description?.text ? <LangerWert><p className="m-0">{current.description.text}</p></LangerWert> : noPublicValue,
-      recommendation: <Recommendation finding={descriptionFinding} goodText={gemessen(["description", "beschreibung"], locale === "de" ? "Leistung und Einzugsgebiet sind klar." : "The service and area are clear.")} />,
+      recommendation: <Recommendation finding={descriptionFinding} goodText={gemessen(["description"], "The service and area are clear.")} />,
     },
     {
       label: t.services,
       finding: servicesFinding,
-      current: services.length ? <LangerWert kopf={`${services.length} ${locale === "de" ? "Leistungen eingetragen" : "services listed"}`}><p className="m-0">{services.join(" · ")}</p></LangerWert> : (locale === "de" ? "Keine öffentlichen Leistungen eingetragen." : "No public services are listed."),
-      recommendation: <Recommendation finding={servicesFinding} goodText={gemessen(["services", "leistungen"], locale === "de" ? "Kunden sehen, was sie buchen können." : "Customers can see what they can book.")} />,
+      current: services.length ? <LangerWert kopf={`${services.length} services listed`}><p className="m-0">{services.join(" · ")}</p></LangerWert> : "No public services are listed.",
+      recommendation: <Recommendation finding={servicesFinding} goodText={gemessen(["services"], "Customers can see what they can book.")} />,
     },
     {
       label: t.photos,
@@ -677,7 +630,7 @@ function IntegratedProfileView({
           <p className="m-0 font-bold">{current.photoLabel ?? `${current.photos?.length ?? 0} ${t.publicPhotos}`}</p>
           {current.photoCategories?.length ? (
             <p className="m-0 mt-1.5 text-[13px] font-normal text-graphite">
-              {locale === "de" ? "Rubriken bei Google: " : "Categories on Google: "}
+              {"Categories on Google: "}
               {current.photoCategories.join(" · ")}
             </p>
           ) : null}
@@ -691,25 +644,25 @@ function IntegratedProfileView({
           ) : null}
         </div>
       ),
-      recommendation: <Recommendation finding={photoFinding} goodText={gemessen(["photos", "fotos", "bilder"], locale === "de" ? "Echte Fotos zeigen den Betrieb bei der Arbeit." : "Real photos show the business at work.")} />,
+      recommendation: <Recommendation finding={photoFinding} goodText={gemessen(["photos"], "Real photos show the business at work.")} />,
     },
     {
       label: t.updates,
       finding: postFinding,
-      current: current.post ? <LangerWert kopf={displayDate(current.post.date, locale)}><p className="m-0">{current.post.text}</p></LangerWert> : noPublicValue,
-      recommendation: <Recommendation finding={postFinding} goodText={gemessen(["updates", "posts", "beiträge", "aktuelles"], locale === "de" ? "Das Profil zeigt einen aktuellen Beitrag." : "The profile has a recent update.")} />,
+      current: current.post ? <LangerWert kopf={displayDate(current.post.date)}><p className="m-0">{current.post.text}</p></LangerWert> : noPublicValue,
+      recommendation: <Recommendation finding={postFinding} goodText={gemessen(["updates", "posts"], "The profile has a recent update.")} />,
     },
     {
       label: t.reviews,
       finding: reviewsFinding,
-      current: <div><p className="m-0"><strong>{current.ratingValue.toFixed(1)}</strong> <Stars rating={current.ratingValue} size={12} /> · {current.reviewsCount} {t.reviewsSuffix}</p>{current.reviews?.length ? <details className="mt-2"><summary className="cursor-pointer font-bold text-slate-800">{locale === "de" ? "Rezensionen und Antworten ansehen" : "View reviews and replies"}</summary><div className="mt-2 grid gap-2">{current.reviews.slice(0, 3).map((review, index) => <div key={`${review.author}-${index}`} className="rounded-lg bg-slate-50 p-2.5"><strong className="block text-[12px] text-slate-900">{review.author}</strong><p className="my-1 text-[12px] font-normal">{review.text}</p><small className={review.ownerResponse ? "text-emerald-800" : "text-red-700"}>{review.ownerResponse ? `${t.ownerResponse}: ${review.ownerResponse}` : t.noOwnerResponse}</small></div>)}</div></details> : null}</div>,
-      recommendation: <Recommendation finding={reviewsFinding} goodText={locale === "de" ? "Bewertung und Antworten schaffen Vertrauen." : "The rating and replies build trust."} />,
+      current: <div><p className="m-0"><strong>{current.ratingValue.toFixed(1)}</strong> <Stars rating={current.ratingValue} size={12} /> · {current.reviewsCount} {t.reviewsSuffix}</p>{current.reviews?.length ? <details className="mt-2"><summary className="cursor-pointer font-bold text-slate-800">View reviews and replies</summary><div className="mt-2 grid gap-2">{current.reviews.slice(0, 3).map((review, index) => <div key={`${review.author}-${index}`} className="rounded-lg bg-slate-50 p-2.5"><strong className="block text-[12px] text-slate-900">{review.author}</strong><p className="my-1 text-[12px] font-normal">{review.text}</p><small className={review.ownerResponse ? "text-emerald-800" : "text-red-700"}>{review.ownerResponse ? `${t.ownerResponse}: ${review.ownerResponse}` : t.noOwnerResponse}</small></div>)}</div></details> : null}</div>,
+      recommendation: <Recommendation finding={reviewsFinding} goodText="The rating and replies build trust." />,
     },
     {
       label: t.additional,
       finding: additionalFinding,
       current: <CurrentValues items={normalizedAdditionalFields.map((field) => ({ label: field.label, value: field.value }))} />,
-      recommendation: <Recommendation finding={additionalFinding} goodText={locale === "de" ? "Die geprüften Angaben sind vollständig." : "The checked details are complete."} />,
+      recommendation: <Recommendation finding={additionalFinding} goodText="The checked details are complete." />,
     },
   ];
 
@@ -726,9 +679,9 @@ function IntegratedProfileView({
         {current.verified ? <span className="mt-1 inline-flex shrink-0 rounded-full bg-emerald-50 px-2.5 py-1.5 text-[11px] sm:text-[10px] font-extrabold text-emerald-800 max-sm:mt-3">✓ {t.verified}</span> : null}
       </div>
       <div className="border-y border-slate-200 bg-slate-50">
-        {sections.map((section) => <AuditRow key={section.label} {...section} locale={locale} />)}
+        {sections.map((section) => <AuditRow key={section.label} {...section} />)}
       </div>
-      {current.reviewAnalysis ? <ReviewAnalysisBlock analysis={current.reviewAnalysis} locale={locale} /> : null}
+      {current.reviewAnalysis ? <ReviewAnalysisBlock analysis={current.reviewAnalysis} /> : null}
     </div>
   );
 }
@@ -737,18 +690,15 @@ function IntegratedProfileView({
    disclosure of its own: the report has exactly three of those. On the left his
    own reviews, read rather than counted; on the right the count and stars of the
    three that outrank him most often on the map. We do not pull their texts. */
-function bewertungen(n: number, de: boolean) {
-  return de
-    ? `${n.toLocaleString("de-DE")} Bewertung${n === 1 ? "" : "en"}`
-    : `${n.toLocaleString("en-GB")} review${n === 1 ? "" : "s"}`;
+function bewertungen(n: number) {
+  return `${n.toLocaleString("en-GB")} review${n === 1 ? "" : "s"}`;
 }
 
-function ReviewAnalysisBlock({ analysis, locale }: { analysis: GbpReviewAnalysis; locale: "en" | "de" }) {
-  const de = locale === "de";
+function ReviewAnalysisBlock({ analysis }: { analysis: GbpReviewAnalysis }) {
   return (
-    <section className="grid gap-5 px-6 py-5 sm:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] max-sm:px-4" aria-label={de ? "Was Ihre Bewertungen sagen" : "What your reviews say"}>
+    <section className="grid gap-5 px-6 py-5 sm:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] max-sm:px-4" aria-label="What your reviews say">
       <div>
-        <h4 className="m-0 text-[16px] font-black tracking-[-0.02em] text-slate-950">{de ? "Was Ihre Bewertungen sagen" : "What your reviews say"}</h4>
+        <h4 className="m-0 text-[16px] font-black tracking-[-0.02em] text-slate-950">What your reviews say</h4>
         <ul className="mb-0 mt-2.5 grid list-none gap-1.5 p-0 text-[13.5px] leading-[1.45] text-slate-800">
           {analysis.sentences.map((sentence) => <li key={sentence}>{sentence}</li>)}
           {analysis.themeSentence ? <li>{analysis.themeSentence}</li> : null}
@@ -758,7 +708,7 @@ function ReviewAnalysisBlock({ analysis, locale }: { analysis: GbpReviewAnalysis
             {analysis.themes.map((theme) => (
               <div key={theme.label} className="rounded-lg bg-slate-50 p-2.5">
                 <strong className="block text-[12.5px] text-slate-900">
-                  {theme.label} · {de ? `${theme.count} Bewertung${theme.count === 1 ? "" : "en"}` : `${theme.count} review${theme.count === 1 ? "" : "s"}`}
+                  {theme.label} · {`${theme.count} review${theme.count === 1 ? "" : "s"}`}
                 </strong>
                 <p className="m-0 mt-1 text-[12.5px] italic text-slate-700">&ldquo;{theme.quote}&rdquo;</p>
               </div>
@@ -769,23 +719,23 @@ function ReviewAnalysisBlock({ analysis, locale }: { analysis: GbpReviewAnalysis
       {analysis.comparison.length ? (
         <div>
           <h4 className="m-0 text-[13px] font-extrabold uppercase tracking-[0.06em] text-slate-500">
-            {de ? "Die drei mit den meisten Bewertungen auf Ihrer Karte" : "The three with the most reviews on your map"}
+            The three with the most reviews on your map
           </h4>
           <ul className="mb-0 mt-2.5 grid list-none gap-2 p-0 text-[13px]">
             {analysis.comparison.map((row) => (
               <li key={row.name} className="flex items-baseline justify-between gap-3 border-b border-slate-100 pb-1.5 last:border-b-0">
                 <span className="min-w-0 line-clamp-2 text-slate-800">{row.name}</span>
                 <span className="tnum shrink-0 text-right text-slate-600">
-                  {bewertungen(row.reviews, de)}
-                  {row.rating != null ? `, ${de ? row.rating.toFixed(1).replace(".", ",") : row.rating.toFixed(1)} ★` : ""}
+                  {bewertungen(row.reviews)}
+                  {row.rating != null ? `, ${row.rating.toFixed(1)} ★` : ""}
                 </span>
               </li>
             ))}
             <li className="flex items-baseline justify-between gap-3 font-bold text-navy">
-              <span>{de ? "Sie" : "You"}</span>
+              <span>You</span>
               <span className="tnum shrink-0">
-                {bewertungen(analysis.total, de)}
-                {analysis.rating != null ? `, ${de ? analysis.rating.toFixed(1).replace(".", ",") : analysis.rating.toFixed(1)} ★` : ""}
+                {bewertungen(analysis.total)}
+                {analysis.rating != null ? `, ${analysis.rating.toFixed(1)} ★` : ""}
               </span>
             </li>
           </ul>
@@ -795,21 +745,20 @@ function ReviewAnalysisBlock({ analysis, locale }: { analysis: GbpReviewAnalysis
   );
 }
 
-/** Reusable, bilingual Business Profile audit. English is the default. */
+/** Reusable Business Profile audit. */
 export function GbpPanel({ data, requireComplete = false, icons = defaultIcons }: { data: GbpExhibit; requireComplete?: boolean; icons?: ProfileIcons }) {
-  const locale = data.locale ?? "en";
-  const t = copy[locale];
+  const t = copy;
   const legacy = useMemo(() => legacyView(data), [data]);
   const current = requireComplete ? data.current : (data.current ?? legacy);
   const prepared = data.prepared;
   if (!current || (requireComplete && !prepared)) {
-    return <div role="alert" className="rounded-[18px] border border-red-200 bg-red-50 px-5 py-6 text-[14px] font-bold text-red-950">{locale === "de" ? "Der vollständige aktuelle und vorbereitete Profil-Datensatz fehlt. Dieser Bericht darf noch nicht freigegeben werden." : "The complete current and prepared profile evidence is missing. This report is not ready for release."}</div>;
+    return <div role="alert" className="rounded-[18px] border border-red-200 bg-red-50 px-5 py-6 text-[14px] font-bold text-red-950">The complete current and prepared profile evidence is missing. This report is not ready for release.</div>;
   }
 
   return (
     <ProfileIconContext.Provider value={icons}><div className="m-0">
       {!prepared ? <div className="rounded-t-[18px] border border-b-0 border-slate-200 bg-white px-6 py-4 max-sm:px-4"><strong className="block text-[18px] tracking-[-0.02em] text-slate-950">{t.title}</strong><span className="mt-1 block text-[12px] leading-snug text-slate-500">{t.subtitle}</span></div> : null}
-      {prepared ? <IntegratedProfileView current={current} prepared={prepared} auditRows={data.auditRows} locale={locale} /> : <ProfileView view={current} locale={locale} />}
+      {prepared ? <IntegratedProfileView current={current} prepared={prepared} auditRows={data.auditRows} /> : <ProfileView view={current} />}
       {data.note ? <p style={{ color: d.faint }} className="mt-3 text-[14px] leading-relaxed">{data.note}</p> : null}
     </div></ProfileIconContext.Provider>
   );

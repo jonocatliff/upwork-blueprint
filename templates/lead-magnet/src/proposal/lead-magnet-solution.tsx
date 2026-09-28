@@ -1,5 +1,3 @@
-/* # multilingual-data: the locale tables below are what a client reads,
-   so a German value there is the German report and not a German comment. */
 "use client";
 
 /* Shared report illustrations and the terms block. The former three-phase
@@ -7,8 +5,6 @@
  * explained once, after the report, instead of inside every finding. */
 
 import { useRef, useState } from "react";
-
-type Locale = "en" | "de";
 
 /** Miniature scenes for the three-step solution path. They deliberately carry more
  * information than the small service glyphs: each drawing shows the actual hand-off
@@ -95,30 +91,10 @@ function RoadmapIllustration({ step }: { step: "visibility" | "website" | "follo
  * any prior knowledge. None of our own jargon.
  */
 
-export function WhatWeDoSection({ locale }: { locale: Locale }) {
-  const de = locale === "de";
+export function WhatWeDoSection() {
   const carousel = useRef<HTMLDivElement>(null);
   const [activeStep, setActiveStep] = useState(0);
-  const steps = de ? [
-    {
-      visual: "visibility" as const,
-      label: "Gefunden werden",
-      title: "SEO + Google-Profil",
-      text: "Wir verbessern, wo Sie erscheinen und was Kunden sehen, wenn sie Sie finden.",
-    },
-    {
-      visual: "website" as const,
-      label: "Anfragen bekommen",
-      title: "Eine Website, die Anfragen bringt",
-      text: "Klare Seiten, bessere Belege und ein offensichtlicher nächster Schritt: anrufen, buchen oder ein kurzes Formular senden.",
-    },
-    {
-      visual: "followup" as const,
-      label: "Aufträge gewinnen",
-      title: "Schnelle Reaktion + klare Zahlen",
-      text: "Speed-to-Lead übernimmt die erste Antwort. Die Auswertung zeigt, welche Anfragen zu Aufträgen werden.",
-    },
-  ] : [
+  const steps = [
     {
       visual: "visibility" as const,
       label: "Get found",
@@ -161,13 +137,13 @@ export function WhatWeDoSection({ locale }: { locale: Locale }) {
   return (
     <section aria-labelledby="what-we-do-title" className="lm-solution border-b border-black/10 bg-white px-5 py-14 sm:px-8 sm:py-20">
       <div className="mx-auto max-w-[1160px]">
-        <p className="lm-blockmarke m-0">{de ? "Was wir machen" : "What we do"}</p>
+        <p className="lm-blockmarke m-0">What we do</p>
         <div className="mt-3 flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-end">
           <h2 id="what-we-do-title" className="m-0 max-w-[720px] text-[clamp(30px,4vw,48px)] font-black leading-[1.02] tracking-[-.045em]">
-            {de ? "Wir bauen den Weg von der Google-Suche bis zum Auftrag." : "We build the path from Google search to booked work."}
+            We build the path from Google search to booked work.
           </h2>
           <a href="#book" className="lm-cta inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-navy px-5 text-[13px] font-black text-white no-underline">
-            {de ? "Meinen Plan für Platz 1 bauen" : "Build my plan to reach #1"}
+            Build my plan to reach #1
             <svg viewBox="0 0 16 16" fill="none" aria-hidden className="size-3.5"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </a>
         </div>
@@ -182,23 +158,22 @@ export function WhatWeDoSection({ locale }: { locale: Locale }) {
             </article>
           ))}
         </div>
-        <div className="lm-solution-carousel-controls" aria-label={de ? "Schritte auswählen" : "Choose a step"}>
-          <button type="button" onClick={() => moveTo(activeStep - 1)} disabled={activeStep === 0} aria-label={de ? "Vorheriger Schritt" : "Previous step"}>←</button>
+        <div className="lm-solution-carousel-controls" aria-label="Choose a step">
+          <button type="button" onClick={() => moveTo(activeStep - 1)} disabled={activeStep === 0} aria-label="Previous step">←</button>
           <span className="tnum" aria-live="polite"><b>{activeStep + 1}</b> / {steps.length}</span>
           <span className="lm-solution-dots" aria-hidden>
             {steps.map((step, index) => <i key={step.label} data-active={index === activeStep} />)}
           </span>
-          <button type="button" onClick={() => moveTo(activeStep + 1)} disabled={activeStep === steps.length - 1} aria-label={de ? "Nächster Schritt" : "Next step"}>→</button>
+          <button type="button" onClick={() => moveTo(activeStep + 1)} disabled={activeStep === steps.length - 1} aria-label="Next step">→</button>
         </div>
       </div>
     </section>
   );
 }
 
-export function TermsSection({ locale }: { locale: Locale }) {
-  const de = locale === "de";
+export function TermsSection() {
   return (
-    <section aria-label={de ? "Die Konditionen" : "The terms"} className="lm-terms mb-10 mt-10 sm:mb-14 sm:mt-14">
+    <section aria-label="The terms" className="lm-terms mb-10 mt-10 sm:mb-14 sm:mt-14">
       <div className="mx-auto max-w-[1160px] px-5 sm:px-8">
         {/* WHAT YOU RISK: NOTHING.
             The order is the sales logic: first what it costs, then why saying no later
@@ -211,19 +186,19 @@ export function TermsSection({ locale }: { locale: Locale }) {
               right say the same as the old line "you can leave whenever you like", only
               evidenced rather than asserted. A headline that repeats what sits below it
               costs height and pushes the price under the fold. */}
-          <p className="lm-blockmarke m-0">{de ? "Die Konditionen" : "The terms"}</p>
+          <p className="lm-blockmarke m-0">The terms</p>
 
           <div className="mt-4 grid gap-3.5 lg:grid-cols-[minmax(0,.72fr)_minmax(0,1.28fr)]">
             <div className="flex flex-col justify-center rounded-[18px] border border-hairline bg-white p-6 shadow-[0_1px_2px_rgba(28,23,18,.03),0_10px_30px_rgba(28,23,18,.045)] sm:p-7">
               {/* "Starts at" rather than "Where it starts": the first says the
                   prices begin here, the second sounds like the only price there is. */}
-              <p className="lm-blockmarke m-0">{de ? "Ab" : "Starts at"}</p>
+              <p className="lm-blockmarke m-0">Starts at</p>
               <p className="m-0 mt-1.5 flex items-baseline gap-1.5">
                 <span className="tnum text-[40px] font-black leading-none tracking-[-.045em] sm:text-[46px]">$199</span>
-                <span className="text-[14px] font-bold text-graphite">{de ? "im Monat" : "a month"}</span>
+                <span className="text-[14px] font-bold text-graphite">a month</span>
               </p>
               <p className="m-0 mt-1 text-[13px] leading-[1.4] text-graphite">
-                {de ? "nach einem Aufbau ab $499" : "after a build from $499"}
+                after a build from $499
               </p>
               {/* IT HAS TO SAY THAT THIS IS THE ENTRY POINT. "$199 a month"
                   on its own reads like our price when it is the lower edge. Learning that
@@ -233,7 +208,7 @@ export function TermsSection({ locale }: { locale: Locale }) {
                   a cold report invites comparison before anyone knows what they are
                   comparing. */}
               <p className="m-0 mt-2.5 inline-flex w-fit rounded-full bg-navy-soft/60 px-2.5 py-1 text-[11.5px] font-bold leading-[1.3] text-navy">
-                {de ? "mehrere Modelle, je nach Bedarf" : "different plans for what you need"}
+                different plans for what you need
               </p>
             </div>
 
@@ -250,23 +225,23 @@ export function TermsSection({ locale }: { locale: Locale }) {
                    was the expressly NON-exclusive licence in clause 07. Struck on
                    20.09.2026 rather than written into the contracts. Whoever adds a line
                    here changes business.md and the agreements first. */
-                { en: "Thirty days money back", de: "Dreißig Tage Geld zurück" },
-                { en: "No minimum term", de: "Keine Mindestlaufzeit" },
-                { en: "Accounts in your name", de: "Konten auf Ihren Namen" },
-                { en: "One setup, then it runs", de: "Einmal einrichten, dann läuft es" },
-                { en: "The same person every time", de: "Immer dieselbe Ansprechperson" },
-                { en: "A five-minute report every month", de: "Jeden Monat ein Report" },
+                "Thirty days money back",
+                "No minimum term",
+                "Accounts in your name",
+                "One setup, then it runs",
+                "The same person every time",
+                "A five-minute report every month",
               ].map((z, k, alle) => (
                 /* AN ODD COUNT LEAVES THE LAST TILE ON ITS OWN, with a grey block gaping
                    beside it. So the last one spans both columns instead of inventing an
                    argument just to make the grid come out even. */
-                <li key={z.en} className={`bg-white px-5 py-3 sm:px-6 sm:py-[18px] ${
+                <li key={z} className={`bg-white px-5 py-3 sm:px-6 sm:py-[18px] ${
                   alle.length % 2 === 1 && k === alle.length - 1 ? "sm:max-lg:col-span-2" : ""}`}>
                   <b className="flex items-center gap-2.5 text-[14.5px] font-black leading-[1.3] tracking-[-.018em] sm:text-[15.5px] sm:leading-[1.32]">
                     <span className="grid size-[20px] shrink-0 place-items-center rounded-full bg-[#2c7048] text-white">
                       <svg viewBox="0 0 16 16" fill="none" aria-hidden className="size-[12px]"><path d="M3.5 8.4l3 3L12.5 5" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                     </span>
-                    <span className="min-w-0">{z[locale]}</span>
+                    <span className="min-w-0">{z}</span>
                   </b>
                 </li>
               ))}

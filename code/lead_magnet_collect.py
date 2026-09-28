@@ -293,7 +293,7 @@ def main() -> int:
                     help="use the strongest verified generic local-pack term, or omit an unsafe grid")
     ap.add_argument("--country-code", default="")
     ap.add_argument("--radius", type=float, default=0.0,
-                    help="km vom Zentrum zu den aeusseren Rasterpunkten; 0 = Vorgabe von pull_search")
+                    help="km from the centre to the outer grid points; 0 takes pull_search's own default")
     ap.add_argument("--zoom", type=int, default=0, help="Kartenzoom je Rasterpunkt; 0 = Vorgabe von pull_search")
     ap.add_argument("--outdir", required=True)
     ap.add_argument("--town", default="", help="town for the on-page checks in lead_magnet_cro")
@@ -315,8 +315,8 @@ def main() -> int:
     os.environ["BLUEPRINT_METRICS_DIR"] = str(out)
     cro_file, cache_file, search_file = (out / "cro.json", out / "keyword-cache.json",
                                             out / "search.json")
-    # Der Seitentext faellt beim CRO-Lauf ohnehin an. Er bleibt aus cro.json
-    # Keep page text outside cro.json, which is the client-facing checklist.
+    # The page text falls out of the CRO run anyway, and it stays out of cro.json,
+    # which is the client-facing checklist.
     site_file = out / "site.json"
 
     # A second call with --grid reuses evidence from the same run.

@@ -254,9 +254,9 @@ export function ProposalStyles() {
 .pp-findings-grid > *{min-width:0}
 .pp-findings-right{overflow-x:auto}
 @media(min-width:1020px){.pp-findings-grid{grid-template-columns:minmax(0,1fr) 400px;align-items:start}.pp-findings-right{position:sticky;top:32px}}
-/* Meilensteine: Wochenraster am Desktop, schlichte Liste auf dem Telefon.
-   Bei sechs Wochen auf 390 Pixel blieben je Meilenstein gut dreissig Pixel,
-   also drei Textbloecke uebereinander. */
+/* Milestones: a week grid on a desktop, a plain list on a phone. Six weeks across
+   390 pixels left about thirty pixels each, which stacked three blocks of text on
+   top of one another. */
 @media(max-width:700px){
   .pp-milestones{display:block!important}
   .pp-milestones .pp-ms-gap{display:none}

@@ -104,9 +104,14 @@ function TheJob({ job }: { job: any }) {
 }
 
 /** The facts that decide whether the job is worth an application. */
+// Score, fit, Connects and competition answer one question: is this worth applying to.
+// The drawer showed them at every stage, so a won client still carried the case for
+// spending Connects on him, which is a decision nobody can take again.
+const DECIDING = new Set(['new']);
+
 function WorthIt({ job }: { job: any }) {
   const rows = jobDetails(job), flags = jobFlags(job);
-  if (!rows.length && !flags.length) return null;
+  if (!DECIDING.has(job.status) || (!rows.length && !flags.length)) return null;
   return <section className="drawer-section">
     <h4>Worth it?</h4>
     {flags.length ? <p className="drawer-flags">{flags.map(flag => <span key={flag.text} className={`uw-flag ${flag.tone}`}>{flag.text}</span>)}</p> : null}

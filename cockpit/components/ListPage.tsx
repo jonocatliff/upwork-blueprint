@@ -54,10 +54,12 @@ export default function ListPage() {
   // not only a colour. Anything without a posting date stays visible: a missing field
   // is not evidence that the job is old.
   const filtered = useMemo(() => {
-    if (!fresh) return byDue;
+    // Only on the list. On the board a "posted 3 days ago" lead is a live conversation,
+    // and hiding it behind an apply-time filter loses work that is already in flight.
+    if (!fresh || layout === 'board') return byDue;
     const cutoff = Date.now() - fresh * 3600e3;
     return byDue.filter(j => !j.posted_date || Date.parse(j.posted_date) >= cutoff);
-  }, [byDue, fresh]);
+  }, [byDue, fresh, layout]);
   const jobs = useMemo(() => sortJobs(searchJobs(filtered, query), layout === 'board' ? null : sort), [filtered, query, sort, layout]);
   if (!state) return null;
 
@@ -87,11 +89,11 @@ export default function ListPage() {
       </label>
       <button type="button" className={`due-toggle${dueOnly ? ' on' : ''}`} aria-pressed={dueOnly}
         onClick={() => setDueOnly(v => !v)}>{dueTotal ? `Needs me · ${dueTotal}` : 'Needs me'}</button>
-      <div className="seg" role="group" aria-label="Posted within"
+      {layout === 'board' ? null : <div className="seg" role="group" aria-label="Posted within"
         style={{ '--segment-index': FRESH.findIndex(([h]) => h === fresh) } as React.CSSProperties}>
         {FRESH.map(([hours, label]) => <button key={label} onClick={() => setFresh(hours)}
           aria-pressed={fresh === hours}>{label}</button>)}
-      </div>
+      </div>}
       <span className="count" aria-live="polite">{jobs.length === pool.length ? `${pool.length} ${noun}` : `${jobs.length} of ${pool.length} ${noun}`}</span>
     </div>
     {layout === 'board' ? <Board jobs={jobs} oldestFirst={oldestFirst} drawerId={drawerId} toggle={toggle} />
@@ -141,8 +143,8 @@ function Table({ jobs, sort, sortBy, drawerId, toggle }: {
         onKeyDown={e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === e.currentTarget) { e.preventDefault(); toggle(id); } }}>
         <td data-column="score"><span className={`uw-score ${scoreTone(j.score)}`}>{j.score == null ? '–' : j.score}</span></td>
         <td data-column="summary">
-          {/* Der Link geht auf die echte Ausschreibung: ohne ihn muss man den Titel
-              auf Upwork suchen, um nachzulesen, was wirklich dasteht. */}
+          {/* The link goes to the posting itself. Without it a member has to search Upwork
+              by title to reread what the client actually wrote. */}
           {j.url
             ? <a className="rt-td-summary" href={j.url} target="_blank" rel="noopener" title={j.title}>{headlineText(j)}</a>
             : <span className="rt-td-summary" title={j.title}>{headlineText(j)}</span>}

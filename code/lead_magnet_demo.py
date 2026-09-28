@@ -62,7 +62,10 @@ def example_evidence(business: str, service: str, conversion: str) -> tuple[dict
                 {"label": "Address", "value": "A full street address is public.", "status": "good"},
                 {"label": "Phone", "value": "A public phone is listed.", "status": "good"},
                 {"label": "Website", "value": "The profile links to the home page, not to the service page.", "status": "warn"},
-                {"label": "Categories", "value": f"One category is set, {category}. Two of the three slots are empty.", "status": "warn"},
+                # Google allows one primary category and nine more, and the advice beside this row
+                # says so, so the example may not say three: a client reading both at once sees
+                # the report contradict itself on the one page that is meant to prove care.
+                {"label": "Categories", "value": f"One category is set, {category}. Nine more slots are empty.", "status": "warn"},
                 {"label": "Services", "value": "No service list is public, so the profile never names what is sold.", "status": "bad"},
                 {"label": "Description", "value": "The description names the service and the area it covers.", "status": "good"},
                 {"label": "Photos", "value": "18 public photos, the newest from last year.", "status": "warn"},

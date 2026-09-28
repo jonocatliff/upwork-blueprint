@@ -1,9 +1,13 @@
 ---
 description: Builds a one-page pitch site for one job and the application to submit with your Loom: cover letter and bid.
-argument-hint: "<job id>"
+argument-hint: "<job id> [more job ids]"
 ---
 
 # /pitch-page
+
+**Several ids run one after another**, because `/find-jobs` hands over ten and applying to
+one at a time is the day's real ceiling. Each page still gets its own sketch, its own
+approval and its own publish: the repetition is the command's, never the member's yes.
 
 Follow `references/copy.md` for the page and application. The
 member described in `context/me.md` is the sender.
@@ -82,7 +86,9 @@ built below.
     than letting it go unanswered. A request with no row reads as a request you
     missed.
 
-  - **Fill every blank, including the photo and the Loom link.** `pitch_check.py`
+  - **Fill every blank, including the photo and the Loom link.** The photo goes in with
+    `python3 code/photo.py <their photo> --into jobs/<id>/pitch.html`, which crops and sizes
+    it and refuses one too heavy to embed. `pitch_check.py`
     refuses the page while it still says `<Your name>` or `PUT-YOUR-...`, and the
     photo has to be embedded as a `data:` URI because the deploy uploads one file
     and nothing beside it. The walkthrough link is not optional: Step 7's cover
@@ -191,19 +197,16 @@ python3 code/pitch_generate.py <id> --hook "..." \
   88 percent of its readable size. Below that the board looks impressive on a
   laptop and is unreadable on the phone the client actually opens it on.
 
-- **Copy hierarchy:** lead every section and card with the result the client
-  wants to feel: fewer lost leads, a calmer handoff, faster replies or clear
-  control. Put the tools, features and implementation mechanics in the short
-  description below. Never use a tool name or feature list as the headline.
-  Keep both layers specific to this job and supported by the posting or proof.
+- **Copy hierarchy:** lead every section and card with the result the client wants to
+  feel, such as fewer lost leads or faster replies, and put the tools and mechanics in
+  the description below. Never use a tool name or a feature list as the headline. Both
+  layers stay specific to this job and supported by the posting or proof.
 
-- **Onboarding:** list only the access, content and decisions needed before the
-  first build can start.
-- **Updates:** name a specific cadence and where updates will live. Use Upwork
-  before a contract. After hire, prefer the client's existing workspace.
-- **Working together:** lead with the client outcome, then show how it happens.
-  When the lead magnet is present, repeat it as Step 01 so the sequence reads
-  audit, onboarding, updates. Write one short, job-specific `--plan-outcome` for
+- **Onboarding:** only the access, content and decisions needed before the first build.
+- **Updates:** name a specific cadence and where updates will live. Upwork before a
+  contract, the client's own workspace after hire.
+- **Working together:** lead with the client outcome, then how it happens. With a lead
+  magnet, it is Step 01, so the sequence reads audit, onboarding, updates. Write one short, job-specific `--plan-outcome` for
   each card. Generate one matching landscape illustration per card and pass it
   with `--plan-image` in the same order. The card images must share one style,
   show the actual project inside the client's industry and contain no text,
@@ -237,12 +240,10 @@ python3 code/pitch_generate.py <id> --hook "..." \
   `--dither-source`. It must remain identifiable after being reduced to dots:
   use one simple industry object or scene, such as a roofline and ladder for a
   roofing job, not a generic particle cloud and not a detailed stock image.
-  Prefer a small local SVG when simple geometry communicates the industry more
-  clearly than generated art. The source is embedded in the pitch and may not
-  load anything from the network.
-  Keep every recognizable motif upright in every section. Horizontal mirroring
-  is acceptable when composition needs it; vertical flipping is not. Roofs,
-  vehicles, people and tools look broken as soon as gravity is reversed.
+  Prefer a small local SVG when simple geometry says the industry better than generated
+  art. It is embedded in the pitch and may load nothing from the network.
+  Keep every recognizable motif upright: horizontal mirroring is fine, vertical
+  flipping is not, because roofs, vehicles, people and tools look broken upside down.
 - When the job is tied to a local business website **and the member sells local SEO**,
   offer the free audit: for them it is part of the offer on every such job. The signal is
   `**Free SEO audit offered:**` in `context/me.md`, and without that line, whether their

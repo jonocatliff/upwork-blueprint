@@ -1,5 +1,3 @@
-/* # multilingual-data: the locale strings below are what a client reads,
-   so a German value there is the German report and not a German comment. */
 // The map ranking grid - LocalFalcon-style, same as the real Automatable
 // audit exhibit: 25 points across the city, each badge a Google Maps API
 // search from that spot. Green = top three, amber = ranked lower, red X =
@@ -60,7 +58,7 @@ function badge(rank: number | null): { bg: string; label: string } {
 }
 
 /* `nackt` means: you are already inside a card, so do not draw a second one. */
-export function GeoGrid({ data, locale = "en", showNote = true, nackt = false }: { data: GeoGridExhibit; locale?: "en" | "de"; showNote?: boolean; nackt?: boolean }) {
+export function GeoGrid({ data, showNote = true, nackt = false }: { data: GeoGridExhibit; showNote?: boolean; nackt?: boolean }) {
   if (!data.ranks) {
     return (
       <div style={{ margin: 0 }}>
@@ -70,7 +68,6 @@ export function GeoGrid({ data, locale = "en", showNote = true, nackt = false }:
   }
   const inPack = data.ranks.filter((r) => typeof r === "number" && r <= 3).length;
   const missing = data.ranks.filter((r) => r === null).length;
-  const de = locale === "de";
   const centre = (data as GeoGridExhibit & { centre?: [number, number] }).centre;
   const locatedWinners = ((data.winners ?? []) as LocatedWinner[]).slice(0, 3).flatMap((winner, index) => {
     if (winner.latitude == null || winner.longitude == null) return [];
@@ -82,7 +79,7 @@ export function GeoGrid({ data, locale = "en", showNote = true, nackt = false }:
     <div style={{ margin: 0 }}>
       <div className={nackt ? undefined : "pp-card"} style={{ padding: nackt ? 0 : 20 }}>
         <h3 className="m-0 text-[17px] font-black leading-[1.2] tracking-[-.02em] text-ink sm:text-lg">
-          {de ? "Wo Kunden Sie in Google Maps sehen" : "Where customers see you in Google Maps"}
+          Where customers see you in Google Maps
         </h3>
 
         {/* THE SEARCH TERM BELONGS ABOVE THE MAP. The explanation
@@ -90,7 +87,7 @@ export function GeoGrid({ data, locale = "en", showNote = true, nackt = false }:
             reads that far, and without the term a red grid asserts
             something about nothing. It now sits where the colours are. */}
         <p style={{ margin: "6px 0 12px", fontSize: 13, lineHeight: 1.4, color: "#4A4640" }}>
-          {de ? "Ihre Position für " : "Your position for "}<b style={{ color: "#1C160E" }}>&ldquo;{data.keyword}&rdquo;</b>{de ? " an 25 Standorten" : " across 25 locations"}
+          Your position for <b style={{ color: "#1C160E" }}>&ldquo;{data.keyword}&rdquo;</b> across 25 locations
         </p>
         <div
           role="img"
@@ -152,7 +149,7 @@ export function GeoGrid({ data, locale = "en", showNote = true, nackt = false }:
               </span>
             );
           })}
-          {centre ? <LocationPin left={50} top={50} label={de ? "SIE" : "YOU"} mine description={de ? "Standort Ihres Google-Profils" : "Your Google profile location"} /> : null}
+          {centre ? <LocationPin left={50} top={50} label="YOU" mine description="Your Google profile location" /> : null}
           {locatedWinners.map((winner) => (
             <LocationPin key={`${winner.name}-${winner.marker}`} left={winner.left} top={winner.top} label={String(winner.marker)} description={`${winner.marker}. ${winner.name}`} />
           ))}
@@ -161,8 +158,8 @@ export function GeoGrid({ data, locale = "en", showNote = true, nackt = false }:
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "4px 16px", marginTop: 14 }}>
           {[
             { c: "#2f7d4f", t: "Top 3" },
-            { c: "#d4a017", t: de ? "Weiter unten" : "Ranked below 3" },
-            { c: "rgba(181,51,51,.8)", t: de ? "Nicht sichtbar" : "Not shown" },
+            { c: "#d4a017", t: "Ranked below 3" },
+            { c: "rgba(181,51,51,.8)", t: "Not shown" },
           ].map((l) => (
             <span key={l.t} style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--font-mono, monospace)", fontSize: 9, letterSpacing: "1px", textTransform: "uppercase", color: d.muted }}>
               <span style={{ width: 10, height: 10, borderRadius: 999, background: l.c }} /> {l.t}
@@ -170,8 +167,8 @@ export function GeoGrid({ data, locale = "en", showNote = true, nackt = false }:
           ))}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "6px 16px", marginTop: 8, color: d.muted, fontSize: 10, fontWeight: 700 }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><span style={{ display: "grid", height: 18, minWidth: 28, placeItems: "center", borderRadius: 999, background: "#2448A8", color: "white", fontSize: 7, fontWeight: 900 }}>YOU</span>{de ? "Ihr GBP-Standort" : "Your GBP location"}</span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><span style={{ display: "grid", width: 18, height: 18, placeItems: "center", borderRadius: 999, background: "#2f3540", color: "white", fontSize: 9, fontWeight: 900 }}>1</span>{de ? "Wettbewerber aus der Tabelle" : "Competitor in the table"}</span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><span style={{ display: "grid", height: 18, minWidth: 28, placeItems: "center", borderRadius: 999, background: "#2448A8", color: "white", fontSize: 7, fontWeight: 900 }}>YOU</span>Your GBP location</span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><span style={{ display: "grid", width: 18, height: 18, placeItems: "center", borderRadius: 999, background: "#2f3540", color: "white", fontSize: 9, fontWeight: 900 }}>1</span>Competitor in the table</span>
         </div>
 
       </div>
@@ -190,21 +187,20 @@ export function GeoGrid({ data, locale = "en", showNote = true, nackt = false }:
  * below the heatmap, which put it in the narrow left column: four sentences
  * squeezed into 320 pixels while there was room to the right of them. The
  * report now renders it below both columns, across the full width. */
-export function KarteErklaerung({ keyword, locale = "en" }: { keyword: string; locale?: "en" | "de" }) {
-  const de = locale === "de";
+export function KarteErklaerung({ keyword }: { keyword: string }) {
   return (
     <details className="mt-5 border-t border-hairline pt-4">
-      <summary className="flex min-h-11 cursor-pointer items-center text-[12px] font-black text-navy sm:min-h-0">{de ? "Warum sich Ihre Position im Gebiet verändert" : "Why your position changes across the area"}</summary>
+      <summary className="flex min-h-11 cursor-pointer items-center text-[12px] font-black text-navy sm:min-h-0">Why your position changes across the area</summary>
       <ul className="m-0 mt-3 grid list-none gap-2.5 p-0 text-[13px] leading-[1.55] text-graphite sm:grid-cols-2 sm:gap-x-10">
-        <li>{de ? "Google zeigt je nach Standort des Kunden andere Ergebnisse." : "Google gives a different answer depending on where the customer is standing."}</li>
-        <li>{de ? "Darum wurde dieselbe Suche an 25 Stellen in Ihrem Gebiet ausgeführt." : "So we picked 25 spots across your area and ran the same search from each one."}</li>
+        <li>Google gives a different answer depending on where the customer is standing.</li>
+        <li>So we picked 25 spots across your area and ran the same search from each one.</li>
         <li>
-          <b className="text-[#1a7f4b]">{de ? "Grün" : "Green"}</b>{de ? " heißt Top 3, " : " means you were in the top three there, "}
-          <b className="text-[#b07a1a]">{de ? "Gelb" : "amber"}</b>{de ? " heißt weiter unten und " : " means further down the list, "}
-          <b className="text-[#b03535]">{de ? "Rot" : "red"}</b>{de ? " heißt in den geprüften Ergebnissen nicht gefunden." : " means your listing was not returned in the checked results."}
+          <b className="text-[#1a7f4b]">Green</b>{" means you were in the top three there, "}
+          <b className="text-[#b07a1a]">amber</b>{" means further down the list, "}
+          <b className="text-[#b03535]">red</b>{" means your listing was not returned in the checked results."}
         </li>
         <li>
-          {de ? "Gesucht wurde nach " : "We searched for "}<b className="text-ink">&ldquo;{keyword}&rdquo;</b>{de ? " ohne Ortsnamen, so wie ein Kunde vor Ort sucht." : " without a town name, because that is what a customer actually types."}
+          We searched for <b className="text-ink">&ldquo;{keyword}&rdquo;</b> without a town name, because that is what a customer actually types.
         </li>
       </ul>
     </details>

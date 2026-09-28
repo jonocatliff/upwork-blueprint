@@ -1,5 +1,3 @@
-/* # multilingual-data: the locale tables below are what a client reads,
-   so a German value there is the German report and not a German comment. */
 "use client";
 
 /* The section head of the cold report: one badge, five chapters.
@@ -21,14 +19,11 @@
 
 import { useEffect, useState } from "react";
 
-type Locale = "en" | "de";
-type Text = { en: string; de: string };
-
 export type Kapitel = {
   schluessel: string;
   nummer: string;
-  kicker: Text;
-  title: Text;
+  kicker: string;
+  title: string;
 };
 
 /** The five chapters, in one place, so that number and order cannot drift apart.
@@ -37,41 +32,34 @@ export const KAPITEL: Record<"branche" | "befund" | "termin", Kapitel> = {
   branche: {
     schluessel: "branche",
     nummer: "01",
-    kicker: { en: "The industry", de: "Die Branche" },
+    kicker: "The industry",
     /* TWO LINES, NOT THREE. At `max-w-[19ch]`, 51 characters
        break into three lines and push the three numbers off the bottom of the
        screen. The word "three" was there twice anyway: the three numbers sit
        directly below and count themselves. */
-    title: {
-      en: "Where almost everyone loses money",
-      de: "Wo fast jeder Geld verliert",
-    },
+    title: "Where almost everyone loses money",
   },
   befund: {
     schluessel: "befund",
     nummer: "01",
-    kicker: { en: "Your business", de: "Ihr Betrieb" },
-    title: { en: "Where you stand today", de: "Wo Sie heute stehen" },
+    kicker: "Your business",
+    title: "Where you stand today",
   },
   termin: {
     schluessel: "termin",
     nummer: "02",
-    kicker: { en: "Your next step", de: "Ihr nächster Schritt" },
+    kicker: "Your next step",
     /* Cut to two lines as well, same reason as chapter 01:
        at 19ch, 44 characters are three lines, and the calendar sits directly
        below them. */
-    title: {
-      en: "One reply, then we plan it",
-      de: "Eine Antwort, dann planen wir",
-    },
+    title: "One reply, then we plan it",
   },
 };
 
 /** Number, chapter name, statement. Always in this form, always at this size.
  *  `hell` inverts the colours for the dark closing section. */
-export function SektionsKopf({ kapitel, locale, hell = false, className = "" }: {
+export function SektionsKopf({ kapitel, hell = false, className = "" }: {
   kapitel: Kapitel;
-  locale: Locale;
   hell?: boolean;
   className?: string;
 }) {
@@ -82,10 +70,10 @@ export function SektionsKopf({ kapitel, locale, hell = false, className = "" }: 
       <p className={`m-0 flex items-center gap-2.5 lm-kapitelmarke ${hell ? "text-white/55" : "text-pewter"}`}>
         <span className={`tnum ${hell ? "text-white/80" : "text-navy"}`}>{kapitel.nummer}</span>
         <span aria-hidden className={`h-px w-6 ${hell ? "bg-white/30" : "bg-hairline"}`} />
-        {kapitel.kicker[locale]}
+        {kapitel.kicker}
       </p>
       <h2 className={`lm-h-aussage m-0 mt-3 max-w-[19ch] font-black ${hell ? "text-white" : ""}`}>
-        {kapitel.title[locale]}
+        {kapitel.title}
       </h2>
     </div>
   );
@@ -153,10 +141,9 @@ export function useAktivesKapitel(): string | null {
 }
 
 /** Four digits in the header, the active one carries its name. A click jumps to the chapter. */
-export function ChapterBar({ aktiv, locale }: { aktiv: string | null; locale: Locale }) {
-  const de = locale === "de";
+export function ChapterBar({ aktiv }: { aktiv: string | null }) {
   return (
-    <nav aria-label={de ? "Kapitel des Berichts" : "Report chapters"} className="lm-leiste hidden items-center gap-1 lg:flex">
+    <nav aria-label="Report chapters" className="lm-leiste hidden items-center gap-1 lg:flex">
       {KAPITEL_FOLGE.map((s) => {
         const k = KAPITEL[s];
         const an = aktiv === s;
@@ -170,7 +157,7 @@ export function ChapterBar({ aktiv, locale }: { aktiv: string | null; locale: Lo
             }`}
           >
             <span className="tnum text-[11.5px] sm:text-[10.5px] font-black">{k.nummer}</span>
-            {an ? <span className="whitespace-nowrap text-[11px] font-bold">{k.kicker[locale]}</span> : null}
+            {an ? <span className="whitespace-nowrap text-[11px] font-bold">{k.kicker}</span> : null}
           </a>
         );
       })}

@@ -54,11 +54,20 @@ LEAKS = _private_patterns() + [
 
 # German function words and orthography. A shipped line carrying one is text a
 # member will read in the wrong language.
+# The list started with the words a translator forgets and missed whole sentences that
+# happened to avoid them: "Der Link geht auf die echte Ausschreibung" carries no umlaut
+# and none of the originals. These are German function words that are not English words,
+# so "die", "man", "was" and "war" stay out however German they look.
 GERMAN = re.compile(
     r'[äöüßÄÖÜ]|\b(nicht|keine[rnms]?|kein|eine[rnms]?|und|oder|wird|werden|weil|damit|'
     r'sondern|statt|schon|noch|Datei|Ordner|Zeile|erledigt|fehlt|liegt|gibt|nichts|'
-    r'etwas|dieser|diesem|diesen|deine[rnms]?|selbst|bereits|jeder|jede[nrms]?)\b',
+    r'etwas|dieser|diesem|diesen|deine[rnms]?|selbst|bereits|jeder|jede[nrms]?|'
+    r'der|das|den|dem|des|ist|sind|auf|sich|wenn|dass|muss|soll|auch|aber|vor|'
+    r'nach|ohne|durch|beim|vom|zum|zur|wurde|wurden|haben|hatte|seine|ihre|dann|'
+    r'hier|dort|immer|wieder|zwischen|jedoch|deshalb|dabei|darauf|geht|steht)\b',
     re.IGNORECASE)
+# Lowercase only, because MIT is a licence and a university while mit is a preposition.
+GERMAN_CASED = re.compile(r'\bmit\b')
 LANGUAGE_DATA_MARKER = '# multilingual-data'
 
 # German identifiers survive a translation because no gate reads them. A member
@@ -220,11 +229,11 @@ def check_language():
         carried = None                      # a template literal left open by a line above
         for i, line in enumerate(lines_of(p), 1):
             code, carried = strip_data(line, carried)
-            if not GERMAN.search(line) or LANGUAGE_DATA_MARKER in line:
+            if not (GERMAN.search(line) or GERMAN_CASED.search(line)) or LANGUAGE_DATA_MARKER in line:
                 continue
             # In a file that declares its locale tables, German inside a string is the
             # German report; German outside one is a sentence the next owner cannot read.
-            if multilingual and not GERMAN.search(code):
+            if multilingual and not (GERMAN.search(code) or GERMAN_CASED.search(code)):
                 continue
             findings.append(f'{p.relative_to(ROOT)}:{i} is German: "{line.strip()[:60]}"')
             break
