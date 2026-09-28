@@ -216,9 +216,10 @@ Run `python3 code/pipeline.py prune` first, then the completion report as
 CLAUDE.md defines it. Say the score from Step 1 and what changed because of it,
 worst problem first, in three lines at most. Link [profile.md](../../profile.md).
 
-Next step: paste it on Upwork, in the order Step 6 gives. Run this command again
-once something real changes, a delivered result or a new direction, not on a
-schedule. End with `Upwork calls: N`, measured,
+Next step: paste it on Upwork, in the order Step 6 gives, then `/find-jobs`,
+which scores postings against the profile you just put live. Run this command
+again once something real changes, a delivered result or a new direction, not on
+a schedule. End with `Upwork calls: N`, measured,
 never estimated. Reading costs four on a first run: the account, the profile, its
 highlights and the one job search that measures the skills clients type, and
 fewer when `/context` already read the profile within the day. Every field put
