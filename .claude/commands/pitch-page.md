@@ -144,7 +144,21 @@ more the estimate carries the risk instead of the member. It never becomes the b
 never appears on the client pitch page and never overrides a client-approved
 commercial term.
 
-## Step 5 · Assemble
+## Step 5 · Show the flow, then assemble
+
+**Run `python3 code/graph_sketch.py jobs/<id>/pitch-graph.json` and put the sketch in front
+of the member before anything is generated.** It prints the diagram as text: one block per
+phase, who owns each node, every edge with its label, and the three things a diagram has to
+prove, counted rather than claimed. It also names a node nothing points at and a decision
+with one exit, which are invisible in a picture and obvious here.
+
+Research and draft the flow alone, that is the work. But the flow is what the client studies
+and what the whole page is built around, so it gets their yes or their correction **before**
+the page is rendered and published. Read the sketch back in two lines, say which of the three
+proofs it rests on and what you deliberately left out, then wait. A correction here costs one
+edit; the same correction after the deploy costs the page, the screenshots and the URL.
+
+
 
 ```
 python3 code/pitch_generate.py <id> --hook "..." \
@@ -264,6 +278,10 @@ python3 code/pitch_generate.py <id> --hook "..." \
   at a 390px document width without horizontal overflow.
 
 ## Step 7 · Publish the client page
+
+**Nothing goes public without their word.** The member has seen the flow as a sketch and
+the page as a screenshot; this is where they say go. One line: what the page promises, what
+the bid will be, and that the URL is about to be public. Then publish.
 
 Run `python3 code/pitch_deploy.py <id>`. It confirms the page opens publicly and
 saves the exact deployment URL through `code/pipeline.py`. Never upload the job
