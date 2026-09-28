@@ -243,11 +243,10 @@ already shown how they write.
 
 1. **Hourly rate**, and the smallest project worth taking. Ask what they have in
    mind rather than proposing a figure: a rate invented here is a number they
-   have to defend on a call. Where they have no idea yet, the rule in
-   [references/jobs.md](../../references/jobs.md) says how to place one, and the
-   two pages linked there carry the current market figures. There is no evidence
-   that a low rate wins work, so never talk them down to compete, and never apply
-   a discount for where somebody lives.
+   have to defend on a call. Without an idea yet, point them at the two pages in
+   [references/jobs.md](../../references/jobs.md) and let them come back with a
+   number. Never talk them down to compete, and never apply a discount for where
+   somebody lives.
 2. **Timezone and the hours** they answer messages.
 3. **Applications per day** they can really carry.
 4. **How they want to sound**: the default is an approachable, professional sales

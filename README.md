@@ -90,10 +90,15 @@ Everything below is yours and gitignored, so `git pull` never touches it.
 
 ## What this will never do
 
-It never submits a proposal, never sends a message, never buys Connects, and
-never runs on its own in the background. It prepares the pitch page and the
-application; you record the Loom, paste its link and submit on Upwork. Replies
-are drafts you copy and send on Upwork yourself. The details are in
+It never submits a proposal, never buys Connects, and never runs on its own in
+the background. It prepares the pitch page and the application; you record the
+Loom, paste its link and submit on Upwork yourself, because an application spends
+Connects and is a bid.
+
+A reply to a client is the one thing it can put into the thread for you, and only
+one message at a time, with the full text in front of you and your yes on that
+one message. No answer leaves the draft for you to send by hand, which is also
+what happens if anything about the send looks wrong. The details are in
 [references/upwork.md](references/upwork.md).
 
 One question about this is open, and you should know it before you run

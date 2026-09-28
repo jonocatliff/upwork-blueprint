@@ -1,5 +1,5 @@
 ---
-description: Your morning on Upwork in one command: pulls what changed, tells you where every lead stands and what to do, and drafts every message that is due. Reads only, sends nothing.
+description: Your morning on Upwork in one command: pulls what changed, tells you where every lead stands and what to do, drafts every message that is due, and puts each one to you before it goes out.
 argument-hint: "[job id, for one lead only]"
 ---
 
@@ -7,7 +7,7 @@ argument-hint: "[job id, for one lead only]"
 
 The daily ritual. Your pipeline says one thing and Upwork may say another, so this
 reads what Upwork shows now, moves each lead to match, tells you where everyone stands,
-and writes the messages that are due. It never sends anything.
+and writes the messages that are due. Each one goes to the member first, on its own.
 
 Read first: the proposals and messages parts of
 [references/upwork.md](../../references/upwork.md),
@@ -19,7 +19,8 @@ this repository.
 due. **Without one** it does the whole pipeline.
 
 Roadmap: read Upwork (about a minute), apply it, say where every lead stands, draft what is
-due, report. No stops, nothing needed from you, nothing sent.
+due, then put each draft to you on its own. The reading half needs nothing from you. The
+last part is one question per message, and no answer leaves that draft for you to handle.
 
 ## Step 1 · Read what Upwork shows
 
@@ -143,10 +144,34 @@ Labels are one or two plain words, each `text` is a full reply rather than notes
 Run `python3 code/replies.py check <id>`, then re-read the file and verify each option
 answers the latest client message and carries no claim the two context files cannot support.
 
-## Step 5 · Report
+## Step 5 · One draft, one decision
+
+The drafts exist. Nothing leaves this machine until the member decides, per message.
+
+**One at a time, never as a batch.** Show the full text exactly as it would arrive, name the
+client and what it answers, and ask about that one. A list of five with a single yes
+underneath is the thing this step exists to prevent, and "all of them" answers none of them.
+
+**On a yes**, put that one message into the thread through the connector, then read the room
+back to see it arrived. Say what went out and to whom. Record it with
+`python3 code/pipeline.py set <id> <status>`, and with
+`python3 code/pipeline.py follow-up <job id> sent` when it was a follow-up, because the
+sequence advances on arrival, never on the draft.
+
+**On a no, or on silence**, the draft stays in `jobs/<id>/replies.json` and the member handles
+it on Upwork. That is a normal outcome, not a failure, and it is never asked twice.
+
+**This part of the connector has never been exercised from this repo.** If the account does
+not have the tool, or the room does not show the message afterwards, stop here for this run,
+say so plainly, and hand over every remaining draft to copy. A message that may or may not
+have arrived is worse than one the member handled by hand.
+
+**Proposals and offers are not messages.** Submitting an application spends Connects and is a
+bid; accepting an offer starts a contract. Both stay the member's own click on Upwork, and
+nothing in this step changes that.
+
+## Step 6 · Report
 
 Run `python3 code/pipeline.py prune` first. Then the completion report as CLAUDE.md defines
-it. Lead with who is waiting for the member, then what moved overnight, then which leads got
-drafts and where they are. The member copies a draft and sends it on Upwork themselves.
-After sending a follow-up they say so here, and the sequence advances with
-`python3 code/pipeline.py follow-up <job id> sent`. End with `Upwork calls: N`.
+it. Lead with who is waiting for the member, then what moved overnight, then what went out
+and what is still waiting on them. End with `Upwork calls: N`.

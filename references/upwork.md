@@ -7,11 +7,17 @@ Every claim carries its measurement date. **MEASURED** means called against a re
 ## Hard constraints
 
 1. A human starts every Upwork call. No timer, no background job, no hosted agent.
-2. The member sends every message, proposal and offer. The Blueprint drafts only.
+2. A message goes out only on the member's explicit yes, one message at a time,
+   with the exact text in front of them and nothing else in the same question.
+   Proposals and offers stay theirs to submit: one spends Connects, the other is
+   a contract.
 3. Never buy Connects. Say what an application costs and what is left.
 4. `python3 code/pipeline.py prune` after every run. Upwork content is cached 24 hours at most; the member's own scores, notes and history stay.
 5. No login leaves this machine.
-6. Every run ends with `Upwork calls: N`. A run stays under 30 calls.
+6. Every run ends with `Upwork calls: N`, counted rather than estimated. No fixed
+   ceiling: a pipeline with twenty open leads legitimately costs more than one
+   with three. What is never allowed is a loop that keeps asking, which is the
+   pattern Upwork's policy names, not the total.
 7. Full job details one job at a time, when a job is opened or before applying, never for a list.
 8. No contact information before the contract starts, given or asked for (checked 12 September 2026). A link to your work is allowed, so every page this repo publishes for a client carries no email, phone, WhatsApp, booking link, contact form or social profile, and says "reply here on Upwork" instead. Meetings run on Upwork's own video calls. Exception: Enterprise plan on either side.
 9. Pipeline state is written only through `python3 code/pipeline.py`.
@@ -42,8 +48,6 @@ Stop when the requested fact is known; never broaden a search to make an empty r
 
 **Writing, MEASURED 14 August 2026:** `update_profile` wrote only availability, employment, languages, education and other experience. **DOCUMENTED BUT UNTESTED, tool description 12 September 2026:** `update_title` (70 characters max), `update_overview` (5,000 characters max), `set_skills` (the complete set, 20 max, names resolved to Upwork's skill list, custom skills rejected). **Not writable: hourly rate, portfolio, video.** Every write returns a preview and runs only through `confirm_preview` after an explicit yes.
 
-**DOCUMENTED BUT UNTESTED, 12 September 2026:** `boost_profile` action `get_status` reads the Availability Badge and any profile boost ad. `toggle_availability_badge` with `enabled: false` switches the badge off; switching it on or starting ads happens only on upwork.com.
-
 ## Jobs
 
 **MEASURED 14 August 2026.** `find_jobs search` returns only a truncated `description_snippet`; the full text needs action `get`.
@@ -55,7 +59,7 @@ Stop when the requested fact is known; never broaden a search to make an empty r
 
 **MEASURED 12 September 2026:** every result carries `url`, a working job link. `title` cannot be combined with `query` or with `sort` relevance. Results carry `proposal_count`, `applied`, `featured` and the client's `total_posted_jobs`, but no hire count; the hire record comes only from `get` (`client_record`).
 
-**DOCUMENTED BUT UNTESTED, 12 September 2026:** `smart_search` reads Upwork's recommendation feeds for the profile. `mode` `most_recent` accepts `days_posted`, `from_date` and `to_date`; `best_match` ranks by fit and ignores dates. It also describes `connect_price`, `applied` and a proposals tier.
+**Never exercised from this repo:** `smart_search` reads Upwork's recommendation feeds. `/find-jobs` uses `mode` `most_recent` with `days_posted`. Whatever else its description promises is unverified, so a run says what it got back rather than what it expected.
 
 **What `find_jobs get` adds:** `connects_cost` (what applying costs), `activityStat.applicationsBidStats` (average, minimum and maximum competing rate), `activityStat.jobActivity` (invites sent, hired, invited to interview, offered, unanswered invites), `preferred_qualifications` (minimum Job Success Score, earnings, hours, English level, rising talent, portfolio, contractor type), `client_work_history` (recent contracts with feedback both ways), `clientCompanyPublic` (city, country, timezone), `contractTerms` (experience level, engagement type, hourly budget, persons to hire), `can_apply`. The full description regularly carries a screening instruction no field shows, such as a mandatory opening phrase: read it before writing a proposal.
 
@@ -63,24 +67,13 @@ Stop when the requested fact is known; never broaden a search to make an empty r
 
 **MEASURED 12 September 2026: the `status` filter on `list_freelancer_proposals` action `list` does not filter.** `Accepted`, `Offered`, `Pending` and `Activated` came back empty with "no submitted proposals yet"; `Hired`, `Declined` and `Withdrawn` each returned the same mixed list, totals 44 to 56. Read each proposal's own `status` field, never trust the filter, and treat an empty list as proof of nothing.
 
-**A freelancer cannot message a client first.** No room exists until the client writes, and applied proposals create no follow-up or task. `/brief` moves one to `lost` after 14 full days without a reply.
+**No room exists until the client writes**, so an applied proposal gets no draft, no follow-up and no task. `/brief` moves one to `lost` after 14 full days without a reply.
 
 **MEASURED since 14 August 2026, reading only:** `get_freelancer_dashboard` action `check` (one call returns contracts, Connects, invitations, unread rooms, offers and Upwork's match feed), `list_freelancer_proposals` (records with creation time and job id), `get_messages`, `list_contracts`, `list_accounts` (each `org_uid`; the tool description says to call it first), `get_account`, `set_tool_permission` action `get`. Message authorship is response-shape dependent: a 14 August response had no author field, 12 September responses exposed sender information. Never infer authorship from message order.
 
-**DOCUMENTED BUT UNTESTED, tool descriptions 12 September 2026:**
+**What `/brief` actually calls, all reading:** `list_freelancer_proposals` action `list` (10 per page) and action `get_room`, which gives a proposal's thread once the client wrote. `get_messages` action `list_rooms` carries `awaiting_reply_from` per room; `list_messages` reads newest first. `list_offers` action `list_mine` shows `awaiting_your_acceptance` or `contract_started`. `list_contracts` action `search` takes `contract_statuses`.
 
-- `manage_proposals` action `create` returns a preview, not a submission: Connects price and balance, competing bid stats (Freelancer Plus), the client's screening questions, unmet preferred qualifications, and a boost block. `confirm_preview` with type `proposal` would submit it; the Blueprint does not.
-- Boost bids live only in that preview, never in `find_jobs get`. The `boost` block: `available` (false means do not offer it, `reason` says why), `current_top_bids` (real competing bids, highest first; `current_top_bids_available` false means unknown, not zero), `recommended_connects`, `max_boost_connects` (balance minus the application's own price), `note` (paid slots on this job), `recommendation` (`skip`). A boost cannot be edited or withdrawn once submitted.
-- Only one pending preview per action type; a new `create` replaces the last unconfirmed one.
-- Before `create`: `list_freelancer_proposals` action `invitations` and action `list`, because an existing proposal makes `create` fail. `accept_invitation` exists, its behavior is unmeasured, and the Blueprint stops before it.
-- Read-only pipeline: `list_freelancer_proposals` action `list` takes a `status` (`Accepted` means submitted, plus `Offered`, `Hired`, `Declined`, `Withdrawn`), 10 per page; action `get_room` gives one proposal's thread once the client wrote. `get_messages` action `list_rooms` carries `awaiting_reply_from` per room, `list_messages` reads newest first. `list_offers` action `list_mine` shows `awaiting_your_acceptance` or `contract_started`; `list_contracts` action `search` takes `contract_statuses`. `/brief` uses exactly these.
-
-## Other freelancers
-
-**DOCUMENTED BUT UNTESTED, 12 September 2026.** `get_tool_help` for `find_freelancers` returns a full description, so the server knows it, though it is absent from a freelancer account's default tool list. Whether a freelancer account may call it is untested.
-
-- `search` filters: `query`, `skills` (ANDed), `title`, `earnings_min`/`max`, `job_success_min` (0 to 100), `top_rated`, `top_rated_plus`, `rising_talent`, `total_jobs_min`, `hours_billed_min`, `rate_min`/`rate_max`, location and language. 10 results per call, paged with `offset`. Each result carries `profile_key` (for `get_profile`) and `personId` (for invitations, never interchangeable). Earnings are bucketed ("$50K+"), never exact, and boosted results are paid placements, not merit.
-- `get_profile`: skills, employment, education, job aggregates, portfolio when readable, and `work_history` (each contract's title, dates, status, amount earned and the client's review). An absent section is not evidence of no contracts; check `work_history_available`.
+**Submitting is not ours to do.** `manage_proposals` action `create` builds a preview and `confirm_preview` would submit it; `accept_invitation` exists and nobody here has run it. An application spends Connects and a boost cannot be edited or withdrawn once placed, so both stay the member's own click on Upwork. That is the rule, and the rest of what those tools describe is unverified and therefore not written down here.
 
 ## Present but untested
 

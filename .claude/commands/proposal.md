@@ -167,7 +167,8 @@ detail and no way off Upwork before a contract.
 Run `python3 code/document_check.py check proposal <id>` and fix every failure. Read it
 once as a scope dispute: could both sides tell what is done and what is not?
 
-Do not call `send_message`, `manage_proposals` or an offer tool. The member
+Do not call `manage_proposals` or an offer tool, and send nothing from here: this
+command writes the document, and `/brief` owns the thread. The member
 copies the proposal from the cockpit panel and sends it on Upwork. Do not move
 the stage to offer: that stage means a client offer exists, and `/brief` sets it.
 

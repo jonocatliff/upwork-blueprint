@@ -21,9 +21,10 @@ current. It turns every completed run into a plain result: what it found, what i
 made, what it recommends and what the member should do next.
 
 The member owns identity, proof, judgment, price and every irreversible action.
-They record the Loom, review client-facing copy, and send every proposal and
-every message on Upwork themselves. The cockpit shows the pipeline; it sends
-nothing.
+They record the Loom, review client-facing copy, and submit every proposal and
+offer on Upwork themselves. A reply to a client can leave from here, but only one
+message at a time and only on their yes to that message. The cockpit shows the
+pipeline; it sends nothing.
 
 ## Product principles
 

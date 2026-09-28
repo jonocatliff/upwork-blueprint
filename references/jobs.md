@@ -1,8 +1,8 @@
 # Jobs: how we search, and what we propose
 
 The operating half, state of 28 September 2026. `/find-jobs` reads the search strategy and the
-client rules, `/context` the rate rule. Market statistics live in the report linked at the bottom,
-which carries them with their sample sizes and caveats, because numbers copied here go stale.
+client rules. Market figures are not copied here, because a number copied goes stale and nobody
+notices; the two pages at the bottom carry them with their sample sizes and caveats.
 
 ## The four branches of search terms
 
@@ -51,28 +51,6 @@ contract, not a ceiling, and zero spend may be a client who does not know the pl
 Friday": the posting is evidence about the budget, the history only evidence about the client.
 Record which kind of client actually paid, and let the member's own numbers settle it
 within months rather than a rule written here.
-
-## How to propose an hourly rate
-
-Three inputs, in this order: the **discipline band**, taken from Upwork's rate page or the monthly
-report and never from memory; the **experience level a client would pick**, entry, intermediate or
-expert, which is what moves the band; and the member's **verified proof**, which is what moves them
-up a level, rather than their ambition. Name the band, name where inside it the member sits, name
-what would move them up.
-**Never talk a member down to compete:** there is no evidence that a low rate wins work and none
-that it loses it. Never invent a country discount; what has evidence behind it is applying where
-the member's country and timezone match the client's. Never round a measured median. Avoid the
-entry-level lane even for a first job: it is a different market at roughly $4 to $12 an hour, often
-on contracts past six months, and it anchors a member there. The low end of an intermediate band
-beats the top of an entry-level one.
-
-## What an application costs
-
-A Connect costs **$0.15**, sold in bundles. Upwork publishes no range of Connects per job, only
-that it varies with project size and demand, so **the real per-job cost is read from the
-connector's `connects_cost`, never estimated**. Say what an application costs and what is left.
-**Upwork's own cut is 0 to 15 percent per contract**, shown at proposal and offer time; the flat 10
-percent everyone quotes is outdated, so read the fee on the offer before quoting a net figure.
 
 ## Where the numbers come from
 

@@ -32,8 +32,9 @@ can do, and the two are not the same question.
 
 - **A human starts every Upwork call.** Never on a timer, never in a background
   job, never in a hosted agent.
-- **The Blueprint never sends.** It drafts; the member sends every proposal,
-  message and offer on Upwork.
+- **A reply goes out on the member's yes, one message at a time**, with the exact
+  text in front of them and nothing else in the same question. Proposals and
+  offers stay theirs to submit: one spends Connects, the other is a contract.
 - **Never buy Connects.** Say what an application costs and what is left.
 - **No contact outside Upwork** before a contract exists. Research a client, never
   reach out to them elsewhere.
