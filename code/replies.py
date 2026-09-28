@@ -17,6 +17,7 @@ import argparse
 import json
 import pathlib
 import re
+import subprocess
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -107,12 +108,49 @@ def cmd_check(args):
     return 0
 
 
+def cmd_sent(args):
+    """Record which draft went to the client, in the draft's own words.
+
+    The send itself is one connector call and leaves no trace here, so a week later
+    nobody can say what was sent or whether it was the text the member approved.
+    Taking the record from replies.json rather than from a retyped summary is the
+    whole point: what is logged is provably the option they chose.
+    """
+    if not ID.fullmatch(args.job_id):
+        print('ABORT: that job id is not valid.', file=sys.stderr)
+        return 1
+    file = pipeline.jobs_dir() / args.job_id / 'replies.json'
+    try:
+        value = json.loads(file.read_text(encoding='utf-8'))
+    except (FileNotFoundError, json.JSONDecodeError):
+        print('ABORT: replies.json is missing or not valid JSON.', file=sys.stderr)
+        return 1
+    drafts = [d for d in value.get('drafts') or [] if isinstance(d, dict)]
+    picked = [d for d in drafts if str(d.get('label', '')).strip().lower() == args.label.strip().lower()]
+    if not picked:
+        labels = ', '.join(repr(str(d.get('label', ''))) for d in drafts) or 'none'
+        print(f'ABORT: no draft labelled {args.label!r}. Labels present: {labels}', file=sys.stderr)
+        return 1
+    text = ' '.join(str(picked[0].get('text', '')).split())
+    out = subprocess.run([sys.executable, str(ROOT / 'code' / 'pipeline.py'), 'note', args.job_id,
+                          f'sent to the client: {text}'], capture_output=True, text=True)
+    if out.returncode:
+        print(out.stderr.strip(), file=sys.stderr)
+        return 1
+    print(f'Recorded the "{picked[0].get("label")}" draft as sent.')
+    return 0
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest='command', required=True)
     check = sub.add_parser('check', help='Validate jobs/<id>/replies.json.')
     check.add_argument('job_id')
     check.set_defaults(func=cmd_check)
+    sent = sub.add_parser('sent', help='Record which draft the member sent, from its own text.')
+    sent.add_argument('job_id')
+    sent.add_argument('--label', required=True, help='the label of the draft that went out')
+    sent.set_defaults(func=cmd_sent)
     args = parser.parse_args(argv)
     return args.func(args)
 

@@ -173,6 +173,9 @@ underneath is the thing this step exists to prevent, and "all of them" answers n
 
 **On a yes**, put that one message into the thread through the connector, then read the room
 back to see it arrived. Say what went out and to whom. Record it with
+`python3 code/replies.py sent <id> --label "<the label they chose>"`, which writes that
+draft's own words into the lead's log, because the send leaves no trace here otherwise and a
+week later nobody can say which version went out. Then
 `python3 code/pipeline.py set <id> <status>`, and with
 `python3 code/pipeline.py follow-up <job id> sent` when it was a follow-up, because the
 sequence advances on arrival, never on the draft.
