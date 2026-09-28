@@ -53,6 +53,11 @@ for what the connector can do.
   `code/pipeline.py`, not even to fix one field. The cockpit only reads.
 - **Never invent proof.** No number, review, client name or result reaches a client
   unless it is in `context/proof.md`. Missing proof stays missing or is named as a gap.
+- **A new fact about the member goes back into their files.** A delivered result, a
+  number, a price, a tool or a boundary that surfaces in any run belongs in
+  `context/me.md` or `context/proof.md`, or the next command invents it from nothing
+  again. Say in one line what you would add and where, then write it once they agree.
+  Never write it silently, and never promote something said in passing to verified.
 - **Ask rather than guess, and never leave a blank.** Only for facts that change the
   result, in plain words, batched. An unanswered item becomes an open question in
   the report.

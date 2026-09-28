@@ -18,6 +18,22 @@ member starting from zero, [references/upwork-beginner.md](../../references/upwo
 holds what actually holds up, including which categories are open to someone
 without a history.
 
+**What this is for.** Two things, and every question only makes sense against
+them. The first is to learn this person's history on two levels at once. The
+career: what they have done, for whom, for how long, and what they were trusted
+with. The skill: what they can actually do today, how well, and on which tools.
+Most members answer the first and skip the second, and a profile built on job
+titles alone reads like a CV nobody asked for.
+
+The second is to lay the base a freelance career on Upwork stands on. Upwork
+sells one specific person solving one specific problem for one kind of client, at
+a price, with something behind the claim. Every question below exists because
+some later command needs its answer to make that case.
+
+Hold both while asking. A question that serves neither is a question to drop. An
+answer that opens a door to either is worth following even when it is not on the
+list, and that judgement is the whole difference between an interview and a form.
+
 **Ask with the slots in mind.** Every answer here lands somewhere later: the
 title needs three or four words a client types into search, the first 250
 characters of the overview need an outcome or a hard number, each portfolio title
@@ -28,6 +44,36 @@ loss; it is an empty slot that `/profile` cannot fill with anything but adjectiv
 **Input:** $ARGUMENTS. A path to a CV or a URL is material to read, see Step 1.
 A focus value runs only that block and rewrites only its part of the files. An
 input that is neither gets the list and a question.
+
+## How this sounds
+
+This is an interview, not a form. The difference is not politeness, it is order.
+A form hands over every question at once and takes whatever comes back. An
+interview asks one thing, listens, and lets that answer decide what comes next.
+
+So each block below opens with one question, never its whole list. What the
+member says steers the rest: name back what you heard in a line, ask the one
+thing their answer left open, move on. A block answered fully in one go is
+finished, so do not walk the rest of its list to look thorough.
+
+Three limits keep this an interview rather than an interrogation:
+
+- **At most three exchanges per block.** Then take what exists, say what stayed
+  open, and go on. Nothing here is something the member has to produce.
+- **Never ask what an answer already gave you.** Years named in a CV, a price
+  mentioned in passing, a rate that came up on its own: confirm it in half a
+  line, do not ask for it again.
+- **One question at a time, unless two are really one.** Timezone and the hours
+  they answer messages are one question. A working life and a price are not.
+
+Open each block by saying what it is for and roughly how long it takes, so the
+member can see the end of it from the start.
+
+`CLAUDE.md` tells every command to batch its questions, and this command is the
+exception it is written against. There, questions interrupt work the member
+wants finished, so they are collected. Here the questions are the work. Batching
+them turns the one conversation about who this person is into a form, and a form
+gets form answers: three words where the profile needs a number.
 
 ## Has this already run?
 
@@ -104,11 +150,20 @@ From that material, list back what you found, one line per job, and ask only
 what is missing or unclear. Everything a CV claims is the member's own wording:
 it becomes a fact with a source and a date, never verified proof by itself.
 
-Then ask, in one message, and say why: a profession outside freelancing is
-usually the strongest thing a new profile has, and most members leave it out.
+Then open the block, and say why before you ask: a profession outside
+freelancing is usually the strongest thing a new profile has, and most members
+leave it out.
+
+Ask this, and only this, first:
 
 1. **Every job you have held**, with the years and what you actually did there.
    Trades, shifts, teaching, coaching, support, sales, anything. No filter yet.
+
+Their answer decides the rest. A missing year, a job described in three words, a
+side project mentioned and dropped: those are the follow-ups, and they are worth
+more than the next question on the list. Ask the three below only where the
+answer did not already carry them:
+
 2. **What you were good at** in those jobs, in your words.
 3. **Education, certificates and languages**, with the year.
 4. **What you have built or delivered for someone**, paid or not, on or off
@@ -121,7 +176,9 @@ handling. Say which is which and why, in two lines.
 
 ## Step 2 · The offer
 
-One message, after Step 1 is written:
+A conversation, after Step 1 is written. Open with the first question below and
+let the answer steer the rest. Point 2 is where the listening matters: a service
+without a deliverable and a price makes every later command invent one.
 
 1. **The one thing you want to be hired for.** Their words, not a category.
 2. **The services they actually sell**, at most five, and per service four
@@ -158,7 +215,10 @@ One message, after Step 1 is written:
 
 ## Step 3 · Terms and voice
 
-One message:
+The shortest block, and often one exchange. Open with the rate, because it is
+the only one here a member may want to think about. Points 2 and 3 are one
+question, and point 4 usually needs none at all, because this conversation has
+already shown how they write.
 
 1. **Hourly rate**, and the smallest project worth taking. Propose a band from
    [references/upwork-market.md](../../references/upwork-market.md) for their
@@ -244,7 +304,23 @@ and say which ones stay open. Never answer a question on the member's behalf.
 
 ## Step 7 · Report
 
-Completion report as CLAUDE.md defines it. Say how many questions are still
-open, and that every later command reads these two files. Next step: `/audit`,
-which measures the live profile, or `/profile` directly when there is no profile
-yet. End with `Upwork calls: N`, normally 0.
+Before the completion report, the part the member sat through the interview for:
+show them what is now in their files. Not a list of filenames, the content, in
+their own words, so a wrong line is visible without opening anything.
+
+**What you are on record as.** The one thing they are hired for, each service
+with its price beside it, the rate, and what they do not do. Six lines at most.
+
+**What you can prove.** Every proof entry, verified and pending kept apart,
+highest tier first. A pending claim never reaches a client, so say plainly which
+ones those are and what would move them to verified.
+
+**Where it lives.** [context/me.md](../../context/me.md) and
+[context/proof.md](../../context/proof.md), the two files every later command
+reads. Name any other file this run created or changed, and say that these two
+are the member's own and are never touched by `git pull`.
+
+Then the completion report as CLAUDE.md defines it: how many questions stayed
+open and which single answer would be worth the most. Next step: `/audit`, which
+measures the live profile, or `/profile` directly when there is no profile yet.
+End with `Upwork calls: N`, normally 0.
