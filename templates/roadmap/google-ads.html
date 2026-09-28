@@ -3,192 +3,206 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The 6-week build</title>
-<!--
-  THE ONE PLACE TO EDIT
-  Change the block in <script id="plan"> below and the page redraws itself.
-  Everything else here is layout. Four tracks is what fits a client's attention;
-  five reads as a list and three looks thin.
-
-  Rules that are not cosmetic:
-  - A track's "gets" line is the outcome in the client's words, not the task.
-    "Found on Google and Maps" beats "technical SEO and citations".
-  - Weeks overlap on purpose. A plan where every track waits for the one before
-    it reads as eight weeks of nothing, and it is also not how the work runs.
-  - The promise line at the bottom names what does NOT get promised. Leave it in.
--->
+<title>The 6-Week Build</title>
 <style>
   :root {
     color-scheme: light;
-    --ink: #101828;
-    --ink-2: #475467;
-    --ink-3: #8a94a6;
-    --line: #e4e7ec;
+    --c-measure: #5b7fe0;
+    --c-page: #153aa1;
+    --c-campaigns: #0b235f;
+    --c-loop: #9fb4ec;
+    --c-hand: #8a8d93;
+    --blue-950: #071540;
+    --blue-800: #102d80;
+    --blue-200: #c4d1f2;
+    --blue-50: #eef2fc;
     --paper: #ffffff;
-    --wash: #f7f8fa;
-    --accent: #1a6b5a;
-    --accent-soft: #e3f1ed;
-    --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    --mono: ui-monospace, 'SF Mono', Menlo, monospace;
-    --r: 12px;
+    --sand: #fafaf7;
+    --line: #e4e3dd;
+    --ink: #16181d;
+    --graphite: #454850;
+    --pewter: #6a6d74;
+    --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink-2); font-family: var(--sans);
-         font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
-  .wrap { max-width: 860px; margin: 0 auto; padding: 48px 22px 72px; }
+  body { margin: 0; background: var(--sand); color: var(--ink); font: 400 15px/1.45 var(--font); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 44px; display: grid; gap: 30px; }
+  h1, h2, h3 { margin: 0; text-wrap: balance; letter-spacing: -0.02em; }
+  p { margin: 0; }
 
-  header { border-bottom: 1px solid var(--line); padding-bottom: 26px; margin-bottom: 30px; }
-  .kicker { font-family: var(--mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
-            color: var(--accent); }
-  h1 { font-size: clamp(28px, 5vw, 38px); line-height: 1.1; color: var(--ink); margin: 8px 0 10px;
-       letter-spacing: -.02em; font-weight: 700; }
-  .sub { font-size: clamp(16px, 2.4vw, 18px); color: var(--ink-2); max-width: 46ch; }
+  header { display: grid; gap: 8px; }
+  header h1 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.04; font-weight: 700; letter-spacing: -0.03em; }
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--c-page); }
+  header p { color: var(--graphite); font-size: 17px; }
 
-  .steps { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line);
-           border-radius: var(--r); overflow: hidden; margin-bottom: 34px; }
-  .step { background: var(--paper); padding: 20px 22px; display: grid;
-          grid-template-columns: 38px 1fr auto; gap: 4px 18px; align-items: baseline; }
-  .step .n { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); grid-row: span 2; }
-  .step h2 { font-size: 17px; color: var(--ink); margin: 0; font-weight: 600; }
-  .step .weeks { font-family: var(--mono); font-size: 12px; color: var(--ink-3); white-space: nowrap; }
-  .step .gets { grid-column: 2 / 4; font-size: 15px; color: var(--ink-2); }
+  /* Flow */
+  .flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .node {
+    position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
+    padding: 22px 20px 20px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+    box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12);
+  }
+  .node:not(:last-child)::after {
+    content: ""; position: absolute; right: -17px; top: 44px; width: 20px; height: 20px; z-index: 2;
+    border-radius: 50%; background: var(--paper); border: 1px solid var(--line);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236a6d74' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E");
+    background-size: 12px; background-repeat: no-repeat; background-position: center;
+  }
+  .icon {
+    width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center; color: #fff; margin-bottom: 8px;
+    background: linear-gradient(155deg, color-mix(in srgb, var(--c) 78%, #fff) 0%, var(--c) 55%, color-mix(in srgb, var(--c) 80%, #000) 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 6px 14px -6px var(--c);
+  }
+  .icon svg { width: 26px; height: 26px; }
+  .node .n { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pewter); }
+  .node h3 { font-size: 20px; line-height: 1.15; }
+  .node p { color: var(--graphite); font-size: 14px; margin-bottom: 8px; }
+  .chip { margin-top: auto; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: color-mix(in srgb, var(--c) 12%, #fff); color: color-mix(in srgb, var(--c) 70%, #000); font-variant-numeric: tabular-nums; }
 
-  .chart { border: 1px solid var(--line); border-radius: var(--r); padding: 22px; background: var(--wash); }
-  .chart h3 { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3);
-              margin: 0 0 16px; font-weight: 600; }
-  .grid { display: grid; gap: 7px; }
-  .row { display: grid; grid-template-columns: minmax(96px, 150px) 1fr; gap: 14px; align-items: center; }
-  .row .label { font-size: 13.5px; color: var(--ink); }
-  .bars { position: relative; height: 26px; }
-  .tick { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line); }
-  .bar { position: absolute; top: 4px; bottom: 4px; background: var(--accent); border-radius: 4px; }
-  .bar.soft { background: var(--accent-soft); border: 1px solid var(--accent); }
-  .scale { display: grid; grid-template-columns: minmax(96px, 150px) 1fr; gap: 14px; margin-top: 10px; }
-  .scale .label { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
-                  text-transform: uppercase; color: var(--ink-3); }
-  .weeknums { position: relative; height: 16px; }
-  .weeknums span { position: absolute; font-family: var(--mono); font-size: 11px; color: var(--ink-3);
-                   transform: translateX(-50%); }
+  /* Big numbers */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--blue-950); border-radius: 16px; overflow: hidden; }
+  .stat { padding: 22px 20px; display: grid; gap: 4px; border-left: 1px solid var(--blue-800); }
+  .stat:first-child { border-left: 0; }
+  .stat b { font-size: clamp(28px, 3.4vw, 38px); line-height: 1; color: #fff; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .stat span { color: var(--blue-200); font-size: 13.5px; }
 
-  .promise { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line);
-             font-size: 14px; color: var(--ink-3); }
+  /* Roadmap */
+  .rm-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 20px; flex-wrap: wrap; margin-bottom: 10px; }
+  .rm-head h2 { font-size: 22px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--pewter); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 14px; height: 8px; border-radius: 3px; display: inline-block; }
+  .scroll { overflow-x: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12); }
+  table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 820px; }
+  th, td { padding: 0; border-bottom: 1px solid var(--line); }
+  thead th { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--pewter); padding: 10px 0; text-align: center; background: var(--sand); }
+  thead th:first-child { text-align: left; padding-left: 16px; }
+  td.what { padding: 10px 16px; width: 410px; font-size: 14px; position: sticky; left: 0; background: var(--paper); z-index: 1; }
+  td.w { position: relative; border-left: 1px solid var(--line); min-width: 50px; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .bar { position: absolute; top: calc(50% - 8px); height: 16px; left: 0; right: 0; }
+  .bar.s { left: 5px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; }
+  .bar.e { right: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; }
+  .bar.run { top: calc(50% - 3px); height: 6px; opacity: 0.35; }
+  td.what b { display: block; font-weight: 600; }
+  td.what span { display: block; font-size: 12.5px; color: var(--pewter); line-height: 1.4; margin-top: 2px; }
+  tr.ms td { background: var(--sand); height: 44px; }
+  tr.ms td.what { background: var(--sand); color: var(--pewter); font-size: 12px; }
+  .d { position: absolute; left: 50%; top: 9px; width: 10px; height: 10px; background: var(--ink); transform: translateX(-50%) rotate(45deg); border-radius: 1px; }
+  .dl { position: absolute; left: 50%; top: 24px; transform: translateX(-50%); font-size: 10.5px; font-weight: 600; color: var(--graphite); white-space: nowrap; }
 
-  @media (max-width: 560px) {
-    .step { grid-template-columns: 30px 1fr; }
-    .step .weeks { grid-column: 2; }
-    .step .gets { grid-column: 2; }
-    .row, .scale { grid-template-columns: 82px 1fr; gap: 10px; }
+  .note { font-size: 13px; color: var(--pewter); text-align: center; }
+
+  @media (max-width: 860px) {
+    .flow { grid-template-columns: 1fr 1fr; }
+    .node:nth-child(2)::after { display: none; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .stat:nth-child(3) { border-left: 0; }
+    .stat:nth-child(n+3) { border-top: 1px solid var(--blue-800); }
+  }
+  @media (max-width: 520px) {
+    .wrap { padding-inline: 16px; padding-block: 28px 32px; gap: 24px; }
+    .flow { grid-template-columns: 1fr; }
+    .node::after { display: none; }
+    td.what { width: 250px; font-size: 13px; }
   }
 </style>
-</head>
-<body>
-<div class="wrap">
 
+<main class="wrap">
   <header>
-    <span class="kicker" id="kicker"></span>
-    <h1 id="title"></h1>
-    <p class="sub" id="sub"></p>
+    <span class="eyebrow">The 6-week build</span>
+    <h1>Ready-to-buy searches, turned into booked jobs</h1>
+    <p>Live in 3 weeks, then tuned every week after that.</p>
   </header>
 
-  <div class="steps" id="steps"></div>
+  <ol class="flow">
+    <li class="node" style="--c:var(--c-measure)">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22"/></svg></span>
+      <span class="n">Step 1</span>
+      <h3>Measurement</h3>
+      <p>Every lead counted, and what it cost</p>
+      <span class="chip">Weeks 1 and 6</span>
+    </li>
+    <li class="node" style="--c:var(--c-page)">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 8.5h18"/><path d="M10 12.5l5 5 .9-2.4 2.4-.9z"/></svg></span>
+      <span class="n">Step 2</span>
+      <h3>Landing page</h3>
+      <p>A page built to get the call</p>
+      <span class="chip">Weeks 1 to 2</span>
+    </li>
+    <li class="node" style="--c:var(--c-campaigns)">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10v4a1 1 0 0 0 1 1h2.2L13 19V5L7.2 9H5a1 1 0 0 0-1 1z"/><path d="M17 9.2a4.2 4.2 0 0 1 0 5.6"/></svg></span>
+      <span class="n">Step 3</span>
+      <h3>Campaigns</h3>
+      <p>In front of people searching now</p>
+      <span class="chip">Weeks 2 to 3</span>
+    </li>
+    <li class="node" style="--c:var(--c-loop)">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 0 1 14.3-6.2L20.5 8"/><path d="M20.5 3.2V8h-4.8"/><path d="M20.5 12a8.5 8.5 0 0 1-14.3 6.2L3.5 16"/><path d="M3.5 20.8V16h4.8"/></svg></span>
+      <span class="n">Step 4</span>
+      <h3>The weekly loop</h3>
+      <p>Wasted spend cut every week</p>
+      <span class="chip">Weeks 3 to 6</span>
+    </li>
+  </ol>
 
-  <div class="chart">
-    <h3 id="chartTitle"></h3>
-    <div class="grid" id="grid"></div>
-    <div class="scale">
-      <span class="label">Week</span>
-      <div class="weeknums" id="weeknums"></div>
+
+  <section aria-labelledby="rm">
+    <div class="rm-head">
+      <h2 id="rm">The roadmap</h2>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--c-measure)"></i>Measurement</span>
+        <span><i class="sw" style="background:var(--c-page)"></i>Landing page</span>
+        <span><i class="sw" style="background:var(--c-campaigns)"></i>Campaigns</span>
+        <span><i class="sw" style="background:var(--c-loop)"></i>The weekly loop</span>
+      </div>
     </div>
-  </div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th scope="col">WEEK</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
 
-  <p class="promise" id="promise"></p>
-
-</div>
-
-<script id="plan" type="application/json">
-{
-  "kicker": "The 6-week build",
-  "title": "Searches that can buy, turned into answered enquiries",
-  "sub": "Nothing runs until the tracking proves itself.",
-  "weeks": 6,
-  "chartTitle": "The roadmap",
-  "promise": "No cost per lead promised before the account has data: the first four weeks are what produce it.",
-  "tracks": [
-    { "name": "Tracking",      "gets": "Every lead counted, before a cent is spent", "from": 1, "to": 1 },
-    { "name": "Campaigns",     "gets": "Ads only for searches that can buy",         "from": 1, "to": 3 },
-    { "name": "Landing pages", "gets": "A page that says what they searched for",    "from": 2, "to": 3 },
-    { "name": "The weekly loop", "gets": "Waste cut every week from real search terms", "from": 3, "to": 6 }
-  ]
-}
-</script>
+  <p class="note">No cost per lead promised before the account has data. Ad spend goes to Google and is separate from the fee.</p>
+</main>
 
 <script>
-  (function () {
-    var plan = JSON.parse(document.getElementById('plan').textContent);
-    var W = plan.weeks;
+  const C = { M: "--c-measure", P: "--c-page", K: "--c-campaigns", L: "--c-loop", H: "--c-hand" };
+  const WEEKS = 6;
+  const ROWS = [
+    ["M", "Conversion tracking", "Every form, call and enquiry counted once, so the cost per lead is a real number.", { from: 1, to: 1 }],
+    ["M", "Call tracking", "Calls from the ad and from your website counted as leads, with the number that rang.", { from: 1, to: 1 }],
+    ["P", "Landing page", "One fast page per service, tap-to-call and your proof up front, built for the ad that sends people to it.", { from: 1, to: 2 }],
+    ["K", "Keyword and ad group map", "What people in your area actually type, grouped so every search meets the ad written for it.", { from: 2, to: 2 }],
+    ["K", "Account build", "Campaigns, ads and the negative keyword lists, built paused so nothing spends before you have seen it.", { from: 2, to: 3 }],
+    ["K", "Go live", "You switch it on, after one real test form and one real test call have each counted exactly once.", { from: 3, to: 3 }],
+    ["L", "Search terms and negatives", "Every week we read what people really typed, cut what does not belong and bid on what does.", { from: 3, to: 6 }],
+    ["L", "Bids and budget", "One change at a time, because two at once cannot be read.", { from: 4, to: 6 }],
+    ["M", "Your dashboard", "What a lead costs, where it came from, and what it is worth to you.", { from: 6, to: 6 }]
+  ];
+  const MS = { 1: "Tracking verified", 3: "Live", 6: "First full report" };
 
-    document.getElementById('kicker').textContent = plan.kicker;
-    document.getElementById('title').textContent = plan.title;
-    document.getElementById('sub').textContent = plan.sub;
-    document.getElementById('chartTitle').textContent = plan.chartTitle;
-    document.getElementById('promise').textContent = plan.promise;
+  function cell(k, p, w) {
+    let c = "";
+    if (p.at) { if (!p.at.includes(w)) return '<td class="w"></td>'; c = "s e"; }
+    else if (w >= p.from && w <= p.to) c = (w === p.from ? "s " : "") + (w === p.to ? "e" : "");
+    else if (p.run && w > p.to) c = "run";
+    else return '<td class="w"></td>';
+    return '<td class="w"><span class="bar ' + c + '" style="background:var(' + C[k] + ')"></span></td>';
+  }
 
-    function span(from, to) {
-      // Week n occupies the slice from (n-1)/W to n/W of the track's width.
-      return { left: ((from - 1) / W * 100) + '%', width: ((to - from + 1) / W * 100) + '%' };
-    }
-
-    var steps = document.getElementById('steps');
-    plan.tracks.forEach(function (t, i) {
-      var weeks = t.also
-        ? 'Weeks ' + t.from + ' and ' + t.also[0]
-        : (t.from === t.to ? 'Week ' + t.from : 'Weeks ' + t.from + ' to ' + t.to);
-      var el = document.createElement('div');
-      el.className = 'step';
-      el.innerHTML = '<span class="n">Step ' + (i + 1) + '</span>'
-        + '<h2></h2><span class="weeks"></span><span class="gets"></span>';
-      el.querySelector('h2').textContent = t.name;
-      el.querySelector('.weeks').textContent = weeks;
-      el.querySelector('.gets').textContent = t.gets;
-      steps.appendChild(el);
-    });
-
-    var grid = document.getElementById('grid');
-    plan.tracks.forEach(function (t) {
-      var row = document.createElement('div');
-      row.className = 'row';
-      var label = document.createElement('span');
-      label.className = 'label';
-      label.textContent = t.name;
-      var bars = document.createElement('div');
-      bars.className = 'bars';
-      for (var w = 1; w < W; w++) {
-        var tick = document.createElement('span');
-        tick.className = 'tick';
-        tick.style.left = (w / W * 100) + '%';
-        bars.appendChild(tick);
-      }
-      [[t.from, t.to]].concat(t.also ? [t.also] : []).forEach(function (pair) {
-        var b = document.createElement('span');
-        b.className = 'bar';
-        var s = span(pair[0], pair[1]);
-        b.style.left = s.left;
-        b.style.width = s.width;
-        bars.appendChild(b);
-      });
-      row.appendChild(label);
-      row.appendChild(bars);
-      grid.appendChild(row);
-    });
-
-    var nums = document.getElementById('weeknums');
-    for (var w = 1; w <= W; w++) {
-      var s = document.createElement('span');
-      s.textContent = w;
-      s.style.left = ((w - 0.5) / W * 100) + '%';
-      nums.appendChild(s);
-    }
-  })();
+  let h = "";
+  for (const [k, name, desc, p] of ROWS) {
+    h += '<tr><td class="what"><b>' + name + "</b><span>" + desc + "</span></td>";
+    for (let w = 1; w <= WEEKS; w++) h += cell(k, p, w);
+    h += "</tr>";
+  }
+  h += '<tr class="ms"><td class="what">Milestones</td>';
+  for (let w = 1; w <= WEEKS; w++) h += '<td class="w">' + (MS[w] ? '<span class="d"></span><span class="dl">' + MS[w] + "</span>" : "") + "</td>";
+  document.getElementById("rows").innerHTML = h + "</tr>";
 </script>
+
 </body>
 </html>

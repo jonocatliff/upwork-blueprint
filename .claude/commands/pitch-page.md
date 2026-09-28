@@ -65,10 +65,11 @@ proves the member drew a diagram.
 
 - **The posting is mainly SEO, local SEO, Google Business Profile or Google Ads:**
   copy `templates/roadmap/seo.html` or `templates/roadmap/google-ads.html` to
-  `jobs/<id>/roadmap.html` and edit its JSON block to this client: their city,
-  their trade, their words for what they end up with. Keep the tracks; change what
-  each one is called in their language, and the promise line if the scope is
-  narrower. Then assemble with `--roadmap` instead of `--graph`, and skip the rest
+  `jobs/<id>/roadmap.html` and edit it to this client: the header, the four step
+  cards, and the `ROWS` and `MS` lists in the script at the bottom, which draw the
+  weeks. Use their city, their trade and their words for what they end up with.
+  Keep the four tracks and the week count; change the row wording, and the note at
+  the foot if the scope is narrower. Then assemble with `--roadmap` instead of `--graph`, and skip the rest
   of this step. `pitch_deploy.py` publishes it at `<id>/roadmap`, which is the
   route `--roadmap` points at.
 - **Anything else, or a job that mixes SEO with real automation work:** draw the

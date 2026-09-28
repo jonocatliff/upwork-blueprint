@@ -4,7 +4,7 @@ Distilled from a maintained local-SEO pipeline and the specs behind it (keyword 
 
 ## The four tracks
 
-The client-facing shape of the work is four overlapping tracks across eight weeks, not a chain of phases. The editable template is `templates/roadmap/seo.html`: change the plan block at the bottom of that file and the page redraws itself.
+The client-facing shape of the work is four overlapping tracks across eight weeks, not a chain of phases. The editable template is `templates/roadmap/seo.html`: change the `ROWS` and `MS` lists in the script at the bottom of that file and the weeks redraw themselves.
 
 | Track | Weeks | What the client gets |
 |---|---|---|

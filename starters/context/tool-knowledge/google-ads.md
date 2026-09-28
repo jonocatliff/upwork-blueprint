@@ -159,7 +159,15 @@ In rough order of money, and this is the order the work gets ranked in:
 
 ## For a pitch page
 
-Four to five steps belong on a client-facing diagram, in this order:
+The default is the six-week build in `templates/roadmap/google-ads.html`: four
+tracks named by what the client ends up with, live in week 3 and tuned weekly
+after that. Change the `ROWS` and `MS` lists in the script at the bottom of that
+file and the weeks redraw themselves. Use it for any job that is a build or an
+ongoing account; draw a diagram instead only when the job mixes Ads with real
+automation work.
+
+The same order holds when a diagram is the right call. Four to five steps, in
+this order:
 
 1. **Measurement first.** Conversion actions, call tracking and the thank-you page, verified with a real test lead before a single ad is enabled. This node always comes before bidding, because it is the one the client has never been shown and the one every later number depends on.
 2. **Structure and keywords.** Campaigns, single-theme ad groups, match types and the negative list, drawn as one step. Show it as a filter, not as a keyword dump.
