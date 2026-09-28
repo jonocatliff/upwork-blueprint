@@ -32,6 +32,8 @@ DECISIONS = DATA / 'decisions.jsonl'
 # When this account last searched. The member's own record of their own runs, so
 # `prune` leaves it alone: it holds no Upwork content, only a timestamp.
 LAST_SEARCH = DATA / 'last-search.json'
+# What the member's own outcomes have taught, written by learn.py lessons.
+LESSONS = DATA / 'lessons.json'
 PIPELINE = ROOT / 'code' / 'pipeline.py'
 ME = pathlib.Path(os.environ.get('BLUEPRINT_ME') or ROOT / 'context' / 'me.md')
 TAG = re.compile(r'</?untrusted_participant_content>')
@@ -41,6 +43,7 @@ FIT_GATE = 60          # below this the job is not the member's work, whatever e
 TRAP_CAP = 60          # a named trap can never reach the gate
 MIN_SCORE = 70         # the gate, and the same number as the shortlist's floor
 MAX_DEDUCTION = 30     # doubts shave a fit, they never outweigh it
+LESSON_CAP = 5         # what measured outcomes may move a score, in either direction
 MAX_PROPOSALS = 40     # hard no: the queue is longer than the Connects are worth
 MIN_CLIENT_RATING = 3.0
 FIXED_FLOOR = 250      # hard no below this on fixed price
@@ -353,6 +356,29 @@ def disqualified(job, limits):
     return None
 
 
+def lesson_points(job):
+    """What the member's own outcomes have earned this job, capped and named.
+
+    `learn.py lessons` measures the reply rate per bucket (the track that found it,
+    the client's country, the job type) and emits a bucket only once eight
+    applications stand behind it, so this cannot learn from a single bad week. It is
+    capped at five points either way, which is enough to tilt a ranking and never
+    enough to overturn a fit. The reasons come back with it, because a member has to
+    be able to read why a lesson moved their list rather than trust that it did.
+    """
+    rows = load_json(LESSONS, {}).get('lessons') or []
+    if not rows:
+        return 0, []
+    import learn
+    mine = set(learn.dimensions(job))
+    hits = [r for r in rows if (r.get('dimension'), r.get('value')) in mine and r.get('points')]
+    if not hits:
+        return 0, []
+    total = max(-LESSON_CAP, min(LESSON_CAP, sum(int(r['points']) for r in hits)))
+    reasons = [f'{r["value"]}: {r["replied"]} replies in {r["applied"]} applications' for r in hits]
+    return total, reasons
+
+
 def deductions(job, rate):
     """What shaves a fit score, with the reason for each. Never a bonus.
 
@@ -489,7 +515,8 @@ def cmd_score(args):
     for c in candidates:
         f = fit[c['id']]
         niche = max(0, min(100, int(f.get('fit', 0))))
-        total = max(0, niche - int(c.get('deduction') or 0))
+        lesson, lesson_why = lesson_points(c)
+        total = max(0, min(100, niche - int(c.get('deduction') or 0) + lesson))
         # A named trap caps the score: a great client must not lift a disguised
         # full-time or operator role above a real build.
         if f.get('trap'):
@@ -501,6 +528,7 @@ def cmd_score(args):
             record.update(score=total, grade=grade(total), niche_fit=niche, recency=c['recency'],
                           deduction=c.get('deduction') or 0,
                           deduction_reasons=c.get('deduction_reasons') or [],
+                          lesson=lesson, lesson_reasons=lesson_why,
                           rationale=f.get('rationale', ''), summary=f.get('summary', c['snippet'][:280]),
                           headline=f.get('headline', ''), trap=f.get('trap'))
             logged.append(record)
@@ -533,7 +561,8 @@ def cmd_reassess(args):
     except (TypeError, ValueError):
         print(f'ABORT: job {args.job_id} needs an integer fit from 0 to 100.', file=sys.stderr)
         return 1
-    total = max(0, niche - int(job.get('deduction') or 0))
+    lesson, _ = lesson_points(job)
+    total = max(0, min(100, niche - int(job.get('deduction') or 0) + lesson))
     if fit.get('trap'):
         total = min(total, TRAP_CAP)
     assessment = {

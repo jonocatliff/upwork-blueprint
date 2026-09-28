@@ -339,6 +339,29 @@ def check_vision():
     return findings
 
 
+WRITING_BUDGET = 3000
+
+
+def check_writing_budget():
+    """The nine commands and the references share one line budget.
+
+    Every session wants to add a sentence, and nothing ever wants to remove one, so a
+    year of good intentions turns a command into a patchwork nobody reads to the end.
+    A shared ceiling makes an addition cost a deletion, which is the only thing that
+    forces a rule to be sharpened instead of duplicated. Raise it deliberately, in its
+    own commit, or not at all.
+    """
+    files = sorted((ROOT / '.claude' / 'commands').glob('*.md')) + sorted((ROOT / 'references').glob('*.md'))
+    counts = {path: len(path.read_text(encoding='utf-8').splitlines()) for path in files}
+    total = sum(counts.values())
+    if total <= WRITING_BUDGET:
+        return []
+    worst = sorted(counts.items(), key=lambda kv: -kv[1])[:3]
+    names = ', '.join(f'{path.name} {n}' for path, n in worst)
+    return [f'commands and references total {total} lines, over the budget of {WRITING_BUDGET} '
+            f'(largest: {names}). Shorten something before adding more.']
+
+
 CHECKS = [
     ('personal data', check_leaks),
     ('language', check_language),
@@ -354,6 +377,7 @@ CHECKS = [
     ('command set', check_command_set),
     ('fact contract', check_facts_contract),
     ('product vision', check_vision),
+    ('writing budget', check_writing_budget),
 ]
 
 

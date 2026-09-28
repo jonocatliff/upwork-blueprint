@@ -121,6 +121,7 @@ resolving it by hand. The commands call `python3`; on Windows `python` or `py`.
 - `RESEARCH.md` - what we know about Upwork that this system does not act on:
   scores, badges, what the market pays, which sources did not hold. Nothing
   reads it, and no command should start to
-- `tools/check_repo.py` - the release gate, fourteen static checks. There is no test
+- `tools/check_repo.py` - the release gate, fifteen static checks, one of them a shared
+  line budget for the commands and references, so a new rule costs an old one. There is no test
   suite: each rule lives in the file it governs, and a run proves itself by building
   the report and starting the cockpit

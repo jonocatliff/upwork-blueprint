@@ -232,13 +232,15 @@ cheapest lesson this pipeline can hand you. **The disagreements** are the leads 
 let through and the member then turned down, with their reasons: the only place the score
 is told it was wrong, so weigh one of those above ten counted outcomes.
 
-The outcome lessons do wait for a sample. Below the gate nothing is weighted, which is the
-normal state for the first months: a rule built on three applications costs more Connects
-than it saves. Past it, `python3 code/learn.py lessons` writes `data/lessons.json`, which is
-a list for you to read, not a filter the score applies on its own: no script reads that file.
-Use it in Step 4 the way you use the skip reasons, by hand, and name in the run which lesson
-you applied and which dimension is still too thin. A lesson is worth at most a few points of
-fit either way; a sample of eight cannot carry more than that.
+The outcome lessons do wait for a sample. Below eight applications in a bucket nothing is
+weighted, which is the normal state for the first weeks: a rule built on three applications
+costs more Connects than it saves. Past it, `python3 code/learn.py lessons` writes
+`data/lessons.json`, and **`jobs.py score` applies it**: the reply rate of the track that
+found a job, of its country and of its job type moves the score by at most five points
+either way, named in the record as `lesson` and `lesson_reasons`. Five is deliberate. It is
+enough to reorder a list and never enough to overturn a fit, because a measured reply rate
+says something about a pattern and nothing about the job in front of you. Say in the run
+which lesson moved a lead and which dimension is still too thin to speak.
 
 ## Step 4 · Judge niche fit
 
@@ -297,7 +299,7 @@ Write `data/fit.json`: per job id `{"fit": 0-40, "rationale": "<what the score b
 
 ## Step 5 · Score and log
 
-Run `python3 code/jobs.py score`. The score is the fit minus the deductions the candidate step already computed, so a job that fits perfectly and carries nothing against it scores 100. It logs every job with a fit of at least 60 and a score of at least 70, caps any job you named a trap at 60 so a generous client cannot lift a disguised full-time or operator role above a real build, and prints the ranking as a grade out of 10 with the points behind it. The deductions and their reasons ride along on the record, so a member asking "why is this a 7" gets the three words that took it there. Everything it turns down is written to `data/decisions.jsonl` with the points and the reason, which costs the member nothing and is what the next run learns from. Report grades to the member, never the raw points: the hundred exists for ranking and for the lessons, the grade is what a person decides on.
+Run `python3 code/jobs.py score`. The score is the fit, minus the deductions the candidate step computed, plus or minus what the member's own outcomes have earned that pattern, so a job that fits perfectly and carries nothing against it scores 100. It logs every job with a fit of at least 60 and a score of at least 70, caps any job you named a trap at 60 so a generous client cannot lift a disguised full-time or operator role above a real build, and prints the ranking as a grade out of 10 with the points behind it. The deductions and their reasons ride along on the record, so a member asking "why is this a 7" gets the three words that took it there. Everything it turns down is written to `data/decisions.jsonl` with the points and the reason, which costs the member nothing and is what the next run learns from. Report grades to the member, never the raw points: the hundred exists for ranking and for the lessons, the grade is what a person decides on.
 
 ## Step 6 · Open the best five
 
