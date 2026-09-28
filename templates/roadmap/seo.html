@@ -26,15 +26,15 @@
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--sand); color: var(--ink); font: 400 15px/1.45 var(--font); -webkit-font-smoothing: antialiased; }
-  .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 44px; display: grid; gap: 30px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 24px 28px; display: grid; gap: 20px; }
   /* A grid item will not shrink below its content, so the 820px table pushed the
      whole page wider than the phone and every other section stretched with it. */
   .wrap > * { min-width: 0; }
   h1, h2, h3 { margin: 0; text-wrap: balance; letter-spacing: -0.02em; }
   p { margin: 0; }
 
-  header { display: grid; gap: 8px; }
-  header h1 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.04; font-weight: 700; letter-spacing: -0.03em; }
+  header { display: grid; gap: 5px; }
+  header h1 { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.04; font-weight: 700; letter-spacing: -0.03em; }
   .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--c-conv); }
   header p { color: var(--graphite); font-size: 17px; }
 
@@ -42,25 +42,25 @@
   .flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
   .node {
     position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
-    padding: 22px 20px 20px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+    padding: 14px 15px 13px; display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
     box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12);
   }
   .node:not(:last-child)::after {
-    content: ""; position: absolute; right: -17px; top: 44px; width: 20px; height: 20px; z-index: 2;
+    content: ""; position: absolute; right: -17px; top: 32px; width: 20px; height: 20px; z-index: 2;
     border-radius: 50%; background: var(--paper); border: 1px solid var(--line);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236a6d74' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E");
     background-size: 12px; background-repeat: no-repeat; background-position: center;
   }
   .icon {
-    width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center; color: #fff; margin-bottom: 8px;
+    width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; color: #fff; margin-bottom: 5px;
     background: linear-gradient(155deg, color-mix(in srgb, var(--c) 78%, #fff) 0%, var(--c) 55%, color-mix(in srgb, var(--c) 80%, #000) 100%);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 6px 14px -6px var(--c);
   }
-  .icon svg { width: 26px; height: 26px; }
+  .icon svg { width: 20px; height: 20px; }
   .node .n { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pewter); }
-  .node h3 { font-size: 20px; line-height: 1.15; }
-  .node p { color: var(--graphite); font-size: 14px; margin-bottom: 8px; }
-  .chip { margin-top: auto; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: color-mix(in srgb, var(--c) 12%, #fff); color: color-mix(in srgb, var(--c) 70%, #000); font-variant-numeric: tabular-nums; }
+  .node h3 { font-size: 17px; line-height: 1.15; }
+  .node p { color: var(--graphite); font-size: 13px; margin-bottom: 6px; }
+  .chip { margin-top: auto; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: color-mix(in srgb, var(--c) 12%, #fff); color: color-mix(in srgb, var(--c) 70%, #000); font-variant-numeric: tabular-nums; }
 
   /* Big numbers */
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--blue-950); border-radius: 16px; overflow: hidden; }
@@ -70,17 +70,17 @@
   .stat span { color: var(--blue-200); font-size: 13.5px; }
 
   /* Roadmap */
-  .rm-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 20px; flex-wrap: wrap; margin-bottom: 10px; }
-  .rm-head h2 { font-size: 22px; }
+  .rm-head { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 20px; flex-wrap: wrap; margin-bottom: 8px; }
+  .rm-head h2 { font-size: 19px; }
   .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--pewter); }
   .legend span { display: inline-flex; align-items: center; gap: 6px; }
   .sw { width: 14px; height: 8px; border-radius: 3px; display: inline-block; }
   .scroll { overflow-x: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12); }
   table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 820px; }
   th, td { padding: 0; border-bottom: 1px solid var(--line); }
-  thead th { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--pewter); padding: 10px 0; text-align: center; background: var(--sand); }
+  thead th { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--pewter); padding: 7px 0; text-align: center; background: var(--sand); }
   thead th:first-child { text-align: left; padding-left: 16px; }
-  td.what { padding: 10px 16px; width: 410px; font-size: 14px; position: sticky; left: 0; background: var(--paper); z-index: 1; }
+  td.what { padding: 6px 14px; width: 410px; font-size: 13.5px; position: sticky; left: 0; background: var(--paper); z-index: 1; }
   td.w { position: relative; border-left: 1px solid var(--line); min-width: 50px; }
   tbody tr:last-child td { border-bottom: 0; }
   .bar { position: absolute; top: calc(50% - 8px); height: 16px; left: 0; right: 0; }
@@ -88,8 +88,8 @@
   .bar.e { right: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; }
   .bar.run { top: calc(50% - 3px); height: 6px; opacity: 0.35; }
   td.what b { display: block; font-weight: 600; }
-  td.what span { display: block; font-size: 12.5px; color: var(--pewter); line-height: 1.4; margin-top: 2px; }
-  tr.ms td { background: var(--sand); height: 44px; }
+  td.what span { display: block; font-size: 12px; color: var(--pewter); line-height: 1.32; margin-top: 1px; }
+  tr.ms td { background: var(--sand); height: 38px; }
   tr.ms td.what { background: var(--sand); color: var(--pewter); font-size: 12px; }
   .d { position: absolute; left: 50%; top: 9px; width: 10px; height: 10px; background: var(--ink); transform: translateX(-50%) rotate(45deg); border-radius: 1px; }
   .dl { position: absolute; left: 50%; top: 24px; transform: translateX(-50%); font-size: 10.5px; font-weight: 600; color: var(--graphite); white-space: nowrap; }
@@ -110,35 +110,32 @@
     td.what { width: 250px; font-size: 13px; }
   }
 
-  /* The free audit, pitched under the roadmap */
-  .audit { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .audit-card {
-    background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
-    padding: 22px 20px 20px; display: grid; gap: 12px; align-content: start;
+  /* The free audit. Three tiles, because eight bullets read as a second offer
+     and the page has to stay one page. */
+  .audit { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .tile {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
+    padding: 14px 15px 13px; display: grid; gap: 3px; justify-items: start;
     box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12);
   }
-  .audit-card h3 { font-size: 20px; line-height: 1.15; }
-  .audit-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-  .audit-card li { position: relative; padding-left: 24px; font-size: 14px; color: var(--graphite); }
-  .audit-card li::before {
-    content: ""; position: absolute; left: 0; top: 7px; width: 14px; height: 8px;
-    border-radius: 3px; background: var(--blue-800);
-  }
-  @media (max-width: 520px) { .audit { grid-template-columns: 1fr; } }
+  .tile h3 { font-size: 15.5px; line-height: 1.15; }
+  .tile p { font-size: 12.5px; color: var(--pewter); }
+  .free { margin-top: 12px; font-size: 13.5px; font-weight: 600; color: var(--blue-800); text-align: center; }
+  @media (max-width: 640px) { .audit { grid-template-columns: 1fr; } }
 
   /* Who is writing, and the one move the client makes */
   .who {
     background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
-    padding: 22px 20px 20px; display: grid; gap: 10px; justify-items: start;
+    padding: 14px 16px 13px; display: grid; gap: 6px; justify-items: start;
     box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12);
   }
-  .who h2 { font-size: 22px; }
-  .who p { color: var(--graphite); font-size: 15px; }
+  .who h2 { font-size: 19px; }
+  .who p { color: var(--graphite); font-size: 14px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .proof { font-size: 12.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--blue-50); color: var(--blue-800); }
-  .next { background: var(--blue-950); border-radius: 18px; padding: 26px 24px 24px; display: grid; gap: 10px; }
-  .next h2 { font-size: 22px; color: #fff; }
-  .next p { color: #fff; font-size: 16px; max-width: 62ch; }
+  .next { background: var(--blue-950); border-radius: 18px; padding: 17px 20px 16px; display: grid; gap: 5px; }
+  .next h2 { font-size: 19px; color: #fff; }
+  .next p { color: #fff; font-size: 15px; max-width: 74ch; }
   .next p.quiet { color: var(--blue-200); font-size: 13px; }
 </style>
 
@@ -223,25 +220,23 @@
       <h2 id="audit">What you get now, free</h2>
     </div>
     <div class="audit">
-      <article class="audit-card">
-        <h3>What the audit finds</h3>
-        <ul>
-          <li>Where you rank across your area, on a 25 point map grid for the search that actually brings work.</li>
-          <li>Your Google Business Profile beside the businesses beating you: reviews, owner replies, categories, services, photos and hours.</li>
-          <li>Your website as a visitor and as a phone sees it, and which enquiry paths work.</li>
-          <li>One score per section, and every number carries the source it came from.</li>
-        </ul>
+      <article class="tile" style="--c:var(--c-traffic)">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.4-6.5-10a6.5 6.5 0 1 1 13 0c0 4.6-6.5 10-6.5 10z"/><circle cx="12" cy="11" r="2.4"/></svg></span>
+        <h3>Where you rank</h3>
+        <p>25 points across your area</p>
       </article>
-      <article class="audit-card">
-        <h3>What it costs you</h3>
-        <ul>
-          <li>Nothing. No fee, no contract, no obligation of any kind.</li>
-          <li>You get the report as a page you can open and keep, whatever you decide afterwards.</li>
-          <li>It names the fixes that move first and what each one is worth to you.</li>
-          <li>If it reads wrong, you have lost an afternoon of mine and none of yours.</li>
-        </ul>
+      <article class="tile" style="--c:var(--c-conv)">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5l2.2 4.5 5 .7-3.6 3.5.9 4.9-4.5-2.4-4.5 2.4.9-4.9L4.8 9.7l5-.7z"/></svg></span>
+        <h3>Your Google profile</h3>
+        <p>Beside whoever outranks you</p>
+      </article>
+      <article class="tile" style="--c:var(--c-sales)">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></span>
+        <h3>Your website</h3>
+        <p>As a phone actually sees it</p>
       </article>
     </div>
+    <p class="free">Free, yours to keep, and no obligation either way.</p>
   </section>
 
   <section class="next" aria-labelledby="next">
