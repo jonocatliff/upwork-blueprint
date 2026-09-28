@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useCockpit } from '@/lib/context';
 import { LABEL } from '@/lib/stages.mjs';
 import { deriveJobBrief } from '@/lib/job-brief.mjs';
-import { headlineText, jobDetails, jobFlags } from '@/lib/job-facts.mjs';
+import { ago, headlineText, jobDetails, jobFlags } from '@/lib/job-facts.mjs';
 import { nextStep, replyDrafts } from '@/lib/next-step.mjs';
 import { parseApplication } from '@/lib/application-review.mjs';
 import { plainText } from '@/lib/plain-text.mjs';
@@ -68,6 +68,7 @@ export default function Drawer() {
           {step.extras.length ? <p className="drawer-extras">{step.extras.map((command: string) =>
             <CopyButton key={command} compact text={command} label={command.split(' ')[0]} />)}</p> : null}
         </section> : null}
+        <Conversation job={job} />
         <TheJob job={job} />
         <WorthIt job={job} />
         <Pitch job={job} />
@@ -163,6 +164,33 @@ function Proposal({ job }: { job: any }) {
     <h4>Proposal</h4>
     <pre className="drawer-text">{plainText(content.text)}</pre>
     <CopyButton text={plainText(content.text)} label="Copy proposal" />
+  </section>;
+}
+
+// The client's own words, which this surface has never shown: sync saves every thread
+// "for the cockpit's chat window" and there was no chat window, so a member with fifteen
+// live conversations read the job posting in three sections and the client in none.
+function Conversation({ job }: { job: any }) {
+  const thread = job.thread || {};
+  const all: any[] = Array.isArray(thread.messages) ? thread.messages : [];
+  if (!all.length) {
+    // A missing thread is a fact worth stating: prune deletes it after a day and only a
+    // /brief run brings it back, so silence here would read as a client who said nothing.
+    return <section className="drawer-section" aria-label="Conversation">
+      <h4>Conversation</h4>
+      <p className="muted">No saved messages. Run /brief to pull the thread again.</p>
+    </section>;
+  }
+  const shown = all.slice(-8);
+  return <section className="drawer-section" aria-label="Conversation">
+    <h4>Conversation{all.length > shown.length ? ` · last ${shown.length} of ${all.length}` : ''}</h4>
+    <ol className="thread">
+      {shown.map((m, index) => <li key={m.id || index} className={`msg ${m.from}`}>
+        <span className="msg-who">{m.from === 'me' ? 'You' : m.from === 'system' ? 'Upwork' : (m.name || 'Client')}
+          {m.at ? <span className="msg-at">{ago(m.at)}</span> : null}</span>
+        <p className="msg-text">{m.text}</p>
+      </li>)}
+    </ol>
   </section>;
 }
 
