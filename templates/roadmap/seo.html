@@ -95,7 +95,15 @@
   .d { position: absolute; left: 50%; top: 9px; width: 10px; height: 10px; background: var(--ink); transform: translateX(-50%) rotate(45deg); border-radius: 1px; }
   .dl { position: absolute; left: 50%; top: 24px; transform: translateX(-50%); font-size: 10.5px; font-weight: 600; color: var(--graphite); white-space: nowrap; }
 
+  /* The four groups the page is built from. They are not labels for what sits
+     under them; they are the structure a client reads before reading anything. */
+  .group { display: flex; align-items: center; gap: 11px; font-size: 24px; margin-bottom: 2px; }
+  .group .num {
+    flex: none; width: 27px; height: 27px; border-radius: 9px; display: grid; place-items: center;
+    background: var(--blue-950); color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0;
+  }
   .note { font-size: 13px; color: var(--pewter); text-align: center; }
+  .detail { margin-top: -8px; }
 
   @media (max-width: 860px) {
     .flow { grid-template-columns: 1fr 1fr; }
@@ -143,6 +151,11 @@
   .next p.quiet { color: var(--blue-200); font-size: 13px; }
 </style>
 
+<!-- A template, not a finished page. Per job you rewrite: the eyebrow and the
+     h1 in the header, the one line under it, the whole "Who I am" card from
+     context/me.md, the four step cards if the client's words differ, and the
+     ROWS and MS lists in the script at the bottom, which draw the weeks. The
+     four numbered groups and their order stay. -->
 <main class="wrap">
   <header>
     <span class="eyebrow">The 8-week build</span>
@@ -154,6 +167,7 @@
     The chips come from the Results, Reviews and Credentials sections of context/me.md.
     A chip with nothing behind it gets deleted rather than softened.
   -->
+  <h2 class="group"><span class="num" aria-hidden="true">1</span>Who I am</h2>
   <section class="who" aria-labelledby="who">
     <h2 id="who">&lt;Your name&gt;</h2>
     <p>&lt;What you do, in one line, for the kind of business this client runs&gt;</p>
@@ -164,7 +178,8 @@
     </div>
   </section>
 
-  <section aria-label="What I will do">
+  <h2 class="group"><span class="num" aria-hidden="true">2</span>What I build</h2>
+  <section aria-label="What I build">
     <ol class="flow">
     <li class="node" style="--c:var(--c-traffic)">
       <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.6" cy="10.6" r="7"/><path d="M15.7 15.7 21 21"/><path d="M10.6 14.4s2.9-2.6 2.9-4.7a2.9 2.9 0 1 0-5.8 0c0 2.1 2.9 4.7 2.9 4.7z" opacity=".55"/></svg></span>
@@ -190,7 +205,7 @@
   </section>
 
 
-  <section aria-label="The roadmap, week by week">
+  <section class="detail" aria-label="The roadmap, week by week">
     <div class="rm-head">
       <div class="legend">
         <span><i class="sw" style="background:var(--c-traffic)"></i>Traffic</span>
@@ -207,6 +222,7 @@
     </div>
   </section>
 
+  <h2 class="group"><span class="num" aria-hidden="true">3</span>What you get now</h2>
   <section aria-label="The free audit">
     <div class="audit">
       <article class="tile" style="--c:var(--c-traffic)">
@@ -228,6 +244,7 @@
     <p class="free">Your free audit, yours to keep, with no obligation either way.</p>
   </section>
 
+  <h2 class="group"><span class="num" aria-hidden="true">4</span>Next step</h2>
   <section class="next" aria-label="The next step">
     <p>Send me your website URL here on Upwork.</p>
     <p class="quiet">That is all I need to start the audit.</p>
