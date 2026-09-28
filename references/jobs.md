@@ -211,7 +211,13 @@ forty proposals spends Connects on races they cannot win, and an established mem
 floored at a hundred dollars takes work that pays worse than their afternoon.
 `/find-jobs` therefore opens by showing these numbers with a recommendation for that
 person, and whatever they answer is written into `context/me.md` and read from there on
-every later run.
+every later run. Three tiers: **no reviews yet** caps proposals near 15, because a queue of
+forty goes to someone with a record, puts the fixed floor near 100, because the first two
+reviews are worth more than the first two hundred dollars, and halves the hourly floor,
+since the rate is still a hope. **A rate and a few finished contracts** fits the figures
+below. **A high rate with proof and a narrow niche** raises the hourly floor toward 80
+percent and drops the cap toward 25, and their honest day is three good leads rather than
+ten.
 
 | Limit | Default | Filter | Why this number |
 |---|---|---|---|

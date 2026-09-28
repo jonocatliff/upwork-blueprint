@@ -63,7 +63,33 @@ and give `**Next:**`, which is handing this brief to the delivery pipeline. No
 invented dates, numbers, access or acceptance criteria. Run
 `python3 code/document_check.py check project <id>` and fix every failure.
 
-## Step 4: Report
+## Step 4: The start, and whether there is a call for it
+
+**Ask first whether there will be an onboarding call.** Plenty of jobs do not have one: a
+small fixed piece with the brief already agreed starts faster in writing, and forcing a
+meeting onto a client who wants the work done is a bad first impression. So ask, once, and
+build whichever of the two the answer calls for.
+
+**With a call**, write the agenda into `project.md` under `## First actions`, in this order,
+because it is the order that gets everything answered: the roadmap from the proposal read
+back in four or five steps so the client hears their own plan again; what the member needs
+from them, named as a list with an owner each; who decides on the client side and who else
+must see the work; how they will hear from the member and how fast a question gets answered;
+and the first milestone with what "done" means for it. Everything the client owes gets a
+date on the call, not an intention. End it by naming the single first deliverable and when
+it lands.
+
+**Without a call**, the same list goes out as one message and a request: the roadmap in four
+lines, the inputs as a numbered list with a date beside each, the decision maker, the
+communication rhythm, and the first milestone. A checklist a client can answer in one sitting
+beats a meeting they postpone twice.
+
+**Either way, what the client owes is the real start date.** An access list nobody has
+worked through is not a formality, it is the reason a project sits idle in week one, so it
+goes into `## Client inputs` with owners and dates and is named in the report as what still
+blocks the start.
+
+## Step 5: Report
 
 Run `python3 code/client_workspace.py new <id>` once the brief exists. A job folder is a sales
 artefact and stops mattering the day the contract starts; delivery needs one place per client.
@@ -81,11 +107,9 @@ contract said rather than from a question: the rate or amount they actually sell
 Say the lines in one block, write them on a yes, and never promote a promise to a result.
 
 **Run again after delivery.** `/won <id>` a second time asks the one question no other
-command owns: what came out of it, with a number and where it can be checked. That line
-goes into the Results section as `verified` when they can point at it, `pending` otherwise,
-and it is what makes the next proposal provable. Without it the evidence base stays at the
-day of the interview while the member's work moves on, and `clients/<slug>/delivered/` is a
-folder nobody reads.
+command owns: what came out of it, with a number and where it can be checked, as `verified`
+when they can point at it and `pending` otherwise. Without it the evidence base stays at the
+day of the interview while the member's work moves on.
 
 Use the completion report from `CLAUDE.md` and link the handover brief. The next action is
 to start delivery from it. End with `Upwork calls: N`: two on a first run for the contract

@@ -91,19 +91,9 @@ Save each response's `jobs` list to `data/search/<name>.json` as `{"jobs": [...]
    words their profile does not contain, and because a wrong term or a wrong limit costs
    them a day of leads rather than a call.
 
-   **The limits are proposed, never assumed.** None of the shipped figures is right for
-   everybody, and the difference is experience rather than taste. Recommend from what
-   this member's own file and profile already say, and say why in half a line each:
-
-   - **No reviews and no Job Success Score yet:** cap proposals near 15, because a queue
-     of forty goes to someone with a record. Put the fixed floor near 100, because the
-     first two reviews are worth more than the first two hundred dollars. Hourly floor
-     at half their rate, since the rate is a hope rather than a history.
-   - **A rate and a few finished contracts:** the shipped figures fit. Cap 40, floor 250,
-     hourly at 60 percent of the rate.
-   - **A high rate, proof, and a narrow niche:** raise the hourly floor toward 80 percent
-     and drop the proposal cap toward 25. Their day is three good leads, not ten, and
-     Step 7 reports that rather than padding it.
+   **The limits are proposed, never assumed.** Recommend from what this member's file and
+   profile already say, using the tiers in [references/jobs.md](../../references/jobs.md),
+   and say why in half a line each.
 
    Whatever they answer goes into `context/me.md` as `**Maximum proposals on a job:**`,
    `**Smallest project worth taking:**` and `**Lowest share of your rate:**`, so the next
@@ -111,16 +101,11 @@ Save each response's `jobs` list to `data/search/<name>.json` as `{"jobs": [...]
    `LIMIT OFF` in the candidate step: name it out loud rather than letting it pass
    quietly.
 
-   **When the member sells something the catalog does not cover**, such as newsletter
-   automation, podcast editing or grant writing, build the list with
-   them instead of from the catalog. The four branches are the frame and they hold for
-   any service: the tool the client already runs, the role they would write in a title,
-   the words they use for the problem, and their industry. Ask for their version of each,
-   spend one call on the broadest of them, then read the ten results back and harvest
-   Upwork's own wording with `python3 code/tracks.py skills`. Two rounds of that produce
-   a better list than any catalog, because it comes from live postings and their
-   vocabulary rather than from this file. Whatever they confirm goes under "Job search
-   tracks" in `context/me.md`, so the next run starts from it.
+   **When the member sells something the catalog does not cover**, build the list with them
+   from the four branches instead, then harvest Upwork's own wording from one broad search:
+   the method is in [references/jobs.md](../../references/jobs.md) and it beats any catalog,
+   because it comes from live postings. Whatever they confirm goes under "Job search tracks"
+   in `context/me.md`.
 
 1. **Upwork's recommendations:** when the connector exposes it, use the
    documented but untested `find_jobs` action `smart_search`, `mode`

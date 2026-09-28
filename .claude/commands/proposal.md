@@ -89,6 +89,23 @@ report, because a proposal a member can fix in one edit beats a blank page.
 Do not add a guarantee, refund promise, result promise or delivery date that the
 member did not approve.
 
+**Then read the proposal back to them and say whether it is ready to start a project on.**
+Not a summary, a judgement on three things, one line each, and name what is missing rather
+than what is present:
+
+- **Is the scope closed?** A deliverable list without its exclusions is not closed, and the
+  first argument of every project is about the thing nobody wrote down.
+- **Is the working relationship settled?** Channel, how often they hear from the member, how
+  fast a question gets answered, and who on the client side decides. A project fails on this
+  more often than on the work.
+- **Can it actually start?** Access, logins, assets, the decisions the client owes and the
+  funded first milestone. Anything on that list the member does not have yet is the real
+  start date, whatever the contract says.
+
+Each one gets ready, thin or missing. A thin or missing item is not a reason to withhold the
+page: send it, and put the gap in front of the member as the next thing to close with this
+client. The point of this step is that nobody discovers the hole after the money moved.
+
 # Part 2 · The page
 
 ## Step 4: Write the one page the client reads after the call
@@ -143,14 +160,14 @@ without a sketch is complete.
 
 **However it is drawn, it carries no text and no number**: a generated image invents a digit
 sooner or later, and a proposal whose figures argue with each other costs more than a nice
-picture is worth. The prompt says so in four ways, the command refuses a stage that contains a
-digit, and the member looks at the result before it goes out.
+picture is worth. The prompt says so in four ways and the member looks at the result before
+it goes out.
 
 Then write the fields as JSON and run `python3 code/proposal_generate.py <id> --file -`. It fills
-`templates/proposal/template.html` and writes `jobs/<id>/proposal.html`: the header band with the
-small drawing and the price tile, the client's own words from the call, a week-by-week plan where each work
-package is a bar and each approval a dot, what is always included against the milestones and
-their amounts, five steps from the yes to the launch, and the fine print.
+`templates/proposal/template.html` and writes `jobs/<id>/proposal.html`: the header band with
+the small drawing, the price, the client's own words from the call, a week-by-week plan where
+each work package is a bar and each approval a dot, what is always included against the
+milestones and their amounts, and the fine print.
 
 **Every value the call did not settle renders as a visible "open" marker.** Never write a
 zero, a rounded guess or a placeholder that reads like a number: a missing figure is honest

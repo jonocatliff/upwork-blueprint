@@ -365,14 +365,12 @@ fields, reviews Upwork's final cost and submits the proposal on Upwork
 themselves.
 
 **Before they paste, run `python3 code/application_check.py jobs/<id>/application.md
---ready`.** It is the same gate as before with one more refusal: the `[LOOM LINK]`
-placeholder, which is correct while the letter is written and wrong the moment it is
-pasted. A client who reads "[LOOM LINK]" learns that nobody checked the letter, and
-until now nothing in this repo ever looked again.
+--ready`.** Same gate, one more refusal: the `[LOOM LINK]` placeholder, correct while the
+letter is written and wrong the moment it is pasted.
 
-Never mark Applied until the member confirms they submitted. After they confirm,
-run `python3 code/pipeline.py set <id> applied`. That stage rests on their word and on
-nothing Upwork returned, so `/brief` asks about it again if no proposal ever shows up.
+Never mark Applied until the member confirms they submitted, then run
+`python3 code/pipeline.py set <id> applied`. That stage rests on their word, so `/brief`
+asks again if no proposal ever shows up.
 
 ## Step 9 · Report
 

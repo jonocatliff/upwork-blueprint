@@ -105,11 +105,10 @@ Name the moment, because it decides the next command:
   does not. When the thread names a date, add `--call-at <YYYY-MM-DD>`: until that
   day the lead is left alone, and from the day after, its task is the one-pager,
   `/proposal <id> <transcript path or notes>`.
-- **Nothing was scheduled and the client owes an answer:** the cockpit asks for a
-  nudge every two days by itself, counted from the last thing that happened on the
-  lead. Record what you send with `python3 code/pipeline.py set <id> <status>`, which
-  restarts the two days. Set an explicit date with `--follow-up` only when the
-  conversation gives you one, such as "call me after the 12th".
+- **Nothing was scheduled and the client owes an answer:** the cockpit asks for a nudge
+  every two days, counted from the last thing that happened on the lead. Recording the send
+  clears the stale date and the two days count again. Set an explicit date with
+  `--follow-up` only when the conversation gives you one, such as "call me after the 12th".
 - **The client sent their website:** the pitch page promised the free audit. The drafts
   thank them and say the audit follows; the next step is `/lead-magnet <id> <website>`.
 - **A call is agreed or requested:** the drafts confirm a time on Upwork. After the call the
