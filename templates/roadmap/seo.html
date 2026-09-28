@@ -76,7 +76,10 @@
   .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--pewter); }
   .legend span { display: inline-flex; align-items: center; gap: 6px; }
   .sw { width: 14px; height: 8px; border-radius: 3px; display: inline-block; }
-  .scroll { overflow-x: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12); }
+  /* On a phone the table shows two weeks of eight and nothing says the rest is a
+     swipe away, so a client reads a plan that stops in week two. The fade is drawn
+     on the container and hidden once the table fits, which is every desktop. */
+  .scroll { position: relative; overflow-x: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12); }
   table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 820px; }
   th, td { padding: 0; border-bottom: 1px solid var(--line); }
   thead th { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--pewter); padding: 7px 0; text-align: center; background: var(--sand); }
@@ -98,6 +101,14 @@
   tr.ms td.what { background: var(--sand); color: var(--pewter); font-size: 12px; }
   .d { position: absolute; left: 50%; top: 9px; width: 10px; height: 10px; background: var(--ink); transform: translateX(-50%) rotate(45deg); border-radius: 1px; }
   .dl { position: absolute; left: 50%; top: 24px; transform: translateX(-50%); font-size: 10.5px; font-weight: 600; color: var(--graphite); white-space: nowrap; }
+  /* A milestone label is wider than its week column by design, so the cell has to
+     let it out: clipped, "First auto-reply" reads as "First auto-rep". */
+  tr.ms td { overflow: visible; }
+  @media (max-width: 720px) {
+    .scroll::after { content: "swipe for the later weeks"; position: sticky; left: 0; bottom: 0;
+      display: block; padding: 6px 14px; font-size: 11.5px; color: var(--pewter);
+      background: linear-gradient(to top, var(--paper), rgba(255,255,255,0)); }
+  }
 
   /* The walkthrough and the client's own words. Both sit in group 1, because
      they answer the same question the photo answers: who is this. */
