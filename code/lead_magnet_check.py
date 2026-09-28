@@ -62,7 +62,9 @@ def check_page(path, business='', website=''):
 
 
 def main(argv):
-    if not 1 <= len(argv) <= 3:
+    # Without this, --help is taken for the page to check and the member gets a
+    # traceback where every other script in code/ prints its usage.
+    if not 1 <= len(argv) <= 3 or argv[0] in ('-h', '--help'):
         print('usage: python3 code/lead_magnet_check.py jobs/<id>/lead-magnet.html '
               '["<business name>"] ["<website>"]', file=sys.stderr)
         return 2
