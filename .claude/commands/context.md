@@ -29,6 +29,22 @@ loss; it is an empty slot that `/profile` cannot fill with anything but adjectiv
 A focus value runs only that block and rewrites only its part of the files. An
 input that is neither gets the list and a question.
 
+## Has this already run?
+
+Run `python3 code/workspace.py`, then `python3 code/context_check.py --status`.
+The first word of its answer decides which of two commands this is, and it is
+read before anything else is said to the member.
+
+**untouched** means nothing here has ever been answered. Run the whole thing:
+Step 0, then the four blocks.
+
+**partial** or **complete** means the member has been through this before. Do
+not interview them again. Say what stands, in their words, in under ten lines:
+what they are hired for, the services with their prices, the rate, and how many
+proof entries carry a verified status. Then name what is still open as one list
+and ask which of it they want to fill now. Wait for that answer. A focus
+argument skips this question and goes straight to that block.
+
 ## Step 0 · The machine, then what already exists
 
 This is the first command a member runs, so it is also the only place where a
@@ -71,12 +87,18 @@ Never ask for anything one of these already answers.
 
 ## Step 1 · Background, the whole working life
 
-**Read before asking.** A CV, an old portfolio page or a pasted LinkedIn profile
-answers most of this in one go, so start by asking for whatever exists: a file
-path, or the text pasted straight into the chat. Read a local file directly. A
-URL: fetch it once; LinkedIn and most profile pages sit behind a login and return
-nothing, so ask for the paste instead rather than guessing what is on it. Never
-invent an employer, a title or a year that the material does not carry.
+**Ask for the material, never go looking for it.** A CV, an old portfolio page or
+a pasted LinkedIn profile answers most of this in one go, so the first thing this
+command says is a question: is there a file, and where, or paste the text
+straight into the chat. Then wait.
+
+**Search nothing.** Do not list, glob or grep the member's disk, their home
+folder, their Documents or their Downloads for something that might be a CV.
+Their machine is not this command's to read. Open exactly the one path they
+name, nothing beside it, and if they name none, ask the four questions below
+instead. A URL: fetch it once; LinkedIn and most profile pages sit behind a login
+and return nothing, so ask for the paste rather than guessing what is on it.
+Never invent an employer, a title or a year that the material does not carry.
 
 From that material, list back what you found, one line per job, and ask only
 what is missing or unclear. Everything a CV claims is the member's own wording:

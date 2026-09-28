@@ -69,6 +69,10 @@ Use plain words and lead with the result. Give only the next action the member n
 
 Link only what the member needs to open, as relative links like [audit-report.md](audit-report.md). Never list code files you touched.
 
+**Every line the member sees during a run is written for them**, including the one-line description beside a command Claude Code is about to run. They are not reading a build log. "Reading the rules I am about to ask you about" is that line; "wc -l references/profile-formula.md" is the same step described to a developer who is not in the room. Say what it is for, never what it types.
+
+**Say where a wait ends.** A run that takes more than a few seconds, and every step that needs an answer, says in one line what is happening and what comes back. A member watching a silent terminal cannot tell working from stuck.
+
 ## Check before saving
 
 Read the text aloud. It should sound like a capable person in a real sales

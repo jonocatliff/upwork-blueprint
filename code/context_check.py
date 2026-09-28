@@ -2,6 +2,7 @@
 """The gate for the two files every other command writes from.
 
     python3 code/context_check.py [--quiet]
+    python3 code/context_check.py --status
 
 /context fills context/me.md and context/proof.md. Everything after it, from the
 profile to a proposal, quotes those files, so a starter line left in place turns
@@ -77,6 +78,34 @@ def check_proof(text):
     return findings
 
 
+def answered(me_text):
+    """How many of the required lines carry an answer rather than the starter."""
+    values = (field(me_text, label) for label in REQUIRED)
+    return sum(1 for v in values if v and STARTER not in v.lower())
+
+
+def proof_entries(proof_text):
+    """Proof lines the member wrote, without the starter's own instructions."""
+    return [line for _, line in entries(proof_text)
+            if EMPTY_SECTION not in line.lower() and not line.startswith('One block per')
+            and line.startswith(('-', '*', '**'))]
+
+
+def status(me_text, proof_text):
+    """untouched, partial or complete, so /context knows which command it is.
+
+    Asking a member a second time for what they already answered is the fastest
+    way to lose them, and running the interview against a file that is still the
+    shipped starter is the only case where every question is new. The line is
+    read by a command, so it keeps the same three words.
+    """
+    filled, proofs = answered(me_text), len(proof_entries(proof_text))
+    open_points = len(check_me(me_text) + check_proof(proof_text))
+    if not filled and not proofs:
+        return 'untouched', filled, proofs, open_points
+    return ('complete' if not open_points else 'partial'), filled, proofs, open_points
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('me', nargs='?', default=ME, type=pathlib.Path,
@@ -84,7 +113,20 @@ def main(argv=None):
     parser.add_argument('proof', nargs='?', default=PROOF, type=pathlib.Path,
                         help='context/proof.md by default')
     parser.add_argument('--quiet', action='store_true', help='print nothing when clean')
+    parser.add_argument('--status', action='store_true',
+                        help='untouched, partial or complete, for the start of /context')
     args = parser.parse_args(argv)
+    if args.status:
+        missing = [p for p in (args.me, args.proof) if not p.is_file()]
+        if missing:
+            print('untouched: the context files do not exist yet. '
+                  'Run python3 code/workspace.py')
+            return 0
+        state, filled, proofs, open_points = status(args.me.read_text(encoding='utf-8'),
+                                                    args.proof.read_text(encoding='utf-8'))
+        print(f'{state}: {filled} of {len(REQUIRED)} answers, {proofs} proof entries, '
+              f'{open_points} open')
+        return 0
     findings = []
     for path, check in ((args.me, check_me), (args.proof, check_proof)):
         if not path.is_file():
