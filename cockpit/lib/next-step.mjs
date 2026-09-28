@@ -55,7 +55,10 @@ export function nextStep(job, today = todayIso()) {
     case 'new': {
       const skip = [`/find-jobs skip ${id} <reason>`];
       return has(job, 'pitch.html') && has(job, 'application.md')
-        ? step('Submit on Upwork', 'Record the Loom, put its link into the cover letter where it says [LOOM LINK] and submit on Upwork. /brief then moves it to Applied.', null, skip)
+        // /pitch-page moves it to Applied on the member's yes, in the run that built it.
+        // Naming /brief here sent a member looking for the command that does nothing of
+        // the sort, and left the lead reading as unsubmitted for the rest of the day.
+        ? step('Submit on Upwork', 'Record the Loom, put its link into the cover letter where it says [LOOM LINK], submit on Upwork, then tell /pitch-page you did.', null, skip)
         : step('Build pitch page', 'Builds the pitch page and the application.', `/pitch-page ${id}`, skip);
     }
     case 'applied':

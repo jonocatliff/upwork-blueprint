@@ -1,9 +1,11 @@
+/* # multilingual-data: the locale tables below are what a client reads,
+   so a German value there is the German report and not a German comment. */
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { KAPITEL, KapitelLeiste, SektionsKopf, useAktivesKapitel } from "./lead-magnet-kopf";
+import { KAPITEL, ChapterBar, SektionsKopf, useAktivesKapitel } from "./lead-magnet-kopf";
 import {
   reportProfileIcons,
   CalendarCheck2,
@@ -163,7 +165,7 @@ function websiteGapEvidence(element: CroElement | undefined, locale: Locale) {
   };
   if (key && messages[key]) return messages[key][locale];
   if (!element?.label) return locale === "de" ? "Der nächste Schritt zur Anfrage ist auf der Website nicht klar." : "The website does not make the next step to an enquiry clear.";
-  return locale === "de" ? `Auf der Website fehlt: ${element.label}.` : `The website does not currently show ${element.label.toLowerCase()}.`;
+  return locale === "de" ? `Auf der Website missing: ${element.label}.` : `The website does not currently show ${element.label.toLowerCase()}.`;
 }
 
 function Score({ value, compact = false, label = "Score", id }: { id: string; value: number | null; compact?: boolean; label?: string }) {
@@ -175,53 +177,53 @@ function Score({ value, compact = false, label = "Score", id }: { id: string; va
   );
 }
 
-/** Das Zeichen des Betriebs: sein Logo, und wenn das nicht kommt, sein Anfangsbuchstabe.
+/** The mark of the business: its logo, or its first letter when the logo fails to load.
  *
- *  DAS IST KEIN SCHOENHEITSFEHLER (gemessen 06.09.2026). Die Logos holt ein fremder Dienst
- *  ueber die Domain, und fuer manche Betriebe hat er keines -- dann antwortete er 404 und im
- *  Bericht standen drei leere Kaesten, genau neben dem Namen des Empfaengers: im Kopf, im
- *  Hero und ueber dem Abschluss. Betroffen war jeder dritte der geprueften Berichte. */
-function KundenZeichen({
-  url, name, klasseBild, klasseErsatz, domain,
-}: { url?: string; name: string; klasseBild: string; klasseErsatz: string; domain?: string }) {
-  /* ZWEI QUELLEN, DANN DER BUCHSTABE. Die Zeilen bis heute
-     tragen `icons.duckduckgo.com`, das fuer accessasap.com 404 liefert -- der
-     Bericht zeigte einen grauen Platzhalter statt seines Logos, in der Zeile
-     "Prepared for". Statt 36 Datenzeilen zu reparieren faellt die Komponente
-     auf Googles Dienst zurueck; damit heilen auch alle alten Berichte. */
-  const [stufe, setStufe] = useState(0);
+ *  THIS IS NOT A COSMETIC FLAW (measured 06.09.2026). A third-party service looks the
+ *  logos up by domain, and for some businesses it holds none: it answered 404 and the
+ *  report showed three empty boxes right beside the recipient's name, in the header, in
+ *  the hero and above the closing block. One report in three checked was affected. */
+function ClientMark({
+  url, name, imageClass, fallbackClass, domain,
+}: { url?: string; name: string; imageClass: string; fallbackClass: string; domain?: string }) {
+  /* TWO SOURCES, THEN THE LETTER. Every data row written so
+     far carries `icons.duckduckgo.com`, which returns 404 for accessasap.com:
+     the report showed a grey placeholder instead of his logo, on the "Prepared
+     for" line. Rather than repair 36 data rows, the component falls back to
+     Google's service; that heals all the older reports too. */
+  const [level, setLevel] = useState(0);
   // NO SECOND HOST. The original fell back to Google's favicon service, which
   // told Google which client had opened the report and which company it was
   // about, from the client's own browser. This report loads nothing from
   // anywhere: a missing icon shows the initial instead.
-  const quellen = [url].filter((q): q is string => typeof q === "string" && q.startsWith("data:"));
-  const fehlt = stufe >= quellen.length;
-  const setFehlt = () => setStufe((s) => s + 1);
-  // NACHSEHEN, NICHT NUR ZUHOEREN. Das Bild scheitert oft, bevor React seine Handler
-  // angehaengt hat -- das `error`-Ereignis ist dann schon vorbei und der leere Kasten bleibt
-  // stehen (gemessen 06.09.2026 an der Live-Seite, nachdem `onError` allein nichts aenderte).
-  const pruefen = (bild: HTMLImageElement | null) => {
-    if (bild && bild.complete && bild.naturalWidth === 0) setFehlt();
+  const sources = [url].filter((q): q is string => typeof q === "string" && q.startsWith("data:"));
+  const missing = level >= sources.length;
+  const setMissing = () => setLevel((s) => s + 1);
+  // LOOK, DO NOT JUST LISTEN. The image often fails before React has attached its
+  // handlers: by then the `error` event is long past, so the empty box simply stays
+  // there (measured 06.09.2026 on the live page, after `onError` alone changed nothing).
+  const watch = (bild: HTMLImageElement | null) => {
+    if (bild && bild.complete && bild.naturalWidth === 0) setMissing();
   };
-  if (fehlt) {
-    return <b className={klasseErsatz}>{name.slice(0, 1)}</b>;
+  if (missing) {
+    return <b className={fallbackClass}>{name.slice(0, 1)}</b>;
   }
-  return <img key={quellen[stufe]} ref={pruefen} src={quellen[stufe]} alt={name} onError={setFehlt} className={klasseBild} />;
+  return <img key={sources[level]} ref={watch} src={sources[level]} alt={name} onError={setMissing} className={imageClass} />;
 }
 
 
-/* WARUM DIESER ABSCHNITT UEBERHAUPT ZAEHLT.
+/* WHY THIS SECTION COUNTS AT ALL.
  *
- * Ein Satz, ein Zeichen, sonst nichts. Wer den Abschnitt aufklappt, sieht danach eine Liste
- * von Befunden; ohne diese Zeile weiss er nicht, warum ihn diese Liste kuemmern sollte. Ein
- * Absatz an derselben Stelle wuerde niemand lesen, weil der Befund direkt darunter steht.
+ * One sentence, one icon, nothing else. Open the section and what follows is a list of
+ * findings; without this line the reader has no idea why that list should concern him. A
+ * paragraph in the same spot would go unread, because the finding sits right below it.
  *
- * Die Zahlen aus Kapitel 01 werden hier bewusst NICHT wiederholt. Dort steht, was die Branche
- * kostet; hier steht, warum genau dieser Abschnitt darueber entscheidet. */
-/* KEIN AUFKLAPPER MEHR. Der Bericht ist jetzt Hero, drei offene Kapitel,
-   Preis, Kalender -- eine Seite, durch die man scrollt. Damit fallen der
-   Aufklapp-Knopf, der Chevron und die ganze Anker-Mechanik weg, die das
-   Wegspringen beim Umschalten ausglich: was nie zuklappt, springt nie. */
+ * The figures from chapter 01 are deliberately NOT repeated here. That chapter says what
+ * the trade loses; this one says why this section is what decides it. */
+/* NO MORE DISCLOSURE. The report is now a hero, three open chapters,
+   the price, the calendar: one page you scroll through. That retires the
+   expand button, the chevron and the whole anchor mechanism that used to
+   compensate for the jump on toggling: what never closes never jumps. */
 function Saeule({
   sectionKey,
   kicker,
@@ -245,9 +247,9 @@ function Saeule({
   return (
     <section id={`report-${sectionKey}`} data-pillar={sectionKey} className="lm-pillar relative scroll-mt-[76px] overflow-hidden rounded-[24px] border border-hairline bg-white">
       <div className="relative z-[1] grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-3 px-4 py-3.5 text-left sm:grid-cols-[28px_minmax(0,1fr)_auto] sm:px-7 lg:grid-cols-[34px_minmax(0,1fr)_auto] lg:gap-5">
-        {/* AUF DEM TELEFON KEINE EIGENE SPALTE: 28 px fuer
-            zwei Ziffern liessen die Ueberschrift auf halber Breite umbrechen.
-            Die Nummer steht dort vor der Marke, ab `sm` wieder links aussen. */}
+        {/* NO COLUMN OF ITS OWN ON THE PHONE: 28 px for two
+            digits made the headline wrap at half width. There the number sits
+            in front of the label, and from `sm` up it is back on the far left. */}
         <span aria-hidden className="hidden text-xs font-black tracking-[.09em] text-navy sm:block">{index}</span>
         <div className="min-w-0">
           <span data-onepager="pillar" className="block text-[11px] font-black uppercase tracking-[.09em] text-navy sm:text-[12px] sm:tracking-[.1em]"><span className="sm:hidden">{index} · </span>{purpose}</span>
@@ -259,9 +261,9 @@ function Saeule({
         <span data-onepager="finding" className="sr-only">{finding}</span>
       </div>
       <div data-lm-motion={`panel-${sectionKey}`} id={`analysis-${sectionKey}`} className="relative z-[1] px-4 py-5 sm:px-7 sm:py-7">{children}</div>
-      {/* DIE KAPITELZIFFER ALS WASSERZEICHEN. Sie steht im
-          DOM hinter dem Inhalt, damit `div:first-child` weiter die Kopfzeile
-          trifft, und liegt durch `z-0` optisch darunter. */}
+      {/* THE CHAPTER NUMBER AS A WATERMARK. It sits behind the
+          content in the DOM so that `div:first-child` still matches the header
+          row, and `z-0` puts it visually underneath. */}
       <span aria-hidden className="lm-kapitelzahl pointer-events-none absolute -top-8 right-2 z-0 select-none text-[150px] font-black leading-none tracking-[-.06em] text-navy/[.06] sm:-top-12 sm:right-6 sm:text-[210px]">{index}</span>
     </section>
   );
@@ -274,18 +276,18 @@ function firstSentence(text: string): string {
   return (match ? match[0] : text).trim();
 }
 
-/** Alles nach dem ersten Satz — der Rest, der in die Ausklapp-Zeile gehört. */
+/** Everything after the first sentence: the rest, which belongs in the expanded row. */
 function restSentences(text: string): string {
   const rest = text.trim().slice(firstSentence(text).length).trim();
   return rest;
 }
 
-/** Ein Rahmen, der erst entsteht, wenn er in die Naehe des Bildschirms kommt.
+/** A frame that comes into being only once it nears the screen.
  *
- *  Der Buchungskalender ist ein fremder Dienst und bringt beim Laden ueber eine halbe Million
- *  Zeichen JavaScript samt Facebook-Zaehler mit -- gemessen 06.09.2026 der Grund fuer eine
- *  halbe Sekunde blockierten Bildschirm, obwohl er ganz unten steht. `loading="lazy"` allein
- *  half nicht: der Browser hielt ihn fuer nah genug. */
+ *  The booking calendar is a third-party service, and loading it pulls in more than half a
+ *  million characters of JavaScript plus a Facebook tracker: measured 06.09.2026 as the
+ *  cause of half a second of blocked screen, although it sits right at the bottom.
+ *  `loading="lazy"` alone did not help: the browser judged it close enough. */
 function SpaeterRahmen({ src, title, className }: { src: string; title: string; className?: string }) {
   const [zeigen, setZeigen] = useState(false);
   const [huelle, setHuelle] = useState<HTMLDivElement | null>(null);
@@ -311,29 +313,29 @@ function SpaeterRahmen({ src, title, className }: { src: string; title: string; 
 
 function CloseSection({ data, locale, onPoster }: { data: ProposalData; locale: Locale; onPoster: () => void }) {
   const t = copy[locale];
-  // DIESELBE ROLLE FUER BEIDE, keine Arbeitsteilung. Der erste Entwurf
-  // gab jedem eine eigene Zustaendigkeit, und wer das liest, fragt sich als Erstes, an wen
-  // er denn nun geraet. "Co-founder" bei beiden sagt das Gegenteil: es sind genau diese
-  // zwei, und es ist egal, wer abnimmt.
-  // Der Titel steht jetzt im Sektionskopf (KAPITEL.termin), hier bleiben nur die Rollen.
+  // THE SAME ROLE FOR BOTH, no division of labour. The first draft
+  // gave each of them a remit of his own, and the first thing a reader then wonders is
+  // which of the two he will get. "Co-founder" on both says the opposite: it is these
+  // two people, and it makes no difference who picks up.
+  // The title now sits in the section header (KAPITEL.termin); only the roles stay here.
   const closeCopy: { roles: Record<string, string> } = { roles: {} };
-  // OHNE UNTERZEILE. Sie zaehlte auf, was im Gespraech passiert --
-  // aber wer hier ankommt, hat den ganzen Bericht hinter sich und weiss das. Die
-  // Ueberschrift sagt, was er danach hat, und darunter steht der Kalender; alles
-  // dazwischen schiebt nur den Termin nach unten.
+  // NO SUBHEADING. It listed what happens on the call, but anyone
+  // who gets this far has the whole report behind him and knows that. The headline says
+  // what he walks away with, and the calendar sits below it; anything in between only
+  // pushes the appointment further down.
   return (
     <section id="book" className="lm-close relative overflow-hidden border-t border-white/15 bg-navy-deep px-5 py-8 text-white sm:px-8 sm:py-10">
       <div className="relative mx-auto max-w-[1160px]">
         <div className="mb-5 max-w-[720px] sm:mb-6">
-          {/* KEINE LOGO-PAARUNG MEHR. Dieselbe Zeile steht oben im
-              Kopf und begleitet den Leser die ganze Seite; ein zweites Mal ueber dem
-              Abschluss sagt sie nichts Neues und schiebt nur den Termin nach unten. */}
+          {/* NO MORE LOGO PAIRING. The same line sits up in the
+              header, where it stays with the reader down the whole page; a second time
+              above the close it says nothing new and only pushes the appointment down. */}
           <SektionsKopf kapitel={KAPITEL.termin} locale={locale} hell />
         </div>
         <div className="mx-auto grid max-w-[760px] gap-5">
-          {/* DIE ZUSAMMENFASSUNG STEHT JETZT HIER. Zwischen zwei grossen Abschnitten unterbrach sie ohne Grund; im
-              Abschluss ist sie die zweite Handlung neben dem Termin — das Blatt, das er
-              seinem Partner zeigt, bevor er bucht. */}
+          {/* THE SUMMARY NOW SITS HERE. Between two large sections it interrupted for no reason; in the
+              close it is the second action beside the appointment: the sheet he shows
+              his partner before he books. */}
           {data.onePager?.url ? (
             <button type="button" onClick={onPoster} className="flex w-full items-center gap-4 rounded-2xl border border-white/25 bg-white/10 p-3 text-left backdrop-blur-sm transition-colors hover:bg-white/15">
               <img src={`/_next/image?url=${encodeURIComponent(data.onePager.url)}&w=256&q=75`} alt="" aria-hidden loading="lazy" decoding="async" className="h-[62px] w-[84px] shrink-0 rounded-lg bg-white object-cover object-top" />
@@ -352,9 +354,9 @@ function CloseSection({ data, locale, onPoster }: { data: ProposalData; locale: 
                   <p className="m-0 min-w-0 text-[13px] leading-[1.35]"><strong className="block text-[14px] text-white">{person.name}</strong>{closeCopy.roles[person.name] ? <span className="text-white/80">{closeCopy.roles[person.name]}</span> : null}</p>
                 </div>
               ))}
-              {/* KEINE TEAM-NOTIZ. Der Satz aus der
-                  Zeile stand ueber den beiden Gesichtern und erklaerte, dass wir zu zweit sind —
-                  das sieht man an den beiden Gesichtern. */}
+              {/* NO TEAM NOTE. The sentence from that row sat above
+                  the two faces and explained that there are two of us, which is what the
+                  two faces already show. */}
             </div>
 
           </div>
@@ -366,10 +368,10 @@ function CloseSection({ data, locale, onPoster }: { data: ProposalData; locale: 
   );
 }
 
-// Lukas eigene Profile. Sie stehen hier und nicht in den Berichtsdaten: sie
-// gehoeren zu ihm, nicht zu einem Kunden, und aendern sich pro Bericht nie.
-// Vier von Hand gezogene Raender. Sie sind bewusst nicht identisch: ein
-// Rechteck, das sich exakt wiederholt, sieht wieder aus wie ein CSS-Rahmen.
+// The sender's own profiles. They live here rather than in the report data: they
+// belong to him, not to a client, and never change from report to report.
+// Four hand-drawn borders. They are deliberately not identical: a rectangle
+// that repeats exactly looks like a CSS border again.
 const SKIZZEN_RAND = [
   "M9 8 C80 4, 200 6, 292 9 C295 70, 294 140, 291 192 C210 195, 90 194, 8 191 C5 130, 6 70, 9 8 Z",
   "M7 11 C90 6, 195 9, 293 6 C296 65, 292 135, 294 189 C200 193, 95 190, 6 194 C9 130, 4 68, 7 11 Z",
@@ -425,11 +427,11 @@ function JourneyIcon({ stage }: { stage: SectionKey }) {
 export function LeadMagnet({ data }: { data: ProposalData }) {
   const locale: Locale = data.language ?? data.findings.gbp?.locale ?? "en";
   const t = copy[locale];
-  // Googles eigene Adresse fuer ein Profil, aus der Place-ID gebaut: sie
-  // oeffnet genau den Eintrag, den wir gemessen haben, nicht die Suche danach.
+  // Google's own address for a profile, built from the place ID: it opens the
+  // exact listing we measured, rather than a search for it.
   const gbpPlaceId = String((data.findings.gbp as { profile?: { place_id?: string } } | undefined)?.profile?.place_id ?? "");
   const gbpUrl = gbpPlaceId ? `https://www.google.com/maps/place/?q=place_id:${encodeURIComponent(gbpPlaceId)}` : "";
-  const aktivesKapitel = useAktivesKapitel();
+  const activeChapter = useAktivesKapitel();
   const [posterOpen, setPosterOpen] = useState(false);
   useEffect(() => {
     if (!posterOpen) return;
@@ -501,9 +503,9 @@ export function LeadMagnet({ data }: { data: ProposalData }) {
       let benefit = action.benefit ?? "";
       const mapWinnerLeads = evidence.match(/^At (\d+) of (\d+) spots(.*), customers see (.+) before you\.$/i);
       const mapClientLeads = evidence.match(/^At (\d+) of (\d+) spots(.*), customers still see another business first, most often (.+)\.$/i);
-      // Kurz und in einem Atemzug lesbar. Vorher stand hier ein
-      // Zweisatz mit „ranks outside the top three at ... checked locations within 5 km";
-      // dieselbe Aussage, nur so lang, dass niemand sie zu Ende liest.
+      // Short, readable in one breath. This used to be two
+      // sentences reading "ranks outside the top three at ... checked locations within
+      // 5 km": the same statement, only too long for anyone to finish.
       if (mapWinnerLeads) evidence = `Outside the top three at ${mapWinnerLeads[1]} of ${mapWinnerLeads[2]} nearby searches. ${mapWinnerLeads[4]} leads.`;
       if (mapClientLeads) evidence = `You lead overall, but sit outside the top three at ${mapClientLeads[1]} of ${mapClientLeads[2]} nearby searches.`;
       const mapAbsence = evidence.match(/^The profile is absent from (\d+) of (\d+) map checks(?: for .+)?\.$/i);
@@ -580,37 +582,37 @@ export function LeadMagnet({ data }: { data: ProposalData }) {
   return (
     <ReportMotion><main className="lm-report relative min-h-screen overflow-x-clip bg-canvas text-ink">
       <ProposalStyles /><LeadMagnetStyles />
-      {/* DIE KOPFZEILE BLEIBT STEHEN UND TRAEGT DEN TERMIN. Der Bericht
-          ist lang; wer auf halber Strecke ueberzeugt ist, soll nicht erst ans Ende scrollen
-          muessen. Milchglas, damit der Text darunter durchscheint statt abgeschnitten zu wirken. */}
-      <header className="sticky top-0 z-40 bg-canvas/80 px-5 backdrop-blur-md sm:px-8"><nav className="mx-auto flex min-h-[68px] max-w-[1160px] items-center justify-between gap-5 border-b border-black/15"><span className="inline-flex items-center gap-2.5 sm:gap-3">{data.clientFaviconUrl || data.clientName ? <>{/* Im Kopf dunkler Grund mit weisser Schrift: `bg-navy-soft` faellt hier dunkel aus, und
-    der Buchstabe war auf dem Bildschirm kaum zu lesen (nachgesehen 06.09.2026). */}
-<KundenZeichen url={data.clientFaviconUrl} domain={data.clientDomain} name={data.clientName} klasseBild="hidden h-6 w-auto max-w-[96px] rounded-md object-contain sm:block" klasseErsatz="hidden size-7 place-items-center rounded-md bg-navy text-[11px] font-black text-white sm:grid" /><span className="hidden max-w-[220px] truncate text-[13px] font-bold text-ink sm:inline">{data.clientName}</span></> : null}</span><KapitelLeiste aktiv={aktivesKapitel} locale={locale} /><span className="flex items-center gap-3 sm:gap-4">{data.onePager?.url ? (<button type="button" onClick={() => setPosterOpen(true)} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-black/15 px-3 text-[12.5px] font-bold text-graphite hover:border-navy/35 hover:bg-navy-soft/50 hover:text-navy sm:min-h-9 sm:px-3.5"><svg viewBox="0 0 16 16" fill="none" aria-hidden className="size-3.5"><rect x="2.5" y="2" width="11" height="12" rx="1.6" stroke="currentColor" strokeWidth="1.6" /><path d="M5.5 6h5M5.5 9h5M5.5 12h3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg><span className="hidden sm:inline">{locale === "de" ? "Report auf einer Seite" : "Report in one page"}</span></button>) : null}<a href="#book" className="lm-cta inline-flex min-h-11 items-center gap-1.5 rounded-full bg-navy px-4 text-[12.5px] font-black text-white no-underline sm:min-h-9 sm:px-5 sm:text-[13px]">{locale === "de" ? "Plan für Platz 1" : "Plan for #1"}<svg viewBox="0 0 16 16" fill="none" aria-hidden className="size-3.5"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></a></span></nav></header>
+      {/* THE HEADER STAYS PUT AND CARRIES THE APPOINTMENT. The report
+          is long; a reader convinced halfway down should not have to scroll to the end
+          first. Frosted glass, so the text below shows through instead of looking cut off. */}
+      <header className="sticky top-0 z-40 bg-canvas/80 px-5 backdrop-blur-md sm:px-8"><nav className="mx-auto flex min-h-[68px] max-w-[1160px] items-center justify-between gap-5 border-b border-black/15"><span className="inline-flex items-center gap-2.5 sm:gap-3">{data.clientFaviconUrl || data.clientName ? <>{/* Dark ground with white type in the header: `bg-navy-soft` comes out dark here, so
+    the letter was barely readable on screen (checked 06.09.2026). */}
+<ClientMark url={data.clientFaviconUrl} domain={data.clientDomain} name={data.clientName} imageClass="hidden h-6 w-auto max-w-[96px] rounded-md object-contain sm:block" fallbackClass="hidden size-7 place-items-center rounded-md bg-navy text-[11px] font-black text-white sm:grid" /><span className="hidden max-w-[220px] truncate text-[13px] font-bold text-ink sm:inline">{data.clientName}</span></> : null}</span><ChapterBar aktiv={activeChapter} locale={locale} /><span className="flex items-center gap-3 sm:gap-4">{data.onePager?.url ? (<button type="button" onClick={() => setPosterOpen(true)} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-black/15 px-3 text-[12.5px] font-bold text-graphite hover:border-navy/35 hover:bg-navy-soft/50 hover:text-navy sm:min-h-9 sm:px-3.5"><svg viewBox="0 0 16 16" fill="none" aria-hidden className="size-3.5"><rect x="2.5" y="2" width="11" height="12" rx="1.6" stroke="currentColor" strokeWidth="1.6" /><path d="M5.5 6h5M5.5 9h5M5.5 12h3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg><span className="hidden sm:inline">{locale === "de" ? "Report auf einer Seite" : "Report in one page"}</span></button>) : null}<a href="#book" className="lm-cta inline-flex min-h-11 items-center gap-1.5 rounded-full bg-navy px-4 text-[12.5px] font-black text-white no-underline sm:min-h-9 sm:px-5 sm:text-[13px]">{locale === "de" ? "Plan für Platz 1" : "Plan for #1"}<svg viewBox="0 0 16 16" fill="none" aria-hidden className="size-3.5"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></a></span></nav></header>
 
-      <section className="lm-hero relative px-5 py-8 sm:px-8 sm:py-11"><div aria-hidden className="pointer-events-none absolute -right-16 top-8 text-[clamp(80px,13vw,190px)] font-black tracking-[-.08em] text-navy/[.035] [writing-mode:vertical-rl]">PRIVATE</div><div className={`relative mx-auto grid w-full min-w-0 max-w-[1160px] items-center gap-7 [&>*]:min-w-0`}><div className="max-w-[760px]"><span className="inline-flex max-w-full items-center gap-3 rounded-full border border-black/10 bg-white/85 py-2 pl-2 pr-5 shadow-xs"><KundenZeichen url={data.clientFaviconUrl} domain={data.clientDomain} name={data.clientName} klasseBild="h-11 w-auto max-w-[150px] rounded-lg object-contain" klasseErsatz="grid size-11 place-items-center rounded-full bg-navy-soft text-[15px] text-navy" /><span className="min-w-0"><span className="lm-datenlabel block">{t.preparedFor}</span><span className="block truncate text-[17px] font-black leading-tight tracking-[-.02em] sm:text-[19px]">{data.clientName}</span>{/* DIE ZWEI ADRESSEN, UEBER DIE WIR REDEN. Der ganze Bericht handelt von seinem Profil und seiner Seite, und keine der beiden war anklickbar -- wer nachsehen will, ob wir recht haben, musste selbst suchen. Genau das soll er tun. */}<span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11.5px] font-bold text-navy">{gbpUrl ? <a href={gbpUrl} target="_blank" rel="noreferrer" className="no-underline hover:underline">{locale === "de" ? "Google-Profil ↗" : "Google profile ↗"}</a> : null}{data.clientDomain ? <a href={`https://${data.clientDomain}`} target="_blank" rel="noreferrer" className="truncate no-underline hover:underline">{data.clientDomain} ↗</a> : null}</span></span></span><h1 className="mt-5 max-w-[15ch] text-[clamp(38px,4.4vw,60px)] font-black leading-[.98] tracking-[-.055em]">{t.title}</h1>{/* KEINE ZWEITE ZEILE IM KOPF: die Ueberschrift sagt, was der Report ist, und der erste Befund steht im ersten Kapitel. */}{/* DER TERMIN STEHT SCHON HIER. Wer nach dem ersten Satz ueberzeugt
-                    ist, soll nicht acht Bildschirme weit scrollen muessen, um zu buchen. */}
+      <section className="lm-hero relative px-5 py-8 sm:px-8 sm:py-11"><div aria-hidden className="pointer-events-none absolute -right-16 top-8 text-[clamp(80px,13vw,190px)] font-black tracking-[-.08em] text-navy/[.035] [writing-mode:vertical-rl]">PRIVATE</div><div className={`relative mx-auto grid w-full min-w-0 max-w-[1160px] items-center gap-7 [&>*]:min-w-0`}><div className="max-w-[760px]"><span className="inline-flex max-w-full items-center gap-3 rounded-full border border-black/10 bg-white/85 py-2 pl-2 pr-5 shadow-xs"><ClientMark url={data.clientFaviconUrl} domain={data.clientDomain} name={data.clientName} imageClass="h-11 w-auto max-w-[150px] rounded-lg object-contain" fallbackClass="grid size-11 place-items-center rounded-full bg-navy-soft text-[15px] text-navy" /><span className="min-w-0"><span className="lm-datenlabel block">{t.preparedFor}</span><span className="block truncate text-[17px] font-black leading-tight tracking-[-.02em] sm:text-[19px]">{data.clientName}</span>{/* THE TWO ADDRESSES WE ARE TALKING ABOUT. The whole report is about his profile and his site, yet neither of them was clickable: anyone wanting to check whether we are right had to go searching. Checking is exactly what he should do. */}<span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11.5px] font-bold text-navy">{gbpUrl ? <a href={gbpUrl} target="_blank" rel="noreferrer" className="no-underline hover:underline">{locale === "de" ? "Google-Profil ↗" : "Google profile ↗"}</a> : null}{data.clientDomain ? <a href={`https://${data.clientDomain}`} target="_blank" rel="noreferrer" className="truncate no-underline hover:underline">{data.clientDomain} ↗</a> : null}</span></span></span><h1 className="mt-5 max-w-[15ch] text-[clamp(38px,4.4vw,60px)] font-black leading-[.98] tracking-[-.055em]">{t.title}</h1>{/* NO SECOND LINE IN THE HERO: the headline says what the report is, and the first finding sits in chapter one. */}{/* THE APPOINTMENT IS ALREADY HERE. A reader convinced by the
+                    first sentence should not have to scroll eight screens to book. */}
                 <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2"><a href="#book" className="lm-cta inline-flex min-h-12 items-center gap-2 rounded-xl bg-navy px-6 text-[15px] font-black text-white no-underline">{locale === "de" ? "Meinen Plan für Platz 1 bauen" : "Build my plan to reach #1"}<svg viewBox="0 0 16 16" fill="none" aria-hidden className="size-4"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></a></div></div>
-        {/* WAS WIR ANGESEHEN HABEN. Die drei Kacheln standen ohne
-            Ueberschrift da und mussten selbst erklaeren, was sie sind — die Zeile darueber
-            macht aus drei Begriffen eine Aussage: das ist der Umfang der Pruefung. */}
+        {/* WHAT WE LOOKED AT. The three tiles stood there with no
+            headline and had to explain themselves; the line above them turns three
+            terms into a statement: this is the scope of the audit. */}
         <div>
-        {/* Der Beleg, wer das geschrieben hat. Der Rand ist gezeichnet und nicht
-          gerechnet: vier leicht unterschiedliche Pfade, damit die Karten nicht
-          gestempelt wirken. Die beiden Marken sind die einzigen fremden Farben
-          im Dokument, damit der Leser sie als Beleg liest und nicht als
-          Fussnote. */}
-        {/* DER UMFANGS-STREIFEN IST RAUS. "Ganze Website,
-            Google-Profil, Google-Sichtbarkeit" sagte dasselbe wie die drei
-            Kapitelueberschriften direkt darunter, nur ohne Ergebnis. */}
+        {/* The proof of who wrote this. The border is drawn, not
+          computed: four slightly different paths, so the cards do not look
+          stamped out. The two brand marks are the only foreign colours in the
+          document, so the reader takes them as evidence rather than as a
+          footnote. */}
+        {/* THE SCOPE STRIP IS GONE. "Whole website, Google
+            profile, Google visibility" said the same thing as the three chapter
+            headings right below it, only without a result. */}
         </div>
       </div></section>
 
-      {/* KAPITEL 01 IST RAUS. Drei
-          Branchenzahlen -- 42 Stunden Antwortzeit, 31 Prozent, die Haelfte der
-          Klicks -- galten fuer jeden Betrieb gleich. Wer einen Bericht ueber
-          SEINE Firma oeffnet, liest zuerst eine Statistik ueber alle anderen.
-          Die drei Zahlen leben weiter in `lead-magnet-losses.tsx`, falls sie
-          je woanders gebraucht werden. */}
+      {/* CHAPTER 01 IS GONE. Three trade
+          figures (42 hours to respond, 31 percent, half of the clicks) applied
+          to every business alike. Open a report about YOUR company and the first
+          thing you read is a statistic about everybody else. The three figures
+          live on in `lead-magnet-losses.tsx` in case they are ever wanted
+          somewhere else. */}
 
       <section className="lm-analysis border-y border-hairline px-5 py-10 sm:px-8 sm:py-12"><div className="mx-auto max-w-[1160px]"><SektionsKopf kapitel={KAPITEL.befund} locale={locale} className="mb-8 sm:mb-10" />
 
@@ -635,7 +637,7 @@ export function LeadMagnet({ data }: { data: ProposalData }) {
         </div>
       </div>
       <div className="lm-chapters">
-        <Saeule sectionKey="maps" kicker={`01 · ${t.mapsSection}`} title={t.maps} score={scores.maps} compactScore finding={mapsVerdict}><div className="grid gap-6 rounded-2xl border border-hairline bg-white p-5 lg:grid-cols-[minmax(320px,.95fr)_minmax(0,1.05fr)]">{data.findings.geoGrid ? <GeoGrid data={data.findings.geoGrid} locale={locale} showNote={false} nackt /> : null}<div className="grid content-start gap-4">{data.findings.geoGrid?.winners?.length ? <KartenGewinner punkte={data.findings.geoGrid?.client?.topThreePoints ?? null} ranks={ranks} zeilen={kartenZeilen(data.findings.geoGrid, t.you, ranks.length || 25)} alleGegner={kartenKontextZeilen(data.findings.geoGrid)} gesamt={ranks.length || 25} titel={t.mapWinners} locale={locale} /> : null}{data.findings.geoGrid?.aiVisibility ? <KiSuche data={data.findings.geoGrid.aiVisibility} locale={locale} /> : null}</div></div></Saeule>
+        <Saeule sectionKey="maps" kicker={`01 · ${t.mapsSection}`} title={t.maps} score={scores.maps} compactScore finding={mapsVerdict}><div className="grid gap-6 rounded-2xl border border-hairline bg-white p-5 lg:grid-cols-[minmax(320px,.95fr)_minmax(0,1.05fr)]">{data.findings.geoGrid ? <GeoGrid data={data.findings.geoGrid} locale={locale} showNote={false} nackt /> : null}<div className="grid content-start gap-4">{data.findings.geoGrid?.winners?.length ? <KartenGewinner points={data.findings.geoGrid?.client?.topThreePoints ?? null} ranks={ranks} rows={kartenZeilen(data.findings.geoGrid, t.you, ranks.length || 25)} allRivals={kartenKontextZeilen(data.findings.geoGrid)} total={ranks.length || 25} title={t.mapWinners} locale={locale} /> : null}{data.findings.geoGrid?.aiVisibility ? <KiSuche data={data.findings.geoGrid.aiVisibility} locale={locale} /> : null}</div></div></Saeule>
         <Saeule sectionKey="profile" kicker={`02 · ${t.profileSection}`} title={t.profile} score={scores.profile} finding={profileFinding}>{data.findings.gbp ? <GbpPanel icons={reportProfileIcons} data={{ ...data.findings.gbp, locale }} requireComplete={data.templateVersion === "lead-magnet-v1"} /> : null}</Saeule>
         <Saeule sectionKey="website" kicker={`03 · ${t.websiteSection}`} title={t.website} score={scores.website} finding={websiteFinding}><WebsiteDetail data={data} locale={locale} /></Saeule>
       </div>
@@ -654,10 +656,10 @@ export function LeadMagnet({ data }: { data: ProposalData }) {
       ) : null}
       <TermsSection locale={locale} />
       <CloseSection data={data} locale={locale} onPoster={() => setPosterOpen(true)} />
-      {/* Die sechs Fragen, die auf jedem Gespraech kommen, unter dem Kalender:
-          wer bucht, liest sie nicht mehr, und wer nicht bucht, hat genau
-          dort seine Einwaende. Die
-          Antworten liegen laengst in den Daten und wurden nur nie gezeigt. */}
+      {/* The six questions that come up on every call, below the calendar:
+          whoever books stops reading here, and whoever does not book has his
+          objections at exactly this point. The answers have been in the data
+          all along and were simply never shown. */}
       {(data.faq?.length ?? 0) > 0 ? (
         <section aria-label={locale === "de" ? "Häufige Fragen" : "Common questions"} className="border-t border-hairline bg-canvas px-5 py-10 sm:px-8 sm:py-12">
           <div className="mx-auto max-w-[880px]">
@@ -667,11 +669,11 @@ export function LeadMagnet({ data }: { data: ProposalData }) {
             </h2>
             <dl className="mt-6 grid gap-3">
               {(data.faq ?? []).slice(0, 10).map((eintrag, index) => (
-                /* AUF DEM TELEFON ZUGEKLAPPT. Sechs offene
-                   Antworten sind gut 2.000 px, also zwei Bildschirme Text vor
-                   dem Kalender -- und wer eine Frage nicht hat, liest ihre
-                   Antwort nicht. Ab `sm` steht wieder alles offen, dort kostet
-                   Laenge nichts. Ein Template, zwei Verhalten. */
+                /* CLOSED ON THE PHONE. Six open answers
+                   run to a good 2,000 px, two screens of text ahead of the
+                   calendar, and a reader without that question does not read
+                   its answer. From `sm` up everything is open again, where
+                   length costs nothing. One template, two behaviours. */
                 <details key={index} open className="group rounded-2xl border border-hairline bg-white p-5 max-sm:open:pb-5 [&:not([open])]:max-sm:pb-4" ref={(el) => { if (el && typeof window !== "undefined" && window.innerWidth < 640) el.open = false; }}>
                   <summary className="-my-3 flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 py-3 [&::-webkit-details-marker]:hidden sm:my-0 sm:min-h-0 sm:items-start sm:py-0 sm:pointer-events-none">
                     <dt className="m-0 text-[15px] font-black text-slate-950">{eintrag.q}</dt>

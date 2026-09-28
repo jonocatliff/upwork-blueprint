@@ -1,3 +1,5 @@
+/* # multilingual-data: the locale tables below are what a client reads,
+   so a German value there is the German report and not a German comment. */
 "use client";
 
 /* Shared report illustrations and the terms block. The former three-phase
@@ -88,9 +90,9 @@ function RoadmapIllustration({ step }: { step: "visibility" | "website" | "follo
   );
 }
 
-/* ------------------------------------------------------------ Kacheltext ---
- * Kurz genug, um beim Überfliegen gelesen zu werden, lang genug, dass die Sache
- * ohne Vorwissen klar ist. Keine unserer Fachwörter.
+/* ------------------------------------------------------------- Tile copy ---
+ * Short enough to survive a skim, long enough that the thing is clear without
+ * any prior knowledge. None of our own jargon.
  */
 
 export function WhatWeDoSection({ locale }: { locale: Locale }) {
@@ -198,23 +200,23 @@ export function TermsSection({ locale }: { locale: Locale }) {
   return (
     <section aria-label={de ? "Die Konditionen" : "The terms"} className="lm-terms mb-10 mt-10 sm:mb-14 sm:mt-14">
       <div className="mx-auto max-w-[1160px] px-5 sm:px-8">
-        {/* WAS SIE RISKIEREN: NICHTS.
-            Die Reihenfolge ist die Verkaufslogik: erst was es kostet, dann warum ein Nein
-            später nichts kostet, und zum Schluss das, was wir NICHT versprechen. Der letzte
-            Punkt ist der, der die anderen glaubwürdig macht: wer offen sagt, wo er keine
-            Zusage gibt, wird beim Rest geglaubt. Genau daran scheitern die Anbieter, über
-            die sich Handwerker in ihren Bewertungen beschweren. */}
+        {/* WHAT YOU RISK: NOTHING.
+            The order is the sales logic: first what it costs, then why saying no later
+            costs nothing, and last what we do NOT promise. That last point is what makes
+            the others believable: say openly where you give no guarantee and you are
+            trusted on the rest. That is exactly where the providers tradespeople
+            complain about in their reviews fall down. */}
         <div>
-          {/* OHNE UEBERSCHRIFT. Der Preis links und die vier Zusagen rechts
-              sagen dasselbe wie die Zeile "Sie koennen jederzeit aussteigen", nur belegt statt
-              behauptet. Eine Ueberschrift, die den Inhalt darunter wiederholt, kostet nur
-              Hoehe und schiebt den Preis unter die Falz. */}
+          {/* NO HEADLINE. The price on the left and the four promises on the
+              right say the same as the old line "you can leave whenever you like", only
+              evidenced rather than asserted. A headline that repeats what sits below it
+              costs height and pushes the price under the fold. */}
           <p className="lm-blockmarke m-0">{de ? "Die Konditionen" : "The terms"}</p>
 
           <div className="mt-4 grid gap-3.5 lg:grid-cols-[minmax(0,.72fr)_minmax(0,1.28fr)]">
             <div className="flex flex-col justify-center rounded-[18px] border border-hairline bg-white p-6 shadow-[0_1px_2px_rgba(28,23,18,.03),0_10px_30px_rgba(28,23,18,.045)] sm:p-7">
-              {/* „Starts at" statt „Where it starts": das eine sagt,
-                  dass hier die Preise anfangen, das andere klingt nach dem einzigen Preis. */}
+              {/* "Starts at" rather than "Where it starts": the first says the
+                  prices begin here, the second sounds like the only price there is. */}
               <p className="lm-blockmarke m-0">{de ? "Ab" : "Starts at"}</p>
               <p className="m-0 mt-1.5 flex items-baseline gap-1.5">
                 <span className="tnum text-[40px] font-black leading-none tracking-[-.045em] sm:text-[46px]">$199</span>
@@ -223,13 +225,13 @@ export function TermsSection({ locale }: { locale: Locale }) {
               <p className="m-0 mt-1 text-[13px] leading-[1.4] text-graphite">
                 {de ? "nach einem Aufbau ab $499" : "after a build from $499"}
               </p>
-              {/* DASS ES DER EINSTIEG IST, MUSS DASTEHEN. „$199 im Monat"
-                  allein liest sich wie unser Preis, dabei ist es die untere Kante. Wer das
-                  erst im Gespraech erfaehrt, fuehlt sich geholt — und genau das Gefuehl
-                  soll dieser Abschnitt ausraeumen, nicht erzeugen. Die anderen Preise
-                  stehen bewusst nicht hier: was passt, haengt am Befund, und eine
-                  Preistabelle im Kaltreport laedt zum Vergleichen ein, bevor jemand
-                  weiss, was er vergleicht. */}
+              {/* IT HAS TO SAY THAT THIS IS THE ENTRY POINT. "$199 a month"
+                  on its own reads like our price when it is the lower edge. Learning that
+                  only on the call feels like a setup, and clearing that feeling away is
+                  what this section is for, not producing it. The other prices are left
+                  out on purpose: what fits depends on the findings, and a price table in
+                  a cold report invites comparison before anyone knows what they are
+                  comparing. */}
               <p className="m-0 mt-2.5 inline-flex w-fit rounded-full bg-navy-soft/60 px-2.5 py-1 text-[11.5px] font-bold leading-[1.3] text-navy">
                 {de ? "mehrere Modelle, je nach Bedarf" : "different plans for what you need"}
               </p>
@@ -237,18 +239,17 @@ export function TermsSection({ locale }: { locale: Locale }) {
 
             <ul className="m-0 grid list-none gap-px overflow-hidden rounded-[18px] border border-hairline bg-hairline p-0 shadow-[0_1px_2px_rgba(28,23,18,.03),0_10px_30px_rgba(28,23,18,.045)] sm:grid-cols-2">
               {[
-                /* NUR DIE ZEILE, KEIN NACHSATZ.
-                   Zusagen mit je zwei Zeilen Erklaerung sind Zeilen, die niemand liest,
-                   also traegt jede Zeile selbst, was vorher darunter stand.
+                /* THE LINE ALONE, NO SECOND SENTENCE.
+                   A promise with two lines of explanation under it is two lines nobody
+                   reads, so every line now carries what used to sit below it.
 
-                   JEDE ZEILE HIER BRAUCHT EINE QUELLE in `context/business.md` oder in den
-                   drei Vereinbarungen unter `projects/sales/vertrag/`. Bis zum 20.09.2026
-                   stand hier „kein Wettbewerber von Ihnen in Ihrem Gebiet" - eine
-                   Exklusivitaetszusage, die in keinem der vier Dokumente vorkommt; das
-                   Einzige, was sich dazu finden liess, war die ausdruecklich NICHT-exklusive
-                   Lizenz in Klausel 07. Am 20.09.2026 gestrichen statt sie
-                   vertraglich einzufuehren. Wer hier etwas ergaenzt, aendert zuerst
-                   business.md und die Vertraege. */
+                   EVERY LINE HERE NEEDS A SOURCE in `context/business.md` or in the three
+                   agreements under `projects/sales/vertrag/`. Until 20.09.2026 this list
+                   said "no competitor of yours in your area", an exclusivity promise that
+                   appears in none of the four documents; the only thing to be found on it
+                   was the expressly NON-exclusive licence in clause 07. Struck on
+                   20.09.2026 rather than written into the contracts. Whoever adds a line
+                   here changes business.md and the agreements first. */
                 { en: "Thirty days money back", de: "Dreißig Tage Geld zurück" },
                 { en: "No minimum term", de: "Keine Mindestlaufzeit" },
                 { en: "Accounts in your name", de: "Konten auf Ihren Namen" },
@@ -256,9 +257,9 @@ export function TermsSection({ locale }: { locale: Locale }) {
                 { en: "The same person every time", de: "Immer dieselbe Ansprechperson" },
                 { en: "A five-minute report every month", de: "Jeden Monat ein Report" },
               ].map((z, k, alle) => (
-                /* EINE UNGERADE ZAHL LAESST DIE LETZTE KACHEL ALLEIN, und daneben klafft ein
-                   grauer Block. Dann spannt sich die letzte ueber beide Spalten, statt ein
-                   Argument zu erfinden, nur damit das Raster aufgeht. */
+                /* AN ODD COUNT LEAVES THE LAST TILE ON ITS OWN, with a grey block gaping
+                   beside it. So the last one spans both columns instead of inventing an
+                   argument just to make the grid come out even. */
                 <li key={z.en} className={`bg-white px-5 py-3 sm:px-6 sm:py-[18px] ${
                   alle.length % 2 === 1 && k === alle.length - 1 ? "sm:max-lg:col-span-2" : ""}`}>
                   <b className="flex items-center gap-2.5 text-[14.5px] font-black leading-[1.3] tracking-[-.018em] sm:text-[15.5px] sm:leading-[1.32]">

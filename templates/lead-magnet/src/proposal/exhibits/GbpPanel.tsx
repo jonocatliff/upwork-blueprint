@@ -1,3 +1,5 @@
+/* # multilingual-data: the locale tables below are what a client reads,
+   so a German value there is the German report and not a German comment. */
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
@@ -395,14 +397,14 @@ function ProfileView({ view, locale }: { view: GbpProfileView; locale: "en" | "d
 
       {view.categories ? (
         <ProfileSection label={t.categories} headline={view.categories.headline}>
-          {/* ZEHN PLAETZE, SICHTBAR. Vorher standen die
-              belegten Kategorien als Pillen nebeneinander und die leeren gar
-              nicht -- der Inhaber sah vier gruene Kaestchen und dachte, das sei
-              vollstaendig. Jetzt stehen alle zehn da: die belegten gefuellt,
-              die freien als gestrichelte Luecke. Eine Luecke, die man sieht,
-              ist ein Argument; eine, die man erklaeren muss, ist eine Ausrede.
-              Der erste Platz traegt seinen eigenen Rahmen, weil Google ihn
-              anders gewichtet als die uebrigen neun. */}
+          {/* TEN SLOTS, ALL VISIBLE. The filled categories used to
+              sit side by side as pills while the empty ones were not shown at
+              all, so the owner saw four green boxes and took the profile for
+              complete. Now all ten are there: the filled ones solid, the free
+              ones a dashed gap. A gap you can see is an argument; a gap that
+              has to be explained is an excuse. The first slot carries a frame
+              of its own, because Google weights it differently from the other
+              nine. */}
           <div className="grid gap-4 py-3">
             <div className="flex flex-wrap items-center gap-2">
               {[view.categories.primary, ...(view.categories.secondary ?? [])]
@@ -488,13 +490,12 @@ function AuditRow({ label, current, recommendation, finding, locale }: { label: 
         : (locale === "de" ? "Verbessern" : "Improve");
   return (
     <details className="group border-t border-slate-200 bg-white first:border-t-0">
-      {/* DREI SACHEN KAEMPFTEN UM DIESELBE AUFMERKSAMKEIT:
-          alles fett, der Satz eingefaerbt wie sein Status, und die Beschriftungs-
-          spalte 400 Pixel breit fuer zwei Worte. Jetzt traegt nur das Zeichen
-          Farbe, der Befund steht in Tinte und die Handlung eine Stufe leiser --
-          Text traegt Textfarben, die Farbe steckt in der Marke daneben. Das
-          Statuswort ist klein und grau, es ordnet beim Ueberfliegen und ruft
-          nicht. */}
+      {/* THREE THINGS FOUGHT OVER THE SAME ATTENTION:
+          everything bold, the sentence tinted to match its status, and a label
+          column 400 pixels wide for two words. Now only the icon carries colour,
+          the finding is set in ink and the action one step quieter: text takes
+          text colours, the colour lives in the marker beside it. The status word
+          is small and grey: it sorts things during a skim without shouting. */}
       <summary className="grid cursor-pointer list-none grid-cols-[32px_minmax(0,1fr)_auto] items-start gap-x-2.5 gap-y-1 px-4 py-2.5 sm:grid-cols-[36px_minmax(0,1fr)_auto] md:grid-cols-[40px_minmax(118px,.26fr)_minmax(0,1.74fr)_auto] md:gap-x-7 md:px-5 md:py-3.5 [&::-webkit-details-marker]:hidden">
         <AuditIcon finding={finding} locale={locale} />
         <span className="self-center">
@@ -505,11 +506,11 @@ function AuditRow({ label, current, recommendation, finding, locale }: { label: 
               : finding.status === "open" ? "text-pewter"
               : "text-[#9a5410]"}`}>{statusLabel}</small>
         </span>
-        {/* AMPEL AUCH IM TEXT. Ich hatte die Farbe erst ins
-            Zeichen allein gelegt; sie gehoeren in den Satz. Also tiefe Stufen statt
-            greller: bei diesen dunklen Toenen bleibt der Text auf Papier
-            lesbar, und die Handlungszeile darunter bleibt grau, damit die
-            beiden Zeilen trotz Farbe verschieden laut sind. */}
+        {/* THE TRAFFIC LIGHT SHOWS IN THE TEXT TOO. I first put the
+            colour in the icon alone; it belongs in the sentence. So deep shades
+            rather than bright ones: at these dark tones the text stays readable
+            on paper, while the action line below stays grey, so the two lines are
+            still different in volume despite the colour. */}
         <div className={`col-start-2 min-w-0 self-center text-[13.5px] font-medium leading-[1.45] sm:text-[14px] sm:font-semibold md:col-start-3 ${
           finding.status === "good" ? "text-[#1a6b45]"
             : finding.status === "bad" ? "text-[#9c2c2c]"
@@ -525,10 +526,10 @@ function AuditRow({ label, current, recommendation, finding, locale }: { label: 
   );
 }
 
-/* KEIN AUFKLAPPER IM AUFKLAPPER. Wer eine Zeile oeffnete,
-   fand darin nur den naechsten Knopf -- ein Klick, um einen Klick zu sehen.
-   Lange Inhalte stehen jetzt sofort da und bekommen bei Bedarf einen Deckel
-   mit eigenem Rollbereich: sichtbar, aber nicht raumgreifend. */
+/* NO DISCLOSURE INSIDE A DISCLOSURE. Opening a row used to
+   reveal nothing but the next button: a click to see a click. Long content is
+   now there straight away and, where it needs one, gets a height cap with its
+   own scroll area: visible without taking over the page. */
 function LangerWert({ kopf, children }: { kopf?: string; children: ReactNode }) {
   return (
     <div>
@@ -548,10 +549,10 @@ function CurrentValues({ items, disclosureLabel }: { items: { label: string; val
   return <LangerWert kopf={disclosureLabel}>{values}</LangerWert>;
 }
 
-/* Zwei Zeilen statt einer: oben der Zustand, darunter die
-   Handlung mit einem Pfeil davor. Der Pfeil macht sichtbar, dass die zweite
-   Zeile etwas anderes ist als die erste, ohne eine Ueberschrift dafuer zu
-   brauchen. Eine gruene Zeile hat keine Handlung und bleibt einzeilig. */
+/* Two lines rather than one: the state on top, the action
+   below it behind an arrow. The arrow shows that the second line is a different
+   kind of thing from the first, with no headline needed to say so. A green row
+   has no action and stays on one line. */
 function Recommendation({ finding, goodText }: { finding: GbpInlineFinding; goodText: string }) {
   const genericGood = /^(no change needed|keine änderung nötig)\.?$/i.test(finding.text.trim());
   const zustand = finding.status === "good" ? (genericGood ? goodText : finding.text) : finding.text;
@@ -593,13 +594,13 @@ function IntegratedProfileView({
     locale,
   });
   const categoryFinding = rawCategoryFinding;
-  /* WAS GUT IST, MIT ZAHL. Die gruenen Zeilen sagten
-     "Echte Fotos zeigen den Betrieb bei der Arbeit" -- ein Kompliment ohne
-     Messung, direkt neben gelben Zeilen, die eine Zahl nennen. Die Messung
-     liegt laengst vor: `pull_search` schreibt je Zeile den Ist-Wert gegen die
-     Marke aus the reference audit ("125 oeffentliche Fotos, die Groesse die ein Profil
-     traegt"). Also nimm die, und behalte den Satz nur als Rueckfall, wenn die
-     Zeile fehlt. */
+  /* WHAT IS GOOD, WITH A NUMBER. The green rows said
+     "Real photos show the business at work": a compliment with no measurement,
+     sitting right next to amber rows that name a figure. The measurement has
+     been there all along: for every row `pull_search` writes the actual value
+     against the benchmark from the reference audit ("125 public photos, the size
+     a profile can carry"). So use that, and keep the sentence only as a fallback
+     for when the row is missing. */
   const gemessen = (aliases: string[], rueckfall: string) =>
     auditRowFor(auditRows, aliases)?.value?.trim() || rueckfall;
 
@@ -664,14 +665,13 @@ function IntegratedProfileView({
     {
       label: t.photos,
       finding: photoFinding,
-      /* DIE ZEILE BEHAUPTETE 125 FOTOS UND ZEIGTE EINS.
-         Der Apify-Lauf fragt zwoelf Bilder an und bekommt nur das Titelbild
-         zurueck -- der Katalog liegt unter einem anderen Schluessel, das ist
-         noch offen. Was er zuverlaessig liefert, sind Googles eigene
-         Foto-Rubriken, und die sind als Beleg besser als drei zufaellige
-         Kacheln: sie zeigen, WORUEBER Fotos existieren und worueber nicht.
-         Bilder werden gezeigt, solange welche da sind, ohne so zu tun, als
-         waeren es alle. */
+      /* THE ROW CLAIMED 125 PHOTOS AND SHOWED ONE.
+         The Apify run asks for twelve images and gets only the cover image
+         back: the catalogue sits under a different key, which is still open.
+         What it does return reliably is Google's own photo categories, and as
+         evidence those beat three random tiles: they show WHAT SUBJECTS photos
+         exist for and which ones they do not. Images are shown as long as there
+         are any, without pretending they are all of them. */
       current: (
         <div>
           <p className="m-0 font-bold">{current.photoLabel ?? `${current.photos?.length ?? 0} ${t.publicPhotos}`}</p>
@@ -733,10 +733,10 @@ function IntegratedProfileView({
   );
 }
 
-/* WAS DIE BEWERTUNGEN SAGEN. Unter dem Profil, nicht als
-   eigene Aufklappflaeche: der Bericht hat genau drei. Links seine eigenen
-   Bewertungen, gelesen statt gezaehlt; rechts Anzahl und Sterne der drei, die
-   auf der Karte am oeftesten vor ihm stehen. Deren Texte holen wir nicht. */
+/* WHAT THE REVIEWS SAY. Below the profile, not as a
+   disclosure of its own: the report has exactly three of those. On the left his
+   own reviews, read rather than counted; on the right the count and stars of the
+   three that outrank him most often on the map. We do not pull their texts. */
 function bewertungen(n: number, de: boolean) {
   return de
     ? `${n.toLocaleString("de-DE")} Bewertung${n === 1 ? "" : "en"}`

@@ -165,7 +165,7 @@ export interface CroSpeed {
   findings?: {
     [category: string]: {
       id: string;
-      titel: string;
+      title: string;
       wert: string;
       gewicht: number;
       betroffen: number;
@@ -332,13 +332,13 @@ export type GbpFieldIcon = "address" | "hours" | "phone" | "website" | "booking"
 export interface GbpInlineFinding {
   status: GbpFieldStatus;
   label: string;
-  /** Was ist: ein Satz ueber den heutigen Zustand, in der Sprache des Inhabers. */
+  /** What is: one sentence on today's state, in the owner's own language. */
   text: string;
-  /** Was zu tun ist: ein Satz, direkt darunter. Vorher trug
-   *  `text` die Anweisung und der Zustand fehlte, sodass gruene Zeilen einen
-   *  Befund und gelbe eine Aufgabe zeigten -- zwei Stimmen in einer Tabelle.
-   *  Beides getrennt zu fuehren ersetzt den frueheren `Fix this now`-Block,
-   *  der dieselben Saetze ein zweites Mal weiter unten wiederholte. */
+  /** What to do: one sentence, directly below it. `text` used to carry
+   *  the instruction while the state was missing, so green rows showed a
+   *  finding while amber ones showed a task: two voices in one table.
+   *  Holding the two apart replaces the earlier `Fix this now` block, which
+   *  repeated the same sentences a second time further down the page. */
   action?: string;
 }
 
@@ -441,9 +441,9 @@ export interface GbpProfileView {
   actions?: GbpProfileAction[];
   photos?: GbpProfilePhoto[];
   photoLabel?: string;
-  /** Googles eigene Foto-Rubriken (Interior, Exterior, Team …). Sie zeigen,
-   *  WORUEBER Fotos existieren, und sind als Beleg belastbarer als eine
-   *  Handvoll Kacheln: der Katalog-Abruf liefert derzeit nur das Titelbild. */
+  /** Google's own photo categories (Interior, Exterior, Team ...). They show
+   *  WHAT SUBJECTS photos exist for, which is firmer evidence than a handful
+   *  of tiles: the catalogue call currently returns only the cover image. */
   photoCategories?: string[];
   fields: GbpProfileField[];
   fieldsHeadline?: string;

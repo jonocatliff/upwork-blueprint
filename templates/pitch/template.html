@@ -88,23 +88,23 @@
   .band-plain { background: var(--bg); }
   .band-warm { background: var(--bg-band); }
   .band-ink { background: var(--ink); color: var(--on-ink); }
-  /* Der Abschluss ist die eine Stelle, an der jemand handelt. Er hatte bisher
-     dieselbe Anmutung wie der Scope-Block darueber und ging darin unter. Das
-     Dither-Feld aus dem Hero holt ihn zurueck und schliesst die Seite optisch
-     dort, wo sie angefangen hat. */
-  /* Deutlich hoeher als die anderen Baender. Zwei Gruende: der Abschluss ist die
-     eine Stelle, an der jemand handelt, und er braucht Raum ueber und unter dem
-     Text, damit das Punktfeld ueberhaupt sichtbar werden kann, ohne hinter der
-     Schrift zu stehen. Bei normaler Bandhoehe fuellt der Text die Sektion und
-     die Maske hat nichts zu maskieren. */
+  /* The closing band is the one place where somebody acts. Until now it looked
+     exactly like the scope block above it and disappeared into it. The dither
+     field from the hero brings it back and visually closes the page where the
+     page started. */
+  /* Clearly taller than the other bands. Two reasons: the close is the one
+     place where somebody acts, and it needs room above and below the text for
+     the dot field to become visible at all without sitting behind the type. At
+     a normal band height the text fills the section and the mask has nothing
+     left to mask. */
   .band-next { position: relative; overflow: hidden;
     padding-top: clamp(110px, 13vw, 170px); padding-bottom: clamp(110px, 13vw, 170px); }
-  /* Im Abschluss ist das Dither kein oberes Ornament mehr, sondern das ruhige
-     Hintergrundmotiv der ganzen Handlungsflaeche. Die geringere Deckkraft haelt
-     Text und CTA vorn; der weiche Rand verhindert einen harten Canvas-Schnitt. */
-  /* Dasselbe Feld in der Mitte der Seite, aber am unteren Rand. Das Motiv
-     taucht dreimal auf (Hero, Scope, Abschluss) und bleibt dabei aufrecht.
-     Vertikales Spiegeln zerstoert erkennbare Motive wie Dachlinien. */
+  /* In the close the dither is no longer an ornament along the top but the quiet
+     background motif of the whole action area. The lower opacity keeps text and
+     CTA in front; the soft edge avoids a hard canvas cut. */
+  /* The same field in the middle of the page, but at the bottom edge. The motif
+     appears three times (hero, scope, close) and stays upright throughout.
+     Flipping it vertically destroys recognisable shapes such as roof lines. */
   .band-dotted { position: relative; overflow: hidden;
     padding-bottom: clamp(120px, 14vw, 180px); }
   .band-dotted > .inner { position: relative; z-index: 1; }
@@ -114,9 +114,9 @@
     -webkit-mask-image: linear-gradient(to top, #000 62%, transparent 100%);
     mask-image: linear-gradient(to top, #000 62%, transparent 100%); }
 
-  /* Spezifischer als `.dither`, das weiter unten im Stylesheet steht und sonst
-     mit inset:0 und height:100% gewinnt -- daran sind drei Anlaeufe
-     gescheitert, bevor die Kaskade als Ursache gefunden war. */
+  /* More specific than `.dither`, which sits further down the stylesheet and
+     would otherwise win with inset:0 and height:100%: three attempts failed on
+     that before the cascade was found to be the cause. */
   .band-next .dither-next { position: absolute; inset: 0; width: 100%; height: 100%;
     display: block; opacity: .52; pointer-events: none;
     -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 10%, #000 90%, transparent 100%);
@@ -242,11 +242,11 @@
   .freelancer-photo figcaption strong { font-size: 15px; line-height: 1.25; }
   .freelancer-photo figcaption span { position: static; color: rgba(255,255,255,.72); font-size: 11px;
     letter-spacing: .04em; text-transform: none; font-weight: 500; }
-  /* Die Zahl traegt den Beweis, also wird sie auch so gesetzt. Vorher stand sie
-     als Fliesstext mitten im Satz und war damit nicht schneller zu erfassen als
-     der Rest -- drei Absaetze ungleicher Laenge, ausgefranste Karten. Jetzt:
-     Zahl gross und serif wie die Hero-Headline, Label darunter, eine Zeile
-     Kontext. Gleiche Struktur je Karte, also auch gleiche Anmutung. */
+  /* The number carries the proof, so it is set like it. It used to run as body
+     copy in the middle of a sentence, no faster to take in than the rest of it:
+     three paragraphs of unequal length, frayed cards. Now: the number large and
+     serif like the hero headline, label below it, one line of context. The same
+     structure on every card, therefore the same feel. */
   @media (max-width: 760px) { .profile-story { grid-template-columns: 1fr; }
     .freelancer-photo { min-height: 230px; } }
 
@@ -300,10 +300,10 @@
      it should sit on the page like it belongs there, not like an attached
      image. Optional: the section just loses this block when no illustration
      was generated for the job. */
-  /* Der Eyecatcher direkt unter der Headline: er entscheidet in den ersten
-     Sekunden, ob ueberhaupt weitergelesen wird. Ohne Rahmen und ohne Karte --
-     das Bild bringt seinen eigenen cremefarbenen Grund mit und soll in die
-     Seite laufen, nicht als angeheftetes Foto danebenstehen. */
+  /* The eye-catcher directly below the headline: it decides in the first few
+     seconds whether anyone reads on at all. No border and no card: the image
+     brings its own cream ground with it and should run into the page rather
+     than stand beside it like a pinned-on photo. */
   .hero-art { max-width: 1000px; margin: clamp(18px, 3vw, 34px) auto 0; padding: 0 20px; }
   .hero-art img { display: block; width: 100%; height: auto; border-radius: 14px; }
 
@@ -427,13 +427,12 @@
     @keyframes dgFade { from { opacity: 0; } to { opacity: 1; } }
   }
 
-  /* Das Board ist das Kernstueck der Seite und bekommt deshalb echte Breite,
-     statt in der 720px-Lesespalte zu stecken. Fliesstext bleibt schmal --
-     eine 1140px breite Zeile liest sich schlecht, ein 1140px breiter Plan
-     dagegen deutlich besser. */
-  /* Der Beweis-Streifen: was wirklich gebaut wurde, anklickbar. Bewusst
-     kraeftiger als ein Textlink -- er ist der Unterschied zwischen "so wuerde
-     ich es bauen" und "hier ist es". */
+  /* The board is the centrepiece of the page, so it gets real width instead of
+     being stuck in the 720px reading column. Body copy stays narrow: a 1140px
+     line of text reads badly, while a 1140px plan reads distinctly better. */
+  /* The proof strip: what was actually built, clickable. Deliberately stronger
+     than a text link, because it is the difference between "this is how I would
+     build it" and "here it is". */
   .live-artifacts { max-width: 1140px; margin: 18px auto 0; padding: 16px 20px 18px;
     background: color-mix(in srgb, var(--accent) 9%, var(--card));
     border: 1px solid var(--dg-tint-stroke); border-radius: 14px; }
@@ -541,8 +540,8 @@
     font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
   .work-details dd { margin: 0; color: var(--on-ink-2); font-size: 14.5px; line-height: 1.6; }
 
-  /* Der Abschluss atmet jetzt: der Knopf ist die Handlung, nicht eine Zeile
-     zwischen zwei anderen. */
+  /* The close breathes now: the button is the action, not one line between two
+     other lines. */
   .band-next .inner.next > * + * { margin-top: 0; }
   .band-next .inner.next p { max-width: 46ch; margin-left: auto; margin-right: auto; }
   .band-next .btn { margin-top: clamp(26px, 3.4vw, 40px); }
@@ -1048,8 +1047,8 @@
     if (!cv || !cv.getContext) return;
     var ctx = cv.getContext('2d');
     if (!ctx) return;
-    // Auf dunklem Grund zieht dieselbe Palette ins Schwarze und verschwindet.
-    // data-on-ink dreht die beiden Endpunkte auf die Ink-Tokens.
+    // On a dark ground the same palette sinks into the black and disappears.
+    // data-on-ink swings both endpoints over to the ink tokens.
     var onInk = cv.hasAttribute('data-on-ink');
 
     // 8x8 Bayer, built recursively from the 4x4.
@@ -1070,11 +1069,11 @@
         CONTRAST = 46, BRIGHTNESS = -4, CX = 0.46, CY = 0.44,
         FADE_FROM = 0.72, FADE_TO = 1.65, SOURCE_MIX = 0.12,
         PAPER = '#efe7d6';   // the drawing's own paper tone, see below
-    // FIT 3.2 zoomt tief in die Tuschewolke -- richtig fuer den Hero, wo nur die
-    // Textur zaehlt. Im Abschluss soll die Form dagegen ERKENNBAR sein, also die
-    // ganze Zeichnung zeigen (Befund 15.08.2026: "im Footer viel zu
-    // undeutlich"). Dazu mehr Kontrast, weil ein Punktfeld auf Dunkel weniger
-    // Spielraum hat als auf Papier.
+    // FIT 3.2 zooms deep into the ink cloud, which is right for the hero, where
+    // only the texture counts. In the close the shape has to be RECOGNISABLE, so
+    // show the whole drawing (finding 15.08.2026: "far too vague in the footer").
+    // Plus more contrast, because a dot field on dark has less room to work with
+    // than one on paper.
     var requestedFit = parseFloat(cv.getAttribute('data-fit'));
     var FIT = Number.isFinite(requestedFit) ? requestedFit : (onInk ? 1.05 : 3.2);
     if (onInk) { CONTRAST = 62; BRIGHTNESS = 6; }
@@ -1165,8 +1164,8 @@
          part is what keeps the dense cells reading as ink rather than as flat
          brand colour. Averaging per step means a few dozen fillStyle changes
          per frame instead of one per dot. */
-      // Auf Ink faengt die Palette bei einem sichtbaren Braun an, nicht bei
-      // Fast-Schwarz -- sonst existieren die duennen Bereiche optisch nicht.
+      // On ink the palette starts at a visible brown rather than at near-black,
+      // otherwise the thin areas do not exist to the eye at all.
       var low = onInk ? tokenRGB('--text-2', '#5c5347') : tokenRGB('--border', '#e2d9c8');
       var high = onInk ? tokenRGB('--accent-on-ink', '#e08a5c') : tokenRGB('--accent-deep', '#a24f2e');
       var acc = new Float64Array(STEPS * 4), b;
@@ -1263,8 +1262,8 @@
     };
     img.src = src;
 
-    // Das Hero-Feld blendet beim Scrollen aus, statt dem Leser zu folgen. Das
-    // Feld im Abschluss dagegen soll da sein, wenn man dort ankommt.
+    // The hero field fades out on scroll instead of following the reader. The
+    // field in the close, by contrast, should be there when you arrive at it.
     if (!onInk) {
       window.addEventListener('scroll', function () {
         var f = 1 - window.scrollY / (window.innerHeight * 0.55);

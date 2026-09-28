@@ -7,54 +7,54 @@ import { ohneKommentare } from "./ui";
  *  was measured in a live report on 20.09.2026. */
 export function LeadMagnetStyles() {
   return <style>{ohneKommentare(`
-/* ---------------------------------------------------------- Schriftskala ---
- * VIER ROLLEN, NICHT SIEBEN GROESSEN. Vorher trug jede Sektion ihre eigene
- * clamp-Formel: 76, 58, 48, 44, 36, 30, 26 Pixel, keine zwei gleich und keine
- * aus einer Reihe. Deshalb las sich eine Ueberschrift ueber einer Liste so
- * gross wie die Aussage im Hero.
+/* ------------------------------------------------------------ Type scale ---
+ * FOUR ROLES, NOT SEVEN SIZES. Before, every section carried its own
+ * clamp formula: 76, 58, 48, 44, 36, 30, 26 pixels, no two alike and none
+ * out of one series. That is why a heading above a list read as large as
+ * the statement in the hero.
  *
- * Die Rolle entscheidet, nicht das Gefuehl beim Bauen:
- *   hero     einmal je Seite, der Satz auf den alles zulaeuft
- *   aussage  eine Sektion behauptet etwas (Verlust, Loesung, Plan, Abschluss)
- *   sektion  ordnet einen Block, behauptet nichts (Scorecard, Saeulen)
- *   block    fuehrt eine Liste an (Jetzt beheben, ein Schritt der Loesung)
+ * The role decides, not how it felt while building:
+ *   hero     once per page, the sentence everything runs towards
+ *   aussage  a section claims something (loss, solution, plan, close)
+ *   sektion  orders a block, claims nothing (scorecard, pillars)
+ *   block    heads a list (fix this now, one step of the solution)
  *
- * Je groesser die Schrift, desto enger laeuft sie: was bei 20px richtig sitzt,
- * faellt bei 68px auseinander. Deshalb gehoert die Laufweite an die Stufe und
- * wird nicht je Stelle geraten. */
+ * The bigger the type, the tighter it runs: what sits right at 20px falls
+ * apart at 68px. So tracking belongs to the step and is not guessed at
+ * every single place. */
 .lm-report{
  --lm-hero:clamp(42px,5vw,68px);      --lm-hero-lw:-.055em; --lm-hero-zh:1.0;
  --lm-aussage:clamp(28px,3.2vw,44px); --lm-aussage-lw:-.042em; --lm-aussage-zh:1.06;
  --lm-sektion:clamp(21px,2.1vw,28px); --lm-sektion-lw:-.032em; --lm-sektion-zh:1.15;
  --lm-block:clamp(18px,1.6vw,22px);   --lm-block-lw:-.025em; --lm-block-zh:1.2;
- /* ARCHIVO, WIE DER REST DER MARKE. Der Bericht lief auf Inter, das Verkaufsdokument und der Vertrag
-    auf Archivo: derselbe Interessent sah zwei Schriften auf dem Weg vom
-    Kaltkontakt zur Unterschrift. Dazu ist Inter die Schrift, an der man
-    erzeugte Seiten erkennt, und ein Kaltreport lebt davon, echt zu wirken.
-    Archivo ist bereits im Layout eingebettet (app/fonts.css, alle Schnitte
-    von 400 bis 900, font-display: swap), kostet also keinen neuen Request. */
+ /* ARCHIVO, LIKE THE REST OF THE BRAND. The report ran on Inter, the sales document and the contract
+    on Archivo: the same prospect saw two typefaces on the way from cold
+    contact to signature. On top of that, Inter is the typeface that gives a
+    generated page away, and a cold report lives on looking real.
+    Archivo is already embedded in the layout (app/fonts.css, every weight
+    from 400 to 900, font-display: swap), so it costs no new request. */
  background:var(--color-canvas);font-family:var(--font-core),var(--font-sans),sans-serif}
 .lm-report h1,.lm-report h2,.lm-report h3{text-wrap:balance;font-weight:700}
-/* ------------------------------------------------ Kapitel und Bloecke ---
- * Jedes Kapitel traegt denselben Kopf (Nummer, Name, Aussage), jeder Block
- * darin dieselbe kleine Marke. Vorher hatte von fuenf Abschnitten genau einer
- * eine Marke, und die Ueberschriften standen sonst nackt da — man sah eine
- * Folge von Aussagen statt einen Bericht mit Kapiteln. */
+/* ---------------------------------------------- Chapters and blocks ---
+ * Every chapter carries the same head (number, name, statement), every block
+ * inside it the same small badge. Before, exactly one of five sections had a
+ * badge and the other headings stood bare: you saw a run of statements
+ * instead of a report with chapters. */
 .lm-kopf+*{margin-top:32px}
 
-/* VIER ROLLEN FUER KLEINSCHRIFT, NICHT NEUN VARIANTEN. Gemessen am 06.09.2026
-   trugen die Marken im Bericht 9, 9.5, 10 und 10.5 Pixel, die Gewichte 600, 700
-   und 900 und Laufweiten von 0.2 bis 1.4 Pixel — jede Stelle hatte ihre eigenen
-   Werte, weil sie einzeln getippt wurden. Vier Rollen reichen, und welche gilt,
-   entscheidet die Aufgabe:
-     kapitelmarke  Nummer und Kapitelname, einmal je Kapitel
-     blockmarke    fuehrt einen Block innerhalb eines Kapitels an
-     spaltenkopf   benennt eine Tabellenspalte
-     datenlabel    beschriftet einen Wert (Score, Paket, Dauer) */
-/* AUF DEM TELEFON EINE STUFE GROESSER. Gemessen an 24
-   Stellen: 9,5 bis 10,5 px in Grossbuchstaben mit weitem Sperrsatz sind am
-   Bildschirm noch lesbar und in der Hand nicht mehr. Am Desktop bleiben die
-   alten Werte, dort traegt die Groesse die Hierarchie. */
+/* FOUR ROLES FOR SMALL TYPE, NOT NINE VARIANTS. Measured on 06.09.2026,
+   the badges in the report ran at 9, 9.5, 10 and 10.5 pixels, at weights 600, 700
+   and 900, with tracking from 0.2 to 1.4 pixels: every place had its own
+   values, because they were typed one at a time. Four roles are enough, and the
+   job decides which one applies:
+     kapitelmarke  number and chapter name, once per chapter
+     blockmarke    heads a block inside a chapter
+     spaltenkopf   names a table column
+     datenlabel    labels a value (score, package, duration) */
+/* ONE STEP BIGGER ON A PHONE. Measured at 24
+   places: 9.5 to 10.5 px in capitals with wide tracking is still legible on a
+   screen and no longer legible in the hand. The desktop keeps the old
+   values, where size carries the hierarchy. */
 .lm-report .lm-kapitelmarke{font-size:11.5px;font-weight:900;text-transform:uppercase;letter-spacing:.13em}
 .lm-report .lm-blockmarke{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.11em;color:var(--color-navy)}
 @media (min-width:640px){
@@ -70,16 +70,16 @@ export function LeadMagnetStyles() {
 .lm-report .lm-datenlabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--color-pewter)}
 .lm-blockmarke+*{margin-top:14px}
 
-/* Fuer Ueberschriften, die im JSX statt hier stehen: dieselbe Stufe, eine Klasse. */
+/* For headings that live in the JSX instead of here: same step, one class. */
 .lm-report .lm-h-aussage{font-size:var(--lm-aussage);line-height:var(--lm-aussage-zh);letter-spacing:var(--lm-aussage-lw)}
 .lm-report .lm-h-sektion{font-size:var(--lm-sektion);line-height:var(--lm-sektion-zh);letter-spacing:var(--lm-sektion-lw)}
 .lm-report .lm-h-block{font-size:var(--lm-block);line-height:var(--lm-block-zh);letter-spacing:var(--lm-block-lw)}
 
-/* ------------------------------------ Bewegung in der Verlust-Sektion ---
- * Dieselbe Machart wie unten im Loesungsteil: nur transform, opacity und stroke-dashoffset, damit
- * der Browser nichts neu berechnen muss. Jede beginnt in ihrem Endzustand, so
- * dass ein stehendes Bild vollstaendig ist — wer Bewegung abgestellt hat, sieht
- * dieselbe Zeichnung, nur still. */
+/* ------------------------------------ Motion in the loss section ---
+ * Same make as the solution part below: only transform, opacity and stroke-dashoffset, so
+ * the browser has nothing to recalculate. Each one starts in its end state, so
+ * that a still frame is complete: anyone who has switched motion off sees the
+ * same drawing, only quiet. */
 .lm-losses .laeuft{stroke-dasharray:3 9;animation:lm-l-laeuft 2.4s linear infinite}
 @keyframes lm-l-laeuft{to{stroke-dashoffset:-24}}
 .lm-losses .fuellt{stroke-dasharray:230;stroke-dashoffset:0;animation:lm-l-fuellt 5.5s cubic-bezier(.45,0,.25,1) infinite}
@@ -101,9 +101,9 @@ export function LeadMagnetStyles() {
 .lm-hero>div.relative{row-gap:40px}
 .lm-hero h1{max-width:12ch;font-size:var(--lm-hero);line-height:var(--lm-hero-zh);letter-spacing:var(--lm-hero-lw);margin-top:28px}
 .lm-hero [data-onepager=hook]{font-weight:500;line-height:1.55;margin-top:24px;max-width:44ch;color:var(--color-graphite)}
-/* Gilt dem Videorahmen im Hero, nicht jedem figure darin: der Belegstreifen
-   nutzt ebenfalls figure, und seine Sternezeile bekam dadurch einen Rahmen
-   quer durch die Karte (07.09.2026). */
+/* Applies to the video frame in the hero, not to every figure in it: the proof
+   strip uses figure as well, which gave its star row a border running right
+   across the card (07.09.2026). */
 .lm-hero figure:not(.lm-beleg-karte)>div{border:1px solid color-mix(in srgb,var(--color-navy-deep) 20%,transparent);border-radius:24px;box-shadow:var(--shadow-raised)}
 .lm-hero article{padding:22px 24px;border-color:var(--color-hairline)}
 .lm-hero article>span{width:44px;height:44px;border-radius:13px;background:var(--color-navy-soft);box-shadow:inset 0 1px 0 #ffffffb3}
@@ -111,22 +111,22 @@ export function LeadMagnetStyles() {
 .lm-hero article strong{font-size:14px;font-weight:600;line-height:1.4}
 .lm-analysis{background:var(--color-surface-2);padding-top:72px;padding-bottom:80px;border-color:var(--color-hairline)}
 .lm-actions{margin-top:0}
-/* Die Ueberschrift fuehrt eine Liste an, sie behauptet nichts. Vorher stand sie mit 42px so gross da wie die Aussagen
-   im Hero und in der Verlust-Sektion. */
+/* The heading heads a list, it claims nothing. Before, it stood at 42px, as large as the statements
+   in the hero and in the loss section. */
 .lm-actions h2{font-size:var(--lm-block);line-height:var(--lm-block-zh);letter-spacing:var(--lm-block-lw)}
 .lm-actions>div{margin-top:18px;border-radius:20px;border-color:var(--color-hairline);box-shadow:var(--shadow-card)}
 .lm-actions>div>div:first-child{padding:11px 26px;background:var(--color-canvas);column-gap:20px}
-/* Die Zeilen waren fuer zwei Textzeilen 25px hoch gepolstert und standen damit
-   halb leer. Enger gesetzt liest sich die Liste als Liste. */
+/* The rows were padded 25px high for two lines of text and stood half empty
+   as a result. Set tighter, the list reads as a list. */
 .lm-actions article{padding:16px 26px;column-gap:20px;border-color:var(--color-hairline)}
 .lm-actions article:hover{background:#fbfaf7}
 .lm-actions article>b{background:var(--color-canvas);color:var(--color-graphite);border:1px solid #0000001a;width:24px;height:24px;font-size:11px}
 .lm-actions article p{font-size:15px;font-weight:500;line-height:1.5}
 .lm-actions article>div:last-child>p{font-weight:600}
 .lm-actions summary{font-size:11px;min-height:44px;letter-spacing:.06em}
-/* Der Pfeil rueckt beim Ueberfahren der Zeile ein Stueck in Richtung Loesung und
-   wird dabei kraeftiger: dieselbe Bewegung, die der Satz beschreibt. Nur transform
-   und color, damit nichts neu umbricht. */
+/* On hover the arrow moves a little way towards the solution and grows stronger
+   as it goes: the same movement the sentence describes. Only transform and
+   color, so that nothing re-wraps. */
 .lm-actions .lm-pfeil{transition:color 200ms cubic-bezier(.23,1,.32,1),transform 200ms cubic-bezier(.23,1,.32,1)}
 @media (hover:hover) and (pointer:fine){
  .lm-actions article:hover .lm-pfeil{color:var(--color-navy);transform:translateX(3px)}
@@ -135,22 +135,21 @@ export function LeadMagnetStyles() {
  .lm-actions .lm-pfeil{transition:none}
  .lm-actions article:hover .lm-pfeil{transform:none}
 }
-/* Bleistift auf Papier: der Rahmen liegt in der Tintenfarbe, aber schwach, und
-   zieht beim Ueberfahren an. Kein Schatten - eine Zeichnung wirft keinen. */
+/* Pencil on paper: the border sits in the ink colour, but faint, and
+   strengthens on hover. No shadow - a drawing does not cast one. */
 .lm-beleg-karte{color:rgba(28,22,14,.82)}
 .lm-beleg-karte svg,.lm-beleg .lm-marke{transition:color 200ms cubic-bezier(.23,1,.32,1),border-color 200ms cubic-bezier(.23,1,.32,1)}
 @media (hover:hover) and (pointer:fine){
  .lm-beleg-karte:hover{color:rgba(28,22,14,1)}
  .lm-beleg .lm-marke:hover{border-color:var(--color-hairline-strong)}
 }
-/* Das Laufband der Bewertungen.
-   Die Liste steht zweimal im DOM, das Band laeuft genau um die halbe Strecke
-   und springt dann zurueck: an diesem Punkt steht die Kopie exakt dort, wo das
-   Original begann, deshalb ist die Naht unsichtbar. Die Dauer haengt an der
-   Zahl der Karten, nicht an einer festen Sekundenzahl, sonst rasen acht
-   Bewertungen und vier schleichen. Ueber den Raendern liegt eine Maske, damit
-   die Karten aus dem Papier heraus- und hineinlaufen statt an einer Kante
-   abgeschnitten zu werden. */
+/* The review ticker.
+   The list sits in the DOM twice, the band travels exactly half the distance
+   and then jumps back: at that point the copy stands exactly where the
+   original began, which is why the seam is invisible. The duration hangs on
+   the number of cards, not on a fixed number of seconds, or else eight
+   reviews race and four crawl. A mask lies over the edges so the cards run
+   out of the paper and into it instead of being cut off at a line. */
 .lm-beleg-fenster{
  overflow:hidden;
  -webkit-mask-image:linear-gradient(90deg,transparent,#000 48px,#000 calc(100% - 48px),transparent);
@@ -166,10 +165,10 @@ export function LeadMagnetStyles() {
 }
 @media (prefers-reduced-motion:reduce){
  .lm-beleg-karte svg,.lm-beleg .lm-marke{transition:none}
- /* Kein Band: zurueck auf ein ruhendes Raster, und die zweite Haelfte der
-    Liste ist die aria-hidden-Kopie, die hier nichts zu suchen hat.
-    ACHTUNG: dieses Stylesheet ist ein Template-Literal. Ein Backtick in einem
-    Kommentar beendet den String und bricht die Datei (gemessen 20.09.2026). */
+ /* No band: back to a still grid, and the second half of the list is the
+    aria-hidden copy, which has no business here.
+    CAREFUL: this stylesheet is a template literal. A backtick in a comment
+    ends the string and breaks the file (measured 20.09.2026). */
  .lm-beleg-fenster{-webkit-mask-image:none;mask-image:none}
  .lm-beleg-band{animation:none;display:grid;width:auto;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
  .lm-beleg-band>[aria-hidden="true"]{display:none}
@@ -196,9 +195,9 @@ export function LeadMagnetStyles() {
 .lm-report-journey>a:focus-visible{outline:none}
 .lm-report-journey>a:focus-visible .lm-journey-mark{outline:3px solid #fff;outline-offset:4px}
 @media (hover:hover) and (pointer:fine){.lm-report-journey>a:hover .lm-journey-mark{transform:translateY(-2px);background:linear-gradient(145deg,color-mix(in srgb,var(--color-navy) 62%,white),var(--color-navy-deep));box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 16px 30px rgba(7,24,82,.34)}}
-/* ------------------------------------------ Die messbare Opportunity ---
- * Eine Matrix zeigt zuerst den Vergleich. Eine einzige Rechenzeile darunter
- * trennt Annahmen von Messwerten; das Ergebnis bekommt die einzige dunkle Flaeche. */
+/* ------------------------------------- The measurable opportunity ---
+ * A matrix shows the comparison first. A single line of arithmetic below it
+ * separates assumptions from measurements; the result gets the only dark area. */
 .lm-opportunity-compare{display:grid;grid-template-columns:minmax(150px,.9fr) repeat(2,minmax(170px,1fr));background:#fff}
 .lm-opportunity-cell{min-width:0;border-bottom:1px solid var(--color-hairline);padding:16px 22px}
 .lm-opportunity-cell:nth-child(3n+2),.lm-opportunity-cell:nth-child(3n+3){border-left:1px solid var(--color-hairline)}
@@ -263,10 +262,10 @@ export function LeadMagnetStyles() {
  .lm-opportunity-result-metric strong{font-size:20px}
  .lm-opportunity-result-metric span{font-size:9px}
 }
-/* Die Scorecard ist die Karte des Berichts; die drei eigenstaendigen Flaechen
-   darunter sind seine Etappen. Der Abstand trennt, die Linie haelt die Reise
-   zusammen. So bleibt die Reihenfolge sichtbar, ohne wieder einen langen
-   gemeinsamen Container um alle Inhalte zu ziehen. */
+/* The scorecard is the report's map; the three standalone areas below it are
+   its stages. The gap separates, the line holds the journey together. That
+   keeps the order visible without drawing one long shared container around all
+   the content again. */
 .lm-chapters{position:relative;display:grid;gap:54px;margin-top:54px}
 .lm-chapters::before{content:"";position:absolute;z-index:0;top:-54px;bottom:0;left:48px;width:1px;background:linear-gradient(var(--lm-accent),color-mix(in srgb,var(--color-navy) 18%,transparent) 18%,color-mix(in srgb,var(--color-navy) 18%,transparent) 82%,transparent)}
 .lm-pillar{z-index:1;border-color:var(--color-hairline);box-shadow:var(--shadow-card)}
@@ -291,8 +290,8 @@ export function LeadMagnetStyles() {
 @media(max-width:639px){
  .lm-report header nav{min-height:70px;gap:12px}
  .lm-hero{padding-top:28px;padding-bottom:36px}
- /* 49 px waren die Schreibtisch-Geste auf einem 390-px-Geraet: vier Zeilen,
-    die den ersten Bildschirm auffressen. */
+ /* 49 px was the desktop gesture on a 390 px device: four lines that eat
+    the whole first screen. */
  .lm-hero h1{font-size:33px;max-width:14ch;margin-top:18px;letter-spacing:-.04em}
  .lm-hero [data-onepager=hook]{font-size:15.5px;line-height:1.5;margin-top:16px}
  .lm-hero>div.relative{gap:28px}
@@ -334,15 +333,15 @@ export function LeadMagnetStyles() {
  .lm-solution-dots i[data-active=true]{width:20px;background:var(--lm-action)}
  .lm-chapters{gap:34px;margin-top:34px}
  .lm-chapters::before{top:-34px;left:24px}
- /* ZWEI GLEICHE HAELFTEN STATT EINER LUECKE. Auf dem Telefon standen Score und Knopf als zwei
-    verschieden grosse Kloetze mit einem Loch dazwischen, und weil die Frage
-    mal ein- und mal zweizeilig laeuft, sass die Zeile bei jedem Kapitel
-    woanders. Jetzt: Frage oben ueber die ganze Breite, darunter zwei
-    gleich breite, gleich hohe Haelften -- links die Zahl, rechts der Knopf. */
- /* SCHLANKER AUF DEM TELEFON. Die Glaskachel ist Schmuck: am Schreibtisch traegt sie den
-    Absatz, in der Hand frisst sie die Spalte, in der der Satz stehen soll.
-    Also eine Stufe kleiner, und der Fliesstext verliert sein Fettgewicht. */
- /* Der Kopf traegt Marke und Knopf in einer Zeile -- der Knopf bricht nie um. */
+ /* TWO EQUAL HALVES INSTEAD OF A GAP. On a phone, score and button stood as two
+    blocks of different sizes with a hole between them, and because the question
+    runs on one line or on two, the row sat somewhere else in every
+    chapter. Now: question on top across the full width, below it two halves of
+    equal width and equal height -- the number left, the button right. */
+ /* LEANER ON A PHONE. The glass tile is ornament: at a desk it carries the
+    paragraph, in the hand it eats the column the sentence should stand in.
+    So one step smaller, and the body text loses its bold weight. */
+ /* The header carries badge and button on one line -- the button never wraps. */
  .lm-report header nav{min-height:60px}
  .lm-report header nav .lm-cta{white-space:nowrap;font-size:12px;padding:0 13px;min-height:44px}
  .lm-pillar{border-radius:20px}
@@ -359,10 +358,10 @@ export function LeadMagnetStyles() {
 }
 @media(prefers-reduced-motion:reduce){.lm-report *,.lm-report *::before,.lm-report *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
-/* FARBE HAT GENAU EINEN JOB.
-   Navy ordnet Inhalt, Linien und aktive Zustände. Orange ist ausschließlich Handlung
-   und bleibt deshalb den CTAs vorbehalten. Grün, Amber und Rot kommen nur aus Befunden.
-   So lässt sich jede Farbe erklären, statt jeden Abschnitt neu einzufärben. */
+/* COLOUR HAS EXACTLY ONE JOB.
+   Navy orders content, lines and active states. Orange is action and nothing else,
+   which is why it stays reserved for the CTAs. Green, amber and red come only from findings.
+   That way every colour can be explained, instead of recolouring every section. */
 .lm-report{
  --lm-accent:var(--color-navy);
  --lm-accent-soft:var(--color-navy-soft);
@@ -374,18 +373,18 @@ export function LeadMagnetStyles() {
   radial-gradient(120% 90% at 88% -10%,color-mix(in srgb,var(--lm-accent) 12%,transparent),transparent 60%),
   linear-gradient(150deg,var(--color-surface),var(--color-canvas) 72%)}
 .lm-hero>div.relative>div:first-child>span:first-child{border-color:color-mix(in srgb,var(--lm-accent) 35%,transparent)}
-/* Der Kicker bekommt einen kurzen Strich in Orange: er führt das Auge in den Abschnitt,
-   ohne dass eine ganze Fläche die Farbe trägt. */
-/* Der Strich stand ueber "Jetzt beheben", als das noch eine Sektion anfuehrte.
-   Seit dem Kapitel-Umbau ist es eine Ueberschrift INNERHALB von Kapitel 02, und
-   der Strich doppelte dort die Kapitelmarke ein paar Zeilen darueber. Er bleibt
-   nur, wo er eine Sektion anfuehrt. */
+/* The kicker gets a short rule in orange: it leads the eye into the section
+   without a whole area carrying the colour. */
+/* The rule stood above "fix this now" while that still headed a section.
+   Since the chapter rebuild it is a heading INSIDE chapter 02, and there the
+   rule doubled the chapter badge a few lines above it. It stays only where it
+   heads a section. */
 .lm-actions article>b{background:linear-gradient(140deg,var(--lm-accent),color-mix(in srgb,var(--lm-accent) 72%,#7a2d00));color:#fff;
   box-shadow:0 1px 2px color-mix(in srgb,var(--lm-accent) 45%,transparent)}
-/* KORREKTUR 06.09.2026: hier stand Orange, und damit widersprach diese Zeile dem
-   Kommentar drei Zeilen darueber („Navy bleibt fuer alles, was man anklickt").
-   „Details" und „2 weitere anzeigen" sind Aufklapper, also Navy. Orange bleibt bei
-   den Ziffern und dem Kicker-Strich, die nur markieren, und beim Handlungsknopf. */
+/* CORRECTION 06.09.2026: orange stood here, which made this line contradict the
+   comment three lines above it ("navy stays for everything you click").
+   "Details" and "show 2 more" are disclosure toggles, so navy. Orange stays with
+   the digits and the kicker rule, which only mark, and with the action button. */
 .lm-actions summary{color:var(--color-navy)}
 .lm-scorecard>div:first-child{background:
   radial-gradient(90% 200% at 100% 0,rgba(188,205,255,.18),transparent 55%),
@@ -397,19 +396,19 @@ export function LeadMagnetStyles() {
 .lm-report>footer>div>span:first-child>b{background:linear-gradient(140deg,var(--color-navy),var(--color-navy-deep))}
 .lm-report header nav>span:first-child>b{background:linear-gradient(140deg,var(--color-navy),var(--color-navy-deep));
   box-shadow:0 1px 0 color-mix(in srgb,var(--lm-accent) 40%,transparent)}
-/* Der Knopf antwortet auf den Druck: 160 ms, ease-out, ein Hauch kleiner. Ohne das fühlt
-   sich ein Klick an, als hätte die Seite ihn nicht gehört. */
-/* DER KNOPF IST DAS EINZIGE ORANGE AUF DER SEITE. Der ganze Bericht
-   laeuft in Navy und Sand; wenn genau eine Flaeche die Signalfarbe traegt, findet das Auge
-   sie ohne Suchen. Wuerde Orange auch anderswo stehen, waere es Dekoration statt Wegweiser.
+/* The button answers the press: 160 ms, ease-out, a shade smaller. Without that a click
+   feels as if the page had not heard it. */
+/* THE BUTTON IS THE ONLY ORANGE ON THE PAGE. The whole report
+   runs in navy and sand; when exactly one area carries the signal colour, the eye finds
+   it without searching. Were orange to sit elsewhere too, it would be decoration, not a signpost.
 
-   Drei Schichten, jede mit einem Zweck: der Verlauf gibt Tiefe (eine flache Flaeche wirkt
-   gedruckt), der Schimmer laeuft alle fuenf Sekunden einmal durch und holt den Blick zurueck,
-   ohne zu blinken, und der Schatten traegt dieselbe Farbe wie der Knopf statt Grau -- ein
-   grauer Schatten unter einer warmen Flaeche sieht schmutzig aus.
+   Three layers, each with a purpose: the gradient gives depth (a flat area looks
+   printed), the shimmer passes through once every five seconds and pulls the eye back
+   without blinking, and the shadow carries the same colour as the button instead of grey -- a
+   grey shadow under a warm area looks dirty.
 
-   Der Schimmer ist bewusst langsam und weit auseinander. Ein pulsierender Knopf wirkt wie
-   ein Werbebanner, und der Bericht lebt davon, dass er nicht nach Werbung aussieht. */
+   The shimmer is deliberately slow and far apart. A pulsing button reads like an ad
+   banner, and the report lives on not looking like advertising. */
 .lm-report .lm-cta{position:relative;overflow:hidden;
   background:linear-gradient(135deg,
     color-mix(in oklab,var(--color-orange) 88%,white) 0%,
@@ -434,8 +433,8 @@ export function LeadMagnetStyles() {
   .lm-report .lm-cta::after{animation:none;opacity:0}
 }
 
-/* Nur auf echten Zeigegeräten, sonst löst eine Berührung den Zustand aus und er bleibt
-   hängen. Kurz und ease-out, damit es antwortet statt zu schweben. */
+/* Only on real pointing devices, or else a touch triggers the state and it stays
+   stuck. Short and ease-out, so it answers instead of floating. */
 @media (hover:hover) and (pointer:fine){
   .lm-report .lm-hero article{transition:transform 160ms cubic-bezier(.23,1,.32,1),box-shadow 160ms cubic-bezier(.23,1,.32,1)}
   .lm-report .lm-hero article:hover{transform:translateY(-1px)}

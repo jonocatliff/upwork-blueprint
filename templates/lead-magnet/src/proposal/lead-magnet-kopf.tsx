@@ -1,20 +1,22 @@
+/* # multilingual-data: the locale tables below are what a client reads,
+   so a German value there is the German report and not a German comment. */
 "use client";
 
-/* Der Sektionskopf des Kaltreports: eine Marke, fuenf Kapitel.
+/* The section head of the cold report: one badge, five chapters.
  *
- * WARUM: „die Sektionen haben unterschiedliche Ueberschriften, der Flow
- * des Lead Magnets ist nicht mehr richtig erkennbar." Gemessen am selben Tag stimmte, was er
- * sah: von fuenf Abschnitten trug genau einer eine Marke („The path"), die uebrigen fingen
- * mit einer nackten Ueberschrift an. Wer scrollt, sieht dann eine Folge von Aussagen und
- * nicht, dass es ein Bericht mit Kapiteln ist.
+ * WHY: "the sections all carry different headings, the flow of the
+ * lead magnet is not really readable any more." Measured the same day, what he
+ * saw held up: of five sections exactly one carried a badge ("The path"), the rest
+ * opened with a bare heading. Anyone scrolling sees a run of statements, not a
+ * report with chapters.
  *
- * Die Nummer traegt hier echte Information, sie ist keine Deko: die Reihenfolge ist das
- * Argument des Berichts. Erst die Branche, damit der eigene Befund als Chance und nicht als
- * Vorwurf liest. Dann der eigene Befund. Dann der Weg. Dann der Termin. Wer sie umstellt,
- * zerstoert die Dramaturgie, also darf man sie sehen.
+ * The number carries real information here, it is not decoration: the order is the
+ * report's argument. The industry first, so that our own finding reads as an
+ * opportunity and not as an accusation. Then the finding. Then the path. Then the
+ * appointment. Reorder them and the arc is gone, so the reader may see it.
  *
- * Ausgenommen bleibt der Hero: er ist der Einstieg, kein Kapitel, und eine „00" darueber
- * waere genau die Deko-Nummer, die diese Datei vermeiden soll.
+ * The hero is excluded: it is the entry, not a chapter, and a "00" above it
+ * would be exactly the decorative number this file sets out to avoid.
  */
 
 import { useEffect, useState } from "react";
@@ -26,21 +28,21 @@ export type Kapitel = {
   schluessel: string;
   nummer: string;
   kicker: Text;
-  titel: Text;
+  title: Text;
 };
 
-/** Die fuenf Kapitel, an einer Stelle, damit Nummer und Reihenfolge nicht auseinanderlaufen.
- *  Wer eine Sektion verschiebt, aendert hier die Nummer mit. */
+/** The five chapters, in one place, so that number and order cannot drift apart.
+ *  Move a section and you change its number here in the same go. */
 export const KAPITEL: Record<"branche" | "befund" | "termin", Kapitel> = {
   branche: {
     schluessel: "branche",
     nummer: "01",
     kicker: { en: "The industry", de: "Die Branche" },
-    /* ZWEI ZEILEN, NICHT DREI. Bei `max-w-[19ch]` brechen
-       51 Zeichen in drei Zeilen und schieben die drei Zahlen nach unten aus
-       dem Bild. Das Wort "drei" stand ohnehin doppelt: die drei Zahlen stehen
-       direkt darunter und zaehlen sich selbst. */
-    titel: {
+    /* TWO LINES, NOT THREE. At `max-w-[19ch]`, 51 characters
+       break into three lines and push the three numbers off the bottom of the
+       screen. The word "three" was there twice anyway: the three numbers sit
+       directly below and count themselves. */
+    title: {
       en: "Where almost everyone loses money",
       de: "Wo fast jeder Geld verliert",
     },
@@ -49,24 +51,24 @@ export const KAPITEL: Record<"branche" | "befund" | "termin", Kapitel> = {
     schluessel: "befund",
     nummer: "01",
     kicker: { en: "Your business", de: "Ihr Betrieb" },
-    titel: { en: "Where you stand today", de: "Wo Sie heute stehen" },
+    title: { en: "Where you stand today", de: "Wo Sie heute stehen" },
   },
   termin: {
     schluessel: "termin",
     nummer: "02",
     kicker: { en: "Your next step", de: "Ihr nächster Schritt" },
-    /* Ebenfalls auf zwei Zeilen gekuerzt, gleicher Grund
-       wie bei Kapitel 01: 44 Zeichen sind bei 19ch drei Zeilen, und direkt
-       darunter steht der Kalender. */
-    titel: {
+    /* Cut to two lines as well, same reason as chapter 01:
+       at 19ch, 44 characters are three lines, and the calendar sits directly
+       below them. */
+    title: {
       en: "One reply, then we plan it",
       de: "Eine Antwort, dann planen wir",
     },
   },
 };
 
-/** Nummer, Kapitelname, Aussage. Immer in dieser Form, immer in dieser Groesse.
- *  `hell` dreht die Farben fuer den dunklen Abschluss um. */
+/** Number, chapter name, statement. Always in this form, always at this size.
+ *  `hell` inverts the colours for the dark closing section. */
 export function SektionsKopf({ kapitel, locale, hell = false, className = "" }: {
   kapitel: Kapitel;
   locale: Locale;
@@ -74,8 +76,8 @@ export function SektionsKopf({ kapitel, locale, hell = false, className = "" }: 
   className?: string;
 }) {
   return (
-    /* Die id ist der Anker, den die Kapitelleiste im Kopf beobachtet und anspringt.
-       scroll-mt haelt die Ueberschrift beim Sprung unter dem klebenden Kopf. */
+    /* The id is the anchor the chapter bar in the header watches and jumps to.
+       scroll-mt keeps the heading clear of the sticky header after a jump. */
     <div id={`kapitel-${kapitel.schluessel}`} className={`lm-kopf scroll-mt-[84px] ${className}`}>
       <p className={`m-0 flex items-center gap-2.5 lm-kapitelmarke ${hell ? "text-white/55" : "text-pewter"}`}>
         <span className={`tnum ${hell ? "text-white/80" : "text-navy"}`}>{kapitel.nummer}</span>
@@ -83,48 +85,48 @@ export function SektionsKopf({ kapitel, locale, hell = false, className = "" }: 
         {kapitel.kicker[locale]}
       </p>
       <h2 className={`lm-h-aussage m-0 mt-3 max-w-[19ch] font-black ${hell ? "text-white" : ""}`}>
-        {kapitel.titel[locale]}
+        {kapitel.title[locale]}
       </h2>
     </div>
   );
 }
 
-/* ------------------------------------------------ Wo bin ich gerade? ---
- * WARUM: „it would be cool if we have a roadmap in the header bar
+/* ------------------------------------------------ Where am I right now? ---
+ * WHY: "it would be cool if we have a roadmap in the header bar
  * that shows which section of the report we are in right now, that runs along as we
  * scroll down the page. That gives a clear orientation."
  *
- * Der Bericht ist lang, und wer bei Kapitel 03 ankommt, hat den Anfang nicht mehr im
- * Blick. Die Leiste beantwortet zwei Fragen auf einmal: wo stehe ich, und wie viel
- * kommt noch. Beides ohne zu scrollen, und ein Klick springt hin.
+ * The report is long, and whoever arrives at chapter 03 has lost sight of the
+ * beginning. The bar answers two questions at once: where am I, and how much is
+ * still to come. Both without scrolling, and a click jumps there.
  *
- * Nur das aktive Kapitel zeigt seinen Namen. Vier Namen nebeneinander waeren eine
- * zweite Navigation im Kopf und wuerden mit den beiden Knoepfen rechts konkurrieren;
- * die drei anderen bleiben als Ziffer stehen, das genuegt zum Zaehlen.
+ * Only the active chapter shows its name. Four names side by side would be a
+ * second navigation in the header and would compete with the two buttons on the
+ * right; the other three stay as a digit, which is enough to count by.
  */
 
-// "branche" ist am 21.09.2026 aus dem Bericht genommen worden, weil drei
-// Branchenzahlen fuer jeden Betrieb gleich galten. Der Eintrag bleibt in
-// KAPITEL stehen, damit ein alter Verweis nicht bricht; die Leiste kennt ihn nicht.
+// "branche" was taken out of the report on 21.09.2026, because three industry
+// numbers were the same for every business. The entry stays in KAPITEL so that an
+// old reference does not break; the bar does not know about it.
 export const KAPITEL_FOLGE = ["befund", "termin"] as const;
 
-/** Das oberste Kapitel, das gerade im oberen Drittel des Fensters steht. `null`, solange
- *  der Leser noch im Hero ist -- dann zeigt die Leiste nichts an, weil es nichts zu
- *  orientieren gibt. */
+/** The topmost chapter currently sitting in the upper third of the window. `null` as
+ *  long as the reader is still in the hero -- the bar then shows nothing, because there
+ *  is nothing to orient by. */
 export function useAktivesKapitel(): string | null {
   const [aktiv, setAktiv] = useState<string | null>(null);
   useEffect(() => {
-    /* ERST MIT IntersectionObserver GEBAUT, DANN GEMESSEN UND VERWORFEN (06.09.2026):
-       der Beobachter haengt am Kapitelkopf, und sobald der oben aus dem Bild gescrollt
-       ist, meldet er nichts mehr. Gemessen zeigte die Leiste dadurch bei zwei von vier
-       Scrollstaenden gar kein Kapitel an.
+    /* BUILT WITH IntersectionObserver FIRST, THEN MEASURED AND DROPPED (06.09.2026):
+       the observer hangs on the chapter head, and once that has scrolled off the top
+       it reports nothing any more. Measured, the bar showed no chapter at all at two
+       of four scroll positions.
 
-       Was zaehlt, ist nicht „welcher Kopf ist sichtbar", sondern „an welchem Kopf bin ich
-       zuletzt vorbeigekommen". Das beantwortet ein Scroll-Zaehler in einem Satz. Vier
-       Messungen je Bild sind billig, und die Drosselung auf einen Frame haelt sie aus
-       dem Scroll-Pfad heraus. */
+       What counts is not "which head is visible" but "which head did I last scroll
+       past". A scroll counter answers that in one line. Four measurements per frame
+       are cheap, and throttling them to one frame keeps them out of the scroll
+       path. */
     let angefordert = false;
-    const marke = 96; // knapp unter dem klebenden Kopf
+    const marke = 96; // just below the sticky header
     const messen = () => {
       angefordert = false;
       let letztes: string | null = null;
@@ -150,8 +152,8 @@ export function useAktivesKapitel(): string | null {
   return aktiv;
 }
 
-/** Vier Ziffern im Kopf, die aktive traegt ihren Namen. Ein Klick springt ins Kapitel. */
-export function KapitelLeiste({ aktiv, locale }: { aktiv: string | null; locale: Locale }) {
+/** Four digits in the header, the active one carries its name. A click jumps to the chapter. */
+export function ChapterBar({ aktiv, locale }: { aktiv: string | null; locale: Locale }) {
   const de = locale === "de";
   return (
     <nav aria-label={de ? "Kapitel des Berichts" : "Report chapters"} className="lm-leiste hidden items-center gap-1 lg:flex">

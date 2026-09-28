@@ -19,6 +19,7 @@ Exit 1 on any finding, so it gates a release rather than being read politely.
 import ast
 import pathlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -79,6 +80,8 @@ MEMBER_PATHS = ('context/', 'data/', 'jobs/')
 
 # The cockpit app's own source. Its texts reach the member like any command does.
 COCKPIT = ('cockpit/**/*.ts', 'cockpit/**/*.tsx', 'cockpit/**/*.mjs', 'cockpit/**/*.css')
+# A member edits these to change what a client reads, so they are shipped text too.
+TEMPLATES = ('templates/**/*.tsx', 'templates/**/*.ts', 'templates/**/*.css', 'templates/**/*.html')
 
 
 def shipped(*globs):
@@ -118,13 +121,113 @@ def check_leaks():
     return findings
 
 
+# Strings and regex literals: a character class naming German letters is code that
+# handles German, not a sentence written in it.
+QUOTED = re.compile(r'"[^"]*"|\'[^\']*\'|`[^`]*`|(?<![\w)])/(?![/*])(?:\\.|\[[^\]]*\]|[^/\n\\])+/[gimsuy]*')
+
+
+def strip_data(line, state=None):
+    """The code and the comments on this line, with every string literal blanked out.
+
+    A scanner rather than a pattern: the report nests template literals inside template
+    literals, writes German inside regex character classes, and puts apostrophes in its
+    English comments. A regex reads none of that the way a reader does, and an apostrophe
+    in prose used to flip the whole rest of the line into "inside a string".
+
+    Comments are kept, because a German comment is exactly what this is looking for, but
+    they are scanned as prose so their apostrophes open nothing. `state` carries an
+    unterminated template literal or block comment into the next line.
+    """
+    out, quote, depth, escaped, prev = [], state, 0, False, ''
+    comment = quote == '*'
+    if comment:
+        quote = None
+    i, n = 0, len(line)
+    while i < n:
+        ch = line[i]
+        if comment:
+            if ch == '*' and line[i + 1:i + 2] == '/':
+                comment, i = False, i + 2
+                continue
+            out.append(ch)
+            i += 1
+            continue
+        if escaped:
+            escaped, i = False, i + 1
+            continue
+        if ch == '\\':
+            escaped, i = True, i + 1
+            continue
+        if quote == '`':
+            if prev == '$' and ch == '{':
+                depth, quote, prev = depth + 1, None, ''
+                out.append('0')
+            elif ch == '`':
+                quote = None
+            else:
+                prev = ch if ch == '$' else ''
+            i += 1
+            continue
+        if quote:
+            if ch == quote:
+                quote = None
+            i += 1
+            continue
+        if ch == '/' and line[i + 1:i + 2] == '/':
+            out.append(line[i:])
+            break
+        if ch == '/' and line[i + 1:i + 2] == '*':
+            comment, i = True, i + 2
+            continue
+        if ch in '"\'`':
+            quote = ch
+            out.append('0')     # a stand-in, so the next character sees a value here
+            i += 1
+            continue
+        # A regex literal, whose German character classes are code that reads German. The
+        # previous non-space character has to be one that can precede a regex: a self
+        # closing JSX tag ends in " />", and reading that as a regex start swallowed the
+        # rest of the line and flipped every string pairing after it.
+        before = next((c for c in reversed(out) if not c.isspace()), '')
+        if ch == '/' and before in '(,=:!&|?[{':
+            quote = '/'
+            out.append('0')
+            i += 1
+            continue
+        if ch == '}' and depth:
+            depth, quote = depth - 1, '`'
+            i += 1
+            continue
+        out.append(ch)
+        i += 1
+    carry = '*' if comment else ('`' if quote == '`' or depth else None)
+    return ''.join(out), carry
+
+
 def check_language():
+    """Nothing a stranger reads speaks German, and the templates are read too.
+
+    The report a client gets is deliberately bilingual, so a file that declares itself
+    multilingual keeps its locale table: a `key: "value"` line there is data. Everything
+    else, and every comment, is a sentence the next owner has to be able to read.
+    """
     findings = []
-    for p in shipped('**/*.md', '**/*.py', *COCKPIT):
+    for p in shipped('**/*.md', '**/*.py', *COCKPIT, *TEMPLATES):
+        if 'node_modules' in str(p) or f'{os.sep}dist{os.sep}' in str(p):
+            continue
+        text = p.read_text(encoding='utf-8', errors='replace')
+        multilingual = LANGUAGE_DATA_MARKER in text
+        carried = None                      # a template literal left open by a line above
         for i, line in enumerate(lines_of(p), 1):
-            if GERMAN.search(line) and LANGUAGE_DATA_MARKER not in line:
-                findings.append(f'{p.relative_to(ROOT)}:{i} is German: "{line.strip()[:60]}"')
-                break
+            code, carried = strip_data(line, carried)
+            if not GERMAN.search(line) or LANGUAGE_DATA_MARKER in line:
+                continue
+            # In a file that declares its locale tables, German inside a string is the
+            # German report; German outside one is a sentence the next owner cannot read.
+            if multilingual and not GERMAN.search(code):
+                continue
+            findings.append(f'{p.relative_to(ROOT)}:{i} is German: "{line.strip()[:60]}"')
+            break
     return findings
 
 
@@ -410,6 +513,14 @@ def main():
                 print(f'  {f}')
         elif not quiet:
             print(f'ok  {label}')
+    if not (pathlib.Path(__file__).with_name('leaks.txt')).is_file() and not quiet:
+        # The list of private names cannot travel, so on anybody else's machine this gate
+        # runs on the built-in patterns alone. Saying so beats a gate that looks stronger
+        # than it is: a new owner passes "personal data" without it ever having looked
+        # for theirs.
+        print('\nnote  personal data ran on the built-in patterns only. Your own names, '
+              'domains and ids are not among them: put one pattern per line, as '
+              '"pattern | what it is", in tools/leaks.txt, which never leaves your machine.')
     if total:
         print(f'\n{total} finding(s). Fix before publishing.')
         return 1

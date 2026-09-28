@@ -1,3 +1,5 @@
+/* # multilingual-data: the locale strings below are what a client reads,
+   so a German value there is the German report and not a German comment. */
 // The map ranking grid - LocalFalcon-style, same as the real Automatable
 // audit exhibit: 25 points across the city, each badge a Google Maps API
 // search from that spot. Green = top three, amber = ranked lower, red X =
@@ -57,7 +59,7 @@ function badge(rank: number | null): { bg: string; label: string } {
   return { bg: "#d4a017", label: String(rank) };
 }
 
-/* `nackt` heisst: du steckst schon in einer Karte, zieh keine zweite. */
+/* `nackt` means: you are already inside a card, so do not draw a second one. */
 export function GeoGrid({ data, locale = "en", showNote = true, nackt = false }: { data: GeoGridExhibit; locale?: "en" | "de"; showNote?: boolean; nackt?: boolean }) {
   if (!data.ranks) {
     return (
@@ -83,10 +85,10 @@ export function GeoGrid({ data, locale = "en", showNote = true, nackt = false }:
           {de ? "Wo Kunden Sie in Google Maps sehen" : "Where customers see you in Google Maps"}
         </h3>
 
-        {/* DER BEGRIFF GEHOERT UEBER DIE KARTE. Die Erklaerung
-            darunter nannte ihn, aber wer die Punkte ansieht, liest sie nicht --
-            und ohne den Begriff ist ein rotes Raster eine Behauptung ueber
-            nichts. Er steht jetzt dort, wo die Farben sind. */}
+        {/* THE SEARCH TERM BELONGS ABOVE THE MAP. The explanation
+            below the map did name it, but whoever studies the dots never
+            reads that far, and without the term a red grid asserts
+            something about nothing. It now sits where the colours are. */}
         <p style={{ margin: "6px 0 12px", fontSize: 13, lineHeight: 1.4, color: "#4A4640" }}>
           {de ? "Ihre Position für " : "Your position for "}<b style={{ color: "#1C160E" }}>&ldquo;{data.keyword}&rdquo;</b>{de ? " an 25 Standorten" : " across 25 locations"}
         </p>
@@ -184,10 +186,10 @@ export function GeoGrid({ data, locale = "en", showNote = true, nackt = false }:
   );
 }
 
-/* WIE DIESE KARTE ENTSTEHT, als eigenes Bauteil. Es stand
- * unter der Heatmap und damit in der schmalen linken Spalte -- vier Saetze, die
- * sich auf 320 Pixel quetschten, waehrend rechts daneben Platz war. Jetzt
- * rendert es der Bericht unter beiden Spalten ueber die volle Breite. */
+/* HOW THIS MAP IS MADE, as a component of its own. It used to sit
+ * below the heatmap, which put it in the narrow left column: four sentences
+ * squeezed into 320 pixels while there was room to the right of them. The
+ * report now renders it below both columns, across the full width. */
 export function KarteErklaerung({ keyword, locale = "en" }: { keyword: string; locale?: "en" | "de" }) {
   const de = locale === "de";
   return (

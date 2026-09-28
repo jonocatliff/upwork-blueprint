@@ -1,3 +1,5 @@
+/* # multilingual-data: the locale tables below are what a client reads,
+   so a German value there is the German report and not a German comment. */
 "use client";
 
 import { useState } from "react";
@@ -5,107 +7,107 @@ import type { CroElement, CroSpeed, ProposalData } from "./types";
 import { ChevronDown } from "./service-icons";
 
 type Locale = "en" | "de";
-type Leser = "google" | "ki" | "besucher";
+type Reader = "google" | "ki" | "besucher";
 
-/* TEIL 3 HAT DREI LESER. Vorher standen oben vier
- * Lighthouse-Zahlen ohne Inhalt und darunter 21 Checks in sechs Gruppen --
- * die Zahlen sagten nichts, die Gruppen alles, und das Gewicht lag falsch
- * herum. Dann stand alles auf einmal da, und das war eine Wand.
+/* PART 3 HAS THREE READERS. Before, four Lighthouse
+ * numbers stood at the top with no content and 21 checks in six groups below
+ * them -- the numbers said nothing, the groups said everything, and the weight
+ * sat the wrong way round. Then it all stood there at once, and that was a wall.
  *
- * Jetzt dieselbe Mechanik wie die drei Kapitel des Reports, eine Ebene
- * tiefer: drei Kacheln nebeneinander, eine offen, darunter in voller Breite.
- * Jede Stufe hat ein Budget. Ohne Klick: ein Satz je Kachel. Eine Kachel
- * offen: vier Karten mit je einem Satz. Eine Karte offen: erst dann Haken
- * und Kreuze. Die Lighthouse-Zahlen fuehren nicht, sie stehen zugeklappt am
- * Fuss der Tafel unter "Googles eigener Test" -- eine 92 neben sechs roten
- * Zeilen las sich als Widerspruch, und der Leser glaubte der gruenen Zahl. */
+ * Now the same mechanic as the report's three chapters, one level down: three
+ * tiles side by side, one open, its contents below at full width. Every step
+ * has a budget. With no click: one sentence per tile. One tile open: four cards
+ * with one sentence each. One card open: only then ticks and crosses. The
+ * Lighthouse numbers do not lead, they sit collapsed at the foot of the panel
+ * under "Google's own test" -- a 92 next to six red lines read as a
+ * contradiction, and the reader believed the green number. */
 
-const BEFUND_TEXTE: Record<string, { wo: Leser; en: string; de: string }> = {
-  "document-title": { wo: "google", en: "The page has no title", de: "Die Seite hat keinen Titel" },
-  "meta-description": { wo: "google", en: "No preview text for the Google result", de: "Kein Vorschautext für das Google-Ergebnis" },
-  "image-alt": { wo: "google", en: "{n} pictures carry no description", de: "{n} Bilder tragen keine Beschreibung" },
-  "link-text": { wo: "google", en: "{n} links just say \"click here\"", de: "{n} Links sagen nur „hier klicken“" },
-  "link-name": { wo: "google", en: "{n} links have no readable name", de: "{n} Links haben keinen lesbaren Namen" },
-  "crawlable-anchors": { wo: "google", en: "{n} links Google cannot follow", de: "{n} Links, denen Google nicht folgen kann" },
-  "is-crawlable": { wo: "google", en: "The page tells Google not to index it", de: "Die Seite sagt Google, sie nicht aufzunehmen" },
-  "robots-txt": { wo: "google", en: "The robots file is broken", de: "Die robots-Datei ist fehlerhaft" },
-  "hreflang": { wo: "google", en: "Language links are set wrong", de: "Sprachverweise sind falsch gesetzt" },
-  "canonical": { wo: "google", en: "The page's official address is wrong", de: "Die offizielle Adresse der Seite ist falsch" },
-  "html-has-lang": { wo: "google", en: "The page does not say its language", de: "Die Seite nennt ihre Sprache nicht" },
-  "heading-order": { wo: "google", en: "Headings skip levels, so the structure is unclear", de: "Überschriften springen, die Struktur ist unklar" },
-  "http-status-code": { wo: "google", en: "The page answers with an error code", de: "Die Seite antwortet mit einem Fehlercode" },
-  "font-size": { wo: "google", en: "Text too small to read on a phone", de: "Text auf dem Handy zu klein zum Lesen" },
-  "render-blocking-resources": { wo: "besucher", en: "Design files load before any text can appear · {s} s to gain", de: "Designdateien laden, bevor Text erscheinen kann · {s} s zu gewinnen" },
-  "unused-css-rules": { wo: "besucher", en: "Style code this page never uses · {s} s to gain", de: "Stilcode, den die Seite nie braucht · {s} s zu gewinnen" },
-  "unused-javascript": { wo: "besucher", en: "Script code this page never uses · {s} s to gain", de: "Skriptcode, den die Seite nie braucht · {s} s zu gewinnen" },
-  "modern-image-formats": { wo: "besucher", en: "Pictures in an old, heavy format · {s} s to gain", de: "Bilder in einem alten, schweren Format · {s} s zu gewinnen" },
-  "uses-optimized-images": { wo: "besucher", en: "Pictures saved larger than needed · {s} s to gain", de: "Bilder größer gespeichert als nötig · {s} s zu gewinnen" },
-  "uses-responsive-images": { wo: "besucher", en: "Desktop-size pictures sent to phones · {s} s to gain", de: "Desktop-Bilder werden ans Handy geschickt · {s} s zu gewinnen" },
-  "offscreen-images": { wo: "besucher", en: "Pictures load before anyone scrolls to them · {s} s to gain", de: "Bilder laden, bevor jemand zu ihnen scrollt · {s} s zu gewinnen" },
-  "prioritize-lcp-image": { wo: "besucher", en: "The main picture is not loaded first", de: "Das Hauptbild wird nicht zuerst geladen" },
-  "server-response-time": { wo: "besucher", en: "The server itself is slow to answer", de: "Der Server selbst antwortet langsam" },
-  "total-byte-weight": { wo: "besucher", en: "The page is very heavy to download", de: "Die Seite ist sehr schwer zu laden" },
-  "uses-text-compression": { wo: "besucher", en: "Text is sent uncompressed · {s} s to gain", de: "Text wird unkomprimiert gesendet · {s} s zu gewinnen" },
-  "uses-long-cache-ttl": { wo: "besucher", en: "Returning visitors download everything again", de: "Wiederkehrende Besucher laden alles neu" },
-  "font-display": { wo: "besucher", en: "Text stays invisible until the font arrives", de: "Text bleibt unsichtbar, bis die Schrift da ist" },
-  "third-party-summary": { wo: "besucher", en: "Outside scripts slow the page down", de: "Fremde Skripte bremsen die Seite" },
-  "mainthread-work-breakdown": { wo: "besucher", en: "The phone works hard before it can react", de: "Das Handy rechnet lange, bevor es reagiert" },
-  "bootup-time": { wo: "besucher", en: "Scripts keep the phone busy for seconds", de: "Skripte beschäftigen das Handy sekundenlang" },
-  "dom-size": { wo: "besucher", en: "The page is built from too many parts", de: "Die Seite besteht aus zu vielen Teilen" },
-  "redirects": { wo: "besucher", en: "The address forwards before the page loads", de: "Die Adresse leitet weiter, bevor die Seite lädt" },
-  "cumulative-layout-shift": { wo: "besucher", en: "Things jump around while the page loads", de: "Elemente springen, während die Seite lädt" },
-  "layout-shift-elements": { wo: "besucher", en: "Things jump around while the page loads", de: "Elemente springen, während die Seite lädt" },
-  "largest-contentful-paint": { wo: "besucher", en: "The main content appears late", de: "Der Hauptinhalt erscheint spät" },
-  "largest-contentful-paint-element": { wo: "besucher", en: "The main content appears late", de: "Der Hauptinhalt erscheint spät" },
-  "first-contentful-paint": { wo: "besucher", en: "Nothing shows for a long moment", de: "Lange ist gar nichts zu sehen" },
-  "speed-index": { wo: "besucher", en: "The page fills in slowly", de: "Die Seite baut sich langsam auf" },
-  "total-blocking-time": { wo: "besucher", en: "The page ignores taps while it loads", de: "Die Seite ignoriert Tipper, während sie lädt" },
-  "interactive": { wo: "besucher", en: "It takes long before anything can be tapped", de: "Es dauert, bis man etwas antippen kann" },
-  "color-contrast": { wo: "besucher", en: "{n} texts with too little contrast", de: "{n} Texte mit zu wenig Kontrast" },
-  "tap-targets": { wo: "besucher", en: "Buttons too small or too close to tap", de: "Knöpfe zu klein oder zu eng zum Tippen" },
-  "target-size": { wo: "besucher", en: "Buttons too small or too close to tap", de: "Knöpfe zu klein oder zu eng zum Tippen" },
-  "label": { wo: "besucher", en: "{n} form fields without a label", de: "{n} Formularfelder ohne Beschriftung" },
-  "button-name": { wo: "besucher", en: "{n} buttons with no readable name", de: "{n} Knöpfe ohne lesbaren Namen" },
-  "meta-viewport": { wo: "besucher", en: "Not built for a phone screen", de: "Nicht für den Handybildschirm gebaut" },
-  "is-on-https": { wo: "besucher", en: "Parts of the page load insecurely", de: "Teile der Seite laden unsicher" },
-  "errors-in-console": { wo: "besucher", en: "The page throws errors while running", de: "Die Seite wirft Fehler im Betrieb" },
-  "no-vulnerable-libraries": { wo: "besucher", en: "Outdated code with known security holes", de: "Veralteter Code mit bekannten Sicherheitslücken" },
-  "deprecations": { wo: "besucher", en: "Uses features browsers are switching off", de: "Nutzt Funktionen, die Browser abschalten" },
-  "third-party-cookies": { wo: "besucher", en: "Sets tracking cookies browsers are starting to block", de: "Setzt Tracking-Cookies, die Browser zu blocken beginnen" },
-  "image-aspect-ratio": { wo: "besucher", en: "Pictures shown squashed or stretched", de: "Bilder werden gestaucht oder gezerrt" },
-  "image-size-responsive": { wo: "besucher", en: "Pictures shown blurry on sharp screens", de: "Bilder wirken auf scharfen Bildschirmen unscharf" },
+const FINDING_TEXTS: Record<string, { where: Reader; en: string; de: string }> = {
+  "document-title": { where: "google", en: "The page has no title", de: "Die Seite hat keinen Titel" },
+  "meta-description": { where: "google", en: "No preview text for the Google result", de: "Kein Vorschautext für das Google-Ergebnis" },
+  "image-alt": { where: "google", en: "{n} pictures carry no description", de: "{n} Bilder tragen keine Beschreibung" },
+  "link-text": { where: "google", en: "{n} links just say \"click here\"", de: "{n} Links sagen nur „hier klicken“" },
+  "link-name": { where: "google", en: "{n} links have no readable name", de: "{n} Links haben keinen lesbaren Namen" },
+  "crawlable-anchors": { where: "google", en: "{n} links Google cannot follow", de: "{n} Links, denen Google nicht folgen kann" },
+  "is-crawlable": { where: "google", en: "The page tells Google not to index it", de: "Die Seite sagt Google, sie nicht aufzunehmen" },
+  "robots-txt": { where: "google", en: "The robots file is broken", de: "Die robots-Datei ist fehlerhaft" },
+  "hreflang": { where: "google", en: "Language links are set wrong", de: "Sprachverweise sind falsch gesetzt" },
+  "canonical": { where: "google", en: "The page's official address is wrong", de: "Die offizielle Adresse der Seite ist falsch" },
+  "html-has-lang": { where: "google", en: "The page does not say its language", de: "Die Seite nennt ihre Sprache nicht" },
+  "heading-order": { where: "google", en: "Headings skip levels, so the structure is unclear", de: "Überschriften springen, die Struktur ist unklar" },
+  "http-status-code": { where: "google", en: "The page answers with an error code", de: "Die Seite antwortet mit einem Fehlercode" },
+  "font-size": { where: "google", en: "Text too small to read on a phone", de: "Text auf dem Handy zu klein zum Lesen" },
+  "render-blocking-resources": { where: "besucher", en: "Design files load before any text can appear · {s} s to gain", de: "Designdateien laden, bevor Text erscheinen kann · {s} s zu gewinnen" },
+  "unused-css-rules": { where: "besucher", en: "Style code this page never uses · {s} s to gain", de: "Stilcode, den die Seite nie braucht · {s} s zu gewinnen" },
+  "unused-javascript": { where: "besucher", en: "Script code this page never uses · {s} s to gain", de: "Skriptcode, den die Seite nie braucht · {s} s zu gewinnen" },
+  "modern-image-formats": { where: "besucher", en: "Pictures in an old, heavy format · {s} s to gain", de: "Bilder in einem alten, schweren Format · {s} s zu gewinnen" },
+  "uses-optimized-images": { where: "besucher", en: "Pictures saved larger than needed · {s} s to gain", de: "Bilder größer gespeichert als nötig · {s} s zu gewinnen" },
+  "uses-responsive-images": { where: "besucher", en: "Desktop-size pictures sent to phones · {s} s to gain", de: "Desktop-Bilder werden ans Handy geschickt · {s} s zu gewinnen" },
+  "offscreen-images": { where: "besucher", en: "Pictures load before anyone scrolls to them · {s} s to gain", de: "Bilder laden, bevor jemand zu ihnen scrollt · {s} s zu gewinnen" },
+  "prioritize-lcp-image": { where: "besucher", en: "The main picture is not loaded first", de: "Das Hauptbild wird nicht zuerst geladen" },
+  "server-response-time": { where: "besucher", en: "The server itself is slow to answer", de: "Der Server selbst antwortet langsam" },
+  "total-byte-weight": { where: "besucher", en: "The page is very heavy to download", de: "Die Seite ist sehr schwer zu laden" },
+  "uses-text-compression": { where: "besucher", en: "Text is sent uncompressed · {s} s to gain", de: "Text wird unkomprimiert gesendet · {s} s zu gewinnen" },
+  "uses-long-cache-ttl": { where: "besucher", en: "Returning visitors download everything again", de: "Wiederkehrende Besucher laden alles neu" },
+  "font-display": { where: "besucher", en: "Text stays invisible until the font arrives", de: "Text bleibt unsichtbar, bis die Schrift da ist" },
+  "third-party-summary": { where: "besucher", en: "Outside scripts slow the page down", de: "Fremde Skripte bremsen die Seite" },
+  "mainthread-work-breakdown": { where: "besucher", en: "The phone works hard before it can react", de: "Das Handy rechnet lange, bevor es reagiert" },
+  "bootup-time": { where: "besucher", en: "Scripts keep the phone busy for seconds", de: "Skripte beschäftigen das Handy sekundenlang" },
+  "dom-size": { where: "besucher", en: "The page is built from too many parts", de: "Die Seite besteht aus zu vielen Teilen" },
+  "redirects": { where: "besucher", en: "The address forwards before the page loads", de: "Die Adresse leitet weiter, bevor die Seite lädt" },
+  "cumulative-layout-shift": { where: "besucher", en: "Things jump around while the page loads", de: "Elemente springen, während die Seite lädt" },
+  "layout-shift-elements": { where: "besucher", en: "Things jump around while the page loads", de: "Elemente springen, während die Seite lädt" },
+  "largest-contentful-paint": { where: "besucher", en: "The main content appears late", de: "Der Hauptinhalt erscheint spät" },
+  "largest-contentful-paint-element": { where: "besucher", en: "The main content appears late", de: "Der Hauptinhalt erscheint spät" },
+  "first-contentful-paint": { where: "besucher", en: "Nothing shows for a long moment", de: "Lange ist gar nichts zu sehen" },
+  "speed-index": { where: "besucher", en: "The page fills in slowly", de: "Die Seite baut sich langsam auf" },
+  "total-blocking-time": { where: "besucher", en: "The page ignores taps while it loads", de: "Die Seite ignoriert Tipper, während sie lädt" },
+  "interactive": { where: "besucher", en: "It takes long before anything can be tapped", de: "Es dauert, bis man etwas antippen kann" },
+  "color-contrast": { where: "besucher", en: "{n} texts with too little contrast", de: "{n} Texte mit zu wenig Kontrast" },
+  "tap-targets": { where: "besucher", en: "Buttons too small or too close to tap", de: "Knöpfe zu klein oder zu eng zum Tippen" },
+  "target-size": { where: "besucher", en: "Buttons too small or too close to tap", de: "Knöpfe zu klein oder zu eng zum Tippen" },
+  "label": { where: "besucher", en: "{n} form fields without a label", de: "{n} Formularfelder ohne Beschriftung" },
+  "button-name": { where: "besucher", en: "{n} buttons with no readable name", de: "{n} Knöpfe ohne lesbaren Namen" },
+  "meta-viewport": { where: "besucher", en: "Not built for a phone screen", de: "Nicht für den Handybildschirm gebaut" },
+  "is-on-https": { where: "besucher", en: "Parts of the page load insecurely", de: "Teile der Seite laden unsicher" },
+  "errors-in-console": { where: "besucher", en: "The page throws errors while running", de: "Die Seite wirft Fehler im Betrieb" },
+  "no-vulnerable-libraries": { where: "besucher", en: "Outdated code with known security holes", de: "Veralteter Code mit bekannten Sicherheitslücken" },
+  "deprecations": { where: "besucher", en: "Uses features browsers are switching off", de: "Nutzt Funktionen, die Browser abschalten" },
+  "third-party-cookies": { where: "besucher", en: "Sets tracking cookies browsers are starting to block", de: "Setzt Tracking-Cookies, die Browser zu blocken beginnen" },
+  "image-aspect-ratio": { where: "besucher", en: "Pictures shown squashed or stretched", de: "Bilder werden gestaucht oder gezerrt" },
+  "image-size-responsive": { where: "besucher", en: "Pictures shown blurry on sharp screens", de: "Bilder wirken auf scharfen Bildschirmen unscharf" },
 };
 
-type Befund = { text: string; gewicht: number };
+type Finding = { text: string; gewicht: number };
 
-function befundeFuer(speed: CroSpeed | null | undefined, wo: Leser, locale: Locale): Befund[] {
+function findingsFor(speed: CroSpeed | null | undefined, where: Reader, locale: Locale): Finding[] {
   const alle = Object.values(speed?.findings ?? {}).flat();
   const gesehen = new Set<string>();
-  const zeilen: Befund[] = [];
+  const rows: Finding[] = [];
   for (const b of alle) {
-    const vorlage = BEFUND_TEXTE[b.id];
-    if (!vorlage || vorlage.wo !== wo) continue;
+    const template = FINDING_TEXTS[b.id];
+    if (!template || template.where !== where) continue;
     const s = Math.round((b.einsparung_ms || 0) / 100) / 10;
-    let text = vorlage[locale].replace("{n}", String(b.betroffen || ""));
-    // Ohne Ersparnis faellt der Nachsatz weg, nie "0,0 s zu gewinnen".
+    let text = template[locale].replace("{n}", String(b.betroffen || ""));
+    // With no saving the trailing clause drops, never "0.0 s to gain".
     text = s >= 0.1 ? text.replace("{s}", s.toFixed(1)) : text.replace(/ · \{s\}[^·]*$/, "");
     if (/^0 /.test(text) || gesehen.has(text)) continue;
     gesehen.add(text);
-    zeilen.push({ text, gewicht: b.gewicht });
+    rows.push({ text, gewicht: b.gewicht });
   }
-  return zeilen.sort((a, b) => b.gewicht - a.gewicht).slice(0, 3);
+  return rows.sort((a, b) => b.gewicht - a.gewicht).slice(0, 3);
 }
 
-/* Die Gruppen je Leser. `was` ist die Frage, die der Inhaber selbst stellen
- * wuerde. Die Schluessel sind die aus `ELEMENTS` in pull_cro.py, nach
- * Gewicht geordnet: der erste rote in der Liste ist der Satz auf der Karte. */
+/* The groups per reader. `was` is the question the owner would ask himself.
+ * The keys are the ones from `ELEMENTS` in pull_cro.py, ordered by weight:
+ * the first red one in the list is the sentence on the card. */
 type Gruppe = { title: string; was: string; keys: string[]; ok?: string; icon?: string };
-type LeserSpec = { titel: string; wer: string; gruppen: Gruppe[]; lighthouse: ("seo" | "accessibility" | "performance" | "best-practices")[] };
+type LeserSpec = { title: string; wer: string; gruppen: Gruppe[]; lighthouse: ("seo" | "accessibility" | "performance" | "best-practices")[] };
 
-const LESER: Record<Locale, Record<Leser, LeserSpec>> = {
+const LESER: Record<Locale, Record<Reader, LeserSpec>> = {
   en: {
     google: {
-      titel: "How Google reads and rates your website", wer: "It decides whether to show you at all.",
+      title: "How Google reads and rates your website", wer: "It decides whether to show you at all.",
       lighthouse: ["seo", "accessibility"],
       gruppen: [
         { icon: "tuer", title: "Google’s access to your site", was: "", keys: ["crawl_robots", "crawl_sitemap", "onpage_viewport"], ok: "Robots file, sitemap and phone view are all fine." },
@@ -115,7 +117,7 @@ const LESER: Record<Locale, Record<Leser, LeserSpec>> = {
       ],
     },
     ki: {
-      titel: "How AI search reads and recommends your business", wer: "ChatGPT and Perplexity only name what they can read.",
+      title: "How AI search reads and recommends your business", wer: "ChatGPT and Perplexity only name what they can read.",
       lighthouse: [],
       gruppen: [
         { icon: "tuer", title: "Your visibility to AI crawlers", was: "", keys: ["crawl_ai_bots", "aeo_no_js", "aeo_llms_txt"], ok: "Crawlers welcome, text readable, and a summary for them." },
@@ -123,7 +125,7 @@ const LESER: Record<Locale, Record<Leser, LeserSpec>> = {
       ],
     },
     besucher: {
-      titel: "How easily visitors can contact you", wer: "From here the site has one job: make getting in touch the easiest thing on the screen.",
+      title: "How easily visitors can contact you", wer: "From here the site has one job: make getting in touch the easiest thing on the screen.",
       lighthouse: ["performance", "best-practices"],
       gruppen: [
         { icon: "kontakt", title: "Can they call you in one tap?", was: "", keys: ["cta_above_fold", "cta_repeated", "click_to_call", "opening_hours", "emergency_cover", "second_channel"], ok: "Button, tap-to-call, hours and out-of-hours cover are all there." },
@@ -136,7 +138,7 @@ const LESER: Record<Locale, Record<Leser, LeserSpec>> = {
   },
   de: {
     google: {
-      titel: "Wie Google Ihre Website liest und bewertet", wer: "Es entscheidet, ob Sie überhaupt gezeigt werden.",
+      title: "Wie Google Ihre Website liest und bewertet", wer: "Es entscheidet, ob Sie überhaupt gezeigt werden.",
       lighthouse: ["seo", "accessibility"],
       gruppen: [
         { icon: "tuer", title: "Googles Zugriff auf Ihre Website", was: "", keys: ["crawl_robots", "crawl_sitemap", "onpage_viewport"], ok: "Robots-Datei, Sitemap und Handy-Ansicht sind in Ordnung." },
@@ -146,7 +148,7 @@ const LESER: Record<Locale, Record<Leser, LeserSpec>> = {
       ],
     },
     ki: {
-      titel: "Wie KI-Suchen Ihren Betrieb lesen und empfehlen", wer: "ChatGPT und Perplexity nennen nur, was sie lesen können.",
+      title: "Wie KI-Suchen Ihren Betrieb lesen und empfehlen", wer: "ChatGPT und Perplexity nennen nur, was sie lesen können.",
       lighthouse: [],
       gruppen: [
         { icon: "tuer", title: "Ihre Sichtbarkeit für KI-Crawler", was: "", keys: ["crawl_ai_bots", "aeo_no_js", "aeo_llms_txt"], ok: "Crawler willkommen, Text lesbar, Zusammenfassung da." },
@@ -154,7 +156,7 @@ const LESER: Record<Locale, Record<Leser, LeserSpec>> = {
       ],
     },
     besucher: {
-      titel: "Wie leicht Besucher Sie kontaktieren können", wer: "Ab hier hat die Seite eine Aufgabe: den Kontakt zur einfachsten Sache auf dem Bildschirm machen.",
+      title: "Wie leicht Besucher Sie kontaktieren können", wer: "Ab hier hat die Seite eine Aufgabe: den Kontakt zur einfachsten Sache auf dem Bildschirm machen.",
       lighthouse: ["performance", "best-practices"],
       gruppen: [
         { icon: "kontakt", title: "Kann man Sie mit einem Tipp anrufen?", was: "", keys: ["cta_above_fold", "cta_repeated", "click_to_call", "opening_hours", "emergency_cover", "second_channel"], ok: "Button, Anruf per Tipp, Zeiten und Notdienst sind da." },
@@ -167,11 +169,11 @@ const LESER: Record<Locale, Record<Leser, LeserSpec>> = {
   },
 };
 
-/* Vier Zahlen von 0 bis 100 ohne Massstab sagen nichts.
- * Jede traegt jetzt, was sie misst, und ein Wort, wie sie steht -- Googles
- * eigene Grenzen: ab 90 gut, ab 50 mittel, darunter schwach. */
-/* EINE ZEILE JE KACHEL. Titel plus Erklaerung waren zwei
- * Zeilen, die zusammen weniger sagten als eine gute. */
+/* Four numbers from 0 to 100 with no scale say nothing.
+ * Each now carries what it measures, and a word for how it stands -- Google's
+ * own thresholds: good from 90, middling from 50, weak below that. */
+/* ONE LINE PER TILE. Title plus explanation were two
+ * lines that together said less than one good one. */
 const LIGHTHOUSE_KENNWORT: Record<string, string> = {
   seo: "SEO", accessibility: "Accessibility", performance: "Performance", "best-practices": "Best Practices",
 };
@@ -229,11 +231,11 @@ const ZEILEN_NAMEN: Record<string, { en: string; de: string }> = {
 };
 
 
-/* Googles eigene Befunde als Kurzwort, damit sie neben unseren stehen
- * koennen. Was hier fehlt, kommt nicht als Kachel, sondern gar nicht. */
-/* Drei Woerter je Befund, in seiner Sprache. "3 Dinge
- * halten das zurueck" sagt nichts; "ein langsamer Server, ungenutzter Code,
- * ungenutztes Design" sagt genug, ohne eine Anleitung zu sein. */
+/* Google's own findings as a short phrase, so that they can stand next to
+ * ours. What is absent here does not arrive as a tile, it does not arrive. */
+/* Three words per finding, in his language. "3 things
+ * are holding this back" says nothing; "a slow server, unused code, unused
+ * design" says enough without being a how-to. */
 const BEFUND_WORT: Record<string, { en: string; de: string }> = {
   "server-response-time": { en: "a slow server", de: "ein langsamer Server" },
   "unused-javascript": { en: "unused code", de: "ungenutzter Code" },
@@ -283,16 +285,16 @@ const BEFUND_WORT: Record<string, { en: string; de: string }> = {
   "image-size-responsive": { en: "blurry pictures", de: "unscharfe Bilder" },
 };
 
-/* Die KI-Kacheln tragen ihren Satz offen: vier Kacheln koennen sich eine
- * Zeile leisten, und "Antworten zitierbar ✕" allein versteht niemand
- *. Erst der Satz sagt, was es fuer ihn heisst. */
-/* EIN URTEIL, EINE HANDLUNG, SONST NICHTS. Die mittlere
- * Erklaerzeile machte aus vier Kacheln vier Absaetze. Gruen sagt, was steht;
- * rot sagt, was zu tun ist -- die Erklaerung liegt dazwischen und faellt weg. */
-/* DREI ZEILEN, DREI FRAGEN. Erst war es ein Absatz, dann
- * war es zu knapp. Jede Kachel beantwortet jetzt: was haben wir geprueft,
- * was kam dabei heraus, und was ist zu tun. Die erste Zeile ist die Pruefung,
- * die zweite der Befund IN SEINEN FOLGEN, die dritte die Handlung. */
+/* The AI tiles carry their sentence in the open: four tiles can afford a
+ * line, and nobody understands "answers quotable ✕" on its own.
+ * Only the sentence says what it means for him. */
+/* ONE VERDICT, ONE ACTION, NOTHING ELSE. The explaining
+ * line in the middle turned four tiles into four paragraphs. Green says what is
+ * there; red says what to do -- the explanation sat between them and goes. */
+/* THREE LINES, THREE QUESTIONS. First it was a paragraph,
+ * then it was too terse. Every tile now answers: what did we check, what came
+ * out of it, and what is to be done. The first line is the check, the second
+ * the finding IN ITS CONSEQUENCES, the third the action. */
 const KI_KACHEL: Record<string, {
   gepr: { en: string; de: string };
   ja: { en: string; de: string };
@@ -309,7 +311,7 @@ const KI_KACHEL: Record<string, {
     gepr: { en: "Do you tell the AI engines what you do?", de: "Sagen Sie den KI-Diensten, was Sie tun?" },
     ja: { en: "A summary file for the AI engines is published.", de: "Eine Zusammenfassung für die KI-Dienste ist hinterlegt." },
     nein: { en: "Nothing sums you up for them, so each one works it out from your pages alone. Ten minutes to write, and the engines have started asking for it.", de: "Nichts fasst Sie für sie zusammen, jeder Dienst muss es sich aus Ihren Seiten zusammenreimen. Zehn Minuten Arbeit, und die Dienste fangen an, danach zu fragen." },
-    tun: { en: ["Put a file called llms.txt at yoursite.com/llms.txt: what you do, where, and your main pages", "10 min"], de: ["Eine Datei llms.txt unter ihreseite.de/llms.txt anlegen: was Sie tun, wo, und Ihre wichtigsten Seiten", "10 Min."] },
+    tun: { en: ["Put a file called llms.txt at yoursite.com/llms.txt: what you do, where, and your main pages", "10 min"], de: ["Eine Datei llms.txt unter ihreseite.de/llms.txt anlegen: was Sie tun, where, und Ihre wichtigsten Seiten", "10 Min."] },
   },
   crawl_ai_bots: {
     gepr: { en: "Is ChatGPT allowed to read you at all?", de: "Darf ChatGPT Sie überhaupt lesen?" },
@@ -318,7 +320,7 @@ const KI_KACHEL: Record<string, {
     tun: { en: ["Delete the Disallow lines for GPTBot, ClaudeBot and PerplexityBot from robots.txt", "10 min"], de: ["Die Disallow-Zeilen für GPTBot, ClaudeBot und PerplexityBot aus robots.txt löschen", "10 Min."] },
   },
   aeo_entity_facts: {
-    gepr: { en: "Does ChatGPT know where you are and how to call you?", de: "Weiß ChatGPT, wo Sie sind und wie man Sie anruft?" },
+    gepr: { en: "Does ChatGPT know where you are and how to call you?", de: "Weiß ChatGPT, where Sie sind und wie man Sie anruft?" },
     ja: { en: "Name, address and phone are labelled in the page code.", de: "Name, Adresse und Telefon sind im Seitencode ausgezeichnet." },
     nein: { en: "They are only text on the page, so an AI has to guess them.", de: "Sie stehen nur als Text da, eine KI muss sie erraten." },
     tun: { en: ["Have your web person add LocalBusiness details with your exact name, address and phone", "30 min"], de: ["LocalBusiness-Angaben mit Ihrem genauen Namen, Adresse und Telefon einbauen lassen", "30 Min."] },
@@ -337,13 +339,13 @@ const KI_KACHEL: Record<string, {
   },
 };
 
-/* EIN URTEIL STATT EINES ETIKETTS. "Erste Überschrift ✕"
- * ist der Name der Pruefung, nicht ihr Ergebnis -- der Leser muss raten, was
- * daran fehlt. Jede rote Zeile traegt jetzt einen ganzen Satz mit "Ihr/Ihre",
- * und darunter den Messwert, der ihn beweist. Fehlt hier ein Schluessel,
- * faellt die Zeile auf ihren Namen und ihre `consequence` zurueck. */
+/* A VERDICT INSTEAD OF A LABEL. "First heading ✕"
+ * is the name of the check, not its result -- the reader has to guess what is
+ * wrong with it. Every red line now carries a whole sentence with "your", and
+ * below it the measurement that proves it. If a key is missing here, the line
+ * falls back on its name and its `consequence`. */
 const ROT_URTEIL: Record<string, { en: string; de: string }> = {
-  onpage_title: { en: "Your page title does not say what you do or where", de: "Ihr Seitentitel sagt nicht, was Sie tun und wo" },
+  onpage_title: { en: "Your page title does not say what you do or where", de: "Ihr Seitentitel sagt nicht, was Sie tun und where" },
   onpage_h1: { en: "Your first headline does not name both your job and your town", de: "Ihre erste Überschrift nennt nicht Leistung und Ort zugleich" },
   onpage_meta_description: { en: "Google writes your preview text itself", de: "Google schreibt Ihren Vorschautext selbst" },
   onpage_alt_text: { en: "Google cannot read most of your pictures", de: "Google kann die meisten Ihrer Bilder nicht lesen" },
@@ -359,9 +361,9 @@ const ROT_URTEIL: Record<string, { en: string; de: string }> = {
   emergency_cover: { en: "Nothing says whether you come out at night", de: "Nichts sagt, ob Sie nachts kommen" },
   second_channel: { en: "The phone is the only way to reach you", de: "Das Telefon ist der einzige Weg zu Ihnen" },
   crawl_ai_bots: { en: "Your robots file locks the AI engines out", de: "Ihre robots-Datei sperrt die KI-Dienste aus" },
-  aeo_no_js: { en: "ChatGPT sees an empty page where your text should be", de: "ChatGPT sieht eine leere Seite, wo Ihr Text stehen sollte" },
+  aeo_no_js: { en: "ChatGPT sees an empty page where your text should be", de: "ChatGPT sieht eine leere Seite, where Ihr Text stehen sollte" },
   aeo_llms_txt: { en: "Nothing sums your business up for the AI engines", de: "Nichts fasst Ihren Betrieb für die KI-Dienste zusammen" },
-  aeo_entity_facts: { en: "An AI has to guess who you are and where", de: "Eine KI muss raten, wer Sie sind und wo" },
+  aeo_entity_facts: { en: "An AI has to guess who you are and where", de: "Eine KI muss raten, wer Sie sind und where" },
   aeo_faq_schema: { en: "An AI quotes a competitor instead of you", de: "Eine KI zitiert einen Wettbewerber statt Sie" },
   aeo_question_headings: { en: "No heading matches what a customer types", de: "Keine Überschrift trifft, was ein Kunde tippt" },
   crawl_robots: { en: "Your robots file blocks Google", de: "Ihre robots-Datei sperrt Google aus" },
@@ -369,15 +371,15 @@ const ROT_URTEIL: Record<string, { en: string; de: string }> = {
   blog_alive: { en: "Your blog has been standing still", de: "Ihr Blog steht seit Längerem still" },
 };
 
-/* WAS ZU TUN IST. Urteil, Beweis, Handlung -- ohne die dritte Ebene ist jede
- * rote Zeile ein Datenpunkt statt eines Auftrags. Der Aufwand steht dabei,
- * weil "eine halbe Stunde" den Unterschied macht zwischen etwas, das er heute
- * macht, und etwas, das er auf die lange Bank schiebt. */
+/* WHAT TO DO. Verdict, proof, action -- without the third level every red
+ * line is a data point instead of a job. The effort stands with it, because
+ * "half an hour" is the difference between something he does today and
+ * something he puts off indefinitely. */
 const TUN: Record<string, { en: [string, string]; de: [string, string] }> = {
   onpage_title: { en: ["Rewrite the title as what you do plus the town, under 60 characters", "10 minutes"], de: ["Den Titel neu schreiben: Leistung plus Ort, unter 60 Zeichen", "10 Minuten"] },
-  onpage_h1: { en: ["Make the first line name the job and the town, keep your own voice underneath", "15 minutes"], de: ["Die erste Zeile Leistung und Ort nennen lassen, Ihr Ton bleibt darunter", "15 Minuten"] },
+  onpage_h1: { en: ["Make the first line name the job and the town, keep your own voice underneath", "15 minutes"], de: ["Die erste Row Leistung und Ort nennen lassen, Ihr Ton bleibt darunter", "15 Minuten"] },
   onpage_meta_description: { en: ["Write one sentence per page for the Google preview", "20 minutes"], de: ["Je Seite einen Satz für die Google-Vorschau schreiben", "20 Minuten"] },
-  onpage_alt_text: { en: ["Describe each picture in a few words where it is uploaded", "30 minutes"], de: ["Jedes Bild dort, wo es hochgeladen ist, in wenigen Worten beschreiben", "30 Minuten"] },
+  onpage_alt_text: { en: ["Describe each picture in a few words where it is uploaded", "30 minutes"], de: ["Jedes Bild dort, where es hochgeladen ist, in wenigen Worten beschreiben", "30 Minuten"] },
   onpage_lang: { en: ["Set the site language in your website settings", "5 minutes"], de: ["Die Seitensprache in den Website-Einstellungen setzen", "5 Minuten"] },
   onpage_canonical: { en: ["Point each page at its one official address", "20 minutes"], de: ["Jede Seite auf ihre eine offizielle Adresse zeigen lassen", "20 Minuten"] },
   onpage_schema_reviews: { en: ["Have your web person add the hidden rating labels, then Google can show your stars", "30 minutes"], de: ["Die Bewertung als unsichtbare Angabe hinterlegen lassen, dann zeigt Google Ihre Sterne", "30 Minuten"] },
@@ -415,18 +417,18 @@ const TUN: Record<string, { en: [string, string]; de: [string, string] }> = {
   email_capture: { en: ["Add a way to collect an email from people who are not ready", "30 minutes"], de: ["Einen Weg schaffen, E-Mails von Unentschlossenen zu sammeln", "30 Minuten"] },
   analytics_live: { en: ["Install Google Analytics so you can see who comes", "30 minutes"], de: ["Google Analytics einrichten, damit Sie sehen, wer kommt", "30 Minuten"] },
   search_console: { en: ["Verify the site in Search Console, it is free", "10 minutes"], de: ["Die Seite in der Search Console verifizieren, sie ist kostenlos", "10 Minuten"] },
-  aeo_llms_txt: { en: ["Put a file called llms.txt at yoursite.com/llms.txt: what you do, where, and your main pages", "10 minutes"], de: ["Eine Datei llms.txt unter ihreseite.de/llms.txt anlegen: was Sie tun, wo, und Ihre wichtigsten Seiten", "10 Minuten"] },
+  aeo_llms_txt: { en: ["Put a file called llms.txt at yoursite.com/llms.txt: what you do, where, and your main pages", "10 minutes"], de: ["Eine Datei llms.txt unter ihreseite.de/llms.txt anlegen: was Sie tun, where, und Ihre wichtigsten Seiten", "10 Minuten"] },
   aeo_no_js: { en: ["Render the text on the server, not in the browser", "2 hours"], de: ["Den Text vom Server ausliefern statt im Browser aufbauen", "2 Stunden"] },
 };
 
-/* Zu jedem Lighthouse-Befund, was zu tun ist. Ohne diese Zeile ist die Zahl
- * eine Note, mit ihr ein Auftrag. */
-/* EINE ZEILE JE TO-DO, IN SEINEN WORTEN. Vorher standen
- * Befund und Handlung untereinander und sagten dasselbe zweimal -- "A link
- * Google can't follow" plus "Make the link a normal href". Jetzt eine
- * Anweisung, ohne href, ohne 48 px, ohne H1. Und was hier fehlt, wird NICHT
- * gezeigt: Googles Rohtitel ("Reduce unused JavaScript") im Kundendokument
- * ist genau das, was diese Tabelle verhindern soll. */
+/* For every Lighthouse finding, what to do. Without this line the number is
+ * a grade, with it a job. */
+/* ONE LINE PER TO-DO, IN HIS WORDS. Before, finding and
+ * action stood one under the other and said the same thing twice -- "A link
+ * Google can't follow" plus "Make the link a normal href". Now one
+ * instruction, with no href, no 48 px, no H1. And what is missing here is NOT
+ * shown: Google's raw title ("Reduce unused JavaScript") in a client document
+ * is exactly what this table exists to prevent. */
 const LH_TUN: Record<string, { en: [string, string]; de: [string, string] }> = {
   "crawlable-anchors": { en: ["A link leads Google nowhere: the destination is only in the script, so the page behind it is invisible to search", "10 minutes"], de: ["Ein Link führt Google nirgendwohin: das Ziel steht nur im Skript, die Seite dahinter ist für die Suche unsichtbar", "10 Minuten"] },
   "link-name": { en: ["One link is just an icon, so nobody can tell what it opens", "10 minutes"], de: ["Ein Link ist nur ein Symbol, niemand sieht, was er öffnet", "10 Minuten"] },
@@ -476,10 +478,10 @@ const LH_TUN: Record<string, { en: [string, string]; de: [string, string] }> = {
   "image-size-responsive": { en: ["Pictures look blurry on sharp screens", "20 minutes"], de: ["Bilder wirken auf scharfen Bildschirmen unscharf", "20 Minuten"] },
 };
 
-/* DER LESER IST DIE WEBSITE-PERSON. "Lassen Sie Ihren
- * Webmenschen..." schiebt die Aufgabe weg; wer diesen Aufklapper oeffnet,
- * macht es selbst. Also die Anweisung im Imperativ, technisch genau genug
- * zum Umsetzen. Fehlt hier ein Eintrag, bleibt es beim Befund. */
+/* THE READER IS THE WEBSITE PERSON. "Have your web
+ * person..." pushes the job away; whoever opens this disclosure does it
+ * themselves. So the instruction in the imperative, technically precise enough
+ * to carry out. If an entry is missing here, the finding stands alone. */
 const LH_FIX: Record<string, { en: string; de: string }> = {
   "crawlable-anchors": { en: "give it a real href instead of a click handler", de: "ihm ein echtes href geben statt eines Klick-Handlers" },
   "link-name": { en: "add link text or an aria-label", de: "Linktext oder ein aria-label ergänzen" },
@@ -533,7 +535,7 @@ const T = {
   en: {
     intro: "Three read this page: Google, the AI search, and the person who clicked.",
     kopf: "Three read your site",
-    leserNamen: { google: "Google", ki: "AI search", besucher: "Visitor" } as Record<Leser, string>,
+    leserNamen: { google: "Google", ki: "AI search", besucher: "Visitor" } as Record<Reader, string>,
     checks: "checks pass",
     notNeeded: "not needed here",
     inPlace: "all in place",
@@ -543,14 +545,14 @@ const T = {
     passt: "Good",
     warum: "Why it matters",
     fehlend: "Missing",
-    fehlt: "What is missing",
+    missing: "What is missing",
     inOrdnung: "in order",
-    // Was gemessen ist: Googles Test mit gedrosseltem Handy, bis der groesste
-    // Inhalt steht. "to load on a phone" las sich wie sein eigenes Handy (24.09.2026).
+    // What is measured: Google's test on a throttled phone, until the largest
+    // content is there. "to load on a phone" read as his own phone (24.09.2026).
     tempoZeile: "until the main content shows in Google's slow-phone test.",
     tempoGut: "Google's mark: 2.5 s.",
-    // Belegte Zahl statt Faustregel (23.09.2026): Google/SOASTA 2017, 53 % der
-    // mobilen Besuche brechen ab, wenn eine Seite laenger als 3 s braucht.
+    // A sourced number instead of a rule of thumb (23.09.2026): Google/SOASTA
+    // 2017, 53% of mobile visits are abandoned when a page takes longer than 3 s.
     tempoSchlecht: "Google's mark: 2.5 s. Google's own research: 53% of mobile visits are abandoned after 3 s.",
     tempoQuelle: "Google, 2017",
     messenSub: "You cannot fix what nothing is counting.",
@@ -563,7 +565,7 @@ const T = {
   de: {
     intro: "Drei lesen diese Seite: Google, die KI-Suche, und der Mensch, der geklickt hat.",
     kopf: "Drei lesen Ihre Seite",
-    leserNamen: { google: "Google", ki: "KI-Suche", besucher: "Besucher" } as Record<Leser, string>,
+    leserNamen: { google: "Google", ki: "KI-Suche", besucher: "Besucher" } as Record<Reader, string>,
     checks: "Prüfungen bestanden",
     notNeeded: "hier nicht nötig",
     inPlace: "alles da",
@@ -573,7 +575,7 @@ const T = {
     passt: "Passt",
     warum: "Warum das zählt",
     fehlend: "Fehlt",
-    fehlt: "Was fehlt",
+    missing: "Was missing",
     inOrdnung: "in Ordnung",
     tempoZeile: "bis der Hauptinhalt steht, in Googles Test mit langsamem Handy.",
     tempoGut: "Googles Marke: 2,5 s.",
@@ -588,20 +590,20 @@ const T = {
   },
 };
 
-/** Die Karten einer Tafel, immer sichtbar. Ein Aufklapper
- *  um die ganze Gruppe versteckte vier Fragen hinter einer Zeile; zu ist nur
- *  jede einzelne Karte, und ihre Frage plus ihr Zaehler reichen, um zu
- *  entscheiden, wo man hineinsieht. */
+/** The cards of a panel, always visible. A disclosure
+ *  around the whole group hid four questions behind one line; only each single
+ *  card is closed, and its question plus its counter is enough to decide
+ *  where to look inside. */
 function Pruefungen({ gruppen, elemente, locale, extra, hinterZeile }: {
   gruppen: Gruppe[]; elemente: CroElement[]; locale: Locale; extra?: React.ReactNode;
-  /** Google: der On-Page-Teil liegt hinter einer kleinen Zeile und bleibt zu. */
+  /** Google: the on-page part sits behind a small line and stays closed. */
   hinterZeile?: boolean;
 }) {
   const alle = zeilenFuer(elemente, gruppen.flatMap((g) => g.keys));
   const { da, von } = stand(alle);
   if (!von) return null;
-  /* Eine ungerade Karte am Ende laeuft ueber beide Spalten, sonst steht sie
-     allein neben einer Luecke. */
+  /* An odd card at the end runs across both columns, otherwise it stands
+     alone next to a gap. */
   const ungerade = gruppen.length % 2 === 1;
   const karten = (
     <div className="grid gap-3 sm:grid-cols-2">
@@ -635,22 +637,22 @@ function name(e: CroElement, locale: Locale): string {
   return (e.key && ZEILEN_NAMEN[e.key]?.[locale]) || e.label;
 }
 
-/** Die Zeilen einer Gruppe, in der Reihenfolge ihrer Schluessel. */
+/** The rows of a group, in the order of their keys. */
 function zeilenFuer(elemente: CroElement[], keys: string[]): CroElement[] {
   return keys.map((k) => elemente.find((e) => e.key === k)).filter((e): e is CroElement => !!e);
 }
 
-function stand(zeilen: CroElement[]) {
-  const zaehlbar = zeilen.filter((e) => e.applies !== false);
+function stand(rows: CroElement[]) {
+  const zaehlbar = rows.filter((e) => e.applies !== false);
   return { da: zaehlbar.filter((e) => e.present).length, von: zaehlbar.length };
 }
 
 
 
-/* DAS URTEIL AUS DEM MESSWERT (24.09.2026). Der feste Satz "Google kann die
- * meisten Ihrer Bilder nicht lesen" stand bei 8 von 19, "Ihr Titel sagt nicht,
- * was Sie tun" bei einem Titel, der das Gewerk nennt. Wo der Beleg genauer
- * ist, spricht der Beleg. */
+/* THE VERDICT OUT OF THE MEASUREMENT (24.09.2026). The fixed sentence "Google
+ * cannot read most of your pictures" stood over 8 of 19, "your title does not
+ * say what you do" over a title that named the trade. Where the evidence is
+ * more precise, the evidence speaks. */
 function gemessenesUrteil(key: string, e: CroElement, locale: Locale): string | null {
   const de = locale === "de";
   const beleg = String(e.evidence ?? "");
@@ -663,9 +665,9 @@ function gemessenesUrteil(key: string, e: CroElement, locale: Locale): string | 
   }
   if (key === "onpage_title") {
     const was = /what you do/.test(folge);
-    const wo = /\bwhere\b/.test(folge);
-    if (was && !wo) return de ? "Ihr Seitentitel sagt nicht, was Sie tun" : "Your page title does not say what you do";
-    if (wo && !was) return de ? "Ihr Seitentitel sagt nicht, wo Sie arbeiten" : "Your page title does not say where you work";
+    const where = /\bwhere\b/.test(folge);
+    if (was && !where) return de ? "Ihr Seitentitel sagt nicht, was Sie tun" : "Your page title does not say what you do";
+    if (where && !was) return de ? "Ihr Seitentitel sagt nicht, where Sie arbeiten" : "Your page title does not say where you work";
     return null;
   }
   if (key === "blog_alive" && /no blog link/.test(beleg)) return de ? "Sie haben keinen Blog" : "You have no blog";
@@ -680,12 +682,12 @@ function gemessenesUrteil(key: string, e: CroElement, locale: Locale): string | 
   return null;
 }
 
-function Zeile({ e, locale }: { e: CroElement; locale: Locale }) {
-  const fehlt = e.applies !== false && !e.present;
+function Row({ e, locale }: { e: CroElement; locale: Locale }) {
+  const missing = e.applies !== false && !e.present;
   const nichtNoetig = e.applies === false;
   const schluessel = (e.key ?? "").replace(/^lh:/, "");
-  const urteil = fehlt ? (gemessenesUrteil(schluessel, e, locale) ?? ROT_URTEIL[schluessel]?.[locale] ?? name(e, locale)) : name(e, locale);
-  const tun = fehlt ? TUN[schluessel]?.[locale] : undefined;
+  const urteil = missing ? (gemessenesUrteil(schluessel, e, locale) ?? ROT_URTEIL[schluessel]?.[locale] ?? name(e, locale)) : name(e, locale);
+  const tun = missing ? TUN[schluessel]?.[locale] : undefined;
   return (
     <div className="grid grid-cols-[18px_minmax(0,1fr)] items-start gap-x-3 border-b border-slate-100 py-3 last:border-b-0">
       <span aria-hidden className="mt-[1px] text-center text-[13px] font-black leading-[1.5]"
@@ -693,41 +695,41 @@ function Zeile({ e, locale }: { e: CroElement; locale: Locale }) {
         {nichtNoetig ? "–" : e.present ? "✓" : "✕"}
       </span>
       <div className="min-w-0">
-        {/* Urteil, Beweis, Handlung. Ohne die dritte Ebene ist die Zeile ein
-            Datenpunkt; mit ihr ist sie ein Auftrag. */}
-        <span style={{ color: nichtNoetig ? "#a8a49b" : fehlt ? "#1c170e" : "#4a463d" }}
-              className={`block text-[13.5px] leading-[1.4] ${fehlt ? "font-bold" : "font-medium"}`}>
+        {/* Verdict, proof, action. Without the third level the row is a data
+            point; with it, it is a job. */}
+        <span style={{ color: nichtNoetig ? "#a8a49b" : missing ? "#1c170e" : "#4a463d" }}
+              className={`block text-[13.5px] leading-[1.4] ${missing ? "font-bold" : "font-medium"}`}>
           {urteil}{nichtNoetig ? ` · ${T[locale].notNeeded}` : ""}
         </span>
-        {fehlt && e.consequence ? <span style={{ color: "#6b6559" }} className="mt-0.5 block text-[12.5px] leading-[1.45]">{e.consequence}</span> : null}
+        {missing && e.consequence ? <span style={{ color: "#6b6559" }} className="mt-0.5 block text-[12.5px] leading-[1.45]">{e.consequence}</span> : null}
         {tun ? (
           <span className="mt-1.5 flex items-start gap-1.5 text-[12.5px] leading-[1.45]" style={{ color: "#1f3f8f" }}>
             <span aria-hidden className="mt-[1px]">→</span>
-            {/* Die Ein-Seiten-Zusammenfassung liest genau diese Marke
-                (`onepager.py:98`). Vorher trug sie der geloeschte
-                Fix-this-now-Block; jetzt jede Handlung an ihrem Befund. */}
+            {/* The one-page summary reads exactly this marker
+                (`onepager.py:98`). Before, the deleted fix-this-now block
+                carried it; now every action sits at its own finding. */}
             <span data-onepager="fix"><b className="font-semibold">{tun[0]}</b><span className="text-graphite"> · {tun[1]}</span></span>
           </span>
         ) : null}
-        {!fehlt && !nichtNoetig && e.evidence && e.evidence.length <= 48 ? <span className="mt-0.5 block text-[12px] leading-[1.4] text-graphite">{e.evidence}</span> : null}
+        {!missing && !nichtNoetig && e.evidence && e.evidence.length <= 48 ? <span className="mt-0.5 block text-[12px] leading-[1.4] text-graphite">{e.evidence}</span> : null}
       </div>
     </div>
   );
 }
 
-/** Eine Karte: Titel, Punktreihe, ein Satz. Aufgeklappt die Zeilen. */
+/** One card: title, score row, one sentence. Open, the rows. */
 function Karte({ g, elemente, locale }: { g: Gruppe; elemente: CroElement[]; locale: Locale }) {
-  const zeilen = zeilenFuer(elemente, g.keys);
-  if (!zeilen.length) return null;
-  const { da, von } = stand(zeilen);
+  const rows = zeilenFuer(elemente, g.keys);
+  if (!rows.length) return null;
+  const { da, von } = stand(rows);
   return (
-    /* GOOGLE KLAPPT AUF, DER BESUCHER STEHT OFFEN. Der
-       On-Page-Teil ist der Fachteil und darf zu sein; was ein Besucher
-       erlebt, ist die Hauptaussage der Tafel und bleibt sichtbar. */
-    /* EIN HAUCH FARBVERLAUF. Weisse Karten auf weissem
-       Grund verschwinden; ein Verlauf von der Statusfarbe ins Weisse hebt sie
-       ab, ohne dass die Karte selbst farbig wirkt. Bei Vollgruen gruen, sonst
-       rot -- dieselbe Ampel wie das Zeichen links. */
+    /* GOOGLE FOLDS OPEN, THE VISITOR STANDS OPEN. The
+       on-page part is the technical part and may be closed; what a visitor
+       experiences is the panel's main statement and stays visible. */
+    /* A HINT OF GRADIENT. White cards on a white ground
+       disappear; a gradient from the status colour into white lifts them off
+       without the card itself looking coloured. Green when all green, else
+       red -- the same traffic light as the mark on the left. */
     <details className="group rounded-xl border shadow-[0_1px_2px_rgba(28,23,18,.04)] open:border-navy/40"
              style={{
                borderColor: da === von ? "rgba(26,107,69,.14)" : "rgba(156,44,44,.14)",
@@ -737,8 +739,8 @@ function Karte({ g, elemente, locale }: { g: Gruppe; elemente: CroElement[]; loc
              }}>
       <summary className="cursor-pointer list-none p-4 [&::-webkit-details-marker]:hidden">
         <span className="flex items-center gap-3">
-          {/* Das Zeichen traegt die Farbe des Zustands: voll gruen heisst
-              erledigt, rot heisst hier liegt Arbeit. */}
+          {/* The mark carries the colour of the state: all green means done,
+              red means there is work here. */}
           {g.icon && KARTEN_ICON[g.icon] ? (
             <span className="grid size-12 shrink-0 place-items-center rounded-[14px] border"
                   style={{ background: da === von ? "#eff8f3" : "#fdf2f2", borderColor: da === von ? "rgba(26,107,69,.16)" : "rgba(156,44,44,.16)", color: da === von ? GRUEN : ROT }}>
@@ -751,24 +753,24 @@ function Karte({ g, elemente, locale }: { g: Gruppe; elemente: CroElement[]; loc
             <ChevronDown className="size-4 text-navy transition-transform group-open:rotate-180" />
           </span>
         </span>
-        {/* KEIN SATZ MEHR UNTER DER FRAGE. Der Titel ist
-            die Frage, und Zeichen, Farbe und Zaehler sind die Antwort. Ein
-            zusaetzlicher Satz machte aus vier Karten vier Textbloecke. */}
+        {/* NO MORE SENTENCE UNDER THE QUESTION. The title is
+            the question, and mark, colour and counter are the answer. One extra
+            sentence turned four cards into four blocks of text. */}
       </summary>
       <div className="border-t border-hairline bg-[#fbfaf7] px-4 pb-2 pt-1">
-        {zeilen.map((e) => <Zeile key={e.key ?? e.label} e={e} locale={locale} />)}
+        {rows.map((e) => <Row key={e.key ?? e.label} e={e} locale={locale} />)}
       </div>
     </details>
   );
 }
 
-/* EIN ZEICHEN, DAS FUEHRT. Vier Karten mit Titel, Punkten
- * und Satz waren vier Textbloecke; das Auge hatte keinen Ankerpunkt. Jede
- * Gruppe traegt jetzt ihr eigenes Bild, gross und in der Farbe ihres Zustands
- * -- gefuellt bei Vollgruen, hohl solange etwas fehlt. */
-/* Feine Strichzeichnungen statt gefuellter Flaechen. 1.5er Strich, runde Enden, ein
- * einziger Akzent je Zeichen -- dieselbe Sprache wie die Leser-Zeichen im
- * Tafelkopf, nur groesser gesetzt. */
+/* A MARK THAT LEADS. Four cards with title, points and
+ * sentence were four blocks of text; the eye had no anchor. Every group now
+ * carries its own picture, large and in the colour of its state
+ * -- filled when all green, hollow while something is missing. */
+/* Fine line drawings instead of filled areas. 1.5 stroke, round caps, a
+ * single accent per mark -- the same language as the reader marks in the
+ * panel head, only set larger. */
 const KARTEN_ICON: Record<string, React.ReactNode> = {
   tuer: <><path d="M6.25 3.75h8.5a1.5 1.5 0 0 1 1.5 1.5v15H6.25a1.5 1.5 0 0 1-1.5-1.5V5.25a1.5 1.5 0 0 1 1.5-1.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" /><path d="M12.9 12.15v.7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /><path d="M19.25 20.25h-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></>,
   lesen: <><path d="M12 6.75c-2-1.4-4.2-1.95-6.75-1.45v11.4c2.55-.5 4.75.05 6.75 1.45m0-11.4c2-1.4 4.2-1.95 6.75-1.45v11.4c-2.55-.5-4.75.05-6.75 1.45m0-11.4v11.4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></>,
@@ -783,7 +785,7 @@ const KARTEN_ICON: Record<string, React.ReactNode> = {
 };
 
 
-const GLYPH: Record<Leser, React.ReactNode> = {
+const GLYPH: Record<Reader, React.ReactNode> = {
   google: <svg viewBox="0 0 24 24" fill="none" className="size-6" aria-hidden><circle cx="10.5" cy="10.5" r="6.8" fill="currentColor" fillOpacity=".15" stroke="currentColor" strokeWidth="2.4" /><path d="M15.6 15.6 21 21" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" /></svg>,
   ki: <svg viewBox="0 0 24 24" fill="none" className="size-6" aria-hidden><path d="M11 2.6 13 8.4 18.8 10.4 13 12.4 11 18.2 9 12.4 3.2 10.4 9 8.4 11 2.6z" fill="currentColor" /><path d="M18.4 14.4 19.4 17.2 22.2 18.2 19.4 19.2 18.4 22 17.4 19.2 14.6 18.2 17.4 17.2 18.4 14.4z" fill="currentColor" /></svg>,
   besucher: <svg viewBox="0 0 24 24" fill="none" className="size-6" aria-hidden><circle cx="12" cy="7.8" r="4.2" fill="currentColor" fillOpacity=".15" stroke="currentColor" strokeWidth="2.4" /><path d="M3.8 21c0-4.2 3.7-7.2 8.2-7.2s8.2 3 8.2 7.2" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /></svg>,
@@ -794,26 +796,26 @@ export function WebsiteDetail({ data, locale }: { data: ProposalData; locale: Lo
   const t = T[locale];
   const leser = LESER[locale];
   const speed = data.cro?.speed;
-  /* DIE LADEZEIT STAND DREIMAL DA (Inventur 20.09.2026). Der Ja/Nein-Check
-     faellt raus; die Sekunden stehen einmal, in Googles Messung. */
+  /* THE LOAD TIME STOOD THERE THREE TIMES (inventory 20.09.2026). The yes/no
+     check drops out; the seconds stand once, in Google's measurement. */
   const elemente = (data.cro?.elements ?? []).filter((e) => e.key !== "phone_speed");
 
   return (
     <div className="grid gap-5">
-      {/* DER KOPF IST GANZ RAUS. Erst eine leere Zeile
-          mit einer Zahl, dann drei Balken -- beides war eine Vorschau auf
-          etwas, das direkt darunter sowieso steht. Das Kapitel beginnt mit
-          Google, wie die Realitaet auch. */}
+      {/* THE HEAD IS GONE ENTIRELY. First an empty line
+          with a number, then three bars -- both were a preview of something
+          that stands directly below anyway. The chapter starts with Google,
+          as reality does too. */}
 
-      {/* UNTEREINANDER, NICHT NEBENEINANDER. Drei
-          Absender in Leserichtung: Google, die KI, der Mensch. */}
+      {/* ONE UNDER THE OTHER, NOT SIDE BY SIDE. Three
+          senders in reading order: Google, the AI, the human. */}
       <TafelGoogle spec={leser.google} elemente={elemente} speed={speed} locale={locale} />
       <TafelKi spec={leser.ki} elemente={elemente} locale={locale} />
       <TafelBesucher spec={leser.besucher} elemente={elemente} locale={locale} />
 
-      {/* DER MESS-KASTEN IST JETZT DIE FUENFTE KARTE.
-          Als eigener Streifen unter allem stand er ohne Zusammenhang da;
-          es ist dieselbe Frage wie die vier davor, nur aus seiner Sicht. */}
+      {/* THE MEASUREMENT BOX IS NOW THE FIFTH CARD.
+          As its own strip below everything it stood there with no context;
+          it is the same question as the four before it, only from his side. */}
 
       <article className="overflow-hidden rounded-2xl border border-hairline bg-slate-100">
         <header className="flex items-center justify-between gap-3 bg-white px-4 py-3">
@@ -832,18 +834,18 @@ export function WebsiteDetail({ data, locale }: { data: ProposalData; locale: Lo
   );
 }
 
-/** Kopf einer Tafel: Zeichen, Name, wer der Leser ist, Zaehler rechts. */
-function TafelKopf({ wo, spec, da, von }: { wo: Leser; spec: LeserSpec; da?: number; von?: number }) {
+/** Head of a panel: mark, name, who the reader is, counter on the right. */
+function TafelKopf({ where, spec, da, von }: { where: Reader; spec: LeserSpec; da?: number; von?: number }) {
   return (
     <div className="flex items-center justify-between gap-3 sm:gap-4">
       <div className="min-w-0 max-w-[56ch]">
-        <h3 className="m-0 flex items-start gap-2 text-navy sm:items-center"><span className="mt-[3px] shrink-0 sm:mt-0">{GLYPH[wo]}</span><span className="text-[19px] font-black leading-[1.15] tracking-[-.02em] text-ink">{spec.titel}</span></h3>
-        {/* KEIN UNTERTITEL: die Kapitel-Storyline oben
-            sagt schon, wer die drei Leser sind. */}
+        <h3 className="m-0 flex items-start gap-2 text-navy sm:items-center"><span className="mt-[3px] shrink-0 sm:mt-0">{GLYPH[where]}</span><span className="text-[19px] font-black leading-[1.15] tracking-[-.02em] text-ink">{spec.title}</span></h3>
+        {/* NO SUBTITLE: the chapter storyline above
+            already says who the three readers are. */}
       </div>
-      {/* NUR DER BESUCHER TRAEGT DEN GESAMTZAEHLER: bei
-          Google stehen vier Lighthouse-Zahlen, bei der KI sechs Haken -- ein
-          Bruch obendrueber waere die siebte Zahl im Bild. */}
+      {/* ONLY THE VISITOR CARRIES THE TOTAL COUNTER: with
+          Google there are four Lighthouse numbers, with the AI six ticks -- a
+          fraction above them would be the seventh number in the frame. */}
       {von != null && da != null ? (
         <span className="flex shrink-0 items-baseline gap-1.5">
           <b className="tnum text-[24px] sm:text-[30px] font-black leading-none tracking-[-.03em]" style={{ color: da < von ? ROT : GRUEN }}>{da}</b>
@@ -855,61 +857,61 @@ function TafelKopf({ wo, spec, da, von }: { wo: Leser; spec: LeserSpec; da?: num
 }
 
 
-/** Google: vier Werte mit Googles Namen, die Sekunden mit den Chancen, dann
- *  was fehlt -- Googles rote Befunde und unsere, in einer Zeile. Das Gruene
- *  zaehlt nur. */
+/** Google: four values under Google's names, the seconds with the chances, then
+ *  what is missing -- Google's red findings and ours, on one line. The green
+ *  only counts. */
 function TafelGoogle({ spec, elemente, speed, locale }: { spec: LeserSpec; elemente: CroElement[]; speed: CroSpeed | null | undefined; locale: Locale }) {
   const t = T[locale];
   const werte = (["seo", "accessibility", "performance", "best-practices"] as const)
     .map((k) => ({ k, v: k === "performance" ? (speed?.scores?.performance ?? speed?.score) : speed?.scores?.[k] }))
     .filter((z) => z.v != null);
-  const chancen = befundeFuer(speed, "besucher", locale).filter((b) => /\d s( |$)/.test(b.text));
-  /* GOOGLES EIGENE ROTE BEFUNDE WERDEN EINE KARTE. Als
-     Wortwolke neben unseren standen sie ohne Absender und ohne Handlung da. */
+  const chancen = findingsFor(speed, "besucher", locale).filter((b) => /\d s( |$)/.test(b.text));
+  /* GOOGLE'S OWN RED FINDINGS BECOME ONE CARD. As a
+     word cloud next to ours they stood there with no sender and no action. */
   const unsere = zeilenFuer(elemente, spec.gruppen.flatMap((g) => g.keys));
   return (
     <section className="rounded-2xl border border-hairline bg-white p-5 sm:p-6">
-      <TafelKopf wo="google" spec={spec} />
+      <TafelKopf where="google" spec={spec} />
       {werte.length ? (
         <div className="mt-5">
-          {/* KEINE ZEILE UEBER DEN ZAHLEN: Googles Namen stehen auf den Kacheln selbst. */}
+          {/* NO LINE ABOVE THE NUMBERS: Google's names sit on the tiles themselves. */}
           <div className="mt-2 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-hairline bg-hairline sm:grid-cols-4">
             {werte.map((z) => {
               const wert = z.v as number;
               const farbe = wert >= 90 ? GRUEN : wert >= 50 ? "#b45309" : ROT;
-              const titel = LIGHTHOUSE_NAMEN[z.k][locale];
-              /* Jede Zahl klappt ihre eigenen To-dos auf: Googles Befunde aus
-                 GENAU dieser Kategorie, uebersetzt, mit Handlung und Aufwand. */
+              const title = LIGHTHOUSE_NAMEN[z.k][locale];
+              /* Every number folds open its own to-dos: Google's findings from
+                 EXACTLY that category, translated, with action and effort. */
               const todos = (speed?.findings?.[z.k] ?? []).filter((b) => LH_TUN[b.id]);
               return (
                 <details key={z.k} className="group bg-white open:bg-[#fbfaf7]">
                   <summary className={`list-none px-4 py-3.5 [&::-webkit-details-marker]:hidden ${todos.length ? "cursor-pointer" : ""}`}>
-                    {/* Googles eigenes Wort klein darueber: er findet die
-                        Zahl in seinem Lighthouse-Bericht wieder, und die
-                        Frage darunter sagt ihm, was sie bedeutet. */}
+                    {/* Google's own word small above it: he finds the
+                        number again in his Lighthouse report, and the
+                        question below it tells him what it means. */}
                     <span className="mb-1 block text-[11px] sm:text-[9.5px] font-bold uppercase tracking-[.08em] text-pewter">{LIGHTHOUSE_KENNWORT[z.k]}</span>
                     <span className="flex items-baseline justify-between gap-2">
                       <span className="flex items-baseline gap-2">
                         <b className="tnum text-[30px] font-black leading-none tracking-[-.03em]" style={{ color: farbe }}>{wert}</b>
-                        {/* KEIN NOTENWORT: die Farbe der
-                            Zahl sagt dasselbe. */}
+                        {/* NO GRADE WORD: the colour of the
+                            number says the same thing. */}
                       </span>
                       {todos.length ? <ChevronDown className="size-4 shrink-0 text-navy transition-transform group-open:rotate-180" /> : null}
                     </span>
-                    <span className="mt-1.5 block text-[12.5px] font-semibold leading-[1.35] text-ink">{titel}</span>
+                    <span className="mt-1.5 block text-[12.5px] font-semibold leading-[1.35] text-ink">{title}</span>
                   </summary>
                   {todos.length ? (() => {
-                    /* NUR NOCH LAGE UND AUFWAND. Auch in
-                       Inhaber-Deutsch blieb "die Seite laedt Programmcode, den
-                       sie nie braucht" ein Satz, den er nicht beurteilen kann.
-                       Die Zahl sagt, wie es steht; die Zeit sagt, was es
-                       kostet; die Einzelheiten gehoeren auf die Rechnung
-                       seines Webmenschen, nicht in dieses Dokument. */
+                    /* NOTHING BUT POSITION AND EFFORT. Even in
+                       plain owner's German, "the page downloads program code it
+                       never uses" stayed a sentence he cannot judge. The number
+                       says how it stands; the time says what it costs; the
+                       details belong on his web person's invoice, not in this
+                       document. */
                     const minuten = todos.reduce((s, b) => s + (parseInt(LH_TUN[b.id].en[1], 10) || 0) * (LH_TUN[b.id].en[1].includes("h") ? 60 : 1), 0);
                     const sek = todos.reduce((s, b) => s + (b.einsparung_ms || 0), 0) / 1000;
-                    // "0,3 s schneller" neben 24,9 s Ladezeit wirkt wie Spott
-                    // (24.09.2026): den Gewinn nur nennen, wenn er ein Zehntel
-                    // der gemessenen Ladezeit erreicht.
+                    // "0.3 s faster" next to a 24.9 s load time reads as mockery
+                    // (24.09.2026): name the gain only when it reaches a tenth
+                    // of the measured load time.
                     const ladezeit = parseFloat(String(speed?.lcp ?? "").replace(",", "."));
                     const zeigeGewinn = sek >= 0.2 && (!Number.isFinite(ladezeit) || sek >= ladezeit * 0.1);
                     const namen = todos.map((b) => BEFUND_WORT[b.id]?.[locale]).filter(Boolean);
@@ -917,8 +919,8 @@ function TafelGoogle({ spec, elemente, speed, locale }: { spec: LeserSpec; eleme
                       ? `${namen.slice(0, -1).join(", ")} ${locale === "de" ? "und" : "and"} ${namen.at(-1)}`
                       : (namen[0] ?? "");
                     const stunden = Math.round(minuten / 60 * 2) / 2;
-                    // Ein Mini-Fix neben einer sehr langen Ladezeit liest sich wie "eine
-                    // Stunde Arbeit gegen 25 Sekunden" (24.09.2026): dann keine Zeile.
+                    // A tiny fix next to a very long load time reads as "an hour of
+                    // work against 25 seconds" (24.09.2026): then no line at all.
                     if (!zeigeGewinn && Number.isFinite(ladezeit) && ladezeit > 4) return null;
                     const aufwand = minuten >= 60
                       ? `${stunden} ${locale === "de" ? (stunden === 1 ? "Stunde" : "Stunden") : (stunden === 1 ? "hour" : "hours")}`
@@ -970,31 +972,31 @@ function TafelGoogle({ spec, elemente, speed, locale }: { spec: LeserSpec; eleme
 }
 
 
-/** KI: vier grosse Kacheln, sonst nichts. */
+/** AI: four large tiles, nothing else. */
 function TafelKi({ spec, elemente, locale }: { spec: LeserSpec; elemente: CroElement[]; locale: Locale }) {
-  /* ZWEI KARTEN STATT SECHS ZEILEN. Sechs Fragen
-     untereinander, jede mit ChatGPT im Namen, lasen sich als Liste desselben
-     Satzes. Zwei Karten fragen, worauf es ankommt: kann es dich lesen, und
-     kann es dich empfehlen. */
+  /* TWO CARDS INSTEAD OF SIX ROWS. Six questions one
+     under the other, each with ChatGPT in its name, read as a list of the same
+     sentence. Two cards ask what matters: can it read you, and can it
+     recommend you. */
   return (
     <section className="rounded-2xl border border-hairline bg-white p-5 sm:p-6">
-      <TafelKopf wo="ki" spec={spec} />
+      <TafelKopf where="ki" spec={spec} />
       <Pruefungen gruppen={spec.gruppen} elemente={elemente} locale={locale} />
     </section>
   );
 }
 
 
-/** Besucher: die vier Karten mit Frage, Punkten, Satz und der Checkliste. */
+/** Visitor: the four cards with question, points, sentence and the checklist. */
 function TafelBesucher({ spec, elemente, locale }: { spec: LeserSpec; elemente: CroElement[]; locale: Locale }) {
   const alle = zeilenFuer(elemente, spec.gruppen.flatMap((g) => g.keys));
   const { da, von } = stand(alle);
   return (
     <section className="rounded-2xl border border-hairline bg-white p-5 sm:p-6">
-      <TafelKopf wo="besucher" spec={spec} da={da} von={von} />
-      {/* Die Karten stehen sichtbar, aber jede ist zu:
-          fuenf offene Karten mit je sechs Zeilen sind dreissig Zeilen auf
-          einen Schlag. Frage und Zaehler reichen zum Entscheiden. */}
+      <TafelKopf where="besucher" spec={spec} da={da} von={von} />
+      {/* The cards stand visible, but each one is closed:
+          five open cards with six rows each are thirty rows in one go. The
+          question and the counter are enough to decide by. */}
       <Pruefungen gruppen={spec.gruppen} elemente={elemente} locale={locale} />
     </section>
   );
