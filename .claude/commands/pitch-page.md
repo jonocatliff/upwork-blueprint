@@ -247,7 +247,6 @@ python3 code/pitch_generate.py <id> --hook "..." \
   the final fallback. Do not expose private client data, link to a contact page
   or promise findings that have not been measured. Its fictional business,
   service, conversion and market must match the actual industry.
-- Your YouTube videos appear when `context/videos.json` lists them (`{"channel": url, "videos": [{"id", "title", "thumb"}]}`); the channel page itself must show no email or booking link.
 
 ## Step 6 · The gates
 
