@@ -339,7 +339,7 @@ def check_vision():
     return findings
 
 
-WRITING_BUDGET = 3000
+WRITING_BUDGET = 3050  # raised once, 28.09.2026, to pay for /won's onboarding step
 
 
 def check_writing_budget():
