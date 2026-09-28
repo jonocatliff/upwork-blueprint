@@ -479,8 +479,8 @@ def cmd_assess(args):
     if not isinstance(value, dict) or set(value) - allowed:
         abort('assessment needs only niche_fit, score, rationale, summary, optional headline and optional trap.')
     headline = clean_headline(value['headline']) if str(value.get('headline') or '').strip() else ''
-    if not isinstance(value.get('niche_fit'), int) or not 0 <= value['niche_fit'] <= 40:
-        abort('assessment niche_fit must be an integer from 0 to 40.')
+    if not isinstance(value.get('niche_fit'), int) or not 0 <= value['niche_fit'] <= 100:
+        abort('assessment niche_fit must be an integer from 0 to 100.')
     if not isinstance(value.get('score'), int) or not 0 <= value['score'] <= 100:
         abort('assessment score must be an integer from 0 to 100.')
     rationale = ' '.join(str(value.get('rationale') or '').split())

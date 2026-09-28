@@ -228,12 +228,16 @@ next month. With no history yet, say that plainly and score against
 `context/me.md` alone. Three turn-downs with the same reason lower the fit for
 the fourth job of that pattern, without waiting for anyone's permission.
 
-Then give every candidate a niche fit from 0 to 40 against `context/me.md`:
+Then give every candidate a fit from 0 to 100 against `context/me.md` and the
+member's own history. **The fit is the score.** Nothing else adds to it: the hard
+no's already removed what cannot be applied to, and the deductions only shave.
 
-- **35 to 40:** the center of what you sell, and your proof covers it.
-- **25 to 34:** clearly yours, one step off the center.
-- **20 to 24:** you could do it, your proof barely covers it.
-- **Under 20:** not your work. Never logged, whatever the client or budget.
+- **90 to 100:** what the member sells, in the words they would use, for the kind of
+  client they serve. One of these is worth the day's first Connects.
+- **75 to 89:** clearly theirs, one step off the centre. The bulk of a good day.
+- **60 to 74:** they could do it and would not enjoy it, or the posting is vague about
+  the part that matters.
+- **Under 60:** not their work. Never logged, whatever the client or the budget pays.
 
 Signals that raise fit come from `context/me.md`: the member's niche, the
 clients they serve best and the services they want more of. Their exact tools
@@ -247,7 +251,7 @@ Write `data/fit.json`: per job id `{"fit": 0-40, "rationale": "<what the score b
 
 ## Step 5 · Score and log
 
-Run `python3 code/jobs.py score`. It adds the four parts, logs every job with fit at least 20 and score at least 50 into your pipeline, caps any job you named a trap at 60 so a generous client cannot lift a disguised full-time or operator role above a real build, and prints the ranking as a grade out of 10 with the points behind it. Everything it turns down is written to `data/decisions.jsonl` with the points and the reason, which costs the member nothing and is what the next run learns from. Report grades to the member, never the raw points: the hundred exists for ranking and for the lessons, the grade is what a person decides on.
+Run `python3 code/jobs.py score`. The score is the fit minus the deductions the candidate step already computed, so a job that fits perfectly and carries nothing against it scores 100. It logs every job with a fit of at least 60 and a score of at least 70, caps any job you named a trap at 60 so a generous client cannot lift a disguised full-time or operator role above a real build, and prints the ranking as a grade out of 10 with the points behind it. The deductions and their reasons ride along on the record, so a member asking "why is this a 7" gets the three words that took it there. Everything it turns down is written to `data/decisions.jsonl` with the points and the reason, which costs the member nothing and is what the next run learns from. Report grades to the member, never the raw points: the hundred exists for ranking and for the lessons, the grade is what a person decides on.
 
 ## Step 6 · Open the best five
 
@@ -308,11 +312,18 @@ list's one-sentence headline `python3 code/pipeline.py headline <id> "<sentence>
    or client. This is the half of the record that needs a person, so it is asked once,
    here, and never chased. A lead the member rejects later takes the same route through
    `/find-jobs skip <id> <reason>`.
-3. **Show ten, hold ten.** The run's job is ten leads the member would actually
-   apply to today, plus a bench of ten behind them. Show exactly ten, numbered, each
-   one line: who wants what, the grade, and what applying costs in Connects. When the
-   member turns one down, name the next from the bench in the same breath, so the list
-   is ten again before they ask. Keep the complete scored list in the cockpit.
+3. **Show ten, and the bench is everything else that passed.** The run's job is ten
+   leads the member would actually apply to today. Show exactly ten, numbered, each one
+   line: who wants what, the grade, and what applying costs in Connects. Behind them
+   stands every other lead that passed the gate, in rank order, which is what
+   `python3 code/pipeline.py list` already prints. When the member turns one down, name
+   the next one in the same breath, so the list is ten again before they ask, and keep
+   going as long as the bench holds. **The bench has a floor: grade 7.** A lead below it
+   passed the gate and is still in the cockpit, but it is never offered as a refill,
+   because a member applying down the list is spending Connects on jobs the score
+   already doubted. The bench is good for today only: tomorrow the 24-hour window has
+   disqualified it, so an unused lead is a lead to use now or lose. The complete scored
+   list lives in the cockpit.
    Open invitations come first, before the ten, because they cost nothing.
 4. **Say it when ten is not there.** Fewer than ten at a 7 or better is a result, not
    a failure to hide: report how many there are, and which of the three causes it was.

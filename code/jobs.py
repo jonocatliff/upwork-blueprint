@@ -33,9 +33,14 @@ PIPELINE = ROOT / 'code' / 'pipeline.py'
 ME = pathlib.Path(os.environ.get('BLUEPRINT_ME') or ROOT / 'context' / 'me.md')
 TAG = re.compile(r'</?untrusted_participant_content>')
 MIN_WINDOW, MAX_WINDOW = 10, 24
-FIT_GATE = 20
-TRAP_CAP = 60
-MIN_SCORE = 50
+FIT_GATE = 60          # below this the job is not the member's work, whatever else is true
+TRAP_CAP = 60          # a named trap can never reach the gate
+MIN_SCORE = 70         # the gate, and the same number as the shortlist's floor
+MAX_DEDUCTION = 30     # doubts shave a fit, they never outweigh it
+MAX_PROPOSALS = 40     # hard no: the queue is longer than the Connects are worth
+MIN_CLIENT_RATING = 3.0
+FIXED_FLOOR = 250      # hard no below this on fixed price
+HOURLY_FLOOR = 0.6     # hard no below this share of the member's own rate
 
 
 def clean(text):
@@ -76,11 +81,29 @@ def load_json(path, default):
     return json.loads(path.read_text(encoding='utf-8')) if path.is_file() else default
 
 
+def me_number(label):
+    """One `**Label:**` figure from context/me.md, or None when it is not answered."""
+    if not ME.is_file():
+        return None
+    match = re.search(rf'(?im)^\*\*{re.escape(label)}:\*\*\s*\$?([\d,.]+)', ME.read_text(encoding='utf-8'))
+    return float(match.group(1).replace(',', '')) if match else None
+
+
 def member_rate():
-    """Your hourly rate from the saved profile, or None when it is unknown."""
+    """Your hourly rate: the live profile first, then the file you filled in.
+
+    The profile is the truth while it is fresh, but `prune` deletes it after a day,
+    and without a rate two of the hard no's silently stop applying. So the answer in
+    `context/me.md` is the fallback rather than nothing.
+    """
     profile = load_json(DATA / 'profile.json', {})
     personal = profile.get('data', {}).get('personalData', {})
-    return money_value((personal.get('chargeRate') or {}).get('rawValue'))
+    return money_value((personal.get('chargeRate') or {}).get('rawValue')) or me_number('Hourly rate')
+
+
+def member_floor():
+    """The smallest project the member said is worth taking, or the shipped default."""
+    return me_number('Smallest project worth taking') or FIXED_FLOOR
 
 
 # --- window -----------------------------------------------------------------
@@ -182,17 +205,19 @@ def cmd_rules(args):
         'window_hours': search_window_hours(),
         'window_bounds': [MIN_WINDOW, MAX_WINDOW],
         'sources': ['Upwork recommendations', 'Semantic search themes'],
-        'filters': ['Already applied', 'Unverified payment', 'Outside the search window',
-                    'Already in the pipeline'],
+        'filters': ['Already applied', 'Already in the pipeline', 'Outside the search window',
+                    'Unverified payment', 'Full-time role',
+                    f'More than {MAX_PROPOSALS} proposals',
+                    f'Client rated under {MIN_CLIENT_RATING} by at least 3 freelancers',
+                    f'Fixed price under ${member_floor():g}',
+                    f'Hourly top under {int(HOURLY_FLOOR * 100)}% of the member rate'],
         'ranking': [
-            {'label': 'Niche fit', 'points': 40,
-             'uses': 'Your service fit, verified proof and repeated member decisions.'},
-            {'label': 'Client trust', 'points': 30,
-             'uses': 'Payment verification, rating, spend and hiring ratio.'},
-            {'label': 'Deal quality', 'points': 20,
-             'uses': 'Budget against the member rate, duration and full-time penalty.'},
-            {'label': 'Recency', 'points': 10,
-             'uses': 'How recently the job was posted inside the current window.'},
+            {'label': 'Fit', 'points': 100,
+             'uses': 'What the job is against what the member sells, judged with their own '
+                     'application history. The fit is the score.'},
+            {'label': 'Deductions', 'points': -MAX_DEDUCTION,
+             'uses': 'Proposal count, a client who never hires or has no history, a missing or '
+                     'low budget. They shave a fit, they never outweigh it.'},
         ],
         'gate': {'fit': FIT_GATE, 'score': MIN_SCORE, 'trap_cap': TRAP_CAP},
     }, ensure_ascii=False))
@@ -237,45 +262,79 @@ def recency_points(posted, window_hours):
     return max(0, min(10, round(10 * (1 - age / window_hours))))
 
 
-def trust_points(c):
-    pts = 5 if c.get('verified') else 0
-    r = c.get('rating')
-    pts += 5 if r is None else 10 if r >= 4.8 else 7 if r >= 4.5 else 4 if r >= 4.0 else 0
-    s = c.get('spent')
-    pts += 2 if not s else 10 if s >= 10_000 else 7 if s >= 1_000 else 4
-    hires, posted = c.get('hires'), c.get('posted_jobs')
-    if hires is not None and posted:
-        ratio = hires / posted
-        pts += 5 if ratio >= 0.5 else 3 if ratio >= 0.2 else 0
-    else:
-        pts += 2
-    return pts
-
-
-def deal_points(job, rate):
+def budget_top(job):
+    """The highest number the posting states, and whether it is an hourly figure."""
     budget = str(job.get('budget') or '')
     values = numbers(budget)
-    if '/hr' in budget or (job.get('job_type') == 'hourly' and values):
-        top = max(values) if values else None
-        base = 6 if top is None or rate is None else 14 if top >= rate else 9 if top >= 0.6 * rate else 3
-    elif values:
-        top = max(values)
-        base = 14 if top >= 1000 else 10 if top >= 300 else 5 if top >= 100 else 1
-    else:
-        base = 6
-    if values:
-        base += 3
-    # Ongoing work is worth more than a one-off. "Less than 1 month" is not ongoing.
-    if re.search(r'(1 to 3|3 to 6|more than 6) months', str(job.get('duration') or ''), re.I):
-        base += 3
+    hourly = '/hr' in budget or job.get('job_type') == 'hourly'
+    return (max(values) if values else None), hourly
+
+
+def disqualified(job, rate):
+    """The short list of hard no's. A reason, or None when the posting stays in.
+
+    Points are for ranking what could be applied to. These are the cases where no
+    score should be computed at all, because no fit saves them: the client cannot
+    pay, the posting is an employment ad, the queue is too long to be worth
+    Connects, or the money is below what the member said they work for. Every one
+    of them is also a search filter, so this is the net under the filters, not a
+    second opinion.
+    """
+    c = job.get('client') or {}
+    if not c.get('verified'):
+        return 'unverified payment'
     if str(job.get('engagement') or '').upper() == 'FULL_TIME':
-        base -= 8
-    return max(0, min(20, base))
+        return 'full-time role, not a project'
+    proposals = job.get('proposals')
+    if isinstance(proposals, (int, float)) and proposals > MAX_PROPOSALS:
+        return f'{int(proposals)} proposals already'
+    rating, reviews = c.get('rating'), c.get('total_reviews')
+    if rating is not None and rating < MIN_CLIENT_RATING and (reviews or 0) >= 3:
+        return f'client rated {rating} by freelancers'
+    top, hourly = budget_top(job)
+    if top is not None:
+        if hourly and rate and top < HOURLY_FLOOR * rate:
+            return f'pays {top:g} against your rate of {rate:g}'
+        floor = member_floor()
+        if not hourly and top < floor:
+            return f'fixed budget of {top:g} under your floor of {floor:g}'
+    return None
+
+
+def deductions(job, rate):
+    """What shaves a fit score, with the reason for each. Never a bonus.
+
+    The fit is the score. These are the facts a member would hold against a job
+    they otherwise want, and they are worth points only because a run has to rank
+    twenty jobs that all fit. Capped, so no pile of small doubts can outweigh what
+    the job actually is.
+    """
+    out = []
+    proposals = job.get('proposals')
+    if isinstance(proposals, (int, float)):
+        if proposals > 25:
+            out.append((10, f'{int(proposals)} proposals'))
+        elif proposals > 10:
+            out.append((5, f'{int(proposals)} proposals'))
+    c = job.get('client') or {}
+    if c.get('hires') == 0 and (c.get('posted_jobs') or 0) >= 2:
+        out.append((5, 'has posted before and never hired'))
+    elif not c.get('rating') and not c.get('spent'):
+        out.append((5, 'no client history at all'))
+    top, hourly = budget_top(job)
+    if top is None:
+        out.append((5, 'no budget stated'))
+    elif hourly and rate and top < rate:
+        out.append((10, f'tops out under your rate ({top:g} against {rate:g})'))
+    elif not hourly and top < 500:
+        out.append((5, f'small fixed budget ({top:g})'))
+    total = min(MAX_DEDUCTION, sum(points for points, _ in out))
+    return total, [reason for _, reason in out]
 
 
 def cmd_candidates(args):
     rate = member_rate()
-    merged, dropped = {}, {'applied': 0, 'outside window': 0, 'unverified payment': 0}
+    merged, dropped = {}, collections.Counter()
     for f in args.files:
         track = pathlib.Path(f).stem
         for job in load_json(f, {}).get('jobs', []):
@@ -284,16 +343,18 @@ def cmd_candidates(args):
                 merged[n['id']]['found_via'].append(track)
                 continue
             if n['applied']:
-                dropped['applied'] += 1
-                continue
-            if not n['client']['verified']:
-                dropped['unverified payment'] += 1
+                dropped['already applied'] += 1
                 continue
             rec = recency_points(n['posted_date'], args.window_hours)
             if rec is None:
                 dropped['outside window'] += 1
                 continue
-            n.update(recency=rec, client_trust=trust_points(n['client']), deal_quality=deal_points(n, rate))
+            no = disqualified(n, rate)
+            if no:
+                dropped[no] += 1
+                continue
+            shaved, reasons = deductions(n, rate)
+            n.update(recency=rec, deduction=shaved, deduction_reasons=reasons)
             merged[n['id']] = n
     known = set()
     if merged:
@@ -307,12 +368,14 @@ def cmd_candidates(args):
         print(f'{j["id"]}  {j["title"][:70]}')
         print(f'    via {",".join(j["found_via"])} · {j["budget"] or "no budget"} · {j["engagement"] or ""} · '
               f'proposals {j["proposals"]} · client {c["rating"] or "unrated"}, '
-              f'${c["spent"] or 0:,.0f} spent · points trust {j["client_trust"]}, '
-              f'deal {j["deal_quality"]}, recency {j["recency"]}')
+              f'${c["spent"] or 0:,.0f} spent · {j["recency"]}/10 fresh')
+        shaved = f'-{j["deduction"]} ({"; ".join(j["deduction_reasons"])})' if j['deduction'] else 'nothing against it'
+        print(f'    deduction {shaved}')
         print(f'    {j["snippet"][:220]}')
-    gone = ', '.join(f'{v} {k}' for k, v in dropped.items() if v) or 'none'
+    gone = ', '.join(f'{v} {k}' for k, v in dropped.most_common()) or 'none'
     print(f'\n{len(fresh)} new candidate(s), {len(known)} already in the pipeline, dropped: {gone}.')
-    print('Next: judge niche fit 0 to 40 for each and write data/fit.json, then run score.')
+    print(f'Next: judge fit 0 to 100 for each and write data/fit.json, then run score. '
+          f'The score is that fit minus the deduction above; the gate is {MIN_SCORE}.')
     return 0
 
 
@@ -346,8 +409,8 @@ def record_rejections(ranked, kept, minimum):
             'score': total,
             'grade': grade(total),
             'niche_fit': niche,
-            'client_trust': candidate['client_trust'],
-            'deal_quality': candidate['deal_quality'],
+            'deduction': candidate.get('deduction') or 0,
+            'deduction_reasons': candidate.get('deduction_reasons') or [],
             'recency': candidate['recency'],
             'reason': (verdict.get('trap') or verdict.get('rationale', ''))[:300],
         }, ensure_ascii=False))
@@ -370,8 +433,8 @@ def cmd_score(args):
     ranked, logged = [], []
     for c in candidates:
         f = fit[c['id']]
-        niche = max(0, min(40, int(f.get('fit', 0))))
-        total = niche + c['client_trust'] + c['deal_quality'] + c['recency']
+        niche = max(0, min(100, int(f.get('fit', 0))))
+        total = max(0, niche - int(c.get('deduction') or 0))
         # A named trap caps the score: a great client must not lift a disguised
         # full-time or operator role above a real build.
         if f.get('trap'):
@@ -380,8 +443,9 @@ def cmd_score(args):
         if niche >= FIT_GATE and total >= args.min:
             record = {k: c[k] for k in ('id', 'title', 'url', 'posted_date', 'found_via', 'budget',
                                          'job_type', 'engagement', 'skills', 'proposals', 'client')}
-            record.update(score=total, grade=grade(total), niche_fit=niche, client_trust=c['client_trust'],
-                          deal_quality=c['deal_quality'], recency=c['recency'],
+            record.update(score=total, grade=grade(total), niche_fit=niche, recency=c['recency'],
+                          deduction=c.get('deduction') or 0,
+                          deduction_reasons=c.get('deduction_reasons') or [],
                           rationale=f.get('rationale', ''), summary=f.get('summary', c['snippet'][:280]),
                           headline=f.get('headline', ''), trap=f.get('trap'))
             logged.append(record)
@@ -410,11 +474,11 @@ def cmd_reassess(args):
         print(f'ABORT: job {args.job_id} needs both a pipeline record and data/fit.json entry.', file=sys.stderr)
         return 1
     try:
-        niche = max(0, min(40, int(fit.get('fit'))))
+        niche = max(0, min(100, int(fit.get('fit'))))
     except (TypeError, ValueError):
-        print(f'ABORT: job {args.job_id} needs an integer fit from 0 to 40.', file=sys.stderr)
+        print(f'ABORT: job {args.job_id} needs an integer fit from 0 to 100.', file=sys.stderr)
         return 1
-    total = niche + sum(int(job.get(key) or 0) for key in ('client_trust', 'deal_quality', 'recency'))
+    total = max(0, niche - int(job.get('deduction') or 0))
     if fit.get('trap'):
         total = min(total, TRAP_CAP)
     assessment = {
