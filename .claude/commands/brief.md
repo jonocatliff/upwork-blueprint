@@ -115,7 +115,19 @@ Name the moment, because it decides the next command:
 - **A call is agreed or requested:** the drafts confirm a time on Upwork. After the call the
   next step is `/proposal <id> <transcript or notes>`.
 - **An offer arrived:** the drafts answer open questions only; the member reviews the offer
-  terms on Upwork.
+  terms on Upwork. **Read `jobs/<id>/proposal.md` when it exists**, because that is the scope,
+  the price and the milestones the member already sent, and a draft that contradicts them
+  reopens a decision the client had already made.
+- **The audit is finished:** `lead_magnet_url` is set, so the drafts hand over the link, say
+  in one line what it found that matters most, and name the next step. This is the moment
+  `/lead-magnet` hands back to, and it is worth its own draft: the audit was the promise the
+  application was won on.
+- **A lead says applied and Upwork has never shown a proposal for it:** ask once whether it
+  was actually submitted. That stage was set on the member's word, so a lead they wrote and
+  never pasted sits in the pipeline forever, counts in the day's application total and can
+  never reach the fourteen-day exit, which needs a proposal to expire. On a no, run
+  `python3 code/pipeline.py set <id> skipped --note "never submitted"`. Ask only for leads
+  older than three days, and only once each.
 - **The client named a result or left a review:** this is the only place where
   `context/me.md` grows after the interview, so nothing said here may be lost. Say in one
   line what you would add to its Results or Reviews section, in the shape that section

@@ -97,7 +97,7 @@ def pc_contacts(text):
     return problems
 
 
-def check(text, job_title='', proof_text=''):
+def check(text, job_title='', proof_text='', ready=False):
     letter, screening = split_letter(text)
     letter = letter_body(letter)
     low = letter.lower()
@@ -120,6 +120,12 @@ def check(text, job_title='', proof_text=''):
         notes.append(problem)
     if not has_video(letter) and LOOM_PLACEHOLDER not in letter:
         fails.append('no Loom or YouTube link: include the walkthrough URL or the [LOOM LINK] placeholder')
+    # The placeholder is correct while the letter is being written and wrong the moment
+    # it is pasted: a client who reads "[LOOM LINK]" learns that nobody read it back.
+    # Only the submit check refuses it, so writing stays possible before the Loom exists.
+    if ready and LOOM_PLACEHOLDER in letter:
+        fails.append('the [LOOM LINK] placeholder is still in the letter: paste the real '
+                     'walkthrough URL before you submit')
     card = ' '.join(re.findall(r"\b[\w'$%+-]+\b", letter)[:CARD_WORDS]).lower()
     spent = [p for p in FILLER_OPENERS if re.search(p, card)]
     if spent:
@@ -149,12 +155,15 @@ def main(argv=None):
     ap.add_argument('draft')
     ap.add_argument('--job-title', default='')
     ap.add_argument('--proof', default=str(ROOT / 'context' / 'me.md'))
+    ap.add_argument('--ready', action='store_true',
+                    help='check the letter as it will be pasted: the Loom placeholder is then a failure')
     args = ap.parse_args(argv)
     text = pathlib.Path(args.draft).read_text(encoding='utf-8')
     proof = pathlib.Path(args.proof)
     fails, notes, eye, words, has_screening = check(
         text, args.job_title,
-        context_check.proof_only(proof.read_text(encoding='utf-8')) if proof.is_file() else '')
+        context_check.proof_only(proof.read_text(encoding='utf-8')) if proof.is_file() else '',
+        ready=args.ready)
     for n in notes:
         print(f'note  {n}')
     for f in fails:
