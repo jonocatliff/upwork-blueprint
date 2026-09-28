@@ -57,16 +57,18 @@ about the client.
 
 ## Step 4 · Read the posting into a plan
 
-**Decide the plan's shape first, because it changes the rest of this step.** SEO
-and Google Ads are programmes the member already runs the same way every time, so
-the client is better served by the roadmap than by a drawing of it: the roadmap
-shows weeks and what lands in each, and a bespoke diagram of a known programme only
-proves the member drew a diagram.
+**Decide which page this job gets, because it decides the whole command.** SEO and
+Google Ads are programmes the member runs the same way every time, so they get the
+one-page roadmap and nothing else: one page, weeks instead of a drawing, and no
+second page saying the same thing twice. Every other job gets the full pitch page
+built below.
 
 - **The posting is mainly SEO, local SEO, Google Business Profile or Google Ads:**
   copy `templates/roadmap/seo.html` or `templates/roadmap/google-ads.html` to
-  `jobs/<id>/roadmap.html` and edit it to this client. The file's own comment
-  lists what to rewrite; three of them decide whether it lands:
+  `jobs/<id>/pitch.html`, which is the file the deploy publishes, and edit it to
+  this client. **Then skip Steps 4 and 5 entirely and go to Step 6**: there is no
+  graph, no `pitch_generate.py` run and no `--roadmap` flag. The file's own comment
+  lists what to rewrite; four of them decide whether it lands:
 
   - **The h1 is the outcome this client asked for, in their words**, never the
     name of a service. A posting about missed calls gets a headline about missed
@@ -80,12 +82,16 @@ proves the member drew a diagram.
     than letting it go unanswered. A request with no row reads as a request you
     missed.
 
+  - **Fill every blank, including the photo and the Loom link.** `pitch_check.py`
+    refuses the page while it still says `<Your name>` or `PUT-YOUR-...`, and the
+    photo has to be embedded as a `data:` URI because the deploy uploads one file
+    and nothing beside it. The walkthrough link is not optional: Step 7's cover
+    letter is built on it and `application_check.py` rejects a letter without it.
+
   Keep the three groups, the four tracks and the week count. They are the reason
   to send a roadmap at all: the client sees that the whole funnel is covered, not
   one piece of it. Change the row wording to their trade and city, and the note at
-  the foot if the scope is narrower. Then assemble with `--roadmap` instead of `--graph`, and skip the rest
-  of this step. `pitch_deploy.py` publishes it at `<id>/roadmap`, which is the
-  route `--roadmap` points at.
+  the foot if the scope is narrower.
 - **Anything else, or a job that mixes SEO with real automation work:** draw the
   diagram as below. A job whose shape is its own is exactly what the diagram is
   for.
@@ -144,8 +150,6 @@ commercial term.
 python3 code/pitch_generate.py <id> --hook "..." \
   --build-lede "one job-specific sentence explaining the full flow" \
   --graph jobs/<id>/pitch-graph.json --kickoff "..." (repeat) \
-  (SEO or Google Ads instead of --graph:
-   --roadmap "The 8-week build|<id>/roadmap" --roadmap-point "..." (two to four)) \
   --updates "cadence|platform" \
   --plan-outcome "job-specific client benefit" (once per card) \
   --plan-image jobs/<id>/plan-01.jpg (once per card) \

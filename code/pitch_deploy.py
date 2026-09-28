@@ -150,16 +150,6 @@ def publish(job_id):
             if old_problems:
                 abort(f'the previously published pitch {published_id} failed its gate: ' + '; '.join(old_problems))
             pages[published_id] = published
-        # A roadmap sits beside its pitch page rather than inside it, so the page
-        # can link to it and the client can open it on its own. Same gate as the
-        # page: no contact route on anything a client sees before a contract.
-        roadmap = jobs_dir() / published_id / 'roadmap.html'
-        if roadmap.is_file():
-            roadmap_problems = pitch_check.check_page(roadmap, require_hero=False)
-            if roadmap_problems:
-                abort(f'the roadmap for {published_id} failed its gate: '
-                      + '; '.join(roadmap_problems))
-            pages[f'{published_id}/roadmap'] = roadmap
         audit = jobs_dir() / published_id / 'lead-magnet.html'
         if record.get('lead_magnet_url') and audit.is_file():
             audit_problems = lead_magnet_check.check_page(
