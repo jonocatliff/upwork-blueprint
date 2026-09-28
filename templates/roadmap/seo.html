@@ -26,7 +26,7 @@
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--sand); color: var(--ink); font: 400 15px/1.45 var(--font); -webkit-font-smoothing: antialiased; }
-  .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 24px 28px; display: grid; gap: 20px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 22px 26px; display: grid; gap: 15px; }
   /* A grid item will not shrink below its content, so the 820px table pushed the
      whole page wider than the phone and every other section stretched with it. */
   .wrap > * { min-width: 0; }
@@ -81,7 +81,7 @@
   th, td { padding: 0; border-bottom: 1px solid var(--line); }
   thead th { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--pewter); padding: 7px 0; text-align: center; background: var(--sand); }
   thead th:first-child { text-align: left; padding-left: 16px; }
-  td.what { padding: 6px 14px; width: 410px; font-size: 13.5px; position: sticky; left: 0; background: var(--paper); z-index: 1; }
+  td.what { padding: 5px 14px; width: 410px; font-size: 13.5px; position: sticky; left: 0; background: var(--paper); z-index: 1; }
   td.w { position: relative; border-left: 1px solid var(--line); min-width: 50px; }
   tbody tr:last-child td { border-bottom: 0; }
   .bar { position: absolute; top: calc(50% - 8px); height: 16px; left: 0; right: 0; }
@@ -97,13 +97,14 @@
 
   /* The four groups the page is built from. They are not labels for what sits
      under them; they are the structure a client reads before reading anything. */
-  .group { display: flex; align-items: center; gap: 11px; font-size: 24px; margin-bottom: 2px; }
+  .group { display: flex; align-items: center; gap: 10px; font-size: 21px; margin-bottom: 0; }
   .group .num {
-    flex: none; width: 27px; height: 27px; border-radius: 9px; display: grid; place-items: center;
+    flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center;
     background: var(--blue-950); color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0;
   }
   .note { font-size: 13px; color: var(--pewter); text-align: center; }
-  .detail { margin-top: -8px; }
+  .detail { margin-top: -6px; }
+  .join { margin-top: -4px; }
 
   @media (max-width: 860px) {
     .flow { grid-template-columns: 1fr 1fr; }
@@ -160,7 +161,6 @@
   <header>
     <span class="eyebrow">The 8-week build</span>
     <h1>More customers from Google, turned into booked jobs</h1>
-    <p>One system, built in 8 weeks. Not just SEO.</p>
   </header>
 
   <!--
@@ -244,8 +244,7 @@
     <p class="free">Your free audit, yours to keep, with no obligation either way.</p>
   </section>
 
-  <h2 class="group"><span class="num" aria-hidden="true">4</span>Next step</h2>
-  <section class="next" aria-label="The next step">
+  <section class="next join" aria-label="The next step">
     <p>Send me your website URL here on Upwork.</p>
     <p class="quiet">That is all I need to start the audit.</p>
   </section>
@@ -257,13 +256,13 @@
   const C = { T: "--c-traffic", C: "--c-conv", S: "--c-sales", A: "--c-analytics", H: "--c-hand" };
   const ROWS = [
     ["A", "Baseline audit", "Where you stand today, frozen as the starting line.", { from: 1, to: 1 }],
-    ["S", "5-minute auto-reply", "Every call, form and message gets a reply within five minutes and goes to the right person, day or night.", { from: 1, to: 1 }],
+    ["S", "5-minute auto-reply", "Every call, form and message answered within five minutes.", { from: 1, to: 1 }],
     ["S", "Review system", "Review requests go out by themselves after every job.", { from: 1, to: 1 }],
-    ["T", "Google Business Profile", "Your Google profile done properly, plus the ten directories that matter.", { from: 2, to: 2 }],
-    ["T", "Keyword map + site fixes", "We find what people in your area actually search for and fix whatever stops Google reading your site.", { from: 2, to: 3 }],
-    ["C", "New website", "A fast site with tap-to-call and your proof up front, built to turn a visit into an enquiry.", { from: 3, to: 4 }],
-    ["T", "Service + location pages", "One page per service and area you really cover, written from the keyword map.", { from: 4, to: 6 }],
-    ["T", "Blog articles", "Articles that answer what customers ask before they call, each one linking to a service page.", { from: 5, to: 7 }],
+    ["T", "Google Business Profile", "Your profile done properly, plus the directories that matter.", { from: 2, to: 2 }],
+    ["T", "Keyword map + site fixes", "What your area actually searches for, and what blocks Google.", { from: 2, to: 3 }],
+    ["C", "New website", "A fast site with tap-to-call and your proof up front.", { from: 3, to: 4 }],
+    ["T", "Service + location pages", "One page per service and area you really cover.", { from: 4, to: 6 }],
+    ["T", "Blog articles", "Answers to what customers ask before they call.", { from: 5, to: 7 }],
     ["A", "Analytics dashboard", "Where enquiries come from and what they're worth.", { from: 7, to: 7 }]
   ];
   const MS = { 1: "First auto-reply", 3: "Plan locked", 8: "Live" };

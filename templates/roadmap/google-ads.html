@@ -26,7 +26,7 @@
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--sand); color: var(--ink); font: 400 15px/1.45 var(--font); -webkit-font-smoothing: antialiased; }
-  .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 24px 28px; display: grid; gap: 20px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 22px 26px; display: grid; gap: 15px; }
   /* A grid item will not shrink below its content, so the 820px table pushed the
      whole page wider than the phone and every other section stretched with it. */
   .wrap > * { min-width: 0; }
@@ -81,7 +81,7 @@
   th, td { padding: 0; border-bottom: 1px solid var(--line); }
   thead th { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--pewter); padding: 7px 0; text-align: center; background: var(--sand); }
   thead th:first-child { text-align: left; padding-left: 16px; }
-  td.what { padding: 6px 14px; width: 410px; font-size: 13.5px; position: sticky; left: 0; background: var(--paper); z-index: 1; }
+  td.what { padding: 5px 14px; width: 410px; font-size: 13.5px; position: sticky; left: 0; background: var(--paper); z-index: 1; }
   td.w { position: relative; border-left: 1px solid var(--line); min-width: 50px; }
   tbody tr:last-child td { border-bottom: 0; }
   .bar { position: absolute; top: calc(50% - 8px); height: 16px; left: 0; right: 0; }
@@ -97,13 +97,14 @@
 
   /* The four groups the page is built from. They are not labels for what sits
      under them; they are the structure a client reads before reading anything. */
-  .group { display: flex; align-items: center; gap: 11px; font-size: 24px; margin-bottom: 2px; }
+  .group { display: flex; align-items: center; gap: 10px; font-size: 21px; margin-bottom: 0; }
   .group .num {
-    flex: none; width: 27px; height: 27px; border-radius: 9px; display: grid; place-items: center;
+    flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center;
     background: var(--blue-950); color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0;
   }
   .note { font-size: 13px; color: var(--pewter); text-align: center; }
-  .detail { margin-top: -8px; }
+  .detail { margin-top: -6px; }
+  .join { margin-top: -4px; }
 
   @media (max-width: 860px) {
     .flow { grid-template-columns: 1fr 1fr; }
@@ -160,7 +161,6 @@
   <header>
     <span class="eyebrow">The 6-week build</span>
     <h1>Ready-to-buy searches, turned into booked jobs</h1>
-    <p>Live in 3 weeks, then tuned every week after that.</p>
   </header>
 
   <!--
@@ -244,8 +244,7 @@
     <p class="free">Your free audit, yours to keep, with no obligation either way.</p>
   </section>
 
-  <h2 class="group"><span class="num" aria-hidden="true">4</span>Next step</h2>
-  <section class="next" aria-label="The next step">
+  <section class="next join" aria-label="The next step">
     <p>Send me your website URL here on Upwork.</p>
     <p class="quiet">That is all I need to start the audit.</p>
   </section>
@@ -257,15 +256,15 @@
   const C = { M: "--c-measure", P: "--c-page", K: "--c-campaigns", L: "--c-loop", H: "--c-hand" };
   const WEEKS = 6;
   const ROWS = [
-    ["M", "Conversion tracking", "Every form, call and enquiry counted once, so the cost per lead is a real number.", { from: 1, to: 1 }],
-    ["M", "Call tracking", "Calls from the ad and from your website counted as leads, with the number that rang.", { from: 1, to: 1 }],
-    ["P", "Landing page", "One fast page per service, tap-to-call and your proof up front, built for the ad that sends people to it.", { from: 1, to: 2 }],
-    ["K", "Keyword and ad group map", "What people in your area actually type, grouped so every search meets the ad written for it.", { from: 2, to: 2 }],
-    ["K", "Account build", "Campaigns, ads and the negative keyword lists, built paused so nothing spends before you have seen it.", { from: 2, to: 3 }],
-    ["K", "Go live", "You switch it on, after one real test form and one real test call have each counted exactly once.", { from: 3, to: 3 }],
-    ["L", "Search terms and negatives", "Every week we read what people really typed, cut what does not belong and bid on what does.", { from: 3, to: 6 }],
+    ["M", "Conversion tracking", "Every form, call and enquiry counted exactly once.", { from: 1, to: 1 }],
+    ["M", "Call tracking", "Calls from your ads and your website counted as leads.", { from: 1, to: 1 }],
+    ["P", "Landing page", "One fast page per service, built for the ad that feeds it.", { from: 1, to: 2 }],
+    ["K", "Keyword and ad group map", "What your area types, grouped to meet the right ad.", { from: 2, to: 2 }],
+    ["K", "Account build", "Campaigns, ads and negative lists, all built paused.", { from: 2, to: 3 }],
+    ["K", "Go live", "You switch it on after one real test form and one real call.", { from: 3, to: 3 }],
+    ["L", "Search terms and negatives", "Weekly: cut what does not belong, bid on what does.", { from: 3, to: 6 }],
     ["L", "Bids and budget", "One change at a time, because two at once cannot be read.", { from: 4, to: 6 }],
-    ["M", "Your dashboard", "What a lead costs, where it came from, and what it is worth to you.", { from: 6, to: 6 }]
+    ["M", "Your dashboard", "What a lead costs, and what it is worth to you.", { from: 6, to: 6 }]
   ];
   const MS = { 1: "Tracking verified", 3: "Live", 6: "First full report" };
 
