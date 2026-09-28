@@ -43,7 +43,7 @@
   .node {
     position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
     padding: 13px 15px 12px; display: grid; grid-template-columns: auto minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr) auto; column-gap: 11px; row-gap: 2px;
+    grid-template-rows: auto minmax(0, 1fr); column-gap: 11px; row-gap: 2px;
     box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12);
   }
   .node:not(:last-child)::after {
@@ -54,7 +54,7 @@
   }
   .icon {
     width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; color: #fff;
-    grid-column: 1; grid-row: 1 / span 3; align-self: start;
+    grid-column: 1; grid-row: 1 / span 2; align-self: start;
     background: linear-gradient(155deg, color-mix(in srgb, var(--c) 78%, #fff) 0%, var(--c) 55%, color-mix(in srgb, var(--c) 80%, #000) 100%);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 6px 14px -6px var(--c);
   }
@@ -62,7 +62,6 @@
   .tile .icon { grid-row: auto; margin-bottom: 4px; }
   .node h3 { font-size: 16.5px; line-height: 1.15; grid-column: 2; align-self: center; }
   .node p { color: var(--graphite); font-size: 13px; grid-column: 2; }
-  .chip { grid-column: 2; grid-row: 3; justify-self: start; align-self: end; margin-top: 6px; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: color-mix(in srgb, var(--c) 12%, #fff); color: color-mix(in srgb, var(--c) 70%, #000); font-variant-numeric: tabular-nums; }
 
   /* Big numbers */
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--blue-950); border-radius: 16px; overflow: hidden; }
@@ -171,25 +170,21 @@
       <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.6" cy="10.6" r="7"/><path d="M15.7 15.7 21 21"/><path d="M10.6 14.4s2.9-2.6 2.9-4.7a2.9 2.9 0 1 0-5.8 0c0 2.1 2.9 4.7 2.9 4.7z" opacity=".55"/></svg></span>
       <h3>Traffic</h3>
       <p>Found on Google and Maps</p>
-      <span class="chip">Weeks 2 to 7</span>
     </li>
     <li class="node" style="--c:var(--c-conv)">
       <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5.9A1.9 1.9 0 0 1 6.9 4h2a1 1 0 0 1 .95.68l1.05 3.1a1 1 0 0 1-.4 1.15L8.9 10a12.5 12.5 0 0 0 5.1 5.1l1.07-1.6a1 1 0 0 1 1.15-.4l3.1 1.05a1 1 0 0 1 .68.95v2A1.9 1.9 0 0 1 18.1 20 13.1 13.1 0 0 1 5 5.9z"/></svg></span>
       <h3>Conversion</h3>
       <p>A website built to get the call</p>
-      <span class="chip">Weeks 3 to 4</span>
     </li>
     <li class="node" style="--c:var(--c-sales)">
       <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 11.4a7.6 7.6 0 0 1-11 6.8L4 19.8l1.5-5.5A7.6 7.6 0 1 1 20.6 11.4z"/><path d="M12.9 7.6 10 12.3h2.9l-.8 3.7 3.3-4.8h-3z" opacity=".55"/></svg></span>
       <h3>Sales automation</h3>
       <p>Every enquiry answered and followed up</p>
-      <span class="chip">Weeks 1 to 8</span>
     </li>
     <li class="node" style="--c:var(--c-analytics)">
       <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.8 20.1h16.4"/><rect x="5.4" y="12.3" width="3.3" height="5" rx="1.1" opacity=".55"/><rect x="10.4" y="9.2" width="3.3" height="8.1" rx="1.1" opacity=".55"/><rect x="15.3" y="5.4" width="3.3" height="11.9" rx="1.1"/></svg></span>
       <h3>Analytics</h3>
       <p>What every lead is worth</p>
-      <span class="chip">Weeks 1 and 7</span>
     </li>
     </ol>
   </section>

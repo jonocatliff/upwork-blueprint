@@ -43,7 +43,7 @@
   .node {
     position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
     padding: 13px 15px 12px; display: grid; grid-template-columns: auto minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr) auto; column-gap: 11px; row-gap: 2px;
+    grid-template-rows: auto minmax(0, 1fr); column-gap: 11px; row-gap: 2px;
     box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12);
   }
   .node:not(:last-child)::after {
@@ -54,7 +54,7 @@
   }
   .icon {
     width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; color: #fff;
-    grid-column: 1; grid-row: 1 / span 3; align-self: start;
+    grid-column: 1; grid-row: 1 / span 2; align-self: start;
     background: linear-gradient(155deg, color-mix(in srgb, var(--c) 78%, #fff) 0%, var(--c) 55%, color-mix(in srgb, var(--c) 80%, #000) 100%);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 6px 14px -6px var(--c);
   }
@@ -62,7 +62,6 @@
   .tile .icon { grid-row: auto; margin-bottom: 4px; }
   .node h3 { font-size: 16.5px; line-height: 1.15; grid-column: 2; align-self: center; }
   .node p { color: var(--graphite); font-size: 13px; grid-column: 2; }
-  .chip { grid-column: 2; grid-row: 3; justify-self: start; align-self: end; margin-top: 6px; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: color-mix(in srgb, var(--c) 12%, #fff); color: color-mix(in srgb, var(--c) 70%, #000); font-variant-numeric: tabular-nums; }
 
   /* Big numbers */
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--blue-950); border-radius: 16px; overflow: hidden; }
@@ -171,25 +170,21 @@
       <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="3.7" opacity=".55"/><path d="M12 3.8v2.2M12 18v2.2M3.8 12H6M18 12h2.2" opacity=".55"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/></svg></span>
       <h3>Measurement</h3>
       <p>Every lead counted, and what it cost</p>
-      <span class="chip">Weeks 1 and 6</span>
     </li>
     <li class="node" style="--c:var(--c-page)">
       <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.2" width="18" height="15.6" rx="2.5"/><path d="M3 8.4h18" opacity=".55"/><circle cx="6.3" cy="6.3" r=".75" fill="currentColor" stroke="none" opacity=".55"/><path d="M9.9 11.5l5.5 5.5.9-2.7 2.7-.9z"/></svg></span>
       <h3>Landing page</h3>
       <p>A page built to get the call</p>
-      <span class="chip">Weeks 1 to 2</span>
     </li>
     <li class="node" style="--c:var(--c-campaigns)">
       <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.2v3.6a1.2 1.2 0 0 0 1.2 1.2h2.3L14 19V5L7.5 9H5.2A1.2 1.2 0 0 0 4 10.2z"/><path d="M7.6 15.1v3.1a1.3 1.3 0 0 0 2.6 0v-2" opacity=".55"/><path d="M17.2 9.4a4.2 4.2 0 0 1 0 5.2" opacity=".55"/><path d="M19.6 7.1a7.5 7.5 0 0 1 0 9.8" opacity=".55"/></svg></span>
       <h3>Campaigns</h3>
       <p>In front of people searching now</p>
-      <span class="chip">Weeks 2 to 3</span>
     </li>
     <li class="node" style="--c:var(--c-loop)">
       <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.7 12A8.3 8.3 0 0 1 18 6.3"/><path d="M18.8 3v3.5h-3.5"/><path d="M20.3 12A8.3 8.3 0 0 1 6 17.7" opacity=".55"/><path d="M5.2 21v-3.5h3.5" opacity=".55"/></svg></span>
       <h3>The weekly loop</h3>
       <p>Wasted spend cut every week</p>
-      <span class="chip">Weeks 3 to 6</span>
     </li>
     </ol>
   </section>
