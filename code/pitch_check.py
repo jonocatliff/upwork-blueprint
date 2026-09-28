@@ -55,7 +55,7 @@ def links(page):
     return [h for h in found if h and not h.startswith(('#', 'data:'))]
 
 
-def check_page(path, *, require_hero=False):
+def check_page(path, *, require_hero=False, ready=False):
     page = pathlib.Path(path).read_text(encoding='utf-8')
     problems = []
     for h in links(page):
@@ -80,6 +80,11 @@ def check_page(path, *, require_hero=False):
     for m in TEMPLATE_BLANK.finditer(text):
         problems.append(f'still carries a template blank: {m.group(0)[:60]}')
     for m in re.finditer(r'PUT-YOUR-[A-Z-]+', page):
+        # The Loom id is the one blank that cannot be filled before publishing: the
+        # walkthrough is a video of this page, so the page has to exist first. It is
+        # refused at the moment the link goes to a client, not while it is being built.
+        if 'LOOM' in m.group(0) and not ready:
+            continue
         problems.append(f'still carries a template blank: {m.group(0)}')
     # write_site copies the HTML and nothing beside it, so any file the page points
     # at by a relative path is a 404 the member only sees after sending the link.

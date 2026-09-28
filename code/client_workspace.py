@@ -100,7 +100,11 @@ def cmd_new(args):
     slug = slugify(args.slug or client_name(job))
     folder = CLIENTS / slug
     if folder.exists():
-        abort(f'clients/{slug} exists already. Pass --slug to open a second one.')
+        # /won runs a second time after delivery, so an existing folder is the normal
+        # case then, not a collision. Opening it again would duplicate the client.
+        print(f'clients/{slug} is already open. Nothing changed. '
+              f'Pass --slug only when this really is a second engagement.')
+        return 0
 
     for name in FOLDERS:
         (folder / name).mkdir(parents=True, exist_ok=True)

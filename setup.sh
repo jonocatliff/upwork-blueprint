@@ -28,8 +28,14 @@ note() { echo "  · $1"; missing=$((missing + 1)); }
 if [ ! -f templates/lead-magnet/dist/index.html ]; then
   if command -v npm >/dev/null; then
     echo "building the audit report template, about a minute..."
-    (cd templates/lead-magnet && npm install --silent && npm run build --silent)
-    echo "built templates/lead-magnet/dist/index.html"
+    # set -e is on, so an unguarded npm failure used to exit here and swallow the
+    # whole list below. A member then saw a stack trace and never learned which
+    # keys or tools he still needs. The build is optional; the list is not.
+    if (cd templates/lead-magnet && npm install --silent && npm run build --silent); then
+      echo "built templates/lead-magnet/dist/index.html"
+    else
+      note "the audit report template did not build: /lead-magnet cannot render a report until it does. Run 'cd templates/lead-magnet && npm install && npm run build' and read npm's own error. Everything else below still applies."
+    fi
   else
     note "Node.js is missing: /cockpit will not start and /lead-magnet cannot render its report. Install it from https://nodejs.org, then run this again."
   fi
@@ -55,10 +61,6 @@ if ! command -v vercel >/dev/null; then
   note "vercel: /pitch-page publishes the page for your client with it. Install with 'npm i -g vercel', then 'vercel login'."
 elif ! vercel whoami >/dev/null 2>&1 && ! env_has VERCEL_TOKEN; then
   note "vercel is installed but not signed in. Run 'vercel login', or put a VERCEL_TOKEN in .env."
-fi
-
-if ! command -v supabase >/dev/null; then
-  note "supabase: only needed when you host reports yourself rather than on Vercel. Install with 'npm i -g supabase' when you get there."
 fi
 
 env_has FIRECRAWL_API_KEY || note "FIRECRAWL_API_KEY in .env: /lead-magnet reads the client's site with it. firecrawl.dev"
