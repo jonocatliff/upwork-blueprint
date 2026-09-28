@@ -27,6 +27,9 @@
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--sand); color: var(--ink); font: 400 15px/1.45 var(--font); -webkit-font-smoothing: antialiased; }
   .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 44px; display: grid; gap: 30px; }
+  /* A grid item will not shrink below its content, so the 820px table pushed the
+     whole page wider than the phone and every other section stretched with it. */
+  .wrap > * { min-width: 0; }
   h1, h2, h3 { margin: 0; text-wrap: balance; letter-spacing: -0.02em; }
   p { margin: 0; }
 
@@ -106,6 +109,37 @@
     .node::after { display: none; }
     td.what { width: 250px; font-size: 13px; }
   }
+
+  /* The free audit, pitched under the roadmap */
+  .audit { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .audit-card {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
+    padding: 22px 20px 20px; display: grid; gap: 12px; align-content: start;
+    box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12);
+  }
+  .audit-card h3 { font-size: 20px; line-height: 1.15; }
+  .audit-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .audit-card li { position: relative; padding-left: 24px; font-size: 14px; color: var(--graphite); }
+  .audit-card li::before {
+    content: ""; position: absolute; left: 0; top: 7px; width: 14px; height: 8px;
+    border-radius: 3px; background: var(--blue-800);
+  }
+  @media (max-width: 520px) { .audit { grid-template-columns: 1fr; } }
+
+  /* Who is writing, and the one move the client makes */
+  .who {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
+    padding: 22px 20px 20px; display: grid; gap: 10px; justify-items: start;
+    box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12);
+  }
+  .who h2 { font-size: 22px; }
+  .who p { color: var(--graphite); font-size: 15px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .proof { font-size: 12.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--blue-50); color: var(--blue-800); }
+  .next { background: var(--blue-950); border-radius: 18px; padding: 26px 24px 24px; display: grid; gap: 10px; }
+  .next h2 { font-size: 22px; color: #fff; }
+  .next p { color: #fff; font-size: 16px; max-width: 62ch; }
+  .next p.quiet { color: var(--blue-200); font-size: 13px; }
 </style>
 
 <main class="wrap">
@@ -115,7 +149,25 @@
     <p>One system, built in 8 weeks. Not just SEO.</p>
   </header>
 
-  <ol class="flow">
+  <!--
+    The chips come from the Results, Reviews and Credentials sections of context/me.md.
+    A chip with nothing behind it gets deleted rather than softened.
+  -->
+  <section class="who" aria-labelledby="who">
+    <h2 id="who">&lt;Your name&gt;</h2>
+    <p>&lt;What you do, in one line, for the kind of business this client runs&gt;</p>
+    <div class="chips">
+      <span class="proof">&lt;A result you can back up&gt;</span>
+      <span class="proof">&lt;A second one, or delete this chip&gt;</span>
+      <span class="proof">&lt;A third one, or delete this chip&gt;</span>
+    </div>
+  </section>
+
+  <section aria-labelledby="plan">
+    <div class="rm-head">
+      <h2 id="plan">What I will do</h2>
+    </div>
+    <ol class="flow">
     <li class="node" style="--c:var(--c-traffic)">
       <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/><path d="M11 8v6M8 11h6"/></svg></span>
       <span class="n">Step 1</span>
@@ -144,7 +196,8 @@
       <p>What every lead is worth</p>
       <span class="chip">Weeks 1 and 7</span>
     </li>
-  </ol>
+    </ol>
+  </section>
 
 
   <section aria-labelledby="rm">
@@ -163,6 +216,38 @@
         <tbody id="rows"></tbody>
       </table>
     </div>
+  </section>
+
+  <section aria-labelledby="audit">
+    <div class="rm-head">
+      <h2 id="audit">What you get now, free</h2>
+    </div>
+    <div class="audit">
+      <article class="audit-card">
+        <h3>What the audit finds</h3>
+        <ul>
+          <li>Where you rank across your area, on a 25 point map grid for the search that actually brings work.</li>
+          <li>Your Google Business Profile beside the businesses beating you: reviews, owner replies, categories, services, photos and hours.</li>
+          <li>Your website as a visitor and as a phone sees it, and which enquiry paths work.</li>
+          <li>One score per section, and every number carries the source it came from.</li>
+        </ul>
+      </article>
+      <article class="audit-card">
+        <h3>What it costs you</h3>
+        <ul>
+          <li>Nothing. No fee, no contract, no obligation of any kind.</li>
+          <li>You get the report as a page you can open and keep, whatever you decide afterwards.</li>
+          <li>It names the fixes that move first and what each one is worth to you.</li>
+          <li>If it reads wrong, you have lost an afternoon of mine and none of yours.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="next" aria-labelledby="next">
+    <h2 id="next">The next step</h2>
+    <p>Reply here on Upwork with your business name and the service you want to be found for. That is everything I need to start the audit.</p>
+    <p class="quiet">No calls booked, no forms, no email. The conversation stays here.</p>
   </section>
 
   <p class="note">No ranking promises: results build over 2 to 3 months.</p>
