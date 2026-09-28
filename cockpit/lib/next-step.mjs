@@ -89,7 +89,12 @@ export function nextStep(job, today = todayIso()) {
       return chase(job, today, `/brief ${id}`, extras);
     }
     case 'won':
-      return has(job, 'project.md') ? { ...NOTHING, extras: [] } : step('Write handover', 'Turns the contract into the handover brief for delivery.', `/won ${id}`);
+      // A won lead used to show nothing at all, which reads as finished when the work has
+      // not started. The second /won pass is the one step nobody else owns: it records what
+      // was delivered, and that is what makes the next proposal provable.
+      return has(job, 'project.md')
+        ? step('Record the result', 'After delivery: what came out of it, with a number and where it can be checked.', `/won ${id}`)
+        : step('Write handover', 'Turns the contract into the handover brief and the onboarding.', `/won ${id}`);
     default:
       return { ...NOTHING, extras: [] };
   }

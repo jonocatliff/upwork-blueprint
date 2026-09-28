@@ -158,10 +158,9 @@ the page is rendered and published. Read the sketch back in two lines, say which
 proofs it rests on and what you deliberately left out, then wait. A correction here costs one
 edit; the same correction after the deploy costs the page, the screenshots and the URL.
 
-**Every FIX line the sketch prints is a defect, not a hint**, and it checks the four rules
-this command used to only state: a fork with one exit or an unlabelled one, a fork whose
-exits meet again straight away and so decides nothing, a step that leads nowhere, and a
-single ending, which means nobody drew what happens when the normal path fails.
+**Every FIX line the sketch prints is a defect, not a hint.** It checks four rules this
+command used to only state: a fork with one exit or an unlabelled one, a fork whose exits
+meet again and so decides nothing, a step that leads nowhere, and a single ending.
 
 
 

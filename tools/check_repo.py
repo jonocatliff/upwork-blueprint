@@ -362,6 +362,22 @@ def check_writing_budget():
             f'(largest: {names}). Shorten something before adding more.']
 
 
+def check_starter_fields():
+    """Every field the code reads from me.md has to exist in the shipped empty.
+
+    A field added to the code and not to the starter is the worst kind of missing: the
+    member never sees a question, the command silently falls back to a constant, and the
+    figure that decides his day is one nobody chose. Three fields had already drifted
+    apart this way before this check existed.
+    """
+    starter = (ROOT / 'starters' / 'context' / 'me.md').read_text(encoding='utf-8')
+    wanted = set()
+    for path in sorted((ROOT / 'code').glob('*.py')):
+        wanted.update(re.findall(r"me_number\(\s*['\"]([^'\"]+)['\"]", path.read_text(encoding='utf-8')))
+    return [f'starters/context/me.md has no "**{name}:**", which code/ reads'
+            for name in sorted(wanted) if f'**{name}:**' not in starter]
+
+
 CHECKS = [
     ('personal data', check_leaks),
     ('language', check_language),
@@ -378,6 +394,7 @@ CHECKS = [
     ('fact contract', check_facts_contract),
     ('product vision', check_vision),
     ('writing budget', check_writing_budget),
+    ('starter fields', check_starter_fields),
 ]
 
 

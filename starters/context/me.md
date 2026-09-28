@@ -26,11 +26,14 @@ profession outside freelancing is usually the strongest thing a new profile has.
 **How settled your direction is (decided, leaning, open):** not answered yet
 **What you do NOT do:** not answered yet
 **Tools and systems you can name confidently:** not answered yet
+**Industries you want to work with:** not answered yet
 
 ## How you work
 
 **Hourly rate:** not answered yet
 **Smallest project worth taking:** not answered yet
+**Maximum proposals on a job:** not answered yet
+**Lowest share of your rate:** not answered yet
 **Timezone and hours you answer messages:** not answered yet
 
 **Job Success Score:** not answered yet

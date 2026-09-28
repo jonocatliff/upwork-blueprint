@@ -5,7 +5,7 @@ argument-hint: "<job id>"
 
 # /won
 
-Turn a real contract into the handover brief the delivery pipeline starts from.
+Turn a real contract into the brief the work starts from, and the onboarding around it.
 This command never accepts an offer, starts a contract or sends a message.
 
 Read first: the job pipeline record, the saved thread, `jobs/<id>/proposal.md`
@@ -59,7 +59,7 @@ Write `jobs/<id>/project.md` with exactly these sections:
 - `## First actions`: the smallest real steps that unblock delivery
 
 The first three non-empty lines name the client project, say when it was recorded
-and give `**Next:**`, which is handing this brief to the delivery pipeline. No
+and give `**Next:**`, which is the first client input still missing. No
 invented dates, numbers, access or acceptance criteria. Run
 `python3 code/document_check.py check project <id>` and fix every failure.
 
@@ -112,5 +112,6 @@ when they can point at it and `pending` otherwise. Without it the evidence base 
 day of the interview while the member's work moves on.
 
 Use the completion report from `CLAUDE.md` and link the handover brief. The next action is
-to start delivery from it. End with `Upwork calls: N`: two on a first run for the contract
+is to fill whatever `clients/<slug>/context.md` still reads as not recorded, then the work
+itself, which lives outside these commands. End with `Upwork calls: N`: two on a first run for the contract
 and its milestones, zero on a later one.

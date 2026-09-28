@@ -79,7 +79,7 @@ Each of these matters only when it fails:
 1. **Consistency, first.** Do title, overview, skills and portfolio tell one story? When the title promises A and the portfolio shows B, the client believes neither. This often explains a profile with decent parts and no invitations.
 2. **Proof order.** Is the strongest proof the member has, by the tiers in the formula, inside the first 250 characters that Upwork shows in search results?
 3. **Opening.** Does the first line say what the client gets, or is it a CV?
-4. **A claim the aggregate contradicts.** Two of sixteen measured profiles named a badge or a client count in their prose that the connector's own aggregate denied. Compare every claim in the text against `data/profile.json`. This is the most expensive thing that can be wrong, because a client checks it in two seconds.
+4. **A claim the aggregate contradicts.** Compare every claim in the text against `data/profile.json`: a badge or a client count the connector's own numbers deny is the most expensive thing that can be wrong, because a client checks it in two seconds.
 5. **What nobody in the lane does.** From `references/profile.md`: no price, no "this is not for you if", no availability window, no date on a claim. Name one the member could add truthfully, because it is free and it is a differentiator in the same search.
 
 **Two things the connector cannot see**, measured 12 September 2026: neither the
