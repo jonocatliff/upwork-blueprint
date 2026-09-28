@@ -192,9 +192,14 @@ def add_history(job, status, at=None):
 
 
 def parse_follow_up(value):
+    """+Nd or a date. N counts business days, because every lane gap does.
+
+    Calendar days here and business days in the lane meant the same "+3d" landed on
+    Monday from a Friday and on Wednesday from a lane step, with nothing saying so.
+    """
     m = re.match(r'^\+(\d+)d$', value)
     if m:
-        return (datetime.date.today() + datetime.timedelta(days=int(m.group(1)))).isoformat()
+        return add_business_days(datetime.date.today(), int(m.group(1))).isoformat()
     try:
         return datetime.date.fromisoformat(value).isoformat()
     except ValueError:
@@ -380,7 +385,14 @@ def cmd_follow_up(args):
             abort('reactivation is only for a previous or current client in won.')
         if lane != 'reactivation' and job.get('status') not in ('replied', 'call', 'offer'):
             abort('sales follow-ups need a lead that has answered; applied proposals cannot message first.')
+        # The lane's own first gap, not whatever date happened to be passed: gaps[0]
+        # existed and was never used, so step 1 was the one step nobody measured.
+        first = FOLLOW_UP_GAPS[lane][0]
+        earliest = add_business_days(datetime.date.today(), first)
         due = parse_follow_up(args.due)
+        if datetime.date.fromisoformat(due) < earliest:
+            abort(f'a {lane} follow-up waits {first} business day(s), so the earliest is '
+                  f'{earliest.isoformat()}, not {due}.')
         reason = ' '.join((args.reason or '').split())
         if not reason:
             abort('a follow-up plan needs the conversation-based reason.')

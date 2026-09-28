@@ -24,7 +24,16 @@ CONTACT_LINKS = re.compile(
     r'linkedin\.com|instagram\.com|facebook\.com|fb\.me|tiktok\.com|twitter\.com|//x\.com|t\.me/|'
     r'telegram|discord\.gg|signal\.me)', re.I)
 EMAIL = re.compile(r'\b[\w.+-]+@[\w-]+\.[a-z]{2,}\b', re.I)
+# A phone number, and not two prices in a row: "12.500 - 12.500" used to fail this gate,
+# and a gate that cries wolf on a real page is one the member learns to skip. Money is
+# removed before the search rather than argued with afterwards.
 PHONE = re.compile(r'(?<![\w.])\+?\d[\d ().-]{8,}\d(?![\w.])')
+MONEY = re.compile(r'[$€£]\s?[\d.,]+|\b\d{1,3}[.,]\d{3}(?:[.,]\d{2})?\b')
+
+
+def phone_hit(text):
+    """The first digit run that reads as a phone number once money is out of the way."""
+    return PHONE.search(MONEY.sub(' ', text))
 BOOKING_WORDS = re.compile(r'\b(book a call|schedule a call|book a meeting|email me|call me|whatsapp me)\b', re.I)
 # A blank a human is meant to replace, written the way the roadmap templates
 # write them: <Your name>, <A result you can back up>.
@@ -55,7 +64,7 @@ def check_page(path, *, require_hero=False):
     text = visible_text(page)
     for m in EMAIL.finditer(text):
         problems.append(f'shows an email address: {m.group(0)}')
-    for m in PHONE.finditer(text):
+    for m in PHONE.finditer(MONEY.sub(' ', text)):
         if len(re.sub(r'\D', '', m.group(0))) >= 9:
             problems.append(f'shows what looks like a phone number: {m.group(0).strip()}')
     for m in BOOKING_WORDS.finditer(text):
