@@ -95,7 +95,7 @@ competes with everyone.
 Two of the **16 cross-section** claim "Top Rated", "100% Job Success" or "250+ clients" in
 overview text while the connector's aggregate shows no badge and ten or five completed jobs.
 **A badge named in an overview is not evidence.** Judge the real badge and aggregate, never the
-sentence, and never write a claim the member cannot back from `context/proof.md`.
+sentence, and never write a claim the member cannot back from the evidence sections of `context/me.md`.
 
 ## What is not a lever, so do not score it
 
@@ -248,7 +248,7 @@ Documented limits: title up to 70 characters, role up to 100, description up to 
 skill tags, images recommended at 1000 by 750 and at least 400 by 300 (360016144974). Linking a
 real Upwork job notifies that client, who has three days to object. **No contact details in the
 files or on any page they link to.** Each item is 5% up to 20%, so **four items** is where
-completeness caps out. A title carries a number only when `context/proof.md` ties it to that
+completeness caps out. A title carries a number only when the evidence sections of `context/me.md` ties it to that
 project. Unmeasured: the connector returns no portfolio array, so nothing about how the sampled
 profiles title their items.
 

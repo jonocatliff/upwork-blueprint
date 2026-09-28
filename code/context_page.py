@@ -225,12 +225,11 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--open', action='store_true', help='open it in the browser')
     args = parser.parse_args(argv)
-    for path in (cc.ME, cc.PROOF):
-        if not path.is_file():
-            print(f'{path} is missing. Run python3 code/workspace.py')
-            return 1
+    if not cc.ME.is_file():
+        print(f'{cc.ME} is missing. Run python3 code/workspace.py')
+        return 1
     me_text = cc.ME.read_text(encoding='utf-8')
-    proof_text = cc.PROOF.read_text(encoding='utf-8')
+    proof_text = cc.proof_only(me_text)
     open_points = len(cc.check_me(me_text) + cc.check_proof(proof_text))
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(build(me_text, proof_text, open_points), encoding='utf-8')

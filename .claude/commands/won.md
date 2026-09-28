@@ -10,7 +10,7 @@ This command never accepts an offer, starts a contract or sends a message.
 
 Read first: the job pipeline record, the saved thread, `jobs/<id>/proposal.md`
 when it exists, and the final Upwork contract, plus `context/me.md` and
-`context/proof.md`.
+the evidence sections of `context/me.md`.
 
 ## ROADMAP
 

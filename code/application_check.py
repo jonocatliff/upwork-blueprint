@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The gate for an Upwork application before the member reads it.
 
-    python3 code/application_check.py jobs/<id>/application.md [--job-title "..."] [--proof context/proof.md]
+    python3 code/application_check.py jobs/<id>/application.md [--job-title "..."] [--proof context/me.md]
 
 Counts what can be counted, on the cover letter alone (screening answers after a
 "Screening answers" heading do not count toward its length):
@@ -31,6 +31,8 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import profile_checks as pc  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import context_check
 BANNED = ('i would love to', "i'm excited", 'i am excited', 'what stood out', 'passionate',
           'results-driven', 'i want in', 'rockstar', 'ninja', 'i hope this finds you')
 RISK = ("you don't pay", 'you do not pay', 'risk-free', 'risk free', 'full refund', 'only pay',
@@ -146,12 +148,13 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('draft')
     ap.add_argument('--job-title', default='')
-    ap.add_argument('--proof', default=str(ROOT / 'context' / 'proof.md'))
+    ap.add_argument('--proof', default=str(ROOT / 'context' / 'me.md'))
     args = ap.parse_args(argv)
     text = pathlib.Path(args.draft).read_text(encoding='utf-8')
     proof = pathlib.Path(args.proof)
     fails, notes, eye, words, has_screening = check(
-        text, args.job_title, proof.read_text(encoding='utf-8') if proof.is_file() else '')
+        text, args.job_title,
+        context_check.proof_only(proof.read_text(encoding='utf-8')) if proof.is_file() else '')
     for n in notes:
         print(f'note  {n}')
     for f in fails:

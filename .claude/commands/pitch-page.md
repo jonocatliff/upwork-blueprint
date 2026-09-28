@@ -13,7 +13,7 @@ proofs, their system drawn as a diagram they can drag and edit, the short
 working-together sequence and the next step on Upwork. The Loom that walks
 through this page comes after it. The application includes a cover letter, bid and any screening answers stated in the full posting.
 
-Read first: [references/upwork.md](../../references/upwork.md) (the section on links before a contract starts), `context/me.md`, `context/proof.md`.
+Read first: [references/upwork.md](../../references/upwork.md) (the section on links before a contract starts), `context/me.md`.
 
 Before Step 1, if `jobs/<id>/pitch.html` exists, run
 `python3 code/pitch_check.py page jobs/<id>/pitch.html`. When it passes, keep
@@ -157,7 +157,7 @@ python3 code/pitch_generate.py <id> --hook "..." \
 - **Member photo:** when a real member photo is available, use it as the identity
   reference for one natural action portrait and pass the finished local asset
   with `--profile-image`. Never invent a member's likeness without that
-  reference. The proof beside it still comes only from `context/proof.md` and
+  reference. The proof beside it still comes only from the evidence sections of `context/me.md` and
   `context/me.md`.
 - Do not put a budget or speculative delivery timeline on the pitch page. The
   internal pricing guide remains in the cockpit for the member.
@@ -245,7 +245,7 @@ excited spends the whole visible part on nothing.
 
 ### What is true about you and the scope
 
-List the posting's hard requirements ("built at least 5 sub-accounts for trades", "A2P 10DLC is non-negotiable") and check each against `context/proof.md`. **A requirement your proof does not cover never becomes a claim.** If it is mandatory, ask the member whether they meet it and where that can be checked. Until resolved, save no client-facing draft. If it is a preference, name the gap for the member and draft without claiming it. Lead with the strongest relevant proof by tier; never a badge or number the member does not hold.
+List the posting's hard requirements ("built at least 5 sub-accounts for trades", "A2P 10DLC is non-negotiable") and check each against the evidence sections of `context/me.md`. **A requirement your proof does not cover never becomes a claim.** If it is mandatory, ask the member whether they meet it and where that can be checked. Until resolved, save no client-facing draft. If it is a preference, name the gap for the member and draft without claiming it. Lead with the strongest relevant proof by tier; never a badge or number the member does not hold.
 
 Separate explicit deliverables from assumptions. Before quoting a price or
 timeline, resolve the contract type, included work, dependencies, revision or
@@ -264,7 +264,7 @@ in the member's voice, with no em-dashes. Use four short blocks:
 
 1. One sentence on why the member fits this exact job and outcome.
 2. One sentence inviting the client to watch the walkthrough, with the literal [LOOM LINK] placeholder.
-3. One or two short, relevant examples from `context/proof.md`. Never stretch unrelated proof to fill space.
+3. One or two short, relevant examples from the evidence sections of `context/me.md`. Never stretch unrelated proof to fill space.
 4. One specific next question or ask on Upwork.
 
 Do not recap the posting, explain a long method, add generic praise, write a

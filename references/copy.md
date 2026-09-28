@@ -20,7 +20,7 @@ use loses the job, and that is the one thing this rule may not cost.
 
 ## Load the person and the situation
 
-Read `context/me.md` every time. Read `context/proof.md` before making any claim
+Read `context/me.md` every time. Read the evidence sections of `context/me.md` before making any claim
 about experience, results, clients, credentials or numbers. Then read the job,
 thread or call material that prompted the copy.
 

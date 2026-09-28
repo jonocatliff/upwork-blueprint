@@ -10,7 +10,7 @@ will not, how acceptance works and what the client must provide. It never sends
 or accepts anything on Upwork.
 
 Follow `references/copy.md` for every line the client will read.
-Read first: `context/me.md`, `context/proof.md`, the complete job record, the
+Read first: `context/me.md`, the complete job record, the
 saved thread and the call transcript or notes.
 
 ## ROADMAP

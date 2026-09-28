@@ -4,8 +4,8 @@
     python3 code/context_check.py [--quiet]
     python3 code/context_check.py --status
 
-/context fills context/me.md and context/proof.md. Everything after it, from the
-profile to a proposal, quotes those files, so a starter line left in place turns
+/context fills context/me.md. Everything after it, from the profile to a
+proposal, quotes that file, so a starter line left in place turns
 into "not answered yet" inside something a client reads. This counts what is
 still open and refuses a proof entry that cannot be checked.
 """
@@ -16,9 +16,12 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 ME = ROOT / 'context' / 'me.md'
-PROOF = ROOT / 'context' / 'proof.md'
 STARTER = 'not answered yet'
 EMPTY_SECTION = 'nothing recorded yet'
+# The three sections that hold evidence. Everything else in the file is what the
+# member says about themselves, which is not the same thing and must never be
+# read as if it were.
+PROOF_SECTIONS = ('Results', 'Reviews', 'Credentials')
 
 # Without these, a later command either invents the answer or stops mid-run.
 REQUIRED = (
@@ -32,6 +35,24 @@ REQUIRED = (
 )
 STATUS = re.compile(r'\b(verified|pending)\b', re.I)
 CHECKABLE = re.compile(r'(where to check|checked at|source:|https?://|upwork\.com)', re.I)
+
+
+def proof_only(text):
+    """Just the evidence sections, for anything that verifies a claim.
+
+    The draft gate looks up every number it is about to print in this text.
+    Handed the whole file it would also see the hourly rate, the applications
+    per day and the years in a CV, so an invented "40%" would pass because the
+    rate happens to be 40. Whoever checks a claim gets the evidence and nothing
+    else.
+    """
+    kept, inside = [], False
+    for line in text.splitlines():
+        if line.startswith('## '):
+            inside = line[3:].strip() in PROOF_SECTIONS
+        if inside:
+            kept.append(line)
+    return '\n'.join(kept)
 
 
 def field(text, label):
@@ -84,14 +105,14 @@ def answered(me_text):
     return sum(1 for v in values if v and STARTER not in v.lower())
 
 
-def proof_entries(proof_text):
+def proof_entries(text):
     """Proof lines the member wrote, without the starter's own instructions."""
-    return [line for _, line in entries(proof_text)
+    return [line for _, line in entries(proof_only(text))
             if EMPTY_SECTION not in line.lower() and not line.startswith('One block per')
             and line.startswith(('-', '*', '**'))]
 
 
-def status(me_text, proof_text):
+def status(text):
     """untouched, partial or complete, so /context knows which command it is.
 
     Asking a member a second time for what they already answered is the fastest
@@ -99,8 +120,8 @@ def status(me_text, proof_text):
     shipped starter is the only case where every question is new. The line is
     read by a command, so it keeps the same three words.
     """
-    filled, proofs = answered(me_text), len(proof_entries(proof_text))
-    open_points = len(check_me(me_text) + check_proof(proof_text))
+    filled, proofs = answered(text), len(proof_entries(text))
+    open_points = len(check_me(text) + check_proof(proof_only(text)))
     if not filled and not proofs:
         return 'untouched', filled, proofs, open_points
     return ('complete' if not open_points else 'partial'), filled, proofs, open_points
@@ -110,36 +131,31 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('me', nargs='?', default=ME, type=pathlib.Path,
                         help='context/me.md by default')
-    parser.add_argument('proof', nargs='?', default=PROOF, type=pathlib.Path,
-                        help='context/proof.md by default')
     parser.add_argument('--quiet', action='store_true', help='print nothing when clean')
     parser.add_argument('--status', action='store_true',
                         help='untouched, partial or complete, for the start of /context')
     args = parser.parse_args(argv)
-    if args.status:
-        missing = [p for p in (args.me, args.proof) if not p.is_file()]
-        if missing:
-            print('untouched: the context files do not exist yet. '
+    if not args.me.is_file():
+        if args.status:
+            print('untouched: the context file does not exist yet. '
                   'Run python3 code/workspace.py')
             return 0
-        state, filled, proofs, open_points = status(args.me.read_text(encoding='utf-8'),
-                                                    args.proof.read_text(encoding='utf-8'))
+        print(f'FAIL  {args.me} is missing. Run python3 code/workspace.py')
+        return 1
+    text = args.me.read_text(encoding='utf-8')
+    if args.status:
+        state, filled, proofs, open_points = status(text)
         print(f'{state}: {filled} of {len(REQUIRED)} answers, {proofs} proof entries, '
               f'{open_points} open')
         return 0
-    findings = []
-    for path, check in ((args.me, check_me), (args.proof, check_proof)):
-        if not path.is_file():
-            findings.append(f'{path} is missing. Run python3 code/workspace.py')
-            continue
-        findings += check(path.read_text(encoding='utf-8'))
+    findings = check_me(text) + check_proof(proof_only(text))
     if findings:
         for f in findings:
             print(f'FAIL  {f}')
         print(f'\n{len(findings)} open. Ask the member, never fill it in for them.')
         return 1
     if not args.quiet:
-        print('PASS: your context and proof files answer what every command needs.')
+        print('PASS: your file answers what every command needs.')
     return 0
 
 

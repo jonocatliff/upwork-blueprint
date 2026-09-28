@@ -24,6 +24,8 @@ import urllib.request
 import webbrowser
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import context_check
 sys.path.insert(0, str(ROOT / 'code'))
 import pipeline  # noqa: E402  (read-only use: load, jobs_dir)
 import application_check  # noqa: E402
@@ -65,8 +67,9 @@ def artifact_health(job):
     """Return gate-backed readiness without hiding saved drafts from the member."""
     folder = JOBS_DIR / str(job.get('id') or '')
     valid, errors = [], {}
-    proof_path = pathlib.Path(os.environ.get('BLUEPRINT_CONTEXT') or ROOT / 'context') / 'proof.md'
-    proof = proof_path.read_text(encoding='utf-8') if proof_path.is_file() else ''
+    proof_path = pathlib.Path(os.environ.get('BLUEPRINT_CONTEXT') or ROOT / 'context') / 'me.md'
+    proof = (context_check.proof_only(proof_path.read_text(encoding='utf-8'))
+             if proof_path.is_file() else '')
     for name in artifacts(str(job.get('id') or '')):
         path = folder / name
         problems = None

@@ -12,7 +12,7 @@ run from two directions: Upwork's recommendations and the member's search
 themes. Code counts client, budget and freshness signals; Claude judges fit.
 Runs only when the member runs it.
 
-Read first: [references/upwork.md](../../references/upwork.md) for what is allowed and what the connector gives you, [references/jobs.md](../../references/jobs.md) for where the work comes from and what it pays, `context/me.md` and `context/proof.md`.
+Read first: [references/upwork.md](../../references/upwork.md) for what is allowed and what the connector gives you, [references/jobs.md](../../references/jobs.md) for where the work comes from and what it pays, `context/me.md`.
 
 ## Taking a lead off the list
 
@@ -197,7 +197,7 @@ same pattern. These are downstream outcomes for saved leads, not true search
 precision: raw Upwork retrieval totals are deliberately deleted after each run.
 Never disable or rewrite a theme without the member's explicit decision.
 
-Then give every candidate a niche fit from 0 to 40 against `context/me.md` and `context/proof.md`:
+Then give every candidate a niche fit from 0 to 40 against `context/me.md`:
 
 - **35 to 40:** the center of what you sell, and your proof covers it.
 - **25 to 34:** clearly yours, one step off the center.

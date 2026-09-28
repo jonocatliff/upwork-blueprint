@@ -6,7 +6,7 @@ argument-hint: "[a CV file, a LinkedIn or portfolio URL, or focus: background | 
 # /context
 
 The first command, before the connector and before any text a client reads. It
-fills `context/me.md` and `context/proof.md`, and every later command writes from
+fills `context/me.md`, and every later command writes from
 them. Nothing here is public, and nothing is sent: it reads your own profile
 when the connector is there, and writes two local files.
 
@@ -118,7 +118,7 @@ files and sends nothing. Never wait for an install, never ask which keys they
 should buy, and never hold back the questions below because something is missing.
 
 1. Run `python3 code/workspace.py`.
-2. Read `context/me.md` and `context/proof.md`. A line reading "not answered yet"
+2. Read `context/me.md`. A line reading "not answered yet"
    is an open question, anything else is an answer to confirm, not to ask again.
 3. **When the connector is there, read the profile they already have.**
    `get_profile` action `get` saved to `data/profile.json`, `get_profile` action
@@ -337,8 +337,7 @@ with its price beside it, the rate, and what they do not do. Six lines at most.
 highest tier first. A pending claim never reaches a client, so say plainly which
 ones those are and what would move them to verified.
 
-**Where it lives.** [context/me.md](../../context/me.md) and
-[context/proof.md](../../context/proof.md), the two files every later command
+**Where it lives.** [context/me.md](../../context/me.md), the two files every later command
 reads. Name any other file this run created or changed, and say that these two
 are the member's own and are never touched by `git pull`.
 

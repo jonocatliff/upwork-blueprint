@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The gate for profile.md, the draft /profile writes, checked before a member pastes it.
 
-    python3 code/profile_draft.py check profile.md [--proof context/proof.md]
+    python3 code/profile_draft.py check profile.md [--proof context/me.md]
 
 It passes only when the draft clears the audit's mechanical checks, lands on
 Upwork's form, and every number in it can be found
@@ -17,6 +17,8 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import profile_checks as pc  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import context_check
 # Upwork cuts a title at 70 characters: a real profile's title came back from the
 # connector cut off at exactly 70 (measured 12 September 2026).
 TITLE_MAX = 70
@@ -107,7 +109,10 @@ def problems(draft, proof_text):
 def cmd_check(args):
     draft = parse(pathlib.Path(args.file).read_text(encoding='utf-8'))
     proof = pathlib.Path(args.proof)
-    proof_text = proof.read_text(encoding='utf-8') if proof.is_file() else ''
+    # Only the evidence sections. Handed the whole file, every number in it would
+    # count as a source, and an hourly rate of 40 would prove a claim of 40%.
+    proof_text = (context_check.proof_only(proof.read_text(encoding='utf-8'))
+                  if proof.is_file() else '')
     found = problems(draft, proof_text)
     for f in found:
         print(f'FAIL  {f}')
@@ -122,7 +127,7 @@ def main(argv=None):
     sub = ap.add_subparsers(dest='cmd', required=True)
     p = sub.add_parser('check')
     p.add_argument('file')
-    p.add_argument('--proof', default=str(ROOT / 'context' / 'proof.md'))
+    p.add_argument('--proof', default=str(ROOT / 'context' / 'me.md'))
     p.set_defaults(func=cmd_check)
     args = ap.parse_args(argv)
     return args.func(args)

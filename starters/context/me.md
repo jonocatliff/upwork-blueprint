@@ -1,7 +1,13 @@
 # Who you are on Upwork
 
-Your facts, in your words. Every command reads this before it writes anything for you.
+Your facts, in your words, and every result you can back up. Every command reads
+this before it writes anything for you.
 Last verified: not yet. Next: run /context, it fills this in with you.
+
+Two halves, and the line between them matters. Everything down to "Job search
+tracks" is what you say about yourself. The three sections after it are what you
+can prove, and only those are read when a claim needs backing: a number in your
+profile is checked against them and nowhere else.
 
 ## Your background
 
@@ -42,3 +48,15 @@ decision easy, use concrete commitments, and never pressure the client.
 ## Job search tracks
 
 Not set yet. /find-jobs proposes them from your profile the first time it runs. One short line each, a tool or role a client would put in a job title.
+
+## Results
+
+Nothing recorded yet. One block per result: what you did, for whom (or what kind of client), the number, where it can be checked, the date, and verified or pending.
+
+## Reviews
+
+Nothing recorded yet. One block per review: the client's words, the job, the rating. /context collects them with you.
+
+## Credentials
+
+Nothing recorded yet. Certificates, tools you are certified in, years of experience, with the date.

@@ -81,7 +81,7 @@ use.
 
 Everything below is yours and gitignored, so `git pull` never touches it.
 
-- `context/me.md` and `context/proof.md` - who you are and what you can back up
+- `context/me.md` - who you are and what you can back up
 - `profile.md` - the profile to paste, written against what is live today
 - `data/jobs.json` - your pipeline, written only by `code/pipeline.py`
 - `jobs/<id>/` - one folder per job: the pitch page, the application, the audit,
@@ -107,7 +107,11 @@ Upwork yet. The reasoning and the source are in
 Stuck? Open an issue on the repository, or ask in the community you got this
 from. Include what you ran and what it printed; both are usually enough.
 
-What in here is not ours, and under which licence, is listed in
-[references/attribution.md](references/attribution.md). Everything else is the
-author's: it ships to members to use in their own freelancing, not to republish or
-resell.
+Three things in here are not ours. The tool logos in `templates/pitch/logos/`
+come from Simple Icons under CC0; brand marks stay their owners' property and
+only name a tool a client already runs. The diagram look in
+`templates/pitch/diagram.js` follows the design system of diagram-design by
+Cathryn Lavery, MIT licence, with no code copied from it. The ink drawing behind
+the pitch page headline comes from the automatable.co landing page, used with
+permission. Everything else is the author's: it ships to members to use in their
+own freelancing, not to republish or resell.

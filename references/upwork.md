@@ -53,17 +53,16 @@ Checked 12 September 2026 against Upwork's help center, as quoted by the search 
 - **Meetings run on Upwork's own video calls** until the contract starts. [Can I share my own communication tools?](https://support.upwork.com/hc/en-us/articles/40444093133331-Can-I-share-my-own-communication-tools-like-email-or-meeting-links)
 - **Exception:** if you or the client is on an Enterprise plan, contact details may be shared before a contract.
 
-### API eligibility does not settle automation permission
+### The API key is a different door, and not the one we use
 
-Upwork's API-key application lists these eligibility criteria:
+Upwork's own API requires an application with earnings and score thresholds
+attached. None of that applies here: the connector is a separate, official route
+that any freelancer account can log into, and no threshold gates it. A member
+reading about $25,000 lifetime earnings somewhere and concluding they cannot use
+this is reading about something else.
 
-- $25,000 lifetime earnings
-- Job Success Score of 90% or higher
-- Identity verified, payment method, profile photo, account in good standing
-
-Plus: *"Upwork API is available for personal and internal use only. Commercial use isn't supported."* This repo hosts nothing and holds no one's login: every member uses the official connector in their own Claude Code, for their own account.
-
-Meeting those criteria may make an account eligible to apply for a key. It does not by itself authorize unattended automation, commercial use or any particular write. This Blueprint remains local and member-started regardless of earnings.
+The repo hosts nothing and holds no one's login. Every member runs the connector
+in their own Claude Code, for their own account.
 
 ### The open contradiction, stated rather than resolved
 

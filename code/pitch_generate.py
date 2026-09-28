@@ -35,6 +35,8 @@ import sys
 from pipeline import jobs_dir
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import context_check
 ASSETS = ROOT / 'templates' / 'pitch'
 TEMPLATE = ASSETS / 'template.html'
 DIAGRAM_JS = ASSETS / 'diagram.js'
@@ -42,7 +44,7 @@ LOGO_DIR = ASSETS / 'logos'
 DITHER = ASSETS / 'ink-plume.png'
 REPORT_COVER = ASSETS / 'report-cover-example.jpg'
 PIPELINE = ROOT / 'code' / 'pipeline.py'
-PROOF = ROOT / 'context' / 'proof.md'
+PROOF = ROOT / 'context' / 'me.md'
 ME = ROOT / 'context' / 'me.md'
 VIDEOS = ROOT / 'context' / 'videos.json'
 PROFILE = ROOT / 'data' / 'profile.json'
@@ -492,7 +494,8 @@ def main(argv=None):
     args = ap.parse_args(argv)
 
     job = load_job(args.job_id)
-    proof_text = PROOF.read_text(encoding='utf-8') if PROOF.is_file() else ''
+    proof_text = (context_check.proof_only(PROOF.read_text(encoding='utf-8'))
+                  if PROOF.is_file() else '')
     me_text = ME.read_text(encoding='utf-8') if ME.is_file() else ''
     diagram_data, diagram_fallback = build_graph(args.graph)
     url = profile_url()

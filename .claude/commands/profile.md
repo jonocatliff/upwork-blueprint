@@ -13,7 +13,7 @@ This command does both halves of the job: it measures what is live today, then
 writes the version that fixes what it found. Measuring without writing is
 `/profile audit`.
 
-Read first: [references/profile.md](../../references/profile.md), which holds every field, what finishes it, the filters a client can close and how strong profiles are actually written; [references/upwork-method.md](../../references/upwork-method.md) for the rules every draft follows; and the profile sections of [references/upwork.md](../../references/upwork.md) for what the connector may write. Then `context/me.md`, `context/proof.md` and `data/profile.json`.
+Read first: [references/profile.md](../../references/profile.md), which holds every field, what finishes it, the filters a client can close and how strong profiles are actually written; [references/upwork-method.md](../../references/upwork-method.md) for the rules every draft follows; and the profile sections of [references/upwork.md](../../references/upwork.md) for what the connector may write. Then `context/me.md` and `data/profile.json`.
 
 **Focus:** $ARGUMENTS. `audit` measures and stops, writing nothing. Any other
 focus writes only that section of `profile.md` and leaves the rest as it is.
@@ -96,7 +96,7 @@ what each fix is worth. Write no file. Next step: `/profile` without the focus.
 
 ## Step 3 · Read your facts
 
-`context/me.md` and `context/proof.md` hold the background, the offer, the terms
+`context/me.md` hold the background, the offer, the terms
 and every result the member can back up. `/context` writes them; this command
 writes copy and interviews nobody.
 
