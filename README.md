@@ -22,12 +22,12 @@ first time you run it. The setup script only saves you those interruptions.
 |------|---------|--------------|
 | 1 | `/context` | Your work history, your offer, your terms and every result you can prove |
 | 2 | `/profile` | Measures your live profile, then writes the version that fixes it |
-| 3 | `/find-jobs` | Finds and scores the jobs worth your Connects, straight into your cockpit |
+| 3 | `/find-jobs` | Ten leads a day worth applying to, scored against what you sell, straight into your cockpit |
 | 4 | `/pitch-page` | A one-page pitch site plus the cover letter and bid you submit with your Loom |
 | 5 | `/brief` | Your morning: what changed on Upwork, where every lead stands, and the messages that are due |
 | 6 | `/lead-magnet` | A checked SEO audit once a local business sends its website |
-| 7 | `/proposal` | Turns your sales call into the proposal you send on Upwork |
-| 8 | `/won` | Turns a started contract into the handover brief for delivery |
+| 7 | `/proposal` | Turns your sales call into the proposal you send, and says whether it is ready to start a project on |
+| 8 | `/won` | Turns a started contract into the handover brief and the onboarding. Run it again after delivery to record what came out of it |
 
 Step 1 runs before the connector and before you have any profile at all. No
 Upwork profile yet is the normal starting point here, not a problem to fix.
