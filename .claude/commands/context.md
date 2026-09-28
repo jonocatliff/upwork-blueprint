@@ -10,12 +10,11 @@ fills `context/me.md`, and every later command writes from
 them. Nothing here is public, and nothing is sent: it reads your own profile
 when the connector is there, and writes two local files.
 
-Follow `references/copy.md` for how to ask. The ten working rules in
-[references/upwork-method.md](../../references/upwork-method.md) decide what counts as
-proof and what stays a question. Read
+Follow `references/copy.md` for how to ask. Read
 [references/profile.md](../../references/profile.md) first: it says which facts
-carry weight, so the questions stay in that order, and what holds up for a member
-starting from zero.
+carry weight, so the questions stay in that order, what has to be on the table
+before a profile can be written, and what holds up for a member starting from
+zero.
 
 **What this is for.** Two things, and every question only makes sense against
 them. The first is to learn this person's history on two levels at once. The
@@ -242,11 +241,13 @@ the only one here a member may want to think about. Points 2 and 3 are one
 question, and point 4 usually needs none at all, because this conversation has
 already shown how they write.
 
-1. **Hourly rate**, and the smallest project worth taking. Propose a band from
-   [references/jobs.md](../../references/jobs.md) for their
-   discipline and the experience level a client would pick, say where inside it
-   you put them and why, and name what would move them up. There is no
-   evidence that a low rate wins work, so never talk them down to compete.
+1. **Hourly rate**, and the smallest project worth taking. Ask what they have in
+   mind rather than proposing a figure: a rate invented here is a number they
+   have to defend on a call. Where they have no idea yet, the rule in
+   [references/jobs.md](../../references/jobs.md) says how to place one, and the
+   two pages linked there carry the current market figures. There is no evidence
+   that a low rate wins work, so never talk them down to compete, and never apply
+   a discount for where somebody lives.
 2. **Timezone and the hours** they answer messages.
 3. **Applications per day** they can really carry.
 4. **How they want to sound**: the default is an approachable, professional sales

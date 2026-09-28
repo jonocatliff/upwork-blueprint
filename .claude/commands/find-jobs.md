@@ -50,9 +50,8 @@ for, the problem words, and the industries they have actually worked in. When th
 direction is still open, cover two candidate lanes rather than one. Then one call per
 term, `limit` 10, `sort` `recency`, and **no window filter**, because the point is
 density, not freshness. Measure them with Step 3a, and report per term what it costs in
-Connects, what the postings pay against the bands in
-[references/jobs.md](../../references/jobs.md), and how many ask for
-entry level.
+Connects, what the postings pay against the member's own rate in `context/me.md`,
+and how many ask for entry level.
 
 Close the first run by writing the three to five terms that survived under "Job search
 tracks" in `context/me.md`, each with its verdict and the date, and by naming the lane

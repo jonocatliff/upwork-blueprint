@@ -110,8 +110,8 @@ resolving it by hand. The commands call `python3`; on Windows `python` or `py`.
 
 - `.claude/commands/` - the nine entry points, the only way in
 - `code/` - every script, `pipeline.py` the one writer
-- `references/` - nine topics, one per area; read the folder before
-  claiming it lacks something
+- `references/` - seven topics, one per area, and nothing in them that a command
+  does not act on; read the folder before claiming it lacks something
 - `templates/` - the pitch page, the audit report and the proposal
 - `cockpit/` - the read-only dashboard · `starters/` - the empties
 - `RESEARCH.md` - what we know about Upwork that this system does not act on:

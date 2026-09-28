@@ -22,7 +22,6 @@ import urllib.request
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PROJECT_RE = re.compile(r'^[a-z0-9][a-z0-9-]{0,99}$')
 HOST_RE = re.compile(r'^[a-z0-9][a-z0-9.-]*\.vercel\.app$')
-URL_RE = re.compile(r'https://[a-z0-9][a-z0-9.-]*\.vercel\.app(?:/[^\s]*)?', re.IGNORECASE)
 
 
 def abort(message):
@@ -81,14 +80,6 @@ def auth_args(config):
     if config['token']:
         args += ['--token', config['token']]
     return args
-
-
-def deployment_url(output, fallback=''):
-    """Prefer the CLI's stdout URL over progress and alias URLs on stderr."""
-    urls = URL_RE.findall(output or '') or URL_RE.findall(fallback or '')
-    if not urls:
-        abort('Vercel finished without returning a deployment URL.')
-    return urls[-1].rstrip('/')
 
 
 def write_site(folder, pages, current_id):

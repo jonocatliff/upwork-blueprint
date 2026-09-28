@@ -128,11 +128,6 @@ def member_search_themes():
     return themes
 
 
-def member_tracks():
-    """Legacy label list retained for scripts that only need theme names."""
-    return [theme['label'] for theme in member_search_themes()]
-
-
 def source_matches_theme(source, theme):
     """Match current query slugs and the older per-term search file names."""
     source = str(source or '').lower()

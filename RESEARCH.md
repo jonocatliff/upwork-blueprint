@@ -101,6 +101,12 @@ answered, the average bids, and the top skills of the competition (article 34019
 
 ### What does not exist
 
+**[Upwork documented] Upwork refuses to explain its ranking.** Asked how profiles are ranked, Upwork
+answers that revealing it "could make it easier for some users to artificially boost their rankings".
+It names only platform-generated data such as completed projects and client feedback, plus the
+freelancer's own service descriptions. **The old article on how profiles are ranked returns 404**, so
+the refusal is now the whole documented answer.
+
 **[Upwork documented, absence checked on article 211062968] There is no search-appearances number.**
 Impressions exist only inside a paid boost, so a member cannot see whether a profile change moved
 them in the search results at all. Anyone selling a service that promises to show search appearances
@@ -128,6 +134,9 @@ The platform still fixes the shape of any honest test:
 
 **[Upwork documented]** Upwork's own **Skill Certifications are discontinued**; the ones already
 earned stay visible (article 360052720974).
+
+**[Upwork documented] Testimonials are closed.** Upwork no longer accepts new testimonial requests
+(article 1500002004322), so a member outside the platform cannot collect one to fill a thin profile.
 
 **Partner Certified Talent is the one with a hard number.** Upwork partners with MindStudio, Podium
 Education and Webflow, calls the certifications "often free or discounted", grants **150 free
@@ -218,13 +227,32 @@ Connects are charged either way.
 **[Practitioner]** The "placebo auction" story that circulates in communities appears in no Upwork
 source; treat it as rumour. Upwork's own claimed boost effect has moved from 37 and 43% in beta, to
 55% in 2023, to "up to 24%", always relative and never against a stated baseline, which on a reply
-rate near 4% is small either way.
+rate near 4% is small either way. **The 24% belongs to boosted proposals, not boosted profiles**: for
+a boosted profile Upwork promises only "may help you gain increased visibility" and publishes no
+number at all.
+
+**[Upwork documented] The availability badge is sold on a number that does not hold still.** The page
+claims "up to 70%" more job invites while indexed snippets of the same page still say 50%, which
+makes it marketing rather than measurement, and Upwork states in its own FAQ that the badge does
+**not** change search position
+(`support.upwork.com/hc/en-us/articles/40368040805907`).
 
 **[Practitioner] The counter-case.** One freelancer reports **$600,000 earned without buying a
 single Connect or boost** (Morgan Overholt,
 `morganoverholt.com/editorials/get-first-job-on-upwork/`). She also documents her own start: **13
 applications in under two weeks, a first job worth $10, and $6,000 a month after three months**, by
 delivering the work before the client agreed to hire.
+
+**[Practitioner] The one paid-feature test anybody published.** The same freelancer ran **30
+proposals in April 2024** and reported the split (`morganoverholt.com/upwork/upwork-paid-features/`):
+
+- Her baseline was **50% of proposals viewed, 20% replies, 10% hires**.
+- The week she carried the **availability badge, views dropped to 20%**.
+- **Boosted proposals reached 80% views**, at **$32.70 in Connects across ten applications**.
+- A **boosted profile changed almost nothing and drew zero invitations**.
+
+One person, 30 data points, two years old. It is indicative and not transferable, and it is still the
+only before-and-after on Upwork's paid features with numbers attached.
 
 **Application volume against profile quality has no beginner data at all.** Nobody should imply that
 it does.
@@ -392,8 +420,45 @@ postings under five proposals and calls that a scrape artifact itself. The one m
 - **The "30% more views from an intro video" page** cannot be opened either, and nothing else
   supports the number.
 - **The "placebo auction"** for Boost appears in no Upwork source.
-- **Specialized profiles for visibility** was overtaken by the platform: the feature is gone and
-  Upwork states the removal did not change rankings.
+- **Specialized profiles for visibility** was overtaken by the platform. **[Upwork documented]**
+  Specialized profiles were **removed on 28 May 2026**, their titles, overviews and skills deleted
+  for good, and Upwork states the rankings did not change (article 115013750068). One profile, one
+  direction. Blogs calling the removal a new "profile dilution" gatekeeper contradict Upwork, and
+  neither side measured anything.
+
+## The three profile samples, and what each is allowed to say
+
+**[Measured]** Everything this system knows about how a working profile is written comes from three
+samples read through the Upwork connector. **They must never be merged.** "3 of 3 top earners" and
+"12 of 16 arbitrary profiles" are different claims, and a finding that does not name its sample means
+nothing.
+
+- **3 top earners**, pulled **14 August 2026**: three high-earning profiles, **$295,000 to
+  $1,090,000 earned**, two of them Top Rated Plus, plus one practitioner's bio formula. Practitioner
+  evidence rather than Upwork documentation, and three profiles do not prove the pattern caused the
+  earnings.
+- **16 cross-section**, read **26 September 2026**: sixteen public profiles, **four per lane**
+  (GoHighLevel and CRM, Make and n8n, AI chatbots and agents, WordPress). Badges from none to Top
+  Rated Plus, earnings **$80 to $200,000**, rates **$6 to $50**. A candidate sample, not a ranking:
+  without a client account there is no way to filter by earnings or Job Success. No text was copied,
+  because a member who copies a sentence competes with everyone else who copied it.
+- **10 postings**, **26 September 2026**: the ten newest GoHighLevel postings, counted for their
+  `skills` arrays.
+
+### What those overviews actually do with the reader
+
+**[Measured, 16 cross-section]** The perspective rule every guide repeats, hook in "you", middle in
+"I", close back in "you", is not what the text does. Measured as a share of the overview, roughly
+**15% is the reader's problem, 70% the freelancer's own abilities, and 10% the reader again**, and
+**only two of the sixteen hold the reader's side throughout**. The advice describes the exception
+rather than the sample.
+
+### The exception that argues against the house style
+
+**[Measured, 16 cross-section]** The two highest earners in that sample, at **$100,000 and $200,000
+plus**, write real prose: **25 to 40 words per sentence and almost no emoji**. The checkmark lists
+correlate with the lower earnings instead. Sixteen profiles cannot show which way the causation runs,
+and the list is still what a beginner reaches for first.
 
 ## Four numbers that lived nowhere else
 
@@ -412,3 +477,66 @@ Maker School evidence snapshot of 26 September 2026.
 - **The monthly posting scrape is published** at
   `upwork.redwaterrev.com/report/2026-08`. Every rate distribution in the section
   above that names August 2026 comes from that page. [Measured, third party]
+
+## One connector observation that contradicts a popular claim
+
+A masterclass source claims that clients with no spending history pay better,
+on the theory that they do not yet know the going rate. One day of connector
+data, 26 September 2026, points the other way. The cheapest GoHighLevel
+postings came from clients with no spending history at all, while the single
+posting offering $40 to $90 came from a client with about $20,000 of history.
+Ten postings on one day is no more proof than the claim it argues with, and
+both sides stay unmeasured. [Measured, tiny sample]
+
+## What Upwork says about automation
+
+Measured 14 August 2026 from Upwork's own pages, links checked 12 September 2026.
+The operating rules this produced live in `references/upwork.md` as constraints
+without this reasoning behind them. The reasoning is here.
+
+**Unattended automation is prohibited.** Upwork names two things verbatim as
+grounds for enforcement: "Using OAuth2 tokens or session cookies from a browser
+or an official client in a script or bot", and "Exceeding rate limits or running
+background polling that resembles scraping".
+[Source](https://support.upwork.com/hc/en-us/articles/43342677368467-Use-bots-and-other-automation-properly)
+Two approaches that would technically work are therefore out: copying a Claude
+Code login into another runner, and polling on a schedule. [Upwork documented]
+
+**The published limits contradict each other.** Ten requests per second per IP,
+then HTTP 429
+([support](https://support.upwork.com/hc/en-us/articles/115015933428-What-are-the-API-requests-limits)),
+against 300 per minute
+([developer docs](https://www.upwork.com/developer/documentation/graphql/api/docs/index.html)),
+which is a factor of two apart. 40,000 per day, confirmed in the API-key
+application. Responses may be cached 24 hours at most. Both smaller numbers are
+Upwork's own, so assume the stricter. [Upwork documented]
+
+**The pattern matters as much as the volume.** "Polling that resembles scraping"
+is a behavioural judgement with no documented threshold. No request count makes
+unattended polling acceptable, which is why a human starting every run is the
+rule rather than a call budget. [Upwork documented]
+
+**Contact details before a contract can cost the account.** Sharing them, or
+asking for them, "before a contract starts is against our Terms of Service, and
+may result in temporary restrictions, loss of talent badges, or permanent loss of
+account access". A link to your own work is allowed if you ask the client to keep
+contact on Upwork, so a linked page may carry no way to reach you.
+[Source](https://support.upwork.com/hc/en-us/articles/360051749534-How-to-keep-your-contact-information-safe-on-Upwork)
+Exception: on an Enterprise plan, either side may share contact details earlier.
+[Upwork documented]
+
+**One contradiction nobody here can resolve.** The connector's own tool
+description exposes a `set_tool_permission` switch with an `always_allow` value
+and calls it useful for automated flows. That is a technical permission setting,
+not policy approval for unattended use. Two Upwork sources, two directions.
+Anyone intending to run something unattended has to ask Upwork support and write
+the answer down. [Upwork documented, unresolved]
+
+**An open question about this system itself.** Upwork's connector guidance asks a
+member to check with support before scheduled activity, AI filtering or scoring of
+results, storing connector output, hosted clients, or chaining several tools into
+one flow. Two of those describe what the Blueprint does: `/find-jobs` scores
+postings with a model, and `pipeline.py` stores connector output until prune
+expires it. A human starts every run and nothing is scheduled, which was the part
+to be careful about. The rest is unanswered. Recorded 26 September 2026, Maker
+School evidence snapshot, source R21. [Upwork documented, unanswered]
