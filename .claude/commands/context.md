@@ -93,26 +93,30 @@ argument skips this question and goes straight to that block.
 
 ## Step 0 · The machine, then what already exists
 
-This is the first command a member runs, so it is also the only place where a
-half-installed machine gets noticed. Run `./setup.sh` yourself (it is safe to run
-again at any time: it creates missing files, never overwrites) and read its gap
-list. Then **do not paste the list**. Walk it by when each item first matters:
+This is the first command a member runs, so it is the one place where the state
+of their machine gets named before it costs them a run halfway through.
 
-- **Nothing here blocks this command.** `/context` writes two local files and
-  touches no service. Say that first, so a member with an empty `.env` keeps going.
-- **The connector is the only thing needed for step 2.** `setup.sh` cannot do it:
-  the folder ships it in `.mcp.json`, so Claude asks to trust it on the next start
-  here; approve, then `/mcp`, pick upwork and log in. Name it now, because
-  `/audit` stops without it.
-- **Node and the Python packages** are needed at `/pitch-page` and `/lead-magnet`,
-  not today. Give the one command per gap, in the order the gap list prints.
-- **The API keys cost money and are needed at step 7 at the earliest.** Tell them
-  what each one buys and that the cheapest start is DataForSEO's free credit;
-  a missing `OPENAI_API_KEY` only turns two chapters into "not measured".
+Run `./setup.sh` (safe at any time: it creates missing files, never overwrites),
+then `python3 code/tools_status.py`. Then check the Upwork connector yourself.
+Its tools are either in this session or they are not, and that is the one line
+the script cannot fill in, because no process on this machine can see it.
 
-One sentence per gap, then start Step 1. Never wait for an install here, never ask
-the member to choose which keys to buy, and never withhold the questions below
-because something is missing.
+Show the member what came back, in this order and in their words:
+
+- **What is ready**, as one line with the names in it. They do not need the
+  detail of something that already works.
+- **What is missing**, one line each: what it would buy them, which command wants
+  it, and what happens without it. Say that every one of these can be skipped,
+  and that skipping costs exactly the one thing named beside it.
+- **The Upwork connector**, last and on its own, because it is the only entry
+  nothing replaces. `/audit`, `/find-jobs` and `/brief` stop without it. To
+  connect: `/mcp`, pick upwork, log in, then restart Claude Code. Connecting
+  without the restart looks fine and leaves the connector invisible, which is the
+  one mistake here that throws no error.
+
+Then say plainly that none of it blocks this command: `/context` writes two local
+files and touches no service. Never wait for an install, never ask which keys they
+should buy, and never hold back the questions below because something is missing.
 
 1. Run `python3 code/workspace.py`.
 2. Read `context/me.md` and `context/proof.md`. A line reading "not answered yet"
@@ -138,11 +142,14 @@ a pasted LinkedIn profile answers most of this in one go, so the first thing thi
 command says is a question: is there a file, and where, or paste the text
 straight into the chat. Then wait.
 
-**Search nothing.** Do not list, glob or grep the member's disk, their home
-folder, their Documents or their Downloads for something that might be a CV.
-Their machine is not this command's to read. Open exactly the one path they
-name, nothing beside it, and if they name none, ask the four questions below
-instead. A URL: fetch it once; LinkedIn and most profile pages sit behind a login
+**Do not go looking on your own.** Until they answer, open nothing outside this
+repository: no listing, globbing or grepping their folders on the chance a CV is
+in one. If they send you looking, look. "Somewhere in my Documents" is
+permission, and searching is then the useful thing to do, so offer it when they
+are unsure where the file sits. Do not say any of this out loud: a member asking
+to be interviewed does not need a speech about who owns their disk.
+
+A URL: fetch it once; LinkedIn and most profile pages sit behind a login
 and return nothing, so ask for the paste rather than guessing what is on it.
 Never invent an employer, a title or a year that the material does not carry.
 

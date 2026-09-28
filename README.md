@@ -58,6 +58,13 @@ from.
 - The Vercel CLI and a Vercel login or `VERCEL_TOKEN` for public pitch pages
 
 `./setup.sh` checks all of this and tells you what is still missing, per command.
+`python3 code/tools_status.py` prints the same list from the other side: every
+tool whether it is there or not, what each one buys you, and what you lose by
+skipping it. `/context` shows you both on your first run, so nothing on this list
+has to be settled before you start.
+
+Only the Upwork connector has no substitute. Everything else is optional and
+costs exactly the one thing named beside it.
 
 ## What it costs to run
 

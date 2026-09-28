@@ -132,6 +132,12 @@ def kie_error(env, *, fetch=get_json):
     return ''
 
 
+def last_line(text):
+    """The account name, past the CLI's own banner line."""
+    lines = [line.strip() for line in str(text or '').splitlines() if line.strip()]
+    return lines[-1] if lines else ''
+
+
 def vercel_error(env, *, which=shutil.which, runner=subprocess.run, ensure_project=True):
     vercel = which('vercel')
     if not vercel:
@@ -144,6 +150,19 @@ def vercel_error(env, *, which=shutil.which, runner=subprocess.run, ensure_proje
     who = runner([vercel, 'whoami', *options], env=config['env'], capture_output=True, text=True)
     if who.returncode or not who.stdout.strip():
         return 'Vercel authentication failed. Log in or add a valid VERCEL_TOKEN.'
+    # A token always beats the account behind `vercel login`, and nothing says so
+    # while it works: a stale one publishes a client's page into a stranger's
+    # Vercel and reports success. A token for a team is legitimate, and that case
+    # names its team in VERCEL_SCOPE, so only the silent mismatch stops the run.
+    if str(config['env'].get('VERCEL_TOKEN') or '').strip() and not str(
+            config['env'].get('VERCEL_SCOPE') or '').strip():
+        login = runner([vercel, 'whoami'], capture_output=True, text=True)
+        named = last_line(who.stdout)
+        signed_in = last_line(login.stdout) if not login.returncode else ''
+        if signed_in and named and signed_in != named:
+            return (f'your VERCEL_TOKEN publishes as {named}, but vercel login is {signed_in}. '
+                    f'The token wins, so a client page would land in that account. Remove '
+                    f'VERCEL_TOKEN to use your login, or set VERCEL_SCOPE if {named} is meant.')
     inspect = runner([vercel, 'project', 'inspect', config['project'], *options],
                      env=config['env'], capture_output=True, text=True)
     if not inspect.returncode:

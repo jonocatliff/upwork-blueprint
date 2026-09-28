@@ -1,7 +1,22 @@
 # Upwork copy
 
 Write as the member whose files are in this repository. These rules travel with
-the Blueprint and has no dependency on a personal or global voice skill.
+the Blueprint and have no dependency on a personal or global voice skill.
+
+## Which language
+
+**English, unless the reader is a client who writes something else.** Everything
+this system says to the member is English: the chat, the reports, `profile.md`,
+their two context files and every file they open. The Blueprint ships in English
+and its rules are written in English, so a member working in another language
+still reads their own tooling in the one the repository speaks. A member who
+writes to Claude in German gets an English answer, and that is deliberate.
+
+Client-facing copy follows the client instead. A job posted in German gets a
+German cover letter, a German thread gets German replies, and the audit follows
+[lead-magnet-language.md](lead-magnet-language.md), which starts in English and
+switches when the business does. Answering a client in a language they did not
+use loses the job, and that is the one thing this rule may not cost.
 
 ## Load the person and the situation
 
@@ -31,8 +46,9 @@ Write as a sales expert who is approachable and professional:
 - Give the recipient an easy, specific way to answer.
 - Use plain language and only commitments the member approved. Omit claims that
   the proof file cannot support.
-- Match the language and formality of the conversation. Preserve the member's
-  stated preferences from `context/me.md`.
+- Match the language and formality of the client's own messages, as the language
+  rule above sets out. Preserve the member's stated preferences from
+  `context/me.md`.
 
 For an application, answer the client's actual requirements in the order that
 helps them decide. Use the shortest complete shape the job supports. A list,
