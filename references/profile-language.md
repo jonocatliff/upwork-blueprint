@@ -106,6 +106,6 @@ profile in a search that does it.
 
 Two of sixteen claim "Top Rated" or "100% Job Success" or "250+ clients" in their
 overview text while the connector's own aggregate shows no badge and ten or five
-completed jobs. **A badge named in an overview is not evidence.** `/audit` judges the
+completed jobs. **A badge named in an overview is not evidence.** `/profile` judges the
 real badge and aggregate, never the sentence, and `/profile` never writes a claim this
 member cannot back with its own file.

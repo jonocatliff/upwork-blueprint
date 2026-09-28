@@ -14,14 +14,14 @@ voice skill from outside this repo and never insert the builder's identity.
 
 ## The path
 
-`/context` · `/audit` · `/profile` · `/find-jobs` · `/pitch-page` · `/brief` ·
+`/context` · `/profile` · `/find-jobs` · `/pitch-page` · `/brief` ·
 `/lead-magnet` · `/proposal` · `/won`, plus the helper `/cockpit`. A lead the
 member rejects leaves through `/find-jobs skip <id> <reason>`, which calls Upwork
 not at all. What each does is in its own frontmatter and, for the member, in
 `README.md`.
 
-`/audit` needs nothing but the connector. Everything after `/context` reads the
-member's two files. A focus argument runs only that part, at full depth; an input
+`/profile` measures the live profile before it writes one, so it needs the
+connector. Everything after `/context` reads the member's two files. A focus argument runs only that part, at full depth; an input
 matching no listed focus value gets that list and a question.
 
 ## The Upwork rules (CRITICAL, they protect the member's account)
@@ -108,7 +108,7 @@ The member's own files are gitignored and listed in `README.md`; `git pull` neve
 touches them. A conflict means something of theirs got tracked: say so rather than
 resolving it by hand. The commands call `python3`; on Windows `python` or `py`.
 
-- `.claude/commands/` - the eleven entry points, the only way in
+- `.claude/commands/` - the nine entry points, the only way in
 - `code/` - every script, `pipeline.py` the one writer
 - `references/` - nineteen topics plus `upwork-facts.json`; read the folder before
   claiming it lacks something

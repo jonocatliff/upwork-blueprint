@@ -282,8 +282,8 @@ def check_self_contained():
 
 
 def check_command_set():
-    """The nine commands of the path plus the one helper, and nothing else."""
-    expected = {'audit', 'brief', 'cockpit', 'context', 'find-jobs', 'lead-magnet',
+    """The eight commands of the path plus the one helper, and nothing else."""
+    expected = {'brief', 'cockpit', 'context', 'find-jobs', 'lead-magnet',
                 'pitch-page', 'profile', 'proposal', 'won'}
     found = {p.stem for p in COMMANDS.glob('*.md')}
     findings = [f'command missing: /{name}' for name in sorted(expected - found)]

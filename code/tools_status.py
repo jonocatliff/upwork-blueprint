@@ -69,7 +69,7 @@ def rows(env):
     return [
         ('Upwork connector', 'ask-claude', 'required',
          'reads your profile and the job market',
-         '/audit, /find-jobs, /brief', 'nothing replaces it, and only you can connect it'),
+         '/profile, /find-jobs, /brief', 'nothing replaces it, and only you can connect it'),
         ('Node.js', shutil.which('node') is not None, 'optional',
          'runs the cockpit and builds the report template',
          '/cockpit, /lead-magnet', 'install from nodejs.org, or work from the chat'),

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Mechanical checks on an Upwork profile: the half of an audit that needs no judgement.
 
-Reads the two connector responses /audit saves, runs every check that can be
+Reads the two connector responses /profile saves, runs every check that can be
 decided by counting, and prints the result. /profile later runs the same checks
 on its drafts, so "better" means the same thing before and after.
 

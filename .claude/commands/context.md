@@ -7,7 +7,8 @@ argument-hint: "[a CV file, a LinkedIn or portfolio URL, or focus: background | 
 
 The first command, before the connector and before any text a client reads. It
 fills `context/me.md` and `context/proof.md`, and every later command writes from
-them. Nothing here touches Upwork and nothing here is public.
+them. Nothing here is public, and nothing is sent: it reads your own profile
+when the connector is there, and writes two local files.
 
 Follow `references/copy.md` for how to ask. The ten working rules in
 [references/upwork-method.md](../../references/upwork-method.md) decide what counts as
@@ -109,29 +110,43 @@ Show the member what came back, in this order and in their words:
   it, and what happens without it. Say that every one of these can be skipped,
   and that skipping costs exactly the one thing named beside it.
 - **The Upwork connector**, last and on its own, because it is the only entry
-  nothing replaces. `/audit`, `/find-jobs` and `/brief` stop without it. To
+  nothing replaces. `/profile`, `/find-jobs` and `/brief` stop without it. To
   connect: `/mcp`, pick upwork, log in, then restart Claude Code. Connecting
   without the restart looks fine and leaves the connector invisible, which is the
   one mistake here that throws no error.
 
 Then say plainly that none of it blocks this command: `/context` writes two local
-files and touches no service. Never wait for an install, never ask which keys they
+files and sends nothing. Never wait for an install, never ask which keys they
 should buy, and never hold back the questions below because something is missing.
 
 1. Run `python3 code/workspace.py`.
 2. Read `context/me.md` and `context/proof.md`. A line reading "not answered yet"
    is an open question, anything else is an answer to confirm, not to ask again.
-3. Read `data/profile.json` when it exists: the profile text, the skills, the
-   aggregates. A result already claimed there is a question to verify, with the
-   source "self-authored Upwork profile, <date>".
-   Do not promote it to verified proof merely because it was already public.
-4. When the Upwork tools happen to be connected, `list_contracts` action
-   `search` on closed contracts names what clients hired the member for. Skip it
-   without a word when they are not: this command runs before the connector.
-   Nothing from that answer is saved as a file. What the member confirms about
-   their own history goes into `context/proof.md` as their record, the way a CV
-   entry would, and the response itself is not kept, so there is nothing for
-   `prune` to expire and no cached Upwork content sitting on disk.
+3. **When the connector is there, read the profile they already have.**
+   `get_profile` action `get` saved to `data/profile.json`, `get_profile` action
+   `list_highlights` to `data/highlights.json`, and `list_contracts` action
+   `search` on closed contracts, which names what clients actually hired them
+   for. Three calls, and `/profile` reuses these files for a day rather than
+   paying for them twice.
+
+   This is material for the interview, not a shortcut past it. Somebody who has
+   written a profile has already decided what they sell, and asking them from
+   zero wastes their time and loses what they got right. Say what is there in a
+   few lines and ask what has changed since, rather than starting at nothing.
+
+   **Nothing in it is proof.** A result the member claimed in their own profile
+   is a question to verify, recorded with the source "self-authored Upwork
+   profile, <date>". Only what they confirm, with somewhere to check it, becomes
+   verified. A contract title proves they were hired, never that a number
+   happened.
+
+   Skip all three without a word when the tools are not connected: this command
+   runs before the connector and never waits for one.
+4. **Two answers no Upwork response carries**, measured 12 September 2026: the
+   Job Success Score and whether they have an intro video. Neither the profile
+   nor the dashboard nor the contract list returns them, and `/profile` needs
+   both. Ask them here, in the terms block, with where to look, and let an
+   unanswered one stay open rather than estimating it.
 
 Never ask for anything one of these already answers.
 
@@ -337,6 +352,7 @@ starter lines in it reads badly, so this is the thing they keep. Say it can be
 rebuilt any time with the same command.
 
 Then the completion report as CLAUDE.md defines it: how many questions stayed
-open and which single answer would be worth the most. Next step: `/audit`, which
-measures the live profile, or `/profile` directly when there is no profile yet.
-End with `Upwork calls: N`, normally 0.
+open and which single answer would be worth the most. Next step: `/profile`, which measures
+the live profile and then writes the one that fixes it.
+End with `Upwork calls: N`: zero without the connector, three with it, for the
+profile, its highlights and the closed contracts.

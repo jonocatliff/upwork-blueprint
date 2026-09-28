@@ -21,14 +21,13 @@ first time you run it. The setup script only saves you those interruptions.
 | Step | Command | What it does |
 |------|---------|--------------|
 | 1 | `/context` | Your work history, your offer, your terms and every result you can prove |
-| 2 | `/audit` | Scores your Upwork profile and lists what to fix first |
-| 3 | `/profile` | Writes your optimal profile, ready to paste into Upwork |
-| 4 | `/find-jobs` | Finds and scores the jobs worth your Connects, straight into your cockpit |
-| 5 | `/pitch-page` | A one-page pitch site plus the cover letter and bid you submit with your Loom |
-| 6 | `/brief` | Your morning: what changed on Upwork, where every lead stands, and the messages that are due |
-| 7 | `/lead-magnet` | A checked SEO audit once a local business sends its website |
-| 8 | `/proposal` | Turns your sales call into the proposal you send on Upwork |
-| 9 | `/won` | Turns a started contract into the handover brief for delivery |
+| 2 | `/profile` | Measures your live profile, then writes the version that fixes it |
+| 3 | `/find-jobs` | Finds and scores the jobs worth your Connects, straight into your cockpit |
+| 4 | `/pitch-page` | A one-page pitch site plus the cover letter and bid you submit with your Loom |
+| 5 | `/brief` | Your morning: what changed on Upwork, where every lead stands, and the messages that are due |
+| 6 | `/lead-magnet` | A checked SEO audit once a local business sends its website |
+| 7 | `/proposal` | Turns your sales call into the proposal you send on Upwork |
+| 8 | `/won` | Turns a started contract into the handover brief for delivery |
 
 Step 1 runs before the connector and before you have any profile at all. No
 Upwork profile yet is the normal starting point here, not a problem to fix.
@@ -48,7 +47,7 @@ from.
 
 - [Claude Code](https://claude.com/claude-code) installed
 - An Upwork freelancer account
-- The official Upwork connector. `/audit` walks you through connecting it the first time
+- The official Upwork connector. `/profile` walks you through connecting it the first time
 - Python 3, plus its packages: `python3 -m pip install -r requirements.txt`, then
   `python3 -m playwright install chromium`. `/lead-magnet` stops before its first
   paid call without them. If pip refuses because the system Python is managed,
@@ -83,7 +82,7 @@ use.
 Everything below is yours and gitignored, so `git pull` never touches it.
 
 - `context/me.md` and `context/proof.md` - who you are and what you can back up
-- `audit-report.md`, `profile.md` - where your profile stands and the version to paste
+- `profile.md` - the profile to paste, written against what is live today
 - `data/jobs.json` - your pipeline, written only by `code/pipeline.py`
 - `jobs/<id>/` - one folder per job: the pitch page, the application, the audit,
   the proposal, the threads and the drafts

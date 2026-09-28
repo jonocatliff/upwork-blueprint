@@ -1,6 +1,6 @@
 # The formula behind profiles that win
 
-What `/audit` measures against and `/profile` writes to. Extracted 14 August
+What `/profile` measures against and then writes to. Extracted 14 August
 2026 from a small sample: **three high-earning profiles** pulled through the
 connector (between $295,000 and $1,090,000 earned, two of them Top Rated Plus),
 and one practitioner's Upwork bio formula.

@@ -80,4 +80,4 @@ echo "you start claude here it asks whether to trust it. Say yes, then type /mcp
 echo "pick upwork and log in. Nothing reaches Upwork until you do."
 echo
 echo "Next: /context. It reads this same list and tells you which of it you need"
-echo "now and which can wait, then asks about your background. After that: /audit"
+echo "now and which can wait, then asks about your background. After that: /profile"
