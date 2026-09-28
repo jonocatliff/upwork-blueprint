@@ -45,7 +45,8 @@ RUN_FLOOR = 2          # the smallest window a repeat run asks for, in hours
 FIT_GATE = 6           # below this the job is not the member's work, whatever else is true
 TRAP_CAP = 6           # a named trap can never reach the gate
 MIN_SCORE = 7          # the gate, and the floor of the shortlist
-MAX_DEDUCTION = 3      # doubts shave a fit, they never outweigh it
+MAX_DEDUCTION = 2      # doubts shave a fit, they never outweigh it: on a ten-point scale
+                       # three would let a nine fail, and a nine is the member's own work
 LESSON_CAP = 1         # what measured outcomes may move a score, in either direction
 BEGINNER_DEDUCTION = 1 # the cap while the evidence sections are still empty
 MAX_PROPOSALS = 40     # hard no: the queue is longer than the Connects are worth
