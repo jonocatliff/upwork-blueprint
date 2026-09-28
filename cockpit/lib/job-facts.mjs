@@ -94,11 +94,12 @@ export function competitionLines(job, now = Date.now()) {
 const share = (value, max) => value == null || value === '' ? null : Number(value) / max;
 const toneOf = part => part == null ? '' : part >= 0.7 ? 'good' : part < 0.35 ? 'bad' : '';
 
+const shaved = (job, pattern) => (job.deduction_reasons || []).some(r => pattern.test(String(r)));
+
 export function clientTone(job) {
   const client = job.client || {}, record = (job.details || {}).client_record || {};
   if (!client.rating || client.verified === false) return 'bad';
-  const part = share(job.client_trust, 30);
-  if (part != null) return toneOf(part);
+  if (shaved(job, /client|hired|history/i)) return 'bad';
   return client.rating >= 4.8 && Number(record.spend_total || client.spent) >= 1000 ? 'good' : '';
 }
 
@@ -118,7 +119,8 @@ export function bidsTone(job) {
 }
 
 export function budgetTone(job) {
-  return toneOf(share(job.deal_quality, 20));
+  if (shaved(job, /budget|rate/i)) return 'bad';
+  return job.budget ? 'good' : '';
 }
 
 /** What speaks against a job, as short warnings. Empty when nothing does. */
@@ -132,15 +134,19 @@ export function jobFlags(job) {
   return flags;
 }
 
+// The gate is 70, so everything a run logs clears it. Strong is what stands out
+// above the gate; weak is a lead that only got in before the gate moved.
 export function scoreTone(score) {
-  return score == null ? '' : score >= 70 ? 'strong' : score < 50 ? 'weak' : '';
+  return score == null ? '' : score >= 85 ? 'strong' : score < 70 ? 'weak' : '';
 }
 
 /** Everything the panel shows about the job as [label, value]; empty rows are left out. */
 export function jobDetails(job, now = Date.now()) {
   const d = job.details || {}, client = job.client || {};
-  const parts = [['fit', job.niche_fit, 40], ['client', job.client_trust, 30], ['deal', job.deal_quality, 20], ['fresh', job.recency, 10]]
-    .filter(([, value]) => value != null).map(([name, value, max]) => `${name} ${value}/${max}`);
+  // The fit is the whole score; deductions are the only thing that moves it.
+  const parts = [job.niche_fit == null ? '' : `fit ${job.niche_fit}/100`,
+                 job.deduction ? `minus ${job.deduction} (${(job.deduction_reasons || []).join('; ')})` : '']
+    .filter(Boolean);
   const budget = budgetText(job);
   const rows = [
     ['Score', job.score != null ? join([`${job.grade ?? Math.max(1, Math.round(job.score / 10))} of 10`, `${job.score} points`, ...parts]) : ''],

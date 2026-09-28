@@ -489,7 +489,10 @@ def cmd_assess(args):
         abort('assessment needs a rationale and summary.')
     jobs = load()
     job = find(jobs, args.job_id)
-    job.update(niche_fit=value['niche_fit'], score=value['score'], rationale=rationale, summary=summary)
+    # The grade is what a person reads, so it follows the score rather than the score
+    # it had when the lead was first logged.
+    job.update(niche_fit=value['niche_fit'], score=value['score'], rationale=rationale, summary=summary,
+               grade=max(1, min(10, round(value['score'] / 10))))
     if headline:
         job['headline'] = headline
     trap = ' '.join(str(value.get('trap') or '').split())

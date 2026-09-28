@@ -15,6 +15,9 @@ type SortKey = 'score' | 'job' | 'client' | 'competition' | 'budget' | 'step';
 type Sort = { key: SortKey; desc: boolean } | null;
 
 const LAYOUT_KEY = 'cockpit-layout';
+// How fresh a posting is, in hours. A dense search term turns over ten postings in
+// two hours, so "today" is not a useful bucket and these are.
+const FRESH: [number, string][] = [[0, 'Any age'], [4, '4h'], [6, '6h'], [12, '12h'], [24, '24h']];
 // The list holds the leads still to decide on; everything from Applied on lives on the board.
 // The title column is gone (27.09.2026): an Upwork title is the client's own SEO line
 // and says the same thing forty times over, while the summary is the sentence that
@@ -41,10 +44,20 @@ export default function ListPage() {
   // Longest waiting first by default: a board exists to show what is going stale.
   const [oldestFirst, setOldestFirst] = useState(true);
   const [dueOnly, setDueOnly] = useState(false);
+  // Hours: 0 shows everything.
+  const [fresh, setFresh] = useState(0);
   const all: any[] = state?.jobs || [];
   const pool = useMemo(() => all.filter(j => (layout === 'board' ? BOARD : LIST).includes(j.status)), [all, layout]);
   // Due means a task is waiting on the member now, not a follow-up set for later.
-  const filtered = useMemo(() => dueOnly ? pool.filter(j => waitingState(j).kind === 'act') : pool, [pool, dueOnly]);
+  const byDue = useMemo(() => dueOnly ? pool.filter(j => waitingState(j).kind === 'act') : pool, [pool, dueOnly]);
+  // A posting stops being worth Connects within hours, so freshness is a filter and
+  // not only a colour. Anything without a posting date stays visible: a missing field
+  // is not evidence that the job is old.
+  const filtered = useMemo(() => {
+    if (!fresh) return byDue;
+    const cutoff = Date.now() - fresh * 3600e3;
+    return byDue.filter(j => !j.posted_date || Date.parse(j.posted_date) >= cutoff);
+  }, [byDue, fresh]);
   const jobs = useMemo(() => sortJobs(searchJobs(filtered, query), layout === 'board' ? null : sort), [filtered, query, sort, layout]);
   if (!state) return null;
 
@@ -74,6 +87,11 @@ export default function ListPage() {
       </label>
       <button type="button" className={`due-toggle${dueOnly ? ' on' : ''}`} aria-pressed={dueOnly}
         onClick={() => setDueOnly(v => !v)}>{dueTotal ? `Needs me · ${dueTotal}` : 'Needs me'}</button>
+      <div className="seg" role="group" aria-label="Posted within"
+        style={{ '--segment-index': FRESH.findIndex(([h]) => h === fresh) } as React.CSSProperties}>
+        {FRESH.map(([hours, label]) => <button key={label} onClick={() => setFresh(hours)}
+          aria-pressed={fresh === hours}>{label}</button>)}
+      </div>
       <span className="count" aria-live="polite">{jobs.length === pool.length ? `${pool.length} ${noun}` : `${jobs.length} of ${pool.length} ${noun}`}</span>
     </div>
     {layout === 'board' ? <Board jobs={jobs} oldestFirst={oldestFirst} drawerId={drawerId} toggle={toggle} />

@@ -148,10 +148,15 @@ Save each response's `jobs` list to `data/search/<name>.json` as `{"jobs": [...]
    pages worth reading.** The search filters are free and server side:
    `proposals_max` for the competition ceiling, `budget_min` for fixed work,
    `rate_min` for hourly, plus `experience_level`, `job_type` and `workload`
-   where the member has named a boundary. A term that still needs more than
-   three pages to reach the window edge is too broad, not deep: narrow it with
-   those filters or split it, and say which, rather than paging through postings
-   the member would reject on sight. Save as `query-<slug>.json`, using the emitted `slug`. Never split
+   where the member has named a boundary.
+
+   **The window decides the page count, nothing else.** A term that takes eight pages
+   to reach the window edge gets eight pages, because those are eight pages of postings
+   inside the hours the member has not seen. Twelve pages is the runaway stop, not a
+   budget: report the term as denser than one run can reach and offer to split it or
+   narrow it with a filter. How many pages a term took is worth saying out loud, since
+   it is the density measurement and it decides what the next run spends where.
+   Save as `query-<slug>.json`, using the emitted `slug`. Never split
    the terms into separate calls: the grouped query exists to cover variants
    without wasting calls.
 
