@@ -188,14 +188,16 @@ let the answer steer the rest. Point 2 is where the listening matters: a service
 without a deliverable and a price makes every later command invent one.
 
 1. **The one thing you want to be hired for.** Their words, not a category.
-2. **The services they actually sell**, at most five, and per service four
-   things: what the client receives at the end, the price or range they would
-   quote, how long it takes, and the tool it runs on. This is the service list
-   every later command works from. `/find-jobs` scores a posting against it,
-   `/pitch-page` builds scope and price from it, and `/proposal` quotes it. A
-   service without a deliverable and a price means every job after this one gets
-   invented from scratch. Missing numbers stay missing: write "not priced yet"
-   and move on, and `/pitch-page` asks for the bid instead.
+2. **What they actually sell**, at most five things. What this block is after is
+   the expertise and the direction, not a price list. "GoHighLevel automation for
+   agencies" is a better answer than a catalogue of packages nobody has bought
+   yet, and a member who has never quoted a fixed price has not failed this
+   question. Ask what the client ends up with and which tool it runs on, because
+   `/find-jobs` searches on exactly those two. Price and duration are welcome
+   where they already exist and stay open where they do not: "not priced yet" is
+   a real answer, `/pitch-page` asks for the bid per job anyway, and pushing
+   someone into inventing a package to fill a line produces a number they will
+   have to defend on a call.
 3. **How settled that direction is.** Ask it plainly, because everything after
    this behaves differently:
    - **decided**, they name the specialization: `/profile` leads with the niche
@@ -326,6 +328,13 @@ ones those are and what would move them to verified.
 [context/proof.md](../../context/proof.md), the two files every later command
 reads. Name any other file this run created or changed, and say that these two
 are the member's own and are never touched by `git pull`.
+
+Then run `python3 code/context_page.py --open`. It renders both files into
+[context/overview.html](../../context/overview.html) and opens it: what they
+sell, how they work, what they can prove with verified and pending side by side,
+and every gap marked as a gap. A terminal report scrolls away and markdown with
+starter lines in it reads badly, so this is the thing they keep. Say it can be
+rebuilt any time with the same command.
 
 Then the completion report as CLAUDE.md defines it: how many questions stayed
 open and which single answer would be worth the most. Next step: `/audit`, which

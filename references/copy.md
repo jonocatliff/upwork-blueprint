@@ -81,6 +81,8 @@ moving to what gets delivered, closing as an imperative back to the reader.
 
 Use plain words and lead with the result. Give only the next action the member needs; do not explain an obvious label or repeat the same fact under another heading. Add exact screen directions only when the action is otherwise unclear.
 
+**No tables in chat either.** The rule above is not about files, it is about what a member reads, and a chat window is where they read most of it. A table invites empty cells and turns a conversation into a form to complete: a member who has never quoted a fixed price sees a Price column with a gap in it and fills it with a number they would have to defend on a call. Reflect what you heard as short lines instead, one per item, and leave out what they did not say rather than printing a blank for it.
+
 **Never use em-dashes**, in files or in chat. Use a hyphen.
 
 Link only what the member needs to open, as relative links like [audit-report.md](audit-report.md). Never list code files you touched.
