@@ -2,7 +2,7 @@
 """The illustrated sheet that travels with the proposal, in the client's own trade.
 
     python3 code/proposal_illustrate.py <job id> --niche "HVAC company" \\
-        --scene "a van, a workshop, a phone that keeps ringing" [--model gpt-image-2]
+        --scene "a van, a workshop, a phone that keeps ringing" [--model <kie.ai model>]
 
 The A4 page stays the document: it carries the price, the weeks and the terms, and a client
 and a freelancer both point at it later. **This picture carries no number and no sentence
@@ -32,8 +32,23 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 API = 'https://api.kie.ai'
 UPLOAD = 'https://kieai.redpandaai.co/api/file-base64-upload'
 MODEL = 'nano-banana-pro'   # kie.ai refuses gpt-image-2 by that name, measured 27.09.2026
+# The two macOS paths were the only ones this script looked at, so Chrome on Linux or
+# Windows read as "not installed". The other two scripts that need it ask the PATH.
 CHROME = ('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
           '/Applications/Chromium.app/Contents/MacOS/Chromium')
+
+
+def chrome_binary():
+    """The browser to drive: CHROME_BIN, then the PATH, then the macOS defaults."""
+    import shutil
+    named = os.environ.get('CHROME_BIN')
+    if named and pathlib.Path(named).exists():
+        return named
+    for command in ('google-chrome', 'chromium', 'chromium-browser', 'chrome'):
+        found = shutil.which(command)
+        if found:
+            return found
+    return next((path for path in CHROME if pathlib.Path(path).exists()), None)
 
 STYLE = ('A hand drawn sketch in ink and a light wash, warm sand paper, one terracotta accent, '
          'thin confident lines, generous white space, the calm of an architect s working drawing. '
@@ -68,10 +83,11 @@ def api_key():
 
 
 def browser():
-    for path in CHROME:
-        if pathlib.Path(path).is_file():
-            return path
-    abort('Chrome is not installed, so the page cannot be rendered as an image.')
+    found = chrome_binary()
+    if found:
+        return found
+    abort('Chrome is not installed, so the page cannot be rendered as an image. '
+          'Set CHROME_BIN if it lives somewhere this cannot find.')
 
 
 def foundation(job_id):

@@ -38,13 +38,13 @@ Stop when the requested fact is known; never broaden a search to make an empty r
 
 **MEASURED 14 August 2026, `get_profile` action `get` without a key** (your own profile): title, full overview text, skills, languages and proficiency, education, employment history, hourly rate, `profileAggregates` (earnings, job counts, feedback count), location, availability, profile URL.
 
-**MEASURED 12 September 2026, `get_profile` action `get` with a `profile_key`** (starts with `~`, from any public profile URL): another freelancer's public profile. The fields sit under `data.talentProfileByProfileKey`, not `data`, and `profileAggregates` adds the badge (`top_rated`), the earnings bucket ("$100K+") and `totalFeedback`.
+**MEASURED 12 September 2026, `get_profile` action `get` with a `profile_key`** (starts with `~`, from any public profile URL): another freelancer's public profile, with the badge, the earnings bucket and the review count. Response shape in `RESEARCH.md`.
 
 `get_profile` action `list_highlights`: portfolio projects (id and title) and certificates, titles only, no contents. Actions `transactions` and `connects_balance` exist, untested.
 
 **Not in any profile response**, only on the public profile page: Job Success Score, client review texts, billed hours, portfolio contents, intro video (no field exists, which says nothing about whether one exists). The review *count* is there, as `profileAggregates.totalFeedback`.
 
-**MEASURED 12 September 2026:** `get_freelancer_dashboard` and `list_contracts` action `search` carry no Job Success Score either. The dashboard does show Connects spending line by line; that is how a recurring "Paid invitation badge" charge of one Connect every twelve hours became visible.
+**MEASURED 12 September 2026:** `get_freelancer_dashboard` and `list_contracts` action `search` carry no Job Success Score either. The dashboard does show Connects spending line by line.
 
 **Writing, MEASURED 14 August 2026:** `update_profile` wrote only availability, employment, languages, education and other experience. **DOCUMENTED BUT UNTESTED, tool description 12 September 2026:** `update_title` (70 characters max), `update_overview` (5,000 characters max), `set_skills` (the complete set, 20 max, names resolved to Upwork's skill list, custom skills rejected). **Not writable: hourly rate, portfolio, video.** Every write returns a preview and runs only through `confirm_preview` after an explicit yes.
 
@@ -65,7 +65,7 @@ Stop when the requested fact is known; never broaden a search to make an empty r
 
 ## Proposals, rooms and pipeline
 
-**MEASURED 12 September 2026: the `status` filter on `list_freelancer_proposals` action `list` does not filter.** `Accepted`, `Offered`, `Pending` and `Activated` came back empty with "no submitted proposals yet"; `Hired`, `Declined` and `Withdrawn` each returned the same mixed list, totals 44 to 56. Read each proposal's own `status` field, never trust the filter, and treat an empty list as proof of nothing.
+**MEASURED 12 September 2026: the `status` filter on `list_freelancer_proposals` action `list` does not filter.** Read each proposal's own `status` field, never trust the filter, and treat an empty list as proof of nothing. What each value returned is in `RESEARCH.md`.
 
 **No room exists until the client writes**, so an applied proposal gets no draft, no follow-up and no task. `/brief` moves one to `lost` after 14 full days without a reply.
 

@@ -540,3 +540,13 @@ postings with a model, and `pipeline.py` stores connector output until prune
 expires it. A human starts every run and nothing is scheduled, which was the part
 to be careful about. The rest is unanswered. Recorded 26 September 2026, Maker
 School evidence snapshot, source R21. [Upwork documented, unanswered]
+
+
+## Connector response shapes, moved out of references/upwork.md on 28.09.2026
+
+A member reads that file before their second command, so the measurements that only a
+maintainer needs live here instead. Nothing reads this file.
+
+- **MEASURED 12 September 2026, `get_profile` action `get` with a `profile_key`** (starts with `~`, from any public profile URL): another freelancer's public profile. The fields sit under `data.talentProfileByProfileKey`, not `data`, and `profileAggregates` adds the badge (`top_rated`), the earnings bucket ("$100K+") and `totalFeedback`.
+- **MEASURED 12 September 2026:** `get_freelancer_dashboard` and `list_contracts` action `search` carry no Job Success Score either. The dashboard does show Connects spending line by line; that is how a recurring "Paid invitation badge" charge of one Connect every twelve hours became visible.
+- **MEASURED 12 September 2026: the `status` filter on `list_freelancer_proposals` action `list` does not filter.** `Accepted`, `Offered`, `Pending` and `Activated` came back empty with "no submitted proposals yet"; `Hired`, `Declined` and `Withdrawn` each returned the same mixed list, totals 44 to 56. Read each proposal's own `status` field, never trust the filter, and treat an empty list as proof of nothing.

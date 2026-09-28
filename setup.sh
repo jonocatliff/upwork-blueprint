@@ -57,6 +57,15 @@ with sync_playwright() as p: p.chromium.launch().close()
   note "the browser for those packages: run 'python3 -m playwright install chromium'. Without it /lead-magnet stops before its first paid call."
 fi
 
+if ! command -v google-chrome >/dev/null && ! command -v chromium >/dev/null \
+   && [ ! -d "/Applications/Google Chrome.app" ] && [ -z "${CHROME_BIN:-}" ]; then
+  note "Google Chrome: /pitch-page checks the finished page on a phone screen with it, and /proposal draws its sketch with it. Install it from google.com/chrome, or put the path in CHROME_BIN."
+fi
+
+if [ ! -d cockpit/node_modules ] && command -v npm >/dev/null; then
+  note "the cockpit installs its own packages on the first /cockpit run, which takes a few minutes once. Run 'cd cockpit && npm install' now if you would rather wait for it here."
+fi
+
 if ! command -v vercel >/dev/null; then
   note "vercel: /pitch-page publishes the page for your client with it. Install with 'npm i -g vercel', then 'vercel login'."
 elif ! vercel whoami >/dev/null 2>&1 && ! env_has VERCEL_TOKEN; then

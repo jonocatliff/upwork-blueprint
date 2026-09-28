@@ -74,11 +74,21 @@ def artifact_health(job):
         path = folder / name
         problems = None
         try:
-            if name == 'pitch.html':
+            # Every client-facing file has a gate in this repo. Two of them ran here and the
+            # rest showed green without a check, which is worse than no tile: a member reads
+            # a green proposal as a checked proposal.
+            if name in ('pitch.html', 'proposal.html'):
                 problems = pitch_check.check_page(path)
             elif name == 'application.md':
                 problems, _, _, _, _ = application_check.check(
                     path.read_text(encoding='utf-8'), str(job.get('title') or ''), proof)
+            elif name in ('proposal.md', 'project.md'):
+                import document_check  # noqa: E402  (same folder, imported where it is used)
+                kind = 'proposal' if name == 'proposal.md' else 'project'
+                problems = document_check.validate_artifact(kind, path.read_text(encoding='utf-8'), proof)
+            elif name == 'lead-magnet.html':
+                import lead_magnet_check  # noqa: E402  (same folder, imported where it is used)
+                problems = lead_magnet_check.check_page(path)
         except (OSError, UnicodeError):
             problems = ['file could not be read']
         if problems is None or not problems:

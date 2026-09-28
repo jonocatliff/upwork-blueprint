@@ -193,7 +193,7 @@ def check_report_shell():
 
 def check_paths():
     findings = []
-    pat = re.compile(r'`((?:context|data|jobs|code|references|starters)/[\w./-]+)`')
+    pat = re.compile(r'`((?:context|data|jobs|code|references|starters|templates|tools)/[\w./-]+)`')
     for p in sorted(COMMANDS.glob('*.md')):
         for m in pat.finditer(p.read_text(encoding='utf-8')):
             rel = m.group(1)

@@ -186,6 +186,8 @@ def main(argv=None):
         '{{TITLE}}': value(data.get('headline')),
         '{{MEMBER}}': value(data.get('member')),
         '{{CLIENT}}': value(data.get('client')),
+        # today is a fact, not a commitment: the day the page was prepared is true whether
+        # or not the call settled anything, so this one keeps its default.
         '{{DATE}}': esc(data.get('date') or today),
         '{{HEADLINE}}': value(data.get('headline')),
         '{{PRICE}}': value(data.get('price')),

@@ -55,7 +55,15 @@ def unbacked(text, proof):
     """
     import profile_draft  # noqa: E402  (same folder, imported where it is used)
     claims = []
+    # A promise with a number in it is the more dangerous half and read as harmless
+    # because it is not in the past tense: "you will be in the top three in eight weeks"
+    # is a guarantee, and this is the document a client holds the member to.
+    promise = re.compile(r'\b(will|expect|guarantee|guaranteed|within \d+|in \d+ (weeks|months)|'
+                         r'by (week|month) \d+|up to \d)\b', re.I)
     for sentence in re.split(r'(?<=[.!?])\s+|\n', text):
+        if promise.search(sentence) and re.search(r'\d', sentence) and '%' in sentence:
+            claims.append(f'"{sentence.strip()[:90]}" promises a number: a proposal states scope '
+                          f'and price, never a result the member cannot control')
         if not re.search(r'\b(got|saved|raised|increased|built|delivered|rebuilt|grew|cut|generated|achieved)\b',
                          sentence, re.I):
             continue

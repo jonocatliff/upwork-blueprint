@@ -22,9 +22,9 @@ that page and skip building it again. Check the pipeline record for a
 was never published, so run Step 7 first, because the application links to a page
 a client has to be able to open.
 
-Before research or assembly, run `python3 code/preflight.py vercel`. Stop if the
-publishing destination is unavailable; a pitch that cannot be published is not
-ready to apply.
+The Vercel preflight sits in Step 7, not here: publishing needs an account, writing the
+letter and the bid needs only the posting. Stopping at the door meant a member without
+Vercel got no application at all rather than one without a link.
 
 ## Step 1 · The job and its full posting
 
@@ -283,21 +283,19 @@ python3 code/pitch_generate.py <id> --hook "..." \
 
 ## Step 7 · Publish the client page
 
-**Nothing goes public without their word.** The member has seen the flow as a sketch and
-the page as a screenshot; this is where they say go. One line: what the page promises, what
-the bid will be, and that the URL is about to be public. Then publish.
+**Run `python3 code/preflight.py vercel`, then ask.** Unavailable: say so, skip this step
+and go to the application, which then carries no link and one sentence about the plan
+instead. Available: one line to the member, what the page promises and that the URL is
+about to be public, and publish on their word.
 
 Run `python3 code/pitch_deploy.py <id>`. It confirms the page opens publicly and
 saves the exact deployment URL through `code/pipeline.py`. Never upload the job
 folder, because it contains drafts.
 
-**It republishes every page that project already holds**, not just this one:
-every earlier pitch page and every published audit go up again, because one
-Vercel deploy replaces the whole project. Two consequences worth knowing before
-the first run. An old page that fails its own gate today stops this run with
-`the previously published pitch <id> failed its gate`, and the fix is that
-page, not this one. And a page pulled from the project by this member stays gone
-after the next deploy.
+**It republishes every page that project already holds**, because one Vercel deploy
+replaces the whole project. So an old page failing its own gate today stops this run with
+`the previously published pitch <id> failed its gate`, and the fix is that page, not this
+one; and a page the member pulled stays gone after the next deploy.
 
 Publishing is part of this command. A missing Vercel CLI or authentication is a
 blocker, not a completed pitch. Either a Vercel CLI login or a `VERCEL_TOKEN`

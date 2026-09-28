@@ -84,7 +84,8 @@ def rows(env):
         ('Vercel', vercel_signed_in() or has_key(env, 'VERCEL_TOKEN'), 'optional',
          'puts your pitch page and audit on a link a client can open',
          '/pitch-page, /lead-magnet',
-         "npm i -g vercel, then vercel login. Nothing gets published without it"),
+         "npm i -g vercel, then vercel login. Without it you still get the cover letter "
+         "and the bid, with no page to link, and /lead-magnet cannot publish an audit at all"),
         ('Firecrawl', has_key(env, 'FIRECRAWL_API_KEY'), 'optional',
          "reads the client's website",
          '/lead-magnet', 'firecrawl.dev. The audit cannot start without it'),
