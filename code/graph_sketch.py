@@ -257,7 +257,15 @@ def proofs(nodes, edges):
     dead = [n for n, node in nodes.items() if not out[n] and str(node.get('kind')) not in ('sink', 'note')]
     unreached = [n for n in nodes if not any(str(e.get('to')) == n for e in edges)
                  and str(nodes[n].get('kind')) != 'source']
-    return labelled, bare, client, questions, dead, unreached
+    # A fork whose exits meet again immediately decided nothing: it draws a choice the
+    # client does not have, which is worse than no fork at all.
+    fake = [n for n in decisions if len(out[n]) >= 2
+            and len({str(e.get('to')) for e in out[n]}) == 1]
+    # The failure path is the role everybody leaves out, and it is what a client is
+    # buying: one ending means nobody drew what happens when the normal path does not.
+    ends = [n for n, node in nodes.items()
+            if str(node.get('kind')) == 'sink' or (not out[n] and str(node.get('kind')) != 'note')]
+    return labelled, bare, client, questions, dead, unreached, fake, ends
 
 
 def main(argv=None):
@@ -277,16 +285,20 @@ def main(argv=None):
         if jumps:
             print('\nedges that skip or loop back:')
             print('\n'.join(jumps))
-    labelled, bare, client, questions, dead, unreached = proofs(nodes, edges)
+    labelled, bare, client, questions, dead, unreached, fake, ends = proofs(nodes, edges)
     print(f'\n{len(nodes)} nodes, {len(edges)} edges, {len(graph.get("groups") or [])} phases. '
           f'Key: > start  . step  ? fork  # store  ~ service  @ actor  * milestone  - question  = end')
     print(f'earns its place: {len(labelled)} labelled fork(s), {len(client)} node(s) the client '
           f'already runs, {len(questions)} open question(s). One of the three is enough.')
     for label, group in (('fork(s) with one exit or an unlabelled exit', bare),
+                         ('fork(s) whose exits meet again straight away', fake),
                          ('step(s) that lead nowhere', dead),
                          ('node(s) nothing points at', unreached)):
         if group:
             print(f'FIX: {label}: {", ".join(nodes[n].get("label") or n for n in group)}')
+    if len(ends) < 2:
+        print('FIX: one ending only, so nothing shows what happens when the normal path fails. '
+              'That path is the one a client is actually buying.')
     return 0
 
 
