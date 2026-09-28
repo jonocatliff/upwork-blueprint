@@ -5,11 +5,10 @@ argument-hint: "[focus: recommended | tracks | recheck | skip <job id> <reason>]
 
 # /find-jobs
 
-Fresh jobs are useful because the member can decide before spending Connects;
-whether applying earlier improves win rate is a practitioner hypothesis, not a
-measured rule in this repository. This looks at what was posted since the last
-run from two directions: Upwork's recommendations and the member's search
-themes. Code counts client, budget and freshness signals; Claude judges fit.
+Fresh jobs are useful because the member can decide before spending Connects. This
+looks at what was posted since the last run from two directions: Upwork's
+recommendations and the member's own search themes. Code counts client, budget and
+freshness signals; Claude judges fit, out of ten, and that is the score.
 Runs only when the member runs it.
 
 Read first: [references/upwork.md](../../references/upwork.md) for what is allowed and what the connector gives you, [references/jobs.md](../../references/jobs.md) for where the work comes from and what it pays, `context/me.md`.
@@ -221,10 +220,10 @@ The outcome lessons do wait for a sample. Below eight applications in a bucket n
 weighted, which is the normal state for the first weeks: a rule built on three applications
 costs more Connects than it saves. Past it, `python3 code/learn.py lessons` writes
 `data/lessons.json`, and **`jobs.py score` applies it**: the reply rate of the track that
-found a job, of its country and of its job type moves the score by at most five points
-either way, named in the record as `lesson` and `lesson_reasons`. Five is deliberate. It is
-enough to reorder a list and never enough to overturn a fit, because a measured reply rate
-says something about a pattern and nothing about the job in front of you. Say in the run
+found a job, of its country and of its job type moves the score by one point either way at
+most, named in the record as `lesson` and `lesson_reasons`. One point is deliberate: enough
+to reorder a list, never enough to overturn a fit, because a measured reply rate says
+something about a pattern and nothing about the job in front of you. Say in the run
 which lesson moved a lead and which dimension is still too thin to speak.
 
 ## Step 4 · Judge niche fit
@@ -261,16 +260,16 @@ next month. With no history yet, say that plainly and score against
 `context/me.md` alone. Three turn-downs with the same reason lower the fit for
 the fourth job of that pattern, without waiting for anyone's permission.
 
-Then give every candidate a fit from 0 to 100 against `context/me.md` and the
-member's own history. **The fit is the score.** Nothing else adds to it: the hard
-no's already removed what cannot be applied to, and the deductions only shave.
+Then give every candidate a fit from 0 to 10 against `context/me.md` and the member's
+own history. **The fit is the score**, and there is no second scale: the hard no's
+already removed what cannot be applied to, and the deductions only shave.
 
-- **90 to 100:** what the member sells, in the words they would use, for the kind of
+- **9 or 10:** what the member sells, in the words they would use, for the kind of
   client they serve. One of these is worth the day's first Connects.
-- **75 to 89:** clearly theirs, one step off the centre. The bulk of a good day.
-- **60 to 74:** they could do it and would not enjoy it, or the posting is vague about
-  the part that matters.
-- **Under 60:** not their work. Never logged, whatever the client or the budget pays.
+- **8:** clearly theirs, one step off the centre. The bulk of a good day.
+- **7:** they could do it and would not enjoy it, or the posting is vague about the
+  part that matters.
+- **6 or less:** not their work. Never logged, whatever the client or the budget pays.
 
 Signals that raise fit come from `context/me.md`: the member's niche, the
 clients they serve best and the services they want more of. Their exact tools
@@ -280,11 +279,11 @@ links or reviews, generic work outside the member's niche, open-ended
 account-manager roles, a full-time employee disguised as a contract, and
 anything the member ruled out in `context/me.md`.
 
-Write `data/fit.json`: per job id `{"fit": 0-100, "rationale": "<what the score bets on, in one sentence>", "summary": "<what they want built and the one thing that makes this job distinctive, in two or three concrete sentences>", "headline": "<who wants what, one sentence of at most 14 words>", "trap": "<only when one applies>"}`. The cockpit list shows the headline whole, so it names the client and the concrete outcome, never a category label. The rationale never repeats what the card already shows (budget, client rating). The summary must let a member explain the job without reopening the posting; never reduce a multi-part build to a category label.
+Write `data/fit.json`: per job id `{"fit": 0-10, "rationale": "<what the score bets on, in one sentence>", "summary": "<what they want built and the one thing that makes this job distinctive, in two or three concrete sentences>", "headline": "<who wants what, one sentence of at most 14 words>", "trap": "<only when one applies>"}`. The cockpit list shows the headline whole, so it names the client and the concrete outcome, never a category label. The rationale never repeats what the card already shows (budget, client rating). The summary must let a member explain the job without reopening the posting; never reduce a multi-part build to a category label.
 
 ## Step 5 · Score and log
 
-Run `python3 code/jobs.py score`. The score is the fit, minus the deductions the candidate step computed, plus or minus what the member's own outcomes have earned that pattern, so a job that fits perfectly and carries nothing against it scores 100. It logs every job with a fit of at least 60 and a score of at least 70, caps any job you named a trap at 60 so a generous client cannot lift a disguised full-time or operator role above a real build, and prints the ranking as a grade out of 10 with the points behind it. The deductions and their reasons ride along on the record, so a member asking "why is this a 7" gets the three words that took it there. Everything it turns down is written to `data/decisions.jsonl` with the points and the reason, which costs the member nothing and is what the next run learns from. Report grades to the member, never the raw points: the hundred exists for ranking and for the lessons, the grade is what a person decides on.
+Run `python3 code/jobs.py score`. The score is the fit, minus the deductions the candidate step computed, plus or minus what the member's own outcomes have earned that pattern, so a job that fits perfectly and carries nothing against it scores 100. It logs every job with a fit of at least 6 and a score of at least 7, caps any job you named a trap at 6 so a generous client cannot lift a disguised full-time or operator role above a real build, and prints each score out of ten with what came off it. The deductions and their reasons ride along on the record, so a member asking "why is this a 7" gets the three words that took it there. Everything it turns down is written to `data/decisions.jsonl` with the points and the reason, which costs the member nothing and is what the next run learns from. Report grades to the member, never the raw points: the hundred exists for ranking and for the lessons, the grade is what a person decides on.
 
 ## Step 6 · Open the ten you will show
 
@@ -360,17 +359,19 @@ list's one-sentence headline `python3 code/pipeline.py headline <id> "<sentence>
    stands every other lead that passed the gate, in rank order, which is what
    `python3 code/pipeline.py list` already prints. When the member turns one down, name
    the next one in the same breath, so the list is ten again before they ask, and keep
-   going as long as the bench holds. **The bench has a floor: grade 7.** A lead below it
-   passed the gate and is still in the cockpit, but it is never offered as a refill,
+   going as long as the bench holds. **The bench floor is the gate itself**, so the bench is
+   whatever passed beyond the ten shown. A lead below the gate is never offered as a refill,
    because a member applying down the list is spending Connects on jobs the score
    already doubted. The bench is good for today only: tomorrow the 24-hour window has
    disqualified it, so an unused lead is a lead to use now or lose. The complete scored
    list lives in the cockpit.
    Open invitations come first, before the ten, because they cost nothing.
-4. **Say it when ten is not there.** Fewer than ten at a 7 or better is a result, not
-   a failure to hide: report how many there are, and which of the three causes it was.
-   Too few dense tracks, limits set too tight, or a quiet day. Never pad the ten with
-   leads the score turned down, and never lower the gate to fill a row.
+4. **Say it when ten is not there.** Fewer than ten at a 7 or better is a result, not a
+   failure to hide: report how many there are and which cause it was. Too few dense tracks,
+   limits set too tight, a quiet day, or the one that applies to a member with nothing in
+   their evidence sections yet: a direction still two lanes wide scores honest fits at 7 and
+   8, and the gate eats them. Never pad the ten with leads the score turned down, and never
+   lower the gate to fill a row.
 5. **Name the day's Connects bill once.** Ten applications cost what the ten jobs cost,
    measured from each `connects_cost`, against the balance the connector reports. One
    line, no advice unless the balance runs out before the ten do. Measured 28 September

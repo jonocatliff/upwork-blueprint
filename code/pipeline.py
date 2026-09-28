@@ -503,20 +503,18 @@ def cmd_assess(args):
     if not isinstance(value, dict) or set(value) - allowed:
         abort('assessment needs only niche_fit, score, rationale, summary, optional headline and optional trap.')
     headline = clean_headline(value['headline']) if str(value.get('headline') or '').strip() else ''
-    if not isinstance(value.get('niche_fit'), int) or not 0 <= value['niche_fit'] <= 100:
-        abort('assessment niche_fit must be an integer from 0 to 100.')
-    if not isinstance(value.get('score'), int) or not 0 <= value['score'] <= 100:
-        abort('assessment score must be an integer from 0 to 100.')
+    if not isinstance(value.get('niche_fit'), int) or not 0 <= value['niche_fit'] <= 10:
+        abort('assessment niche_fit must be an integer from 0 to 10.')
+    if not isinstance(value.get('score'), int) or not 0 <= value['score'] <= 10:
+        abort('assessment score must be an integer from 0 to 10.')
     rationale = ' '.join(str(value.get('rationale') or '').split())
     summary = ' '.join(str(value.get('summary') or '').split())
     if not rationale or not summary:
         abort('assessment needs a rationale and summary.')
     jobs = load()
     job = find(jobs, args.job_id)
-    # The grade is what a person reads, so it follows the score rather than the score
-    # it had when the lead was first logged.
     job.update(niche_fit=value['niche_fit'], score=value['score'], rationale=rationale, summary=summary,
-               grade=max(1, min(10, round(value['score'] / 10))))
+               grade=value['score'])
     if headline:
         job['headline'] = headline
     trap = ' '.join(str(value.get('trap') or '').split())
@@ -525,7 +523,7 @@ def cmd_assess(args):
     else:
         job.pop('trap', None)
     save(jobs)
-    print(f'{args.job_id}: assessment updated to {value["score"]}/100 from the full posting.')
+    print(f'{args.job_id}: assessment updated to {value["score"]}/10 from the full posting.')
 
 
 def parse_verified_timestamp(value):

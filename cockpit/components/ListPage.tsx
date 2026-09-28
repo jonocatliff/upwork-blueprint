@@ -139,7 +139,7 @@ function Table({ jobs, sort, sortBy, drawerId, toggle }: {
       return <tr key={id} className={`uw-row${id === drawerId ? ' sel' : ''}`} tabIndex={0}
         onClick={e => { if (!(e.target as Element).closest('button, a')) toggle(id); }}
         onKeyDown={e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === e.currentTarget) { e.preventDefault(); toggle(id); } }}>
-        <td data-column="score"><span className={`uw-score ${scoreTone(j.score)}`}>{j.score == null ? '–' : (j.grade ?? Math.max(1, Math.round(j.score / 10)))}</span></td>
+        <td data-column="score"><span className={`uw-score ${scoreTone(j.score)}`}>{j.score == null ? '–' : j.score}</span></td>
         <td data-column="summary">
           {/* Der Link geht auf die echte Ausschreibung: ohne ihn muss man den Titel
               auf Upwork suchen, um nachzulesen, was wirklich dasteht. */}

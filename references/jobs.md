@@ -41,10 +41,9 @@ the member always reads ten. Fewer than ten is reported as what it is, with the 
 named: too few dense tracks, limits set too tight, or a quiet day. Padding the ten with
 leads the score turned down wastes Connects on purpose.
 
-**What ten a day costs.** Measured 28 September 2026: one local SEO job cost 7 Connects
-to apply to. Ten a day is therefore near 70 Connects a day, roughly 2,100 a month
-against the 100 a Freelancer Plus plan includes. Say the number, never buy Connects,
-and never talk the member out of their own target.
+**What it costs.** Measured 28 September 2026: one local SEO job cost 7 Connects. Say the
+day's bill and the balance once, never buy Connects, and never talk a member out of their
+own target.
 
 ## The candidate term catalog
 

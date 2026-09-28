@@ -39,11 +39,15 @@ ME = pathlib.Path(os.environ.get('BLUEPRINT_ME') or ROOT / 'context' / 'me.md')
 TAG = re.compile(r'</?untrusted_participant_content>')
 MIN_WINDOW, MAX_WINDOW = 10, 24
 RUN_FLOOR = 2          # the smallest window a repeat run asks for, in hours
-FIT_GATE = 60          # below this the job is not the member's work, whatever else is true
-TRAP_CAP = 60          # a named trap can never reach the gate
-MIN_SCORE = 70         # the gate, and the same number as the shortlist's floor
-MAX_DEDUCTION = 30     # doubts shave a fit, they never outweigh it
-LESSON_CAP = 5         # what measured outcomes may move a score, in either direction
+# Everything a member reads about a job is one number out of ten, so there is no
+# second scale to translate, no "points" behind a "grade", and nothing for the
+# cockpit to print twice.
+FIT_GATE = 6           # below this the job is not the member's work, whatever else is true
+TRAP_CAP = 6           # a named trap can never reach the gate
+MIN_SCORE = 7          # the gate, and the floor of the shortlist
+MAX_DEDUCTION = 3      # doubts shave a fit, they never outweigh it
+LESSON_CAP = 1         # what measured outcomes may move a score, in either direction
+BEGINNER_DEDUCTION = 1 # the cap while the evidence sections are still empty
 MAX_PROPOSALS = 40     # hard no: the queue is longer than the Connects are worth
 MIN_CLIENT_RATING = 3.0
 FIXED_FLOOR = 250      # hard no below this on fixed price
@@ -267,7 +271,7 @@ def cmd_rules(args):
                     f'Fixed price under ${_LIMITS["fixed_floor"]:g}',
                     f'Hourly top under {int(_LIMITS["hourly_share"] * 100)}% of the member rate'],
         'ranking': [
-            {'label': 'Fit', 'points': 100,
+            {'label': 'Fit', 'points': 10,
              'uses': 'What the job is against what the member sells, judged with their own '
                      'application history. The fit is the score.'},
             {'label': 'Deductions', 'points': -MAX_DEDUCTION,
@@ -391,23 +395,43 @@ def deductions(job, rate):
     proposals = job.get('proposals')
     if isinstance(proposals, (int, float)):
         if proposals > 25:
-            out.append((10, f'{int(proposals)} proposals'))
+            out.append((2, f'{int(proposals)} proposals'))
         elif proposals > 10:
-            out.append((5, f'{int(proposals)} proposals'))
+            out.append((1, f'{int(proposals)} proposals'))
     c = job.get('client') or {}
     if c.get('hires') == 0 and (c.get('posted_jobs') or 0) >= 2:
-        out.append((5, 'has posted before and never hired'))
+        out.append((1, 'has posted before and never hired'))
     elif not c.get('rating') and not c.get('spent'):
-        out.append((5, 'no client history at all'))
+        out.append((1, 'no client history at all'))
     top, hourly = budget_top(job)
     if top is None:
-        out.append((5, 'no budget stated'))
+        out.append((1, 'no budget stated'))
     elif hourly and rate and top < rate:
-        out.append((10, f'tops out under your rate ({top:g} against {rate:g})'))
+        out.append((2, f'tops out under your rate ({top:g} against {rate:g})'))
     elif not hourly and top < 500:
-        out.append((5, f'small fixed budget ({top:g})'))
+        out.append((1, f'small fixed budget ({top:g})'))
     total = min(MAX_DEDUCTION, sum(points for points, _ in out))
+    # Every one of these doubts describes the market a member without reviews actually
+    # wins: a new client with no history, no budget written down, a dozen applicants.
+    # Stacked at full weight they put the gate out of reach on day one, so while the
+    # evidence sections are empty they can cost at most one point between them.
+    if not has_evidence():
+        total = min(total, BEGINNER_DEDUCTION)
     return total, [reason for _, reason in out]
+
+
+def has_evidence():
+    """True when the member has anything in the evidence sections of their own file."""
+    if not ME.is_file():
+        return False
+    try:
+        import context_check  # noqa: E402  (same folder, imported where it is used)
+        proof = context_check.proof_only(ME.read_text(encoding='utf-8'))
+    except Exception:
+        return False
+    lines = [l.strip() for l in proof.splitlines()
+             if l.strip() and not l.startswith('#') and 'othing recorded yet' not in l]
+    return bool(lines)
 
 
 def cmd_candidates(args):
@@ -455,7 +479,7 @@ def cmd_candidates(args):
         print(f'LIMIT OFF: {off}')
     gone = ', '.join(f'{v} {k}' for k, v in dropped.most_common()) or 'none'
     print(f'\n{len(fresh)} new candidate(s), {len(known)} already in the pipeline, dropped: {gone}.')
-    print(f'Next: judge fit 0 to 100 for each and write data/fit.json, then run score. '
+    print(f'Next: judge fit 0 to 10 for each and write data/fit.json, then run score. '
           f'The score is that fit minus the deduction above; the gate is {MIN_SCORE}.')
     return 0
 
@@ -463,8 +487,9 @@ def cmd_candidates(args):
 # --- score ------------------------------------------------------------------
 
 def grade(total):
-    """The 1 to 10 a member reads. The 100 points stay inside, for ranking and lessons."""
-    return max(1, min(10, round(total / 10)))
+    """Kept so older records still render: the score has been the member's number since
+    the scale became 0 to 10, and there is nothing left to translate."""
+    return total
 
 
 def record_rejections(ranked, kept, minimum):
@@ -514,9 +539,9 @@ def cmd_score(args):
     ranked, logged = [], []
     for c in candidates:
         f = fit[c['id']]
-        niche = max(0, min(100, int(f.get('fit', 0))))
+        niche = max(0, min(10, int(f.get('fit', 0))))
         lesson, lesson_why = lesson_points(c)
-        total = max(0, min(100, niche - int(c.get('deduction') or 0) + lesson))
+        total = max(0, min(10, niche - int(c.get('deduction') or 0) + lesson))
         # A named trap caps the score: a great client must not lift a disguised
         # full-time or operator role above a real build.
         if f.get('trap'):
@@ -540,7 +565,7 @@ def cmd_score(args):
     for total, niche, c, f in sorted(ranked, key=lambda r: r[0], reverse=True):
         mark = 'LOGGED' if any(r['id'] == c['id'] for r in logged) else 'skip  '
         why = f.get('trap') or f.get('rationale', '')
-        print(f'{mark} {grade(total):2d}/10 ({total:3d} pts, fit {niche:2d})  {c["title"][:60]}  · {why[:90]}')
+        print(f'{mark} {total:2d}/10 (fit {niche}, minus {c.get("deduction") or 0})  {c["title"][:60]}  · {why[:90]}')
     turned_down = record_rejections(ranked, logged, args.min)
     print(f'\n{len(logged)} of {len(ranked)} logged (fit at least {FIT_GATE} and score at least {args.min}).')
     if turned_down:
@@ -557,12 +582,12 @@ def cmd_reassess(args):
         print(f'ABORT: job {args.job_id} needs both a pipeline record and data/fit.json entry.', file=sys.stderr)
         return 1
     try:
-        niche = max(0, min(100, int(fit.get('fit'))))
+        niche = max(0, min(10, int(fit.get('fit'))))
     except (TypeError, ValueError):
-        print(f'ABORT: job {args.job_id} needs an integer fit from 0 to 100.', file=sys.stderr)
+        print(f'ABORT: job {args.job_id} needs an integer fit from 0 to 10.', file=sys.stderr)
         return 1
     lesson, _ = lesson_points(job)
-    total = max(0, min(100, niche - int(job.get('deduction') or 0) + lesson))
+    total = max(0, min(10, niche - int(job.get('deduction') or 0) + lesson))
     if fit.get('trap'):
         total = min(total, TRAP_CAP)
     assessment = {

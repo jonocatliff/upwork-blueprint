@@ -134,22 +134,23 @@ export function jobFlags(job) {
   return flags;
 }
 
-// The gate is 70, so everything a run logs clears it. Strong is what stands out
-// above the gate; weak is a lead that only got in before the gate moved.
+// The gate is 7, so everything a run logs clears it. Strong stands out above it;
+// weak is a lead that only got in before the gate moved.
 export function scoreTone(score) {
-  return score == null ? '' : score >= 85 ? 'strong' : score < 70 ? 'weak' : '';
+  return score == null ? '' : score >= 9 ? 'strong' : score < 7 ? 'weak' : '';
 }
 
 /** Everything the panel shows about the job as [label, value]; empty rows are left out. */
 export function jobDetails(job, now = Date.now()) {
   const d = job.details || {}, client = job.client || {};
   // The fit is the whole score; deductions are the only thing that moves it.
-  const parts = [job.niche_fit == null ? '' : `fit ${job.niche_fit}/100`,
-                 job.deduction ? `minus ${job.deduction} (${(job.deduction_reasons || []).join('; ')})` : '']
+  // The score is the fit minus what stands against it, both out of ten, so the only
+  // thing worth adding is why a point came off.
+  const parts = [job.deduction ? `minus ${job.deduction} (${(job.deduction_reasons || []).join('; ')})` : '']
     .filter(Boolean);
   const budget = budgetText(job);
   const rows = [
-    ['Score', job.score != null ? join([`${job.grade ?? Math.max(1, Math.round(job.score / 10))} of 10`, `${job.score} points`, ...parts]) : ''],
+    ['Score', job.score != null ? join([`${job.score} of 10`, ...parts]) : ''],
     ['Fit check', job.rationale || ''],
     ['Deal', join([budget === '–' ? '' : budget, job.job_type === 'fixed' ? 'fixed price' : job.job_type === 'hourly' ? 'hourly' : '',
       engagementText(job.engagement || d.engagement_type)])],
