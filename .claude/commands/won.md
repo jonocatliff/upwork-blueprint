@@ -33,11 +33,18 @@ Anything earlier than offer is blocked. Never accept the offer for the member.
 
 ## Step 2: Confirm the delivery baseline
 
-Compare the final Upwork contract terms the member can see with the proposal and
-the saved conversation. Confirm only the differences or missing items, one
-question at a time: contract type and amount or rate, funded first milestone for
-fixed work, agreed scope and exclusions, start date, deadline, client inputs and
-acceptance method. The contract wins every conflict.
+**Read the contract yourself before asking anything.** `list_contracts` action `search`
+on active contracts returns the type, the rate or amount and the dates, and
+`list_milestones` returns the funded first milestone for fixed work. Asking the member to
+retype what the connector will hand over is the kind of question this system exists to
+remove. The one thing you cannot verify is the join: a contract without a job id is
+matched by title, so name which contract you took and let them confirm it is this job.
+
+Then compare what you read with `jobs/<id>/proposal.md` and the saved conversation, and
+put only the differences to them, one question at a time: contract type and amount or
+rate, funded first milestone, agreed scope and exclusions, start date, deadline, client
+inputs and acceptance method. The contract wins every conflict, and a difference is
+written into the brief as a difference rather than quietly resolved.
 
 ## Step 3: Write the handover brief
 
@@ -68,6 +75,18 @@ Then fill the lines in `context.md` that read "not recorded yet" from the propos
 thread, and name in the report how many are still open. A fact nobody wrote down is a question
 the client gets asked twice.
 
-Use the completion report from `CLAUDE.md` and link the handover brief. The next
-action is to start delivery from it. End with `Upwork calls: 0`. Nothing here touches the connector, and a `/brief`
-run before this one counts its own calls in its own report.
+**Then put the new facts about the member back into their own file**, from what the
+contract said rather than from a question: the rate or amount they actually sell at, and a
+`pending` Results entry for the engagement with the client's industry and the sold outcome.
+Say the lines in one block, write them on a yes, and never promote a promise to a result.
+
+**Run again after delivery.** `/won <id>` a second time asks the one question no other
+command owns: what came out of it, with a number and where it can be checked. That line
+goes into the Results section as `verified` when they can point at it, `pending` otherwise,
+and it is what makes the next proposal provable. Without it the evidence base stays at the
+day of the interview while the member's work moves on, and `clients/<slug>/delivered/` is a
+folder nobody reads.
+
+Use the completion report from `CLAUDE.md` and link the handover brief. The next action is
+to start delivery from it. End with `Upwork calls: N`: two on a first run for the contract
+and its milestones, zero on a later one.

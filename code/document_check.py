@@ -37,7 +37,45 @@ def abort(message):
     return 1
 
 
-def validate_artifact(kind, text):
+def proof_text():
+    """The evidence sections of the member's own file, and nothing else from it."""
+    import context_check  # noqa: E402  (same folder, imported where it is used)
+    me = ROOT / 'context' / 'me.md'
+    return context_check.proof_only(me.read_text(encoding='utf-8')) if me.is_file() else ''
+
+
+def unbacked(text, proof):
+    """Result numbers the evidence sections do not carry, in the sentences that claim them.
+
+    The proposal is the document with the price in it and the one a client is sent to
+    read twice, and it was the only client-facing artifact with no check of this kind:
+    the cover letter and the chat draft both had one. A number in a scope line or a
+    milestone is a commitment, not a claim, so only sentences that read as a past result
+    are examined.
+    """
+    import profile_draft  # noqa: E402  (same folder, imported where it is used)
+    claims = []
+    for sentence in re.split(r'(?<=[.!?])\s+|\n', text):
+        if not re.search(r'\b(got|saved|raised|increased|built|delivered|rebuilt|grew|cut|generated|achieved)\b',
+                         sentence, re.I):
+            continue
+        for number in profile_draft.unproven_numbers({'title': '', 'overview': sentence, 'portfolio': None}, proof):
+            claims.append(f'"{number}" reads as a past result but is not in the evidence sections of context/me.md')
+    return claims
+
+
+def off_upwork(text):
+    """Contact details and invitations to move the conversation, as the letter gate reads them.
+
+    The proposal is pasted into the Upwork chat, so it is bound by the same rule as a
+    message: no way to reach the member off the platform before a contract exists.
+    """
+    import application_check  # noqa: E402  (same folder, imported where it is used)
+    return [problem.replace('in the letter', 'in the proposal').replace('the letter asks', 'the proposal asks')
+            for problem in application_check.pc_contacts(text)]
+
+
+def validate_artifact(kind, text, proof=None):
     _, required = ARTIFACTS[kind]
     problems = []
     lines = text.splitlines()
@@ -65,6 +103,9 @@ def validate_artifact(kind, text):
         problems.append('contains an em-dash')
     if PLACEHOLDER.search(text):
         problems.append('contains a placeholder')
+    if kind == 'proposal':
+        problems.extend(unbacked(text, proof if proof is not None else proof_text()))
+        problems.extend(off_upwork(text))
     return problems
 
 

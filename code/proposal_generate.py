@@ -169,7 +169,12 @@ def main(argv=None):
     if not TEMPLATE.is_file():
         abort(f'template missing: {TEMPLATE}')
 
-    weeks = int(data.get('weeks') or 6)
+    # No default. A delivery schedule is a commitment, and six weeks nobody agreed to
+    # is the kind of invented number a client holds the member to on the first call.
+    if not data.get('weeks'):
+        abort('weeks is missing: a schedule the call did not settle cannot be drawn. '
+              'Agree the length with the member, or leave the plan out of the page.')
+    weeks = int(data['weeks'])
     if not 1 <= weeks <= 12:
         abort(f'weeks is {weeks}; a post-call plan runs 1 to 12 weeks.')
     labels = {**DEFAULT_LABELS, **(data.get('labels') or {})}
