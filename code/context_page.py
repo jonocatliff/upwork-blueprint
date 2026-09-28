@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""The one page that shows a member what is now in their own two files.
+"""The one page that shows a member what is now in their own file.
 
     python3 code/context_page.py [--open]
 
 /context ends by reporting what it wrote. A report in a terminal scrolls away,
-and the two files it wrote are markdown with starter lines still in them, which
+and the file it wrote is markdown with starter lines still in it, which
 is a poor thing to read back. This renders both into one page: what they sell,
 how they work, what they can prove, and what is still open, with anything still
 unanswered shown as a gap rather than hidden.

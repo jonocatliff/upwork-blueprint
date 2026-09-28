@@ -984,8 +984,8 @@ def link_map(base: str, html: str) -> dict:
     # unreachable offer page has it in the first dozen, and one with a hundred
     # blog posts does not need each one checked to sell a call.
     #
-    # The full sweep belongs in /audit, which is what the client pays for after
-    # they say yes. This one has to finish in a minute.
+    # The full sweep belongs in the paid work the client buys after they say yes.
+    # This one has to finish in a minute.
     pages = sorted({path_of(u) for u in listed}, key=lambda p: (p.count("/"), len(p)))[:12]
     # Follow the links from the home page and from every page the home page
     # reaches. Two hops is what a visitor does before giving up, and it is what

@@ -56,8 +56,8 @@ The cockpit applies these principles to the interface in
 - Reply, offer and win rates improve once enough applications exist to measure
   them honestly.
 - Dormant leads receive relevant follow-ups and stop when the context says stop.
-- Every client-facing claim is supported, the member sends everything by hand, and every
-  run leaves a clear next action.
+- Every client-facing claim is supported, every reply that leaves carries the member's
+  yes to that one message, and every run leaves a clear next action.
 
 ## Review contract
 

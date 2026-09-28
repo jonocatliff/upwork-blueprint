@@ -88,8 +88,8 @@ so this system excludes that pattern.
 ## Workflow
 
 Turn the current pipeline and fresh conversations into today's follow-up queue.
-The member starts every run. The run makes decisions and drafts, but sends
-nothing.
+The member starts every run. The run decides and drafts; a draft only leaves on
+their yes to that one message.
 
 ### Start with current evidence
 
@@ -141,10 +141,10 @@ cockpit renders the same three groups from it.
 ### Report
 
 Use the repository's completion report. Lead with the number due now and name
-the strongest opportunity. The member sends the draft on Upwork and says so in Claude Code; then run
-`python3 code/pipeline.py follow-up <job id> sent`. The sequence advances only
-after that confirmation. End
-with the exact Upwork call count.
+the strongest opportunity. Then run `python3 code/pipeline.py follow-up <job id> sent`
+for each message that actually went out, whether it left from here on the member's
+yes or they sent it on Upwork and said so. The sequence advances on arrival, never
+on the draft. End with the exact Upwork call count.
 
 ### Self-improvement
 

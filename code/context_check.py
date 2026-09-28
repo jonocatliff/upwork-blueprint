@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The gate for the two files every other command writes from.
+"""The gate for the one file every other command writes from.
 
     python3 code/context_check.py [--quiet]
     python3 code/context_check.py --status

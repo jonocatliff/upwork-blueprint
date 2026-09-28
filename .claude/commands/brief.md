@@ -142,7 +142,7 @@ Write `jobs/<id>/replies.json` as UTF-8 JSON with this exact shape:
 Two drafts when the decision is simple, three only when a genuinely different angle helps.
 Labels are one or two plain words, each `text` is a full reply rather than notes about one.
 Run `python3 code/replies.py check <id>`, then re-read the file and verify each option
-answers the latest client message and carries no claim the two context files cannot support.
+answers the latest client message and carries no claim the evidence sections cannot support.
 
 ## Step 5 · One draft, one decision
 

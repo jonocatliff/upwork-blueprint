@@ -138,7 +138,7 @@ def check(text, job_title='', proof_text=''):
             continue
         missing = profile_draft.unproven_numbers({'title': '', 'overview': sentence, 'portfolio': None}, proof_text)
         for number in missing:
-            fails.append(f'"{number}" reads as a past result but is not in your proof file')
+            fails.append(f'"{number}" reads as a past result but is not in the evidence sections of context/me.md')
     notes.append('human review: match each claim to relevant proof, and confirm scope, rate and commitments')
     eye = [('risk reversal', any(r in low for r in RISK)), ('a specific ask', any(a in low for a in ASK))]
     return fails, notes, eye, words, screening is not None

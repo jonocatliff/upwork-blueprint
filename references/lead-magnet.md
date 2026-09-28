@@ -14,7 +14,7 @@ in the report has to read, then run:
 python3 code/lead_magnet_build.py <job-id>
 ```
 
-The job must be In conversation or Offer and have a saved business website. The
+A saved business website is the only precondition; the audit runs at any stage. The
 `/lead-magnet <job id> <website>` command saves that source through
 `code/pipeline.py lead-magnet-source`. The audit resolves the exact Google
 profile by its website and derives the city, country and map coordinate from that
@@ -226,4 +226,4 @@ contradicts is a failure, not a rough edge.
 
 When the member corrects or praises a report, ask whether the change should be
 permanent. If yes, update this file for report decisions or the relevant
-deterministic script for measurement logic. Save no client example in the skill.
+deterministic script for measurement logic. Save no client example in this repository.

@@ -250,7 +250,7 @@ the outcome.** "A business wants its GoHighLevel CRM cleaned up and automated"
 describes half the board and tells the member nothing he can decide on; "A dental
 practice wants its GoHighLevel CRM cleaned up and automated" tells him in three
 words whether this is his ground. Industry decides fit faster than any other fact:
-it says whether the proof file already covers it, whether the vocabulary is
+it says whether the evidence sections already cover it, whether the vocabulary is
 familiar, and whether the pitch can open with a result instead of a promise.
 
 Take the industry from the posting: the client's own words, the company profile,

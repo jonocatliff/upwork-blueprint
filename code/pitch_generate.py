@@ -5,7 +5,7 @@ reviews, background, the live editable diagram, scope, and the next step.
 Pure assembly. The diagram plan and every sentence are written by Claude from the
 job posting before this runs; this script checks them and fills the template.
 Reviews and background come from the evidence sections of context/me.md, so the page can never claim
-something the proof file does not hold.
+something the evidence sections do not hold.
 
     python3 code/pitch_generate.py <job_id> \\
         --hook "..." \\
@@ -125,7 +125,7 @@ def bullets(block):
 
 
 def reviews(proof_text, limit):
-    """Real client words from the proof file's Reviews section: - "quote" · job."""
+    """Real client words from the Reviews section: - "quote" · job."""
     head, block = section(proof_text, 'Reviews')
     five = '5 star' in head.lower()
     out = []
@@ -138,7 +138,7 @@ def reviews(proof_text, limit):
 
 def cv_block(proof_text, me_text):
     """Background from the proof and facts files. Nothing here is typed in by hand."""
-    _, record = section(proof_text, 'Upwork track record')
+    _, record = section(proof_text, 'Results')
     _, creds = section(proof_text, 'Credentials')
     parts = []
     stats = []
@@ -162,7 +162,7 @@ def cv_block(proof_text, me_text):
         parts.append('<p class="cv-sub">Background</p><ul class="cv-list">'
                      + ''.join(f'<li><span class="cv-list-icon">{BACKGROUND_ICON}</span>'
                                f'<span>{esc(b)}</span></li>' for b in bullets(creds)) + '</ul>')
-    lang = re.search(r'\*\*Languages:\*\*\s*(.+)', me_text)
+    lang = re.search(r'\*\*Education, certificates, languages:\*\*\s*(.+)', me_text)
     if lang:
         parts.append(f'<p class="cv-lang"><span class="cv-list-icon">{LANGUAGE_ICON}</span>'
                      f'<span>{esc(lang.group(1).strip())}</span></p>')

@@ -7,7 +7,7 @@ the Blueprint and have no dependency on a personal or global voice skill.
 
 **English, unless the reader is a client who writes something else.** Everything
 this system says to the member is English: the chat, the reports, `profile.md`,
-their two context files and every file they open. The Blueprint ships in English
+their context file and every file they open. The Blueprint ships in English
 and its rules are written in English, so a member working in another language
 still reads their own tooling in the one the repository speaks. A member who
 writes to Claude in German gets an English answer, and that is deliberate.
@@ -45,7 +45,7 @@ Write as a sales expert who is approachable and professional:
 - Make value, risk and the next decision clear without pressure or tricks.
 - Give the recipient an easy, specific way to answer.
 - Use plain language and only commitments the member approved. Omit claims that
-  the proof file cannot support.
+  the evidence sections cannot support.
 - Match the language and formality of the client's own messages, as the language
   rule above sets out. Preserve the member's stated preferences from
   `context/me.md`.
@@ -97,7 +97,7 @@ conversation, not a template or an assistant. Remove filler, fake urgency,
 generic praise, repeated summaries and em-dashes.
 
 Before a contract, keep every conversation on Upwork and include no contact
-details. Apply the exact output contract of the command that invoked this skill.
+details. Apply the exact output contract of the command that called for the text.
 
 ## Self-improvement
 

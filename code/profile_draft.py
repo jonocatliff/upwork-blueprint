@@ -5,7 +5,7 @@
 
 It passes only when the draft clears the audit's mechanical checks, lands on
 Upwork's form, and every number in it can be found
-in the member's proof file. That last one is the point: a number nobody can
+in the member's evidence sections. That last one is the point: a number nobody can
 back up gets exposed on the first call.
 """
 import argparse
@@ -55,7 +55,7 @@ def parse(text):
 
 
 def unproven_numbers(draft, proof_text):
-    """Every result number in title, overview and portfolio titles that the proof file lacks."""
+    """Every result number in title, overview and portfolio titles the evidence lacks."""
     missing = set()
     for text in [draft['title'], draft['overview']] + (draft['portfolio'] or []):
         for m in pc.RESULT_NUMBER.finditer(text):
@@ -80,7 +80,7 @@ def problems(draft, proof_text):
     # A first profile has no verified result, and the command tells it to lead with
     # the offer and the background instead of a number. Demanding a number anyway
     # left exactly one way out, inventing one, which the next check would catch and
-    # the client would not. No digit anywhere in the proof file means there is
+    # the client would not. No digit anywhere in the evidence means there is
     # nothing to lead with, and the two number checks stand down.
     if not re.search(r'\d', proof_text or ''):
         skip |= {'opening_has_number', 'results_with_numbers'}
@@ -101,7 +101,7 @@ def problems(draft, proof_text):
             found.append(f'{field} has an em-dash')
 
     for n in unproven_numbers(draft, proof_text):
-        found.append(f'"{n}" is not in your proof file: prove it there or cut it')
+        found.append(f'"{n}" is not in the evidence sections of context/me.md: prove it there or cut it')
 
     return found
 

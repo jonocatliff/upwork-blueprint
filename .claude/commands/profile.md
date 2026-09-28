@@ -1,5 +1,5 @@
 ---
-description: Measures your live Upwork profile, then writes the version that fixes it, ready to paste. Every number in it is backed by your proof file.
+description: Measures your live Upwork profile, then writes the version that fixes it, ready to paste. Every number in it is backed by your own evidence.
 argument-hint: "[audit | title | overview | skills | portfolio | video | fields]"
 ---
 
@@ -133,7 +133,7 @@ First three lines, then the decisions:
 ```
 # Your Upwork profile
 
-Written Saturday 12 September 2026 · clears every draft check · every number backed by your proof file
+Written Saturday 12 September 2026 · clears every draft check · every number backed by your own evidence
 **Next:** answer the open questions below, then paste the sections in the order at the bottom.
 ```
 
@@ -196,7 +196,7 @@ Then these sections, with these exact headings. The gate reads the first four (`
 
 ## Step 5 · The gate
 
-Run `python3 code/profile_draft.py check profile.md`. It re-runs the same checks on the draft, Upwork's limits, and looks up every number in your proof file. Exit 1 means fix and run it again. Never loosen the draft's claims to pass, and never add a number to the proof file to make the gate quiet: the proof file changes only with the member's word or the connector's.
+Run `python3 code/profile_draft.py check profile.md`. It re-runs the same checks on the draft, Upwork's limits, and looks up every number in the evidence sections of `context/me.md`. Exit 1 means fix and run it again. Never loosen the draft's claims to pass, and never add a number there to make the gate quiet: those sections change only with the member's word or the connector's.
 
 ## Step 6 · Put it live, one field at a time
 
