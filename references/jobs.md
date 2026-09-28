@@ -33,6 +33,86 @@ the client's stack the quiet ones. Zapier and n8n lead the postings by a distanc
 Make falling through 2026, Power Automate barely present, while GoHighLevel and generic CRM wording
 carry a quarter to nearly half of the automation set alone. Current shares are in the report.
 
+## Ten a day, and a bench of ten
+
+The run's unit is not a score, it is **ten leads worth applying to today**, with ten
+more behind them. One turned down is replaced from the bench in the same breath, so
+the member always reads ten. Fewer than ten is reported as what it is, with the cause
+named: too few dense tracks, limits set too tight, or a quiet day. Padding the ten with
+leads the score turned down wastes Connects on purpose.
+
+**What ten a day costs.** Measured 28 September 2026: one local SEO job cost 7 Connects
+to apply to. Ten a day is therefore near 70 Connects a day, roughly 2,100 a month
+against the 100 a Freelancer Plus plan includes. Say the number, never buy Connects,
+and never talk the member out of their own target.
+
+## The candidate term catalog
+
+A menu for a first run, so nobody stares at a blank page. **Every term here is
+unmeasured until this account measures it**, and one page of results settles it: how
+many of the ten are real work for this member, and over how many hours they spread.
+A term that fails twice is removed with a line saying so. The four branches are the
+columns; a field the member does not sell is a field to skip.
+
+**Local search and paid search**
+```
+tools     Google Business Profile · Google Maps · Search Console · Google Tag Manager · GA4
+roles     local SEO specialist · SEO consultant · Google Ads specialist · PPC manager
+problems  not showing on Google · organic traffic · wasted ad spend · cost per lead · more calls
+industry  <trade> SEO · <trade> leads · <trade> marketing · <trade> Google Ads
+```
+
+**Websites**
+```
+tools     Webflow · WordPress · Elementor · Wix · Squarespace · Shopify theme
+roles     web designer · landing page designer
+problems  website redesign · site speed · mobile friendly · one page website
+industry  <trade> website · <trade> landing page
+```
+
+**AI visibility**, the fastest-growing wording measured on 28 September 2026: six of ten
+SEO postings that day asked for it by name.
+```
+tools     AI Overviews · ChatGPT Search · Perplexity
+roles     GEO specialist · AEO specialist
+problems  AI search visibility · show up in AI answers · cited by ChatGPT
+```
+
+**Automation**
+```
+tools     Make · n8n · Zapier · Airtable · Google Sheets · Twilio
+roles     automation engineer · no-code developer · integration specialist
+problems  manual data entry · connect two tools · API integration · client onboarding
+industry  <trade> booking · <trade> intake · <trade> scheduling
+```
+
+**CRM and follow-up**
+```
+tools     GoHighLevel · GHL · HubSpot · Pipedrive · Mailgun
+roles     GoHighLevel expert · marketing automation specialist · RevOps
+problems  missed call text back · lead follow-up · appointment booking · CRM setup · no-shows
+industry  agency · <trade> academy · med spa · clinic
+```
+
+**The industry line always carries the service word.** Measured 28 September 2026:
+"dentist" returned ten postings over seven days and not one of them was marketing work,
+"plumber" the same, while "gym marketing" returned two clear fits out of ten, one Google
+Ads and one GoHighLevel. The trade alone finds job adverts; the trade plus what you sell
+finds clients.
+
+## Reverse engineering a term, the cheapest discovery there is
+
+One broad term, one page, then read the ten. Name the jobs that actually fit, and take
+their wording rather than inventing any:
+
+```
+python3 code/tracks.py skills data/search/*.json --term "<a term you already run>" --id <fitting job id> --id <another>
+```
+
+It counts Upwork's own skill names on those postings and marks the ones no current term
+covers. Those are candidates, not keepers: each still needs its one page of measurement.
+Costs no Upwork call, because it reads the files the run already saved.
+
 ## Ready-made tracks
 
 A first run does not have to invent terms from nothing. Two lanes are written out below, each
@@ -68,6 +148,31 @@ lane of its own rather than three more terms.
 run's roughly two dozen calls. Two lanes at once buys twice the coverage at half the depth per
 term, which is how a run stops finding the fresh postings that are the whole point. The rotating
 slot for a new candidate term is the place to test across lanes, not a second lane.
+
+## The member's limits, sent with the query
+
+A boundary belongs in the search itself, not in a judgement after the results
+arrive: the filters cost nothing and every one of them turns ten random rows into
+ten rows worth reading. These are the defaults. A member's own figure in
+`context/me.md` beats every one of them, and `/context` asks for them in the
+terms block.
+
+| Limit | Default | Filter | Why this number |
+|---|---|---|---|
+| Competition | 40 proposals | `proposals_max` | Measured 28 September 2026: a single SEO term returned postings at 106 and 122 proposals. Connects spent there buy a lottery ticket |
+| Fixed price floor | $250 | `budget_min` | Below it the writing costs more than the job pays |
+| Hourly floor | 60% of the member's rate | `rate_min` | The same day returned hourly postings at $3 to $5 |
+| Engagement | no `FULL_TIME` | `job_type`, `workload` | An employee disguised as a contract, and the one trap a generous budget hides best |
+| Client rating | drop below 3.0, and only with at least 3 reviews | after the search | One bad review is one freelancer's bad week; three are a pattern. The rating is not a search filter |
+| Age | over 24 hours | the window | Measured 28 September 2026: a three-hour-old posting already carried 23 proposals. A day old is a queue, not an opening |
+
+**A posting that caps itself is a no whatever the client looks like**, for example
+"$500 fixed price, done by Friday". The posting is evidence about the budget, the
+client history only evidence about the client.
+
+**Every exclusion is logged with its reason.** A limit that costs the member good
+work has to be visible as a cost within two weeks, or it is a rule nobody can
+argue with.
 
 ## Judging the client
 

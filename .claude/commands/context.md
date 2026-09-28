@@ -229,10 +229,16 @@ without a deliverable and a price makes every later command invent one.
    websites. Pick by overlap with the jobs they have held, not by what sounds
    biggest, and say that the first ten applications test the choice.
 4. **What you do not do.** One line. It protects every later proposal.
-5. **The niche their background points at**, proposed by you with the reason,
+5. **The industries they want to work with**, in their own words, written as
+   `**Industries you want to work with:**` in `context/me.md`. This is a preference,
+   not a specialization: somebody who sells local SEO and loves gyms searches "gym
+   marketing" as well as "local SEO", and that one line is where `/find-jobs` gets it.
+   Ask it even when the direction is still open, because it is usually the easiest
+   question in this block to answer.
+6. **The niche their background points at**, proposed by you with the reason,
    then confirmed or corrected. A profile that serves everyone reads as serving
    no one, and in most professions none of the top three owns a niche.
-6. **The tools and systems** they can name confidently, for search.
+7. **The tools and systems** they can name confidently, for search.
 
 ## Step 3 · Terms and voice
 

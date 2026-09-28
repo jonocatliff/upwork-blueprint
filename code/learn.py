@@ -33,6 +33,15 @@ def reached(job, stage):
     return job.get('status') == stage
 
 
+def tracks(job):
+    """Every source slug this lead came from. `found_via` is a list, not a string."""
+    found = job.get('found_via')
+    if isinstance(found, str):
+        found = [found]
+    named = [str(slug) for slug in (found or []) if str(slug).strip()]
+    return named or ['unknown']
+
+
 def branch(slug):
     """Which kind of search found it: Upwork's own feed, a theme, or a client tool."""
     if slug.startswith('recommended'):
@@ -45,13 +54,13 @@ def branch(slug):
 def dimensions(job):
     """Every bucket this lead belongs to, as (dimension, value) pairs."""
     out = []
-    for slug in job.get('found_via') or []:
-        out.append(('found via', str(slug)))
-        out.append(('search branch', branch(str(slug))))
+    for slug in tracks(job):
+        out.append(('found via', slug))
+        out.append(('search branch', branch(slug)))
     client = job.get('client') or {}
     if client.get('country'):
         out.append(('client country', str(client['country'])))
-    spent = str(client.get('total_spent') or '').strip()
+    spent = str(client.get('spent') or client.get('total_spent') or '').strip()
     out.append(('client history', 'has spent' if spent and spent not in ('$0', '$0.00') else 'no spend recorded'))
     if job.get('job_type'):
         out.append(('job type', str(job['job_type'])))
@@ -127,10 +136,12 @@ def branch_yield(rows, jobs):
     """
     produced = collections.Counter()
     for row in rows:
-        produced[row.get('found_via') or 'unknown'] += 1
+        for name in tracks(row):
+            produced[name] += 1
     passed = collections.Counter()
     for job in jobs:
-        passed[job.get('found_via') or 'unknown'] += 1
+        for name in tracks(job):
+            passed[name] += 1
     return [(name, passed.get(name, 0), passed.get(name, 0) + count)
             for name, count in produced.most_common()]
 

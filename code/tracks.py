@@ -16,6 +16,7 @@ a rate, the median number of proposals, and the share from clients with a verifi
 payment method.
 """
 import argparse
+import collections
 import datetime
 import json
 import pathlib
@@ -95,6 +96,56 @@ def verdict(row):
     return 'thin: check it weekly, not daily'
 
 
+def posting_skills(path, keep=None):
+    """Upwork's own skill names on the postings in one saved search page.
+
+    With `keep`, only the postings whose id is in it: the reverse-engineering case,
+    where one broad search is read, the jobs that actually fit are named, and their
+    wording becomes the candidate terms. Upwork's vocabulary beats anyone's guess.
+    """
+    for job in load(path):
+        if keep and str(job.get('id')) not in keep:
+            continue
+        for skill in job.get('skills') or []:
+            name = str(skill).strip()
+            if name:
+                yield name
+
+
+def covered(name, terms):
+    """True when a current search term already carries this skill's wording."""
+    plain = re.sub(r'[^a-z0-9]+', ' ', name.lower()).strip()
+    for term in terms:
+        other = re.sub(r'[^a-z0-9]+', ' ', term.lower()).strip()
+        if plain and other and (plain in other or other in plain):
+            return True
+    return False
+
+
+def cmd_skills(args):
+    keep = {str(i) for i in (args.id or [])}
+    counts = collections.Counter()
+    for path in args.files:
+        counts.update(posting_skills(path, keep))
+    terms = args.term or []
+    rows = [(name, n) for name, n in counts.most_common() if n >= args.min_count]
+    fresh = [(name, n) for name, n in rows if not covered(name, terms)]
+    if args.json:
+        print(json.dumps({'skills': [{'skill': n, 'postings': c, 'covered': covered(n, terms)}
+                                     for n, c in rows]}, indent=2, ensure_ascii=False))
+        return 0
+    if not rows:
+        print(f'No skill appears on {args.min_count} or more of these postings.')
+        return 0
+    print(f'{len(rows)} skills on {args.min_count}+ postings, {len(fresh)} of them outside your current terms:')
+    for name, n in rows:
+        mark = '   ' if covered(name, terms) else ' * '
+        print(f'{mark}{n:3}  {name}')
+    print('\n* is a candidate term Upwork itself uses and your tracks do not. '
+          'Measure it before keeping it: one call says whether it is dense.')
+    return 0
+
+
 def cmd_measure(args):
     rows = [measure(p) for p in args.files]
     rows.sort(key=lambda r: (r['span_hours'] is None, r['span_hours'] or 1e9))
@@ -125,6 +176,13 @@ def main(argv=None):
     m.add_argument('files', nargs='+')
     m.add_argument('--json', action='store_true', help='machine-readable output')
     m.set_defaults(func=cmd_measure)
+    s = sub.add_parser('skills', help="Upwork's own skill names on the postings you already pulled")
+    s.add_argument('files', nargs='+')
+    s.add_argument('--term', action='append', help='a search term you already run; repeatable')
+    s.add_argument('--id', action='append', help='only these job ids, the ones that actually fit; repeatable')
+    s.add_argument('--min-count', type=int, default=3, help='ignore skills below this many postings')
+    s.add_argument('--json', action='store_true', help='machine-readable output')
+    s.set_defaults(func=cmd_skills)
     args = parser.parse_args(argv)
     return args.func(args)
 

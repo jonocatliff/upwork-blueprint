@@ -35,7 +35,7 @@ cockpit list. End with `Upwork calls: 0`, and do not continue into Step 0.
 
 ## Step 0 · Files, connector, window
 
-Run `python3 code/workspace.py` and `python3 code/pipeline.py prune`, then `list_accounts` (walk through connecting as `/profile` Step 0 does if the tools are missing). Then `python3 code/jobs.py window`: the hours to look back, at least 10, stretched to cover the gap since the newest saved lead, capped at 72 hours.
+Run `python3 code/workspace.py` and `python3 code/pipeline.py prune`, then `list_accounts` (walk through connecting as `/profile` Step 0 does if the tools are missing). Then `python3 code/jobs.py window`: the hours to look back, at least 10, stretched to cover the gap since the newest saved lead, capped at 24 hours because a posting a day old is already answered by fifty other freelancers.
 
 ## Step 0b · Is this the first run, or a run with a direction?
 
@@ -95,9 +95,22 @@ Save each response's `jobs` list to `data/search/<name>.json` as `{"jobs": [...]
    are the member's personal configuration from `context/me.md`. Each theme
    groups useful variations and tool names into one semantic query. For every
    theme, call `find_jobs` action `search`, `query` the emitted `query`, `sort`
-   `recency`, and `verified_payment_only` true. Page with `cursor` while
-   `hasNextPage` and the page's newest job is still inside the window, at most
-   2 pages. Save as `query-<slug>.json`, using the emitted `slug`. Never split
+   `recency`, and `verified_payment_only` true. **Page until the window is
+   covered**, not to a fixed page count: keep setting `cursor` while
+   `hasNextPage` and the page's oldest job is still inside the window, and stop
+   at the page that crosses it. A dense term therefore costs more calls than a
+   thin one, which is the point: ten results on a dense term can be two hours of
+   a twenty-four hour window, and a fixed cap leaves the rest of the day
+   invisible without saying so.
+
+   **Send the member's own limits with the query, so the pages that come back are
+   pages worth reading.** The search filters are free and server side:
+   `proposals_max` for the competition ceiling, `budget_min` for fixed work,
+   `rate_min` for hourly, plus `experience_level`, `job_type` and `workload`
+   where the member has named a boundary. A term that still needs more than
+   three pages to reach the window edge is too broad, not deep: narrow it with
+   those filters or split it, and say which, rather than paging through postings
+   the member would reject on sight. Save as `query-<slug>.json`, using the emitted `slug`. Never split
    the terms into separate calls: the grouped query exists to cover variants
    without wasting calls.
 
@@ -200,6 +213,21 @@ same pattern. These are downstream outcomes for saved leads, not true search
 precision: raw Upwork retrieval totals are deliberately deleted after each run.
 Never disable or rewrite a theme without the member's explicit decision.
 
+**Read the member's own history before scoring anything.** Run `python3
+code/jobs.py lessons` and `python3 code/learn.py report`: the jobs they applied
+to, the ones that got a reply, the ones they turned down and the reason they
+gave. That record is stronger evidence than any sentence in `context/me.md`,
+because it is what they did rather than what they said, and it is the only thing
+that can tell the score it was wrong.
+
+**Every fit names its comparable case.** The rationale says which past lead this
+job resembles and how that one ended: "like the pet grooming lead that replied"
+or "same shape as the three account-manager roles turned down as too open". A
+rationale that only asserts a good fit is taste, and taste cannot be measured
+next month. With no history yet, say that plainly and score against
+`context/me.md` alone. Three turn-downs with the same reason lower the fit for
+the fourth job of that pattern, without waiting for anyone's permission.
+
 Then give every candidate a niche fit from 0 to 40 against `context/me.md`:
 
 - **35 to 40:** the center of what you sell, and your proof covers it.
@@ -280,10 +308,20 @@ list's one-sentence headline `python3 code/pipeline.py headline <id> "<sentence>
    or client. This is the half of the record that needs a person, so it is asked once,
    here, and never chased. A lead the member rejects later takes the same route through
    `/find-jobs skip <id> <reason>`.
-3. Keep the complete scored list in the cockpit. The chat report names open
-   invitations first, then the count scoring 70 or more and, if useful, the best
-   lead with one reason. No separate
-   result list or repeated recap. None above a 7: say so plainly.
-4. Use the compact completion report from `CLAUDE.md`. Next step: open the cockpit,
+3. **Show ten, hold ten.** The run's job is ten leads the member would actually
+   apply to today, plus a bench of ten behind them. Show exactly ten, numbered, each
+   one line: who wants what, the grade, and what applying costs in Connects. When the
+   member turns one down, name the next from the bench in the same breath, so the list
+   is ten again before they ask. Keep the complete scored list in the cockpit.
+   Open invitations come first, before the ten, because they cost nothing.
+4. **Say it when ten is not there.** Fewer than ten at a 7 or better is a result, not
+   a failure to hide: report how many there are, and which of the three causes it was.
+   Too few dense tracks, limits set too tight, or a quiet day. Never pad the ten with
+   leads the score turned down, and never lower the gate to fill a row.
+5. **Name the day's Connects bill once.** Ten applications cost what the ten jobs cost,
+   measured from each `connects_cost`, against the balance the connector reports. One
+   line, no advice unless the balance runs out before the ten do. Measured 28 September
+   2026: one local SEO job cost 7 Connects, so a ten-a-day habit runs near 70 a day.
+6. Use the compact completion report from `CLAUDE.md`. Next step: open the cockpit,
    or `/pitch-page <id>` for the best lead. End with `Upwork calls: N`, measured,
    never an estimated range.
