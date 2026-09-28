@@ -7,8 +7,8 @@ argument-hint: "[a CV file, a LinkedIn or portfolio URL, or focus: background | 
 
 The first command, before the connector and before any text a client reads. It
 fills `context/me.md`, and every later command writes from
-them. Nothing here is public, and nothing is sent: it reads your own profile
-when the connector is there, and writes two local files.
+it. Nothing here is public, and nothing is sent: it reads your own profile
+when the connector is there, and writes one local file.
 
 Follow `references/copy.md` for how to ask. Read
 [references/profile.md](../../references/profile.md) first: it says which facts
@@ -113,7 +113,7 @@ Show the member what came back, in this order and in their words:
   one mistake here that throws no error.
 
 Then say plainly that none of it blocks this command: `/context` writes two local
-files and sends nothing. Never wait for an install, never ask which keys they
+file and sends nothing. Never wait for an install, never ask which keys they
 should buy, and never hold back the questions below because something is missing.
 
 1. Run `python3 code/workspace.py`.
@@ -305,11 +305,11 @@ the first delivered job fills this file.
 Never write a number the member did not give. Never round one up. An invented
 number is worse than a missing one, because the first client call exposes it.
 
-## Step 5 · Write the two files
+## Step 5 · Write the file
 
-Keep the shape of the starters, replace every "not answered yet" you have an
-answer for, and leave the rest as it is. Top of each file: what it is, the date
-in words, and the one next action. No tables, no raw JSON, no ids.
+Keep the shape of the starter, replace every "not answered yet" you have an
+answer for, and leave the rest as it is. At the top: what it is, the date in
+words, and the one next action. No tables, no raw JSON, no ids.
 
 `context/me.md` gains the background as its own section: one block per job with
 the years, one line on what transfers. That section is what `/pitch-page` reads
@@ -338,11 +338,11 @@ with its price beside it, the rate, and what they do not do. Six lines at most.
 highest tier first. A pending claim never reaches a client, so say plainly which
 ones those are and what would move them to verified.
 
-**Where it lives.** [context/me.md](../../context/me.md), the two files every later command
-reads. Name any other file this run created or changed, and say that these two
-are the member's own and are never touched by `git pull`.
+**Where it lives.** [context/me.md](../../context/me.md), the one file every later
+command reads. Name any other file this run created or changed, and say that it is
+the member's own and is never touched by `git pull`.
 
-Then run `python3 code/context_page.py --open`. It renders both files into
+Then run `python3 code/context_page.py --open`. It renders that file into
 [context/overview.html](../../context/overview.html) and opens it: what they
 sell, how they work, what they can prove with verified and pending side by side,
 and every gap marked as a gap. A terminal report scrolls away and markdown with

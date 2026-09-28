@@ -104,11 +104,12 @@ Save each response's `jobs` list to `data/search/<name>.json` as `{"jobs": [...]
    Do not add a service merely because a tool exists; the member must actually
    want that work.
 
-   **Cover all three branches, not just one** (see
+   **Cover all four branches, not just one** (see
    [references/jobs.md](../../references/jobs.md)):
-   the tools a client runs, the job titles a client hires for, and the problem
-   words a client uses when they do not know the solution. Most freelancers
-   search only the third and land in the crowd.
+   the tools a client runs, the job titles a client hires for, the problem words
+   a client uses when they do not know the solution, and the industry the client
+   is in. Most freelancers search only the third and land in the crowd, and the
+   fourth is the one a career changer already owns.
 
 3. **The client's own industry.** Search the trade plus the pain, not the tool: a dental
    practice, a gym, a law firm, an HVAC company, a Shopify store or a clinic writes about

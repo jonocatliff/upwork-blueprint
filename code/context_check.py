@@ -93,9 +93,9 @@ def check_proof(text):
         if not line.startswith(('-', '*', '**')) and not line[0].isdigit():
             continue
         if not STATUS.search(line):
-            findings.append(f'proof.md, {section}: no verified or pending status: "{line[:50]}"')
+            findings.append(f'me.md, {section}: no verified or pending status: "{line[:50]}"')
         elif re.search(r'\bverified\b', line, re.I) and not CHECKABLE.search(line):
-            findings.append(f'proof.md, {section}: verified with no place to check it: "{line[:50]}"')
+            findings.append(f'me.md, {section}: verified with no place to check it: "{line[:50]}"')
     return findings
 
 

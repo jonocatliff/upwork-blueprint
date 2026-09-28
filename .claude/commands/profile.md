@@ -96,13 +96,13 @@ what each fix is worth. Write no file. Next step: `/profile` without the focus.
 
 ## Step 3 · Read your facts
 
-`context/me.md` hold the background, the offer, the terms
+`context/me.md` holds the background, the offer, the terms
 and every result the member can back up. `/context` writes them; this command
 writes copy and interviews nobody.
 
 Run `python3 code/context_check.py`. Open questions never stop this command:
 write the draft from what exists and name every gap under "# Decide first" at the
-top of `profile.md`. Only when both files are still untouched starters does
+top of `profile.md`. Only when that file is still the untouched starter does
 `/context` come first, because then there is nothing to write from.
 
 **Never use a pending claim in client-facing copy.** Verified means the member
@@ -139,9 +139,9 @@ Written Saturday 12 September 2026 · clears every draft check · every number b
 
 Then these sections, with these exact headings. The gate reads the first four (`## Title`, `## Overview`, `## Skills`, `## Portfolio titles`); the last two are for you alone:
 
-- **`## Title`**: the recommended title alone in a fenced `text` block, three or four blocks split by |, each block a word a client types. Upwork documents no character limit; the sixteen measured profiles run 55 to 70, so stay inside that and never pad to fill it. Below it, four to seven variants as a list, each with its angle in bold (tool first, outcome first, niche first, audience first). Picking is faster than explaining.
+- **`## Title`**: the recommended title alone in a fenced `text` block, two to five blocks split by |, each block a word a client types. **The limit is 70 characters**, measured from the connector's own write action and from a real title that came back cut at exactly 70, and the draft gate fails anything longer. Strong profiles run 55 to 70, so use the room without padding to fill it. Below it, four to seven variants as a list, each with its angle in bold (tool first, outcome first, niche first, audience first). Picking is faster than explaining.
 - **`## Overview`**: the first two lines once on their own as a quote, because they carry the click. Then the whole overview in one fenced `text` block. No markdown inside it: Upwork shows asterisks as asterisks, so structure comes from Unicode bold, emoji or plain prose. Offer prose first when the member writes well, because the two highest earners in the measured sample use it and lists sat with the lower ones. It opens with what the client gets and the strongest relevant verified proof when one exists, lists what you build, names the tools on one line for search, and ends with a specific ask. A good ask invites the client to send their website on Upwork.
-- **`## Skills`**: one `- Skill` line each, up to 20, in Upwork's exact spelling (the skill for GoHighLevel is called HighLevel). Use the names Step 1 counted in real postings; mark any you could not confirm with "(check the spelling in Upwork's list)".
+- **`## Skills`**: one `- Skill` line each, in Upwork's exact spelling. Upwork's own help says 15 in one place and 20 in another, so fill what the live editor actually offers and claim no number from memory (the skill for GoHighLevel is called HighLevel). Use the names Step 1 counted in real postings; mark any you could not confirm with "(check the spelling in Upwork's list)".
 - **`## Portfolio titles`**: one `- New title (was: old title)` line per project. A number goes in a title only when the proof ties it to that project.
 - **`## Video script`**: the profile video, where the member introduces themselves. It is
   **derived from the sections above, never invented next to them**: the problem sentence
@@ -220,7 +220,8 @@ CLAUDE.md defines it. Say the score from Step 1 and what changed because of it,
 worst problem first, in three lines at most. Link [profile.md](../../profile.md).
 
 Next step: paste, then `/profile audit` in a day or two, which measures the live
-profile again and says what is still open. End with `Upwork calls: N`, normally
-four on a first run: the account, the profile, its highlights and the one job
-search that measures the skills clients type. Fewer when `/context` already read
-the profile within the day.
+profile again and says what is still open. End with `Upwork calls: N`, measured,
+never estimated. Reading costs four on a first run: the account, the profile, its
+highlights and the one job search that measures the skills clients type, and
+fewer when `/context` already read the profile within the day. Every field put
+live in Step 6 adds two more, a preview and its confirmation.

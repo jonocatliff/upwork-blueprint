@@ -13,12 +13,14 @@ proofs, their system drawn as a diagram they can drag and edit, the short
 working-together sequence and the next step on Upwork. The Loom that walks
 through this page comes after it. The application includes a cover letter, bid and any screening answers stated in the full posting.
 
-Read first: [references/upwork.md](../../references/upwork.md) (the section on links before a contract starts), `context/me.md`.
+Read first: [references/upwork.md](../../references/upwork.md) (hard constraint 8, no contact route on a page before a contract), `context/me.md`.
 
 Before Step 1, if `jobs/<id>/pitch.html` exists, run
 `python3 code/pitch_check.py page jobs/<id>/pitch.html`. When it passes, keep
-that page and go straight to the Application step. This also covers leads from
-the old flow that have a valid page but no application.
+that page and skip building it again. Check the pipeline record for a
+`pitch_url`: with one, go straight to the Application step. Without one the page
+was never published, so run Step 7 first, because the application links to a page
+a client has to be able to open.
 
 Before research or assembly, run `python3 code/preflight.py vercel`. Stop if the
 publishing destination is unavailable; a pitch that cannot be published is not
@@ -157,7 +159,7 @@ python3 code/pitch_generate.py <id> --hook "..." \
 - **Member photo:** when a real member photo is available, use it as the identity
   reference for one natural action portrait and pass the finished local asset
   with `--profile-image`. Never invent a member's likeness without that
-  reference. The proof beside it still comes only from the evidence sections of `context/me.md` and
+  reference. The proof beside it still comes only from the Results, Reviews and Credentials sections of
   `context/me.md`.
 - Do not put a budget or speculative delivery timeline on the pitch page. The
   internal pricing guide remains in the cockpit for the member.
@@ -220,15 +222,24 @@ python3 code/pitch_generate.py <id> --hook "..." \
 
 ## Step 7 · Publish the client page
 
-Run `python3 code/pitch_deploy.py <id>`. It deploys only the checked
-`jobs/<id>/pitch.html` to the member's `upwork-pitches` Vercel project, confirms
-that the page opens publicly, then saves the exact deployment URL through
-`code/pipeline.py`. Never upload the job folder because it contains drafts.
+Run `python3 code/pitch_deploy.py <id>`. It confirms the page opens publicly and
+saves the exact deployment URL through `code/pipeline.py`. Never upload the job
+folder, because it contains drafts.
+
+**It republishes every page that project already holds**, not just this one:
+every earlier pitch page and every published audit go up again, because one
+Vercel deploy replaces the whole project. Two consequences worth knowing before
+the first run. An old page that fails its own gate today stops this run with
+`the previously published pitch <id> failed its gate`, and the fix is that
+page, not this one. And a page pulled from the project by this member stays gone
+after the next deploy.
 
 Publishing is part of this command. A missing Vercel CLI or authentication is a
-blocker, not a completed pitch. The member can set `VERCEL_TOKEN`,
-`VERCEL_SCOPE` and `VERCEL_PITCH_PROJECT` in `.env`; an existing Vercel CLI
-login also works without a token.
+blocker, not a completed pitch. Either a Vercel CLI login or a `VERCEL_TOKEN`
+works, **but not a token that belongs to a different account**: the preflight
+stops when a token publishes as somebody other than `vercel login`, because that
+sends a client's page into a stranger's Vercel and reports success. A token for a
+team names that team in `VERCEL_SCOPE`.
 
 ## Step 8 · Application
 

@@ -4,7 +4,7 @@ reviews, background, the live editable diagram, scope, and the next step.
 
 Pure assembly. The diagram plan and every sentence are written by Claude from the
 job posting before this runs; this script checks them and fills the template.
-Reviews and background come from context/proof.md, so the page can never claim
+Reviews and background come from the evidence sections of context/me.md, so the page can never claim
 something the proof file does not hold.
 
     python3 code/pitch_generate.py <job_id> \\

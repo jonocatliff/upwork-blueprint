@@ -192,7 +192,7 @@ def build(me_text, proof_text, open_points):
 <div class="wrap">
   <h1>Your Upwork context</h1>
   <p class="lede">What every command reads before it writes a word for you or a client.</p>
-  <p class="stamp">Built from context/me.md and context/proof.md. Nothing on this page left your machine.</p>
+  <p class="stamp">Built from context/me.md. Nothing on this page left your machine.</p>
 
   <div class="verdict">{esc(verdict)}</div>
 
