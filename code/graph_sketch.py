@@ -1,29 +1,30 @@
 #!/usr/bin/env python3
-"""The plan diagram as text, before anyone renders or publishes it.
+"""The plan diagram as a drawing, before anyone renders or publishes it.
 
     python3 code/graph_sketch.py jobs/<id>/pitch-graph.json
+    python3 code/graph_sketch.py jobs/<id>/pitch-graph.json --list
 
 A pitch page's diagram is the part a client studies, and it used to be judged for the
 first time as a rendered image on a public URL. That is the wrong moment: by then the
-page exists, the deploy ran, and changing the flow means doing all of it again. Printed
-as text it can be read in the terminal in ten seconds and argued about in words, which
-is the only cheap round of edits a diagram ever gets.
+page exists, the deploy ran, and changing the flow means doing all of it again.
 
-It draws what the file says and nothing it wishes were there: one block per phase, every
-node with who owns it, every edge with its label, and the three things the diagram is
-supposed to prove, counted rather than claimed. A node nobody points at, a decision with
-one exit, a phase with a single step: all of them are visible here and invisible in a
-picture.
+So it is drawn here, in boxes and arrows, from the same file the page is built from. An
+indented list is not a diagram and cannot be judged like one: a fork that does not fork,
+a step that leads nowhere and a phase with one box are all obvious in a drawing and
+invisible in a list. `--list` prints the flat version when a flow is too wide to draw.
 """
 import argparse
 import collections
 import json
 import pathlib
 import sys
+import textwrap
 
 KIND_MARK = {'source': '>', 'sink': '=', 'decision': '?', 'datastore': '#',
              'service': '~', 'actor': '@', 'note': '-', 'milestone': '*', 'step': '.'}
-OWNER_MARK = {'you': 'you', 'client': 'CLIENT RUNS IT', 'thirdparty': 'third party'}
+OWNER_TAG = {'client': 'client runs it', 'thirdparty': 'third party'}
+INNER = 24          # characters inside a box
+GAP = 3             # spaces between two boxes in a row
 
 
 def load(path):
@@ -38,70 +39,204 @@ def load(path):
     return value
 
 
-def sketch(graph):
+def read(graph):
     nodes = {str(n.get('id')): n for n in graph.get('nodes') or [] if isinstance(n, dict)}
-    edges = [e for e in graph.get('edges') or [] if isinstance(e, dict)]
-    groups = [g for g in graph.get('groups') or [] if isinstance(g, dict)]
-    out = collections.defaultdict(list)
+    edges = [e for e in graph.get('edges') or [] if isinstance(e, dict)
+             and str(e.get('from')) in nodes and str(e.get('to')) in nodes]
+    return nodes, edges
+
+
+def layers(nodes, edges):
+    """Shortest path from a start: the first moment a step can happen.
+
+    A real plan loops (a failed check goes round again) and a longest-path walk lets one
+    loop drag a whole branch to the bottom, which draws a flow nobody would recognise.
+    The first moment a step is reachable is the moment a reader expects to see it, so a
+    loop stays what it is: an edge pointing back, listed under the drawing.
+    """
+    after = collections.defaultdict(list)
+    incoming = collections.Counter()
     for edge in edges:
-        out[str(edge.get('from'))].append(edge)
-    lines, placed = [], set()
-    for index, group in enumerate(groups, 1):
+        after[str(edge['from'])].append(str(edge['to']))
+        incoming[str(edge['to'])] += 1
+    starts = [node for node in nodes if not incoming[node]] or [next(iter(nodes))]
+    depth = {node: 0 for node in starts}
+    queue = collections.deque(starts)
+    while queue:
+        node = queue.popleft()
+        for target in after[node]:
+            if target not in depth:
+                depth[target] = depth[node] + 1
+                queue.append(target)
+    for node in nodes:                      # anything the walk never reached
+        depth.setdefault(node, max(depth.values(), default=0) + 1)
+    rows = collections.defaultdict(list)
+    for node, level in sorted(depth.items(), key=lambda kv: (kv[1], kv[0])):
+        rows[level].append(node)
+    return [rows[level] for level in sorted(rows)], depth
+
+
+def box(node_id, node):
+    """One node as four to six lines of exactly INNER + 2 characters."""
+    mark = KIND_MARK.get(str(node.get('kind')), '.')
+    label = f'{mark} {node.get("label") or node_id}'
+    body = textwrap.wrap(label, INNER - 2)[:3] or [label[:INNER - 2]]
+    tag = OWNER_TAG.get(str(node.get('owner')))
+    if tag:
+        body.append(tag.rjust(INNER - 2))
+    top = '+' + '-' * INNER + '+'
+    return [top] + [f'| {line.ljust(INNER - 2)} |' for line in body] + [top]
+
+
+def row(ids, nodes):
+    """A whole layer side by side, plus the centre column of each box."""
+    boxes = [box(i, nodes[i]) for i in ids]
+    height = max(len(b) for b in boxes)
+    boxes = [b + [' ' * (INNER + 2)] * (height - len(b)) for b in boxes]
+    lines = [(' ' * GAP).join(part) for part in zip(*boxes)]
+    centres = [index * (INNER + 2 + GAP) + (INNER + 2) // 2 for index in range(len(ids))]
+    return lines, dict(zip(ids, centres))
+
+
+def place(text, column, width):
+    """One label written into a blank line at a column, kept inside the width."""
+    column = max(0, min(column, width - len(text)))
+    return column, text
+
+
+def connectors(pairs, source_centres, target_centres, width, labels):
+    """Four lines: out of each source, across, the edge labels, then into each target.
+
+    Labels get their own line on purpose. Written onto the horizontal run they collide
+    with it and with each other, and a fork whose second label silently vanished is
+    exactly the defect this drawing exists to expose.
+    """
+    down = [' '] * width
+    across = [' '] * width
+    tags = [' '] * width
+    into = [' '] * width
+    for source, target in pairs:
+        a, b = source_centres[source], target_centres[target]
+        down[a] = '|'
+        into[b] = 'v'
+        lo, hi = sorted((a, b))
+        for x in range(lo, hi + 1):
+            if across[x] == ' ':
+                across[x] = '-'
+        # A source that fans out sideways gets a corner even on its straight edge,
+        # so a fork never reads as a single line that happens to touch a branch.
+        fans = any(source_centres[s] != target_centres[t] for s, t in pairs if s == source)
+        across[a] = '+' if fans else '|'
+        across[b] = '+' if a != b else across[b]
+    for (source, target), text in labels.items():
+        if not text:
+            continue
+        word = text[:INNER]
+        at = max(0, min(target_centres[target] - len(word) // 2, width - len(word)))
+        while at and any(tags[at + i] != ' ' for i in range(len(word)) if at + i < width):
+            at -= 1
+        tags[at:at + len(word)] = list(word)
+    return [line.rstrip() for line in (''.join(down), ''.join(across), ''.join(tags), ''.join(into))
+            if line.strip()]
+
+
+def draw(nodes, edges):
+    rows, depth = layers(nodes, edges)
+    width = max(len(ids) for ids in rows) * (INNER + 2 + GAP)
+    out, jumps, centres = [], [], []
+    for ids in rows:
+        lines, centre = row(ids, nodes)
+        centres.append(centre)
+        out.append(lines)
+    drawn = []
+    for index, ids in enumerate(rows):
+        drawn.extend(out[index])
+        if index + 1 >= len(rows):
+            continue
+        forward, labels = [], {}
+        for edge in edges:
+            source, target = str(edge['from']), str(edge['to'])
+            if source in centres[index] and target in centres[index + 1]:
+                forward.append((source, target))
+                labels[(source, target)] = str(edge.get('label') or '')
+        if forward:
+            drawn.extend(connectors(forward, centres[index], centres[index + 1], width, labels))
+        else:
+            drawn.append('')
+    for edge in edges:
+        source, target = str(edge['from']), str(edge['to'])
+        if depth[target] != depth[source] + 1:
+            label = f' [{edge["label"]}]' if edge.get('label') else ''
+            back = 'back to' if depth[target] <= depth[source] else 'ahead to'
+            jumps.append(f'  {nodes[source].get("label") or source} {back} '
+                         f'{nodes[target].get("label") or target}{label}')
+    return drawn, jumps
+
+
+def flat(nodes, edges, graph):
+    after = collections.defaultdict(list)
+    for edge in edges:
+        after[str(edge['from'])].append(edge)
+    lines = []
+    for index, group in enumerate(graph.get('groups') or [], 1):
         lines.append(f'\nPHASE {index}: {group.get("label") or "(no label)"}')
-        members = [str(i) for i in group.get('nodes') or []]
-        if len(members) < 2:
-            lines.append('   ! only one step in this phase, which is a list with rounded corners')
-        for node_id in members:
-            placed.add(node_id)
+        for node_id in [str(i) for i in group.get('nodes') or []]:
             node = nodes.get(node_id)
             if not node:
                 lines.append(f'   ! {node_id} is in this phase and not in nodes')
                 continue
-            mark = KIND_MARK.get(str(node.get('kind')), '.')
-            owner = OWNER_MARK.get(str(node.get('owner')), str(node.get('owner') or ''))
-            lines.append(f'   [{mark}] {node.get("label") or node_id}   ({owner})')
-            for edge in out.get(node_id, []):
+            tag = OWNER_TAG.get(str(node.get('owner')), 'you')
+            lines.append(f'   [{KIND_MARK.get(str(node.get("kind")), ".")}] '
+                         f'{node.get("label") or node_id}   ({tag})')
+            for edge in after.get(node_id, []):
                 label = f' -- {edge["label"]}' if edge.get('label') else ''
-                target = nodes.get(str(edge.get('to')), {})
-                arrow = '-->' if not edge.get('dashed') else '..>'
-                lines.append(f'        {arrow} {target.get("label") or edge.get("to")}{label}')
-    loose = [i for i in nodes if i not in placed]
-    if loose:
-        lines.append('\nIN NO PHASE: ' + ', '.join(nodes[i].get('label') or i for i in loose))
-    return lines, nodes, edges, out
+                arrow = '..>' if edge.get('dashed') else '-->'
+                lines.append(f'        {arrow} {nodes[str(edge["to"])].get("label")}{label}')
+    return lines
 
 
-def proofs(nodes, edges, out):
-    """The three things the command says a diagram must show, counted."""
-    labelled_forks = [n for n, group in out.items()
-                      if str(nodes.get(n, {}).get('kind')) == 'decision' and len(group) >= 2
-                      and all(e.get('label') for e in group)]
-    bare_forks = [n for n, group in out.items()
-                  if str(nodes.get(n, {}).get('kind')) == 'decision'
-                  and (len(group) < 2 or not all(e.get('label') for e in group))]
+def proofs(nodes, edges):
+    out = collections.defaultdict(list)
+    for edge in edges:
+        out[str(edge['from'])].append(edge)
+    decisions = [n for n, node in nodes.items() if str(node.get('kind')) == 'decision']
+    labelled = [n for n in decisions if len(out[n]) >= 2 and all(e.get('label') for e in out[n])]
+    bare = [n for n in decisions if n not in labelled]
     client = [n for n, node in nodes.items() if str(node.get('owner')) == 'client']
     questions = [n for n, node in nodes.items() if str(node.get('kind')) == 'note']
+    dead = [n for n, node in nodes.items() if not out[n] and str(node.get('kind')) not in ('sink', 'note')]
     unreached = [n for n in nodes if not any(str(e.get('to')) == n for e in edges)
                  and str(nodes[n].get('kind')) != 'source']
-    return labelled_forks, bare_forks, client, questions, unreached
+    return labelled, bare, client, questions, dead, unreached
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('graph')
+    ap.add_argument('--list', action='store_true', help='the flat version, for a flow too wide to draw')
     args = ap.parse_args(argv)
     graph = load(args.graph)
-    lines, nodes, edges, out = sketch(graph)
-    print('\n'.join(lines).lstrip('\n'))
-    labelled, bare, client, questions, unreached = proofs(nodes, edges, out)
-    print(f'\n{len(nodes)} nodes, {len(edges)} edges, {len(graph.get("groups") or [])} phases.')
-    print(f'earns its place: {len(labelled)} labelled decision(s), {len(client)} node(s) the client '
+    nodes, edges = read(graph)
+    if not nodes:
+        sys.exit('ABORT: the graph has no nodes.')
+    if args.list:
+        print('\n'.join(flat(nodes, edges, graph)).lstrip('\n'))
+    else:
+        drawn, jumps = draw(nodes, edges)
+        print('\n'.join(drawn))
+        if jumps:
+            print('\nedges that skip or loop back:')
+            print('\n'.join(jumps))
+    labelled, bare, client, questions, dead, unreached = proofs(nodes, edges)
+    print(f'\n{len(nodes)} nodes, {len(edges)} edges, {len(graph.get("groups") or [])} phases. '
+          f'Key: > start  . step  ? fork  # store  ~ service  @ actor  * milestone  - question  = end')
+    print(f'earns its place: {len(labelled)} labelled fork(s), {len(client)} node(s) the client '
           f'already runs, {len(questions)} open question(s). One of the three is enough.')
-    if bare:
-        print(f'FIX: decision(s) with one exit or an unlabelled exit: '
-              f'{", ".join(nodes[n].get("label") or n for n in bare)}')
-    if unreached:
-        print(f'FIX: nothing points at: {", ".join(nodes[n].get("label") or n for n in unreached)}')
+    for label, group in (('fork(s) with one exit or an unlabelled exit', bare),
+                         ('step(s) that lead nowhere', dead),
+                         ('node(s) nothing points at', unreached)):
+        if group:
+            print(f'FIX: {label}: {", ".join(nodes[n].get("label") or n for n in group)}')
     return 0
 
 
