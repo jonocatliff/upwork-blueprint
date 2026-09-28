@@ -35,7 +35,7 @@ cockpit list. End with `Upwork calls: 0`, and do not continue into Step 0.
 
 ## Step 0 · Files, connector, window
 
-Run `python3 code/workspace.py` and `python3 code/pipeline.py prune`, then `list_accounts` (walk through connecting as `/profile` Step 0 does if the tools are missing). Then `python3 code/jobs.py window`: the hours to look back, at least 10, stretched to cover the gap since the newest saved lead, capped at 24 hours because a posting a day old is already answered by fifty other freelancers.
+Run `python3 code/workspace.py` and `python3 code/pipeline.py prune`, then `list_accounts` (walk through connecting as `/profile` Step 0 does if the tools are missing). Then `python3 code/jobs.py window`: the hours to look back, measured from **the last run rather than the last saved lead**, because a run that found nothing still covered its hours. Four runs a day therefore cost four small windows instead of four overlapping ones, with a floor of two hours and a ceiling of 24, since a posting a day old is already answered by fifty other freelancers. A first run, or an account whose stamp was never written, looks back 24 hours. `jobs.py clean` in Step 7 writes the stamp, so the run has to finish for the next one to narrow.
 
 ## Step 0b · Is this the first run, or a run with a direction?
 
@@ -81,13 +81,35 @@ it. No invitations: say nothing and continue.
 
 Save each response's `jobs` list to `data/search/<name>.json` as `{"jobs": [...]}`, every job with its fields as returned. The file name becomes the job's "found via", which is how weak tracks get noticed later.
 
-0. **Show the terms and ask, before spending a single call.** List what you are about
-   to search, one line per track, with where each came from: their own file, the
-   catalog in [references/jobs.md](../../references/jobs.md), or a skill name harvested
-   from the last run. Then one question: does this fit, what is missing, what goes.
-   Wait for the answer. This is the one gate in this command, and it exists because the
-   member knows words their profile does not contain, and because a wrong term costs
+0. **Show the terms and the limits, and ask, before spending a single call.** List what
+   you are about to search, one line per track, with where each came from: their own
+   file, the catalog in [references/jobs.md](../../references/jobs.md), or a skill name
+   harvested from the last run. Under it, the hard no's as `python3 code/jobs.py rules`
+   reports them, with one recommendation per number **for this person**. Then one
+   question covering both: does this fit, what is missing, what goes. Wait for the
+   answer. This is the one gate in this command, and it exists because the member knows
+   words their profile does not contain, and because a wrong term or a wrong limit costs
    them a day of leads rather than a call.
+
+   **The limits are proposed, never assumed.** None of the shipped figures is right for
+   everybody, and the difference is experience rather than taste. Recommend from what
+   this member's own file and profile already say, and say why in half a line each:
+
+   - **No reviews and no Job Success Score yet:** cap proposals near 15, because a queue
+     of forty goes to someone with a record. Put the fixed floor near 100, because the
+     first two reviews are worth more than the first two hundred dollars. Hourly floor
+     at half their rate, since the rate is a hope rather than a history.
+   - **A rate and a few finished contracts:** the shipped figures fit. Cap 40, floor 250,
+     hourly at 60 percent of the rate.
+   - **A high rate, proof, and a narrow niche:** raise the hourly floor toward 80 percent
+     and drop the proposal cap toward 25. Their day is three good leads, not ten, and
+     Step 7 reports that rather than padding it.
+
+   Whatever they answer goes into `context/me.md` as `**Maximum proposals on a job:**`,
+   `**Smallest project worth taking:**` and `**Lowest share of your rate:**`, so the next
+   run reads it instead of asking again. A limit whose figure is unknown prints as
+   `LIMIT OFF` in the candidate step: name it out loud rather than letting it pass
+   quietly.
 
    **When the member sells something the catalog does not cover**, such as newsletter
    automation, podcast editing or grant writing, build the list with

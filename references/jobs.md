@@ -203,9 +203,15 @@ slot for a new candidate term is the place to test across lanes, not a second la
 
 A boundary belongs in the search itself, not in a judgement after the results
 arrive: the filters cost nothing and every one of them turns ten random rows into
-ten rows worth reading. These are the defaults. A member's own figure in
-`context/me.md` beats every one of them, and `/context` asks for them in the
-terms block.
+ten rows worth reading.
+
+**These figures are a starting point, not a rule.** Three of the five scale with
+experience, and the wrong figure is expensive in both directions: a beginner capped at
+forty proposals spends Connects on races they cannot win, and an established member
+floored at a hundred dollars takes work that pays worse than their afternoon.
+`/find-jobs` therefore opens by showing these numbers with a recommendation for that
+person, and whatever they answer is written into `context/me.md` and read from there on
+every later run.
 
 | Limit | Default | Filter | Why this number |
 |---|---|---|---|

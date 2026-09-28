@@ -29,10 +29,14 @@ FIT = DATA / 'fit.json'
 # What the gate turned down, kept across runs. `clean` deletes a run's raw
 # responses; this is not one of them.
 DECISIONS = DATA / 'decisions.jsonl'
+# When this account last searched. The member's own record of their own runs, so
+# `prune` leaves it alone: it holds no Upwork content, only a timestamp.
+LAST_SEARCH = DATA / 'last-search.json'
 PIPELINE = ROOT / 'code' / 'pipeline.py'
 ME = pathlib.Path(os.environ.get('BLUEPRINT_ME') or ROOT / 'context' / 'me.md')
 TAG = re.compile(r'</?untrusted_participant_content>')
 MIN_WINDOW, MAX_WINDOW = 10, 24
+RUN_FLOOR = 2          # the smallest window a repeat run asks for, in hours
 FIT_GATE = 60          # below this the job is not the member's work, whatever else is true
 TRAP_CAP = 60          # a named trap can never reach the gate
 MIN_SCORE = 70         # the gate, and the same number as the shortlist's floor
@@ -106,9 +110,56 @@ def member_floor():
     return me_number('Smallest project worth taking') or FIXED_FLOOR
 
 
+def member_limits():
+    """The hard no's, the member's own answers first and the shipped starting points after.
+
+    None of these is a number this repository gets to decide for everybody. A member
+    without a single review wins nothing in a queue of forty proposals, so their cap
+    belongs lower than an established one's; a member at sixty dollars an hour loses
+    nothing by refusing fifteen. `/context` proposes per person, the member answers,
+    and this reads the answer. `missing` names every limit that is switched off
+    because the figure behind it is unknown, because a silent limit is worse than a
+    loose one.
+    """
+    rate = member_rate()
+    share = me_number('Lowest share of your rate')
+    limits = {
+        'rate': rate,
+        'proposals': me_number('Maximum proposals on a job') or MAX_PROPOSALS,
+        'fixed_floor': member_floor(),
+        'hourly_share': (share / 100 if share else HOURLY_FLOOR),
+        'min_rating': MIN_CLIENT_RATING,
+    }
+    limits['missing'] = [] if rate else ['hourly floor, because no rate is known']
+    return limits
+
+
 # --- window -----------------------------------------------------------------
 
+def last_search():
+    """When this account last searched, from the stamp `clean` leaves behind."""
+    return parse_time(load_json(LAST_SEARCH, {}).get('at'))
+
+
+def record_search():
+    """Stamp this run, so the next one asks for the hours since it and no more."""
+    DATA.mkdir(exist_ok=True)
+    LAST_SEARCH.write_text(json.dumps({'at': now().isoformat()}, indent=2), encoding='utf-8')
+
+
 def search_window_hours():
+    """The hours to look back: since the last run, never past a day.
+
+    The stamp is the honest source, because a run that found nothing still covered
+    its hours. The newest saved lead is the fallback for an account whose stamp was
+    never written, and 24 hours the fallback for a first run. The floor is small on
+    purpose: searching four times a day should cost four small windows, not four
+    overlapping ten-hour ones.
+    """
+    stamp = last_search()
+    if stamp:
+        hours = (now() - stamp).total_seconds() / 3600
+        return int(max(RUN_FLOOR, min(MAX_WINDOW, round(hours + 0.5))))
     raw = load_json(jobs_file(), [])
     stamps = [parse_time(j.get('found_at')) for j in raw if j.get('found_at')]
     stamps = [s for s in stamps if s]
@@ -196,6 +247,7 @@ def query_performance(themes):
 def cmd_rules(args):
     """The live search and ranking contract, for people and the cockpit."""
     themes = member_search_themes()
+    _LIMITS = member_limits()
     print(json.dumps({
         'tracks': [theme['label'] for theme in themes],
         'themes': themes,
@@ -207,10 +259,10 @@ def cmd_rules(args):
         'sources': ['Upwork recommendations', 'Semantic search themes'],
         'filters': ['Already applied', 'Already in the pipeline', 'Outside the search window',
                     'Unverified payment', 'Full-time role',
-                    f'More than {MAX_PROPOSALS} proposals',
+                    f'More than {_LIMITS["proposals"]:g} proposals',
                     f'Client rated under {MIN_CLIENT_RATING} by at least 3 freelancers',
-                    f'Fixed price under ${member_floor():g}',
-                    f'Hourly top under {int(HOURLY_FLOOR * 100)}% of the member rate'],
+                    f'Fixed price under ${_LIMITS["fixed_floor"]:g}',
+                    f'Hourly top under {int(_LIMITS["hourly_share"] * 100)}% of the member rate'],
         'ranking': [
             {'label': 'Fit', 'points': 100,
              'uses': 'What the job is against what the member sells, judged with their own '
@@ -270,7 +322,7 @@ def budget_top(job):
     return (max(values) if values else None), hourly
 
 
-def disqualified(job, rate):
+def disqualified(job, limits):
     """The short list of hard no's. A reason, or None when the posting stays in.
 
     Points are for ranking what could be applied to. These are the cases where no
@@ -286,18 +338,18 @@ def disqualified(job, rate):
     if str(job.get('engagement') or '').upper() == 'FULL_TIME':
         return 'full-time role, not a project'
     proposals = job.get('proposals')
-    if isinstance(proposals, (int, float)) and proposals > MAX_PROPOSALS:
-        return f'{int(proposals)} proposals already'
+    if isinstance(proposals, (int, float)) and proposals > limits['proposals']:
+        return f'{int(proposals)} proposals, over your cap of {limits["proposals"]:g}'
     rating, reviews = c.get('rating'), c.get('total_reviews')
-    if rating is not None and rating < MIN_CLIENT_RATING and (reviews or 0) >= 3:
+    if rating is not None and rating < limits['min_rating'] and (reviews or 0) >= 3:
         return f'client rated {rating} by freelancers'
     top, hourly = budget_top(job)
     if top is not None:
-        if hourly and rate and top < HOURLY_FLOOR * rate:
+        rate = limits['rate']
+        if hourly and rate and top < limits['hourly_share'] * rate:
             return f'pays {top:g} against your rate of {rate:g}'
-        floor = member_floor()
-        if not hourly and top < floor:
-            return f'fixed budget of {top:g} under your floor of {floor:g}'
+        if not hourly and top < limits['fixed_floor']:
+            return f'fixed budget of {top:g} under your floor of {limits["fixed_floor"]:g}'
     return None
 
 
@@ -333,7 +385,8 @@ def deductions(job, rate):
 
 
 def cmd_candidates(args):
-    rate = member_rate()
+    limits = member_limits()
+    rate = limits['rate']
     merged, dropped = {}, collections.Counter()
     for f in args.files:
         track = pathlib.Path(f).stem
@@ -349,7 +402,7 @@ def cmd_candidates(args):
             if rec is None:
                 dropped['outside window'] += 1
                 continue
-            no = disqualified(n, rate)
+            no = disqualified(n, limits)
             if no:
                 dropped[no] += 1
                 continue
@@ -372,6 +425,8 @@ def cmd_candidates(args):
         shaved = f'-{j["deduction"]} ({"; ".join(j["deduction_reasons"])})' if j['deduction'] else 'nothing against it'
         print(f'    deduction {shaved}')
         print(f'    {j["snippet"][:220]}')
+    for off in limits['missing']:
+        print(f'LIMIT OFF: {off}')
     gone = ', '.join(f'{v} {k}' for k, v in dropped.most_common()) or 'none'
     print(f'\n{len(fresh)} new candidate(s), {len(known)} already in the pipeline, dropped: {gone}.')
     print(f'Next: judge fit 0 to 100 for each and write data/fit.json, then run score. '
@@ -632,7 +687,9 @@ def cmd_clean(args):
         if f.is_file():
             f.unlink()
             gone += 1
-    print(f'{gone} raw file(s) from this run removed.')
+    record_search()
+    print(f'{gone} raw file(s) from this run removed. Search time stamped, so the next '
+          f'run looks back only as far as this one.')
     return 0
 
 
