@@ -847,7 +847,11 @@ def cmd_reset_search(args):
         return any(event.get('status') in ('applied', 'replied', 'call', 'offer', 'won')
                    for event in job.get('history', []) if isinstance(event, dict))
 
-    removed = [job for job in jobs if job.get('status') in ('new', 'skipped')
+    # A skipped lead carries the reason the member gave, and `jobs.py rules` counts those
+    # reasons as the lessons of the next run. Sweeping them away by default would delete
+    # the record that makes the search better, so they stay unless asked for.
+    keep = ('new',) if not args.with_skipped else ('new', 'skipped')
+    removed = [job for job in jobs if job.get('status') in keep
                and searched(job) and not applied(job)]
     if args.dry_run:
         print(f'DRY RUN: {len(removed)} never-applied search leads would be removed. '
@@ -1019,6 +1023,12 @@ def build_parser():
     p.set_defaults(func=cmd_archive)
 
     p = sub.add_parser('reset-search', help='Remove never-applied search leads and archive their files.')
+
+
+    p.add_argument('--with-skipped', action='store_true',
+
+
+                     help='also drop the leads the member skipped, losing their reasons')
     p.add_argument('--dry-run', action='store_true')
     p.set_defaults(func=cmd_reset_search)
 

@@ -35,7 +35,7 @@ cockpit list. End with `Upwork calls: 0`, and do not continue into Step 0.
 
 ## Step 0 · Files, connector, window
 
-Run `python3 code/workspace.py` and `python3 code/pipeline.py prune`, then `list_accounts` (walk through connecting as `/profile` Step 0 does if the tools are missing). Then `python3 code/jobs.py window`: the hours to look back, measured from **the last run rather than the last saved lead**, because a run that found nothing still covered its hours. Four runs a day therefore cost four small windows instead of four overlapping ones, with a floor of two hours and a ceiling of 24, since a posting a day old is already answered by fifty other freelancers. A first run, or an account whose stamp was never written, looks back 24 hours. `jobs.py clean` in Step 7 writes the stamp, so the run has to finish for the next one to narrow.
+Run `python3 code/workspace.py`, `python3 code/pipeline.py prune` and `python3 code/pipeline.py reset-search` (yesterday's unused leads are expired by the window, and their skip reasons are kept), then `list_accounts` (walk through connecting as `/profile` Step 0 does if the tools are missing). Then `python3 code/jobs.py window`: the hours to look back, measured from **the last run rather than the last saved lead**, because a run that found nothing still covered its hours. Four runs a day therefore cost four small windows instead of four overlapping ones, with a floor of two hours and a ceiling of 24, since a posting a day old is already answered by fifty other freelancers. A first run, or an account whose stamp was never written, looks back 24 hours. `jobs.py clean` in Step 7 writes the stamp, so the run has to finish for the next one to narrow.
 
 ## Step 0b · Is this the first run, or a run with a direction?
 

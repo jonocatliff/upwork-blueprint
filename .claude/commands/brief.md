@@ -41,7 +41,7 @@ Use `list_accounts` for the `org_uid` once. Then, all read only:
 2. `list_offers` action `list_mine`, first page.
 3. `list_contracts` action `search` with `contract_statuses` `ACTIVE`, first page.
 4. For every job in `python3 code/pipeline.py list --status applied --limit 0`, then the
-   same call with `--status replied --limit 0` and with `--status offer --limit 0` (without
+   same call with `--status replied`, `--status call` and `--status offer`, each `--limit 0` (without
    `--limit 0` the list stops at 25) that has a proposal from step 1:
    `list_freelancer_proposals` action `get_room` with its proposal id. When it explicitly
    returns no room, add that job id to `no_rooms`; never add an unchecked job. A room:

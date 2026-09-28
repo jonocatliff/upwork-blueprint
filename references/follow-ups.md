@@ -100,7 +100,7 @@ If today's sync is missing or any relevant thread is older than 24 hours, follow
 `.claude/commands/brief.md` Step 1 once before reviewing. Call the connector as
 `references/upwork.md` describes. Never poll or read every historical room.
 
-Review jobs in `replied`, `offer` and `won`. An `applied` proposal without a room
+Review jobs in `replied`, `call`, `offer` and `won`. An `applied` proposal without a room
 cannot receive a message, so leave it waiting without a task, reminder or draft.
 
 ### Decide from the conversation
