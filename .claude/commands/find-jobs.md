@@ -81,6 +81,25 @@ it. No invitations: say nothing and continue.
 
 Save each response's `jobs` list to `data/search/<name>.json` as `{"jobs": [...]}`, every job with its fields as returned. The file name becomes the job's "found via", which is how weak tracks get noticed later.
 
+0. **Show the terms and ask, before spending a single call.** List what you are about
+   to search, one line per track, with where each came from: their own file, the
+   catalog in [references/jobs.md](../../references/jobs.md), or a skill name harvested
+   from the last run. Then one question: does this fit, what is missing, what goes.
+   Wait for the answer. This is the one gate in this command, and it exists because the
+   member knows words their profile does not contain, and because a wrong term costs
+   them a day of leads rather than a call.
+
+   **When the member sells something the catalog does not cover** — newsletter
+   automation, podcast editing, grant writing, whatever it is — build the list with
+   them instead of from the catalog. The four branches are the frame and they hold for
+   any service: the tool the client already runs, the role they would write in a title,
+   the words they use for the problem, and their industry. Ask for their version of each,
+   spend one call on the broadest of them, then read the ten results back and harvest
+   Upwork's own wording with `python3 code/tracks.py skills`. Two rounds of that produce
+   a better list than any catalog, because it comes from live postings and their
+   vocabulary rather than from this file. Whatever they confirm goes under "Job search
+   tracks" in `context/me.md`, so the next run starts from it.
+
 1. **Upwork's recommendations:** when the connector exposes it, use the
    documented but untested `find_jobs` action `smart_search`, `mode`
    `most_recent`, `days_posted` the window in days rounded up and

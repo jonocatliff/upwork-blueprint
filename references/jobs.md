@@ -56,7 +56,7 @@ columns; a field the member does not sell is a field to skip.
 
 **Local search and paid search**
 ```
-tools     Google Business Profile · Google Maps · Search Console · Google Tag Manager · GA4
+tools     Google Business Profile · Google Maps · Search Console · BrightLocal · Citations
 roles     local SEO specialist · SEO consultant · Google Ads specialist · PPC manager
 problems  not showing on Google · organic traffic · wasted ad spend · cost per lead · more calls
 industry  <trade> SEO · <trade> leads · <trade> marketing · <trade> Google Ads
@@ -93,6 +93,56 @@ roles     GoHighLevel expert · marketing automation specialist · RevOps
 problems  missed call text back · lead follow-up · appointment booking · CRM setup · no-shows
 industry  agency · <trade> academy · med spa · clinic
 ```
+
+**Paid social**
+```
+tools     Meta Ads Manager · Facebook Pixel · TikTok Ads · Klaviyo
+roles     paid social specialist · media buyer
+problems  ads stopped working · creative testing · retargeting · cost per acquisition
+```
+
+**Email and lifecycle**
+```
+tools     Klaviyo · Mailchimp · ActiveCampaign · ConvertKit · Beehiiv
+roles     email marketing specialist · lifecycle marketer · newsletter operator
+problems  abandoned cart · welcome sequence · list cleanup · open rates · newsletter automation
+```
+
+**E-commerce**
+```
+tools     Shopify · WooCommerce · Amazon Seller Central · Merchant Center
+roles     Shopify developer · Amazon PPC specialist
+problems  product feed · abandoned checkout · conversion rate · listing optimization
+```
+
+**AI assistants and chatbots**
+```
+tools     OpenAI API · Voiceflow · Vapi · Retell · ManyChat · Intercom
+roles     AI automation engineer · chatbot developer · voice agent developer
+problems  answer the phone · qualify leads · book appointments · support tickets · FAQ bot
+```
+
+**Analytics and tracking**
+```
+tools     GA4 · Google Tag Manager · Looker Studio · server-side tagging
+roles     analytics implementation specialist · tracking consultant
+problems  conversions not tracked · duplicate events · reporting dashboard · attribution
+```
+
+**The client's own systems**, the branch nobody searches. A trade business writes the
+name of the software it runs, never the name of your discipline.
+```
+home services   Housecall Pro · Jobber · ServiceTitan
+health          Dentrix · Cliniko · Zenoti
+fitness         Mindbody · PushPress · TeamUp · Zen Planner
+booking         Calendly · Acuity · Square Appointments
+back office     QuickBooks · Wave · Airtable
+```
+Measured 28 September 2026, and the measurement is the point: **"Housecall Pro" returned
+ten postings over seven days with three worth applying to**, among them a GoHighLevel
+role for an agency running 200 local clients. **"Mindbody" returned exactly one posting
+in total**, `hasMore: false`. Two neighbouring terms from the same branch, one a track
+and one a dead end, and nothing but a call could tell them apart.
 
 **The industry line always carries the service word.** Measured 28 September 2026:
 "dentist" returned ten postings over seven days and not one of them was marketing work,
