@@ -114,7 +114,9 @@ resolving it by hand. The commands call `python3`; on Windows `python` or `py`.
 - `code/` - every script, `pipeline.py` the one writer
 - `references/` - seven topics, one per area, and nothing in them that a command
   does not act on; read the folder before claiming it lacks something
-- `templates/` - the pitch page, the audit report and the proposal
+- `templates/` - the pitch page, the audit report, the proposal, and the
+  eight-week roadmap a client sees; the roadmap redraws from one block in its
+  own file
 - `cockpit/` - the read-only dashboard · `starters/` - the empties
 - `RESEARCH.md` - what we know about Upwork that this system does not act on:
   scores, badges, what the market pays, which sources did not hold. Nothing

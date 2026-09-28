@@ -47,11 +47,15 @@ category is not a reason to skip this: the specific combination is what the
 client is paying for.
 
 For SEO, choose the relevant lane from `context/tool-knowledge/seo.md` before
-drawing. Its five-stage client roadmap is the default for SEO website work. Put
-the posting's plugins, badges, privacy rules and performance targets inside the
-relevant stage notes instead of turning each requirement into another box. For
-Google Ads, put verified conversion measurement before bidding and keep media
-spend separate from the implementation fee. These references guide the
+drawing, and read `context/tool-knowledge/delivery.md` for how the work is
+sequenced. The default shape for a full SEO engagement is the eight-week build
+in `templates/roadmap/index.html`: four tracks that overlap rather than queue,
+each named by what the client ends up with rather than by the task. Edit the
+block in that file and it redraws; four tracks is what holds a client's
+attention. Put the posting's plugins, badges, privacy rules and performance
+targets inside the relevant track instead of turning each requirement into
+another box. For Google Ads, put verified conversion measurement before bidding
+and keep media spend separate from the implementation fee. These references guide the
 mechanism; they never supply proof about the member or facts about the client.
 
 ## Step 4 · Read the posting into a plan
