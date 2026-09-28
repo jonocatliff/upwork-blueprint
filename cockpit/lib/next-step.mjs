@@ -2,8 +2,8 @@
 // the member's own hands, plus the other commands that fit its stage. The
 // cockpit runs nothing itself.
 // The stage decides what a lead carries. `new` builds the pitch page until BOTH
-// files exist, then the member submits by hand, and `/skip <id> <reason>` stays
-// available on every new lead. `applied` waits. `replied`, `call` and `offer`
+// files exist, then the member submits by hand, and `/find-jobs skip <id>
+// <reason>` stays available on every new lead. `applied` waits. `replied`, `call` and `offer`
 // answer a waiting client first and a due follow-up second, where due means
 // `next_follow_up <= today`; a future date stays Waiting. `/proposal` is offered
 // only in conversation and before the call, never once an offer exists. `won`
@@ -53,7 +53,7 @@ export function nextStep(job, today = todayIso()) {
   const id = job.id;
   switch (job.status) {
     case 'new': {
-      const skip = [`/skip ${id} <reason>`];
+      const skip = [`/find-jobs skip ${id} <reason>`];
       return has(job, 'pitch.html') && has(job, 'application.md')
         ? step('Submit on Upwork', 'Record the Loom, put its link into the cover letter where it says [LOOM LINK] and submit on Upwork. /brief then moves it to Applied.', null, skip)
         : step('Build pitch page', 'Builds the pitch page and the application.', `/pitch-page ${id}`, skip);

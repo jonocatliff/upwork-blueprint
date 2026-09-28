@@ -1,6 +1,6 @@
 ---
 description: Finds the Upwork jobs worth your Connects right now, scores them against your finished profile, and puts the best into your pipeline and cockpit.
-argument-hint: "[focus: recommended | tracks | recheck]"
+argument-hint: "[focus: recommended | tracks | recheck | skip <job id> <reason>]"
 ---
 
 # /find-jobs
@@ -13,6 +13,25 @@ themes. Code counts client, budget and freshness signals; Claude judges fit.
 Runs only when the member runs it.
 
 Read first: [references/upwork-rules.md](../../references/upwork-rules.md), the jobs sections of [references/upwork-mcp.md](../../references/upwork-mcp.md), `context/me.md` and `context/proof.md`.
+
+## Taking a lead off the list
+
+`skip <job id> <reason>` does that one thing and stops. It calls no tool that
+talks to Upwork and runs no search, so a lead recognised as a no days after the
+run that found it costs nothing. Step 7 asks the same question for the leads of
+the current run; this is the same record, written later.
+
+Run `python3 code/pipeline.py get <job id>`. Only a Not applied lead (status
+`new`) can be skipped. A lead further along moves through `/brief`, so say that
+and stop. Without a reason, ask for one line and wait: a useful reason names the
+fact that rules the job out, such as budget, scope, tool or client, never a mood.
+
+Then `python3 code/pipeline.py set <job id> skipped --note "not a fit: <reason>"`.
+Keep the prefix. `python3 code/jobs.py rules` counts a reason only when the note
+carries it, so a note without it takes the lead off the list and loses the lesson.
+
+Report one line: the job title, the reason as saved, and that the lead left the
+cockpit list. End with `Upwork calls: 0`, and do not continue into Step 0.
 
 ## Step 0 · Files, connector, window
 
@@ -162,7 +181,7 @@ fit either way; a sample of eight cannot carry more than that.
 ## Step 4 · Judge niche fit
 
 Run `python3 code/jobs.py lessons` first: the member's past decisions, including
-the reasons saved with `/skip`. Use relevant reasons to
+every reason saved with a skip. Use relevant reasons to
 calibrate fit and explain their effect in the candidate's rationale. A bare
 "not a fit" is not evidence of a particular budget, niche or tool preference.
 Treat one rejection as specific to that job; repeated reasons can guide ranking,
@@ -252,9 +271,12 @@ list's one-sentence headline `python3 code/pipeline.py headline <id> "<sentence>
 1. `python3 code/pipeline.py prune`, then `python3 code/jobs.py clean` (deletes this run's raw responses).
 2. Ask once, in one line, which of the leads you showed are a no and why. Take the
    answer in any shape, including none, and record each with
-   `python3 code/pipeline.py set <id> skipped --note "not a fit: <reason>"`. A reason
-   names the fact that rules it out, such as budget, scope, tool or client. This is the
-   half of the record that needs a person, so it is asked once, here, and never chased.
+   `python3 code/pipeline.py set <id> skipped --note "not a fit: <reason>"`. Keep the
+   prefix, because `python3 code/jobs.py rules` counts a reason only when the note
+   carries it. A reason names the fact that rules it out, such as budget, scope, tool
+   or client. This is the half of the record that needs a person, so it is asked once,
+   here, and never chased. A lead the member rejects later takes the same route through
+   `/find-jobs skip <id> <reason>`.
 3. Keep the complete scored list in the cockpit. The chat report names open
    invitations first, then the count scoring 70 or more and, if useful, the best
    lead with one reason. No separate

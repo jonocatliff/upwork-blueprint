@@ -34,12 +34,15 @@ Step 1 runs before the connector and before you have any profile at all. No
 Upwork profile yet is the normal starting point here, not a problem to fix.
 
 For a local business in conversation, `/lead-magnet <job id> <website>`
-builds a private three-part SEO audit from live Firecrawl, Apify and
-DataForSEO evidence. Nothing paid starts before the website is saved.
+builds a three-part SEO audit from live Firecrawl, Apify and DataForSEO
+evidence. Nothing paid starts before the website is saved. A finished audit is
+published to a public URL, so anyone holding the link can open it; every audit
+and every pitch page shares one Vercel project.
 
-Two helpers: `/cockpit` shows your leads with the next command to copy, and
-`/skip <job id> <reason>` takes a lead off the list so the next search learns
-from it.
+One helper: `/cockpit` shows your leads with the next command to copy. A lead you
+will not apply to leaves the list with `/find-jobs skip <job id> <reason>`, which
+searches nothing, costs no Connects and keeps the reason the next search learns
+from.
 
 ## Requirements
 
@@ -87,6 +90,14 @@ never runs on its own in the background. It prepares the pitch page and the
 application; you record the Loom, paste its link and submit on Upwork. Replies
 are drafts you copy and send on Upwork yourself. The details are in
 [references/upwork-rules.md](references/upwork-rules.md).
+
+One question about this is open, and you should know it before you run
+anything. Upwork's own connector guidance asks you to check with their support
+before scoring results with a model and before storing connector output. This
+Blueprint does both: `/find-jobs` scores postings, and `data/jobs.json` keeps
+what the connector returned until `prune` expires it. Nobody here has asked
+Upwork yet. The reasoning and the source are in
+[references/upwork-mcp.md](references/upwork-mcp.md).
 
 Stuck? Open an issue on the repository, or ask in the community you got this
 from. Include what you ran and what it printed; both are usually enough.

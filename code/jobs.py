@@ -436,8 +436,11 @@ def cmd_reassess(args):
         return 1
     print(out.stdout.strip())
     if niche < FIT_GATE or total < MIN_SCORE:
+        # The same prefix the member writes by hand. query_performance counts a
+        # reason only when it carries it, so an automatic skip without the prefix
+        # is a lead removed and a lesson lost.
         reason = fit.get('trap') or 'full posting does not meet the search gate'
-        moved = pipeline('set', args.job_id, 'skipped', '--note', str(reason))
+        moved = pipeline('set', args.job_id, 'skipped', '--note', f'not a fit: {reason}')
         if moved.returncode:
             print(moved.stderr, file=sys.stderr)
             return 1

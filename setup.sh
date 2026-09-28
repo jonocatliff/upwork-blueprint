@@ -68,7 +68,9 @@ env_has PAGESPEED_API_KEY || command -v lighthouse >/dev/null || note "PAGESPEED
 env_has KIE_AI_API_KEY || note "KIE_AI_API_KEY in .env: lets /proposal draw the plan for the client's trade without leaving the terminal. kie.ai. Skip it if you already have an image model: /proposal prints the prompt for you to paste anywhere, and the page picks the picture up from jobs/<id>/proposal-sketch.png whoever drew it."
 env_has OPENAI_API_KEY || note "OPENAI_API_KEY in .env: /lead-magnet adds two chapters with it, whether AI search names the business and what its worst reviews complain about. Without it both say 'not measured' and the rest of the report is unaffected. platform.openai.com"
 
-[ "$missing" -eq 0 ] && echo "  nothing. Every command can run."
+[ "$missing" -eq 0 ] && echo "  nothing is missing. This checks that a key exists, never that it still
+  has credit, and never which account a token belongs to. Before the first run
+  that spends money: 'python3 code/preflight.py lead-magnet'."
 
 echo
 echo "Your context, data and job files are yours now; git will not touch them."

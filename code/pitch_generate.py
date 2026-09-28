@@ -473,8 +473,8 @@ def main(argv=None):
     ap.add_argument('--video-length', default='3 minute')
     ap.add_argument('--hero-illustration', default='',
                     help='16:9 image of the project or finished outcome. Draw one with '
-                         'code/illustrate.py when KIE_AI_API_KEY is set; without it the '
-                         'pitch is built without a hero image')
+                         'code/proposal_illustrate.py when KIE_AI_API_KEY is set; without '
+                         'it the pitch is built without a hero image')
     ap.add_argument('--profile-image', default='', help='member-supplied action photo for the proof section')
     ap.add_argument('--theme', choices=('warm', 'steel', 'signal', 'growth', 'calm'), default='warm')
     ap.add_argument('--dither-source', default='',

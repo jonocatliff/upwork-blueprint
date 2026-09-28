@@ -15,8 +15,10 @@ voice skill from outside this repo and never insert the builder's identity.
 ## The path
 
 `/context` · `/audit` · `/profile` · `/find-jobs` · `/pitch-page` · `/brief` ·
-`/lead-magnet` · `/proposal` · `/won`, plus the helpers `/cockpit` and `/skip`.
-What each does is in its own frontmatter and, for the member, in `README.md`.
+`/lead-magnet` · `/proposal` · `/won`, plus the helper `/cockpit`. A lead the
+member rejects leaves through `/find-jobs skip <id> <reason>`, which calls Upwork
+not at all. What each does is in its own frontmatter and, for the member, in
+`README.md`.
 
 `/audit` needs nothing but the connector. Everything after `/context` reads the
 member's two files. A focus argument runs only that part, at full depth; an input
