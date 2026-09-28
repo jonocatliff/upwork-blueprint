@@ -67,7 +67,7 @@ built below.
   copy `templates/roadmap/seo.html` or `templates/roadmap/google-ads.html` to
   `jobs/<id>/pitch.html`, which is the file the deploy publishes, and edit it to
   this client. **Then skip Steps 4 and 5 entirely and go to Step 6**: there is no
-  graph, no `pitch_generate.py` run and no `--roadmap` flag. The file's own comment
+  graph and no `pitch_generate.py` run at all. The file's own comment
   lists what to rewrite; four of them decide whether it lands:
 
   - **The h1 is the outcome this client asked for, in their words**, never the
