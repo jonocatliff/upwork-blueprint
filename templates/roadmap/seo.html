@@ -129,8 +129,8 @@
   .who h2 { font-size: 19px; grid-column: 2; grid-row: 1; }
   .who p { grid-column: 2; grid-row: 2; }
   .chips { grid-column: 3; grid-row: 1 / span 2; }
-  .hero { grid-column: 1; grid-row: 1 / span 2; width: 104px; height: 68px;
-    border-radius: 11px; object-fit: cover; }
+  .photo { grid-column: 1; grid-row: 1 / span 2; width: 66px; height: 66px;
+    border-radius: 50%; object-fit: cover; }
   /* Only until the picture exists. Replacing the div removes it. */
   .placeholder { display: grid; place-items: center; border: 1.5px dashed var(--blue-200);
     background: var(--blue-50); color: var(--blue-800); font-size: 11px; font-weight: 600; }
@@ -175,12 +175,11 @@
   -->
   <h2 class="group"><span class="num" aria-hidden="true">1</span>Who I am</h2>
   <section class="who" aria-labelledby="who">
-    <!-- The job's hero image. Generate one that shows this client's own trade,
-         site or workflow, save it beside this file, and replace this whole div
-         with:  <img class="hero" src="hero.jpg" alt="">
-         Same rule as the pitch page: their environment and their work, never
-         stock, never a logo, never a face that is not the member's. -->
-    <div class="hero placeholder"><span>hero.jpg</span></div>
+    <!-- The member's own photo, the same one their Upwork profile shows, so the
+         client recognises who they already replied to. Save it beside this file
+         and replace this whole div with:  <img class="photo" src="photo.jpg" alt="">
+         Never a stock portrait and never a face that is not theirs. -->
+    <div class="photo placeholder"><span>photo</span></div>
     <h2 id="who">&lt;Your name&gt;</h2>
     <p>&lt;What you do, in one line, for the kind of business this client runs&gt;</p>
     <div class="chips">

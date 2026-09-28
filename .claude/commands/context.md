@@ -246,7 +246,11 @@ already shown how they write.
    have to defend on a call. Without an idea yet, point them at the two pages in
    [references/jobs.md](../../references/jobs.md) and let them come back with a
    number. Never talk them down to compete, and never apply a discount for where
-   somebody lives.
+   somebody lives. Whatever they land on goes into the `**Hourly rate:**` line as
+   a number, because `/pitch-page` prices every bid from it and stops without
+   one. The live rate sits in `data/profile.json` too, but `prune` deletes that
+   file after a day, so `context/me.md` is its only lasting home. A range is fine
+   as long as the figure they would actually quote comes first.
 2. **Timezone and the hours** they answer messages.
 3. **Applications per day** they can really carry.
 4. **How they want to sound**: the default is an approachable, professional sales
