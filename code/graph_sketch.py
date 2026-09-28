@@ -140,37 +140,87 @@ def connectors(pairs, source_centres, target_centres, width, labels):
             if line.strip()]
 
 
-def draw(nodes, edges):
-    rows, depth = layers(nodes, edges)
-    width = max(len(ids) for ids in rows) * (INNER + 2 + GAP)
-    out, jumps, centres = [], [], []
-    for ids in rows:
-        lines, centre = row(ids, nodes)
-        centres.append(centre)
-        out.append(lines)
-    drawn = []
-    for index, ids in enumerate(rows):
-        drawn.extend(out[index])
-        if index + 1 >= len(rows):
-            continue
-        forward, labels = [], {}
-        for edge in edges:
-            source, target = str(edge['from']), str(edge['to'])
-            if source in centres[index] and target in centres[index + 1]:
-                forward.append((source, target))
-                labels[(source, target)] = str(edge.get('label') or '')
-        if forward:
-            drawn.extend(connectors(forward, centres[index], centres[index + 1], width, labels))
-        else:
-            drawn.append('')
+def columns_of(nodes, edges, graph):
+    """One column per phase, which is how the page itself lays the diagram out.
+
+    Layers would be truer to the flow and unreadable in a terminal: nine layers is two
+    hundred characters wide. The phases are the client-facing structure anyway, so the
+    sketch and the rendered page argue about nothing.
+    """
+    groups = [g for g in graph.get('groups') or [] if isinstance(g, dict)]
+    if groups:
+        cols = [[str(i) for i in (g.get('nodes') or []) if str(i) in nodes] for g in groups]
+        heads = [str(g.get('label') or f'Phase {n}') for n, g in enumerate(groups, 1)]
+        placed = {i for col in cols for i in col}
+        loose = [i for i in nodes if i not in placed]
+        if loose:
+            cols.append(loose)
+            heads.append('in no phase')
+        return cols, heads
+    rows, _ = layers(nodes, edges)
+    return rows, [f'Step {n}' for n in range(1, len(rows) + 1)]
+
+
+def draw(nodes, edges, graph):
+    """The whole thing left to right: phases across, their steps down inside a phase."""
+    cols, heads = columns_of(nodes, edges, graph)
+    boxes = {i: box(i, nodes[i]) for col in cols for i in col}
+    inner_edges, cross = [], []
     for edge in edges:
         source, target = str(edge['from']), str(edge['to'])
-        if depth[target] != depth[source] + 1:
-            label = f' [{edge["label"]}]' if edge.get('label') else ''
-            back = 'back to' if depth[target] <= depth[source] else 'ahead to'
-            jumps.append(f'  {nodes[source].get("label") or source} {back} '
-                         f'{nodes[target].get("label") or target}{label}')
-    return drawn, jumps
+        here = next((n for n, col in enumerate(cols) if source in col), None)
+        there = next((n for n, col in enumerate(cols) if target in col), None)
+        if here is not None and here == there and abs(cols[here].index(source) - cols[here].index(target)) == 1:
+            inner_edges.append((source, target, edge))
+        else:
+            cross.append((source, target, edge, here, there))
+    grid, tops = [], []
+    for index, col in enumerate(cols):
+        lines = [heads[index][:INNER + 2].center(INNER + 2)]
+        first_box = 1
+        for position, node_id in enumerate(col):
+            if position:
+                label = next((str(e.get('label') or '') for s, t, e in inner_edges
+                              if s == col[position - 1] and t == node_id), '')
+                lines.append('v'.rjust((INNER + 2) // 2 + 1).ljust(INNER + 2))
+                if label:
+                    lines.append(label[:INNER].center(INNER + 2))
+            lines.extend(boxes[node_id])
+        grid.append(lines)
+        tops.append(first_box)
+    height = max(len(lines) for lines in grid)
+    grid = [lines + [' ' * (INNER + 2)] * (height - len(lines)) for lines in grid]
+    out = []
+    for row_index in range(height):
+        parts = []
+        for col_index, lines in enumerate(grid):
+            parts.append(lines[row_index])
+        # An arrow between two phases sits on the first box row of the column it leaves.
+        joiner = []
+        for col_index in range(len(grid) - 1):
+            forward = [c for c in cross if c[3] == col_index and c[4] == col_index + 1]
+            mark = ' -> ' if forward and row_index == 2 else '    '
+            joiner.append(mark)
+        line = parts[0]
+        for col_index in range(1, len(parts)):
+            line += joiner[col_index - 1] + parts[col_index]
+        out.append(line.rstrip())
+    jumps = []
+    for source, target, edge, here, there in cross:
+        if here is not None and there == here + 1:
+            continue
+        label = f' [{edge["label"]}]' if edge.get('label') else ''
+        if here is not None and there == here:
+            # Same phase, not the next box down: a second exit of a fork, or a skip.
+            forward = cols[here].index(target) > cols[here].index(source)
+            way = 'also down to' if forward else 'loops back to'
+        elif there is not None and here is not None and there < here:
+            way = 'loops back to'
+        else:
+            way = 'jumps ahead to'
+        jumps.append(f'  {nodes[source].get("label") or source} {way} '
+                     f'{nodes[target].get("label") or target}{label}')
+    return out, jumps
 
 
 def flat(nodes, edges, graph):
@@ -222,7 +272,7 @@ def main(argv=None):
     if args.list:
         print('\n'.join(flat(nodes, edges, graph)).lstrip('\n'))
     else:
-        drawn, jumps = draw(nodes, edges)
+        drawn, jumps = draw(nodes, edges, graph)
         print('\n'.join(drawn))
         if jumps:
             print('\nedges that skip or loop back:')
