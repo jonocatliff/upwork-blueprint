@@ -427,7 +427,7 @@ def review_activity(profile: dict, today: dt.date | None = None) -> dict:
 
 # These are the audit's operating heuristics, not Google requirements or causal
 # claims. Their provenance and limits ship with this skill in
-# `references/lead-magnet-benchmarks.md`.
+# `references/lead-magnet.md`, which has to change with this block.
 BENCHMARK = {
     "category_slots": 10,        # 1 primary + 9 secondary, spec "Categories"
     "photos_strong": 100,        # audit operating target

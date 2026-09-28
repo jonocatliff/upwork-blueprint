@@ -13,7 +13,7 @@ proofs, their system drawn as a diagram they can drag and edit, the short
 working-together sequence and the next step on Upwork. The Loom that walks
 through this page comes after it. The application includes a cover letter, bid and any screening answers stated in the full posting.
 
-Read first: [references/upwork-rules.md](../../references/upwork-rules.md) (the section on links before a contract), `context/me.md`, `context/proof.md`.
+Read first: [references/upwork.md](../../references/upwork.md) (the section on links before a contract starts), `context/me.md`, `context/proof.md`.
 
 Before Step 1, if `jobs/<id>/pitch.html` exists, run
 `python3 code/pitch_check.py page jobs/<id>/pitch.html`. When it passes, keep
@@ -236,6 +236,12 @@ Use the full posting from Step 1 and `references/copy.md` for
 every line the client will read. The member reviews and submits the proposal
 on Upwork themselves. Prepare the cover letter, screening answers when the
 posting states the questions, and the bid for manual submission.
+
+**The first 230 characters decide.** That is what the applicant card shows a
+client before they open anything, roughly the first 45 words (Maker School
+evidence snapshot, 26 September 2026, sources C09 and F02). Put the outcome and
+the one relevant proof in there. A greeting, a name and a sentence about being
+excited spends the whole visible part on nothing.
 
 ### What is true about you and the scope
 

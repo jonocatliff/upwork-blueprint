@@ -26,9 +26,9 @@ matching no listed focus value gets that list and a question.
 
 ## The Upwork rules (CRITICAL, they protect the member's account)
 
-Read [references/upwork-rules.md](references/upwork-rules.md) before changing
-anything that talks to Upwork, and [references/upwork-mcp.md](references/upwork-mcp.md)
-for what the connector can do.
+Read [references/upwork.md](references/upwork.md) before changing anything that
+talks to Upwork. Its first half is what is allowed, its second what the connector
+can do, and the two are not the same question.
 
 - **A human starts every Upwork call.** Never on a timer, never in a background
   job, never in a hosted agent.
@@ -87,7 +87,7 @@ that writes for a member or a client already reads.
 
 This holds for the whole run, not only the report. The one-line description beside
 every command Claude Code runs is the member's line too: say what the step is for,
-never the shell it types. A member watching `wc -l references/profile-formula.md`
+never the shell it types. A member watching `wc -l references/profile.md`
 is reading a build log nobody wrote for them.
 
 **Every command opens with a ROADMAP**, before the first tool call: what happens
@@ -110,10 +110,13 @@ resolving it by hand. The commands call `python3`; on Windows `python` or `py`.
 
 - `.claude/commands/` - the nine entry points, the only way in
 - `code/` - every script, `pipeline.py` the one writer
-- `references/` - nineteen topics plus `upwork-facts.json`; read the folder before
+- `references/` - nine topics, one per area; read the folder before
   claiming it lacks something
 - `templates/` - the pitch page, the audit report and the proposal
 - `cockpit/` - the read-only dashboard · `starters/` - the empties
+- `RESEARCH.md` - what we know about Upwork that this system does not act on:
+  scores, badges, what the market pays, which sources did not hold. Nothing
+  reads it, and no command should start to
 - `tools/check_repo.py` - the release gate, fourteen static checks. There is no test
   suite: each rule lives in the file it governs, and a run proves itself by building
   the report and starting the cockpit

@@ -13,7 +13,7 @@ This command does both halves of the job: it measures what is live today, then
 writes the version that fixes what it found. Measuring without writing is
 `/profile audit`.
 
-Read first: [references/upwork-method.md](../../references/upwork-method.md) for the rules every draft follows, [references/profile-language.md](../../references/profile-language.md) for how sixteen real profiles are written and what none of them does, [references/upwork-beginner.md](../../references/upwork-beginner.md) when there is no Upwork history yet, [references/profile-blueprint.md](../../references/profile-blueprint.md) for every field, its principle and what finishes it, [references/upwork-visibility.md](../../references/upwork-visibility.md) for the filters a client can close, [references/profile-formula.md](../../references/profile-formula.md) for why they win, and the profile sections of [references/upwork-mcp.md](../../references/upwork-mcp.md). Then `context/me.md`, `context/proof.md` and `data/profile.json`.
+Read first: [references/profile.md](../../references/profile.md), which holds every field, what finishes it, the filters a client can close and how strong profiles are actually written; [references/upwork-method.md](../../references/upwork-method.md) for the rules every draft follows; and the profile sections of [references/upwork.md](../../references/upwork.md) for what the connector may write. Then `context/me.md`, `context/proof.md` and `data/profile.json`.
 
 **Focus:** $ARGUMENTS. `audit` measures and stops, writing nothing. Any other
 focus writes only that section of `profile.md` and leaves the rest as it is.
@@ -49,7 +49,7 @@ The script decides pass or fail for the mechanical checks. Never overrule it. If
 
 **Completeness, because it is the one lever Upwork admits to.** From the saved
 profile response, work through the published percentages in
-`references/profile-blueprint.md`: the mandatory half (photo, overview, one
+`references/profile.md`: the mandatory half (photo, overview, one
 employment entry, one skill tag) and then each optional field with what it is
 worth. Note every missing field **with its percentage**, cheapest first, because
 "add a linked account" is ten points for one click and "record a video" is ten
@@ -58,7 +58,7 @@ only in Upwork's own words: a complete profile ranks better. Nothing else about
 ranking gets asserted.
 
 **The filters a client can close.** Every field in
-`references/upwork-visibility.md` that a client can filter on is a gate, and an
+`references/profile.md` that a client can filter on is a gate, and an
 empty one fails silently rather than looking untidy: **English level**,
 **languages**, **timezone and location**, **availability in hours**,
 **categories**, and an **hourly rate**. A wrong timezone also makes every reply
@@ -80,7 +80,7 @@ Each of these matters only when it fails:
 2. **Proof order.** Is the strongest proof the member has, by the tiers in the formula, inside the first 250 characters that Upwork shows in search results?
 3. **Opening.** Does the first line say what the client gets, or is it a CV?
 4. **A claim the aggregate contradicts.** Two of sixteen measured profiles named a badge or a client count in their prose that the connector's own aggregate denied. Compare every claim in the text against `data/profile.json`. This is the most expensive thing that can be wrong, because a client checks it in two seconds.
-5. **What nobody in the lane does.** From `references/profile-language.md`: no price, no "this is not for you if", no availability window, no date on a claim. Name one the member could add truthfully, because it is free and it is a differentiator in the same search.
+5. **What nobody in the lane does.** From `references/profile.md`: no price, no "this is not for you if", no availability window, no date on a claim. Name one the member could add truthfully, because it is free and it is a differentiator in the same search.
 
 **Two things the connector cannot see**, measured 12 September 2026: neither the
 profile, the dashboard nor the contract list returns a Job Success Score or

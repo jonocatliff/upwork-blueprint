@@ -86,7 +86,6 @@ Everything below is yours and gitignored, so `git pull` never touches it.
 - `data/jobs.json` - your pipeline, written only by `code/pipeline.py`
 - `jobs/<id>/` - one folder per job: the pitch page, the application, the audit,
   the proposal, the threads and the drafts
-- `follow-ups.md` - what is due, what is coming and what you parked
 - `clients/<slug>/` - a won job: the brief, the inputs, the work, what you delivered
 
 ## What this will never do
@@ -95,7 +94,7 @@ It never submits a proposal, never sends a message, never buys Connects, and
 never runs on its own in the background. It prepares the pitch page and the
 application; you record the Loom, paste its link and submit on Upwork. Replies
 are drafts you copy and send on Upwork yourself. The details are in
-[references/upwork-rules.md](references/upwork-rules.md).
+[references/upwork.md](references/upwork.md).
 
 One question about this is open, and you should know it before you run
 anything. Upwork's own connector guidance asks you to check with their support
@@ -103,7 +102,7 @@ before scoring results with a model and before storing connector output. This
 Blueprint does both: `/find-jobs` scores postings, and `data/jobs.json` keeps
 what the connector returned until `prune` expires it. Nobody here has asked
 Upwork yet. The reasoning and the source are in
-[references/upwork-mcp.md](references/upwork-mcp.md).
+[references/upwork.md](references/upwork.md).
 
 Stuck? Open an issue on the repository, or ask in the community you got this
 from. Include what you ran and what it printed; both are usually enough.

@@ -1,11 +1,9 @@
 # How to decide: the working rules
 
-The durable part. Prices, limits, rankings and demand belong in the dated files
-next door ([upwork-market.md](upwork-market.md),
-[upwork-visibility.md](upwork-visibility.md), [upwork-status.md](upwork-status.md),
-[upwork-facts.json](upwork-facts.json), which `python3 code/facts.py` reads:
-`get <id>` for one number with its source and the date it was read, `topic <name>`
-for a field, `stale --days 120` for what is old enough to re-check); this file
+The durable part. Prices and demand belong in [jobs.md](jobs.md), fields and
+visibility in [profile.md](profile.md), and what a member is measured by in
+`RESEARCH.md` at the root, which is knowledge about Upwork rather than a tool
+this system uses; this file
 holds the methods that survive
 Upwork changing them. Adapted 26 September 2026 from a Maker School research pass
 whose full evidence trail, 79 source records, stays outside the shipped repo.

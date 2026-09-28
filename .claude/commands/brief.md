@@ -9,8 +9,8 @@ The daily ritual. Your pipeline says one thing and Upwork may say another, so th
 reads what Upwork shows now, moves each lead to match, tells you where everyone stands,
 and writes the messages that are due. It never sends anything.
 
-Read first: [references/upwork-rules.md](../../references/upwork-rules.md), the proposals
-and messages parts of [references/upwork-mcp.md](../../references/upwork-mcp.md),
+Read first: the proposals and messages parts of
+[references/upwork.md](../../references/upwork.md),
 [references/follow-ups.md](../../references/follow-ups.md), `context/me.md` and
 `context/proof.md`. Follow [references/copy.md](../../references/copy.md). The member
 described in `context/me.md` is the sender; never load a personal voice skill from outside

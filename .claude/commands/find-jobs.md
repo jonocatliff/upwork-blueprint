@@ -12,7 +12,7 @@ run from two directions: Upwork's recommendations and the member's search
 themes. Code counts client, budget and freshness signals; Claude judges fit.
 Runs only when the member runs it.
 
-Read first: [references/upwork-rules.md](../../references/upwork-rules.md), the jobs sections of [references/upwork-mcp.md](../../references/upwork-mcp.md), `context/me.md` and `context/proof.md`.
+Read first: [references/upwork.md](../../references/upwork.md) for what is allowed and what the connector gives you, [references/jobs.md](../../references/jobs.md) for where the work comes from and what it pays, `context/me.md` and `context/proof.md`.
 
 ## Taking a lead off the list
 
@@ -51,7 +51,7 @@ direction is still open, cover two candidate lanes rather than one. Then one cal
 term, `limit` 10, `sort` `recency`, and **no window filter**, because the point is
 density, not freshness. Measure them with Step 3a, and report per term what it costs in
 Connects, what the postings pay against the bands in
-[references/upwork-market.md](../../references/upwork-market.md), and how many ask for
+[references/jobs.md](../../references/jobs.md), and how many ask for
 entry level.
 
 Close the first run by writing the three to five terms that survived under "Job search
@@ -106,7 +106,7 @@ Save each response's `jobs` list to `data/search/<name>.json` as `{"jobs": [...]
    want that work.
 
    **Cover all three branches, not just one** (see
-   [references/upwork-job-search.md](../../references/upwork-job-search.md)):
+   [references/jobs.md](../../references/jobs.md)):
    the tools a client runs, the job titles a client hires for, and the problem
    words a client uses when they do not know the solution. Most freelancers
    search only the third and land in the crowd.

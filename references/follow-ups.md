@@ -98,7 +98,7 @@ Read `data/sync.json` and run
 
 If today's sync is missing or any relevant thread is older than 24 hours, follow
 `.claude/commands/brief.md` Step 1 once before reviewing. Call the connector as
-`references/upwork-mcp.md` describes. Never poll or read every historical room.
+`references/upwork.md` describes. Never poll or read every historical room.
 
 Review jobs in `replied`, `offer` and `won`. An `applied` proposal without a room
 cannot receive a message, so leave it waiting without a task, reminder or draft.
@@ -132,9 +132,11 @@ Each follow-up adds one new reason to answer: a useful observation, a narrowed
 decision, a relevant next step or a graceful close. A pure "just checking in"
 message is not a draft.
 
-Write `follow-ups.md` with three short sections: `Do today`, `Coming up` and
-`Parked`. Put the decision and reason before supporting detail. Name each due
-job by its title. Keep the list to active or recently parked items.
+Report this in chat, in three short groups: due today, coming up, parked. Put
+the decision and reason before supporting detail, name each due job by its
+title, and keep it to active or recently parked items. Nothing is written to a
+file: `data/jobs.json` already holds every plan, due date and reason, and the
+cockpit renders the same three groups from it.
 
 ### Report
 
@@ -147,6 +149,7 @@ with the exact Upwork call count.
 ### Self-improvement
 
 When the member corrects a cadence decision or a follow-up wins a reply, ask
-whether to keep the lesson. If yes, add the dated observation to
-`context/follow-up-learnings.md`; change this file only after two
+whether to keep the lesson. If yes, record it against that job with
+`python3 code/pipeline.py note <job id> "<the dated observation>"`, where the
+next run will find it. Change the intervals in this file only after two
 independent examples support the same default.

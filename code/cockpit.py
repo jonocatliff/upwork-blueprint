@@ -46,7 +46,7 @@ def artifacts(job_id):
 # they still have to send, and the raw material behind both. A flat list of eleven files
 # hides the first two behind the third.
 CLIENT_FACING = {'pitch.html', 'proposal.html', 'lead-magnet.html'}
-TO_SEND = {'application.md', 'proposal.md', 'project.md', 'loom-script.md'}
+TO_SEND = {'application.md', 'proposal.md', 'project.md'}
 
 
 def role(name):

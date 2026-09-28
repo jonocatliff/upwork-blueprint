@@ -13,11 +13,9 @@ when the connector is there, and writes two local files.
 Follow `references/copy.md` for how to ask. The ten working rules in
 [references/upwork-method.md](../../references/upwork-method.md) decide what counts as
 proof and what stays a question. Read
-[references/profile-formula.md](../../references/profile-formula.md) first: it
-says which facts carry weight, so the questions stay in that order. For a
-member starting from zero, [references/upwork-beginner.md](../../references/upwork-beginner.md)
-holds what actually holds up, including which categories are open to someone
-without a history.
+[references/profile.md](../../references/profile.md) first: it says which facts
+carry weight, so the questions stay in that order, and what holds up for a member
+starting from zero.
 
 **What this is for.** Two things, and every question only makes sense against
 them. The first is to learn this person's history on two levels at once. The
@@ -245,7 +243,7 @@ question, and point 4 usually needs none at all, because this conversation has
 already shown how they write.
 
 1. **Hourly rate**, and the smallest project worth taking. Propose a band from
-   [references/upwork-market.md](../../references/upwork-market.md) for their
+   [references/jobs.md](../../references/jobs.md) for their
    discipline and the experience level a client would pick, say where inside it
    you put them and why, and name what would move them up. There is no
    evidence that a low rate wins work, so never talk them down to compete.
@@ -282,7 +280,7 @@ report" is proof. "Significant time savings" is nothing.
 Write each result in the shape the formula uses, so `/profile` can lift it
 without rewriting: BUILT or DELIVERED [what] for [kind of company], achieving
 [result with number] in [timeframe]. Then tag its tier from
-`references/profile-formula.md`: S for testimonials and case studies with hard
+`references/profile.md`: S for testimonials and case studies with hard
 numbers, A for reach and volume, B for outcome numbers, C for certificates,
 years and systems built. `/profile` leads with the highest tier that exists.
 

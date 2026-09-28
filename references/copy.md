@@ -60,10 +60,9 @@ of the person who built this repository.
 
 ## The craft, measured
 
-Sixteen real profiles were read and counted on 26 September 2026, and the three
+Sixteen real profiles were read and counted on 26 September 2026, and three
 measured top earners on top of that. The findings live once, in
-[profile-language.md](profile-language.md) and [profile-formula.md](profile-formula.md),
-with the counts attached. Read them before writing anything a client sees, and
+[profile.md](profile.md), with the counts and the sample attached to each. Read them before writing anything a client sees, and
 take from them the two that decide most: **one line is one sentence of 6 to 14
 words**, and **the perspective flips twice**, opening on the reader's problem,
 moving to what gets delivered, closing as an imperative back to the reader.
@@ -87,7 +86,7 @@ Use plain words and lead with the result. Give only the next action the member n
 
 Link only what the member needs to open, as relative links like [profile.md](profile.md). Never list code files you touched.
 
-**Every line the member sees during a run is written for them**, including the one-line description beside a command Claude Code is about to run. They are not reading a build log. "Reading the rules I am about to ask you about" is that line; "wc -l references/profile-formula.md" is the same step described to a developer who is not in the room. Say what it is for, never what it types.
+**Every line the member sees during a run is written for them**, including the one-line description beside a command Claude Code is about to run. They are not reading a build log. "Reading the rules I am about to ask you about" is that line; "wc -l references/profile.md" is the same step described to a developer who is not in the room. Say what it is for, never what it types.
 
 **Say where a wait ends.** A run that takes more than a few seconds, and every step that needs an answer, says in one line what is happening and what comes back. A member watching a silent terminal cannot tell working from stuck.
 

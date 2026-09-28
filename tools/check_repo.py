@@ -298,25 +298,25 @@ def check_command_set():
 
 
 def check_facts_contract():
-    """A fact ships with its source, that source's strength and the day it was read."""
-    path = ROOT / 'references' / 'upwork-facts.json'
-    if not path.is_file():
-        return []
-    try:
-        entries = json.loads(path.read_text(encoding='utf-8'))
-    except json.JSONDecodeError as problem:
-        return [f'references/upwork-facts.json is not valid JSON: {problem}']
-    if isinstance(entries, dict):
-        entries = entries.get('facts', [])
+    """A reference that carries numbers carries the day they were read.
+
+    This used to check a structured fact file. Nothing read that file, and every
+    number in it also lived in prose, so the file is gone and the rule moved to
+    where the numbers actually are. A reference with a figure in it and no date
+    anywhere is folklore that looks like measurement.
+    """
+    dated = re.compile(r'\b(?:[12]?\d|3[01]) (?:January|February|March|April|May|June|July|'
+                       r'August|September|October|November|December) 20\d\d\b')
+    has_number = re.compile(r'(?<![\w.])\d{2,}(?![\w.])')
     findings = []
-    for entry in entries if isinstance(entries, list) else []:
-        if not isinstance(entry, dict):
-            findings.append('upwork-facts.json holds an entry that is not an object')
-            continue
-        name = entry.get('id', '<no id>')
-        for field in ('source', 'source_kind', 'measured_at'):
-            if not str(entry.get(field, '')).strip():
-                findings.append(f'upwork-facts.json:{name} has no {field}: that is folklore, not a fact')
+    for path in sorted((ROOT / 'references').glob('*.md')):
+        text = path.read_text(encoding='utf-8')
+        # A figure inside backticks is an example of what to write, not a claim
+        # about the world: `37 Google reviews` shows a sentence shape.
+        text = re.sub(r'`[^`]*`', '', text)
+        if has_number.search(text) and not dated.search(text):
+            findings.append(f'references/{path.name} states figures with no date '
+                            'anywhere: that is folklore, not a measurement')
     return findings
 
 
