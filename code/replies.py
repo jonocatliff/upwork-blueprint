@@ -4,8 +4,14 @@
     python3 code/replies.py check <job_id>
 
 The model chooses the words. This script checks the fixed contract around them:
-valid JSON, two or three labeled non-empty options, distinct text and no
-em-dashes. It never sends or changes a reply.
+valid JSON, two or three labeled non-empty options, distinct text, no em-dashes,
+no number the evidence sections of context/me.md cannot back, and no way of
+reaching the member off Upwork. It never sends or changes a reply.
+
+A draft is the one client-facing artifact that leaves this repo as a message, and
+it used to be the only one with no gate on its content: the cover letter and the
+pitch page were both scanned for unproven numbers and contact details while the
+reply, which goes straight into a client's inbox, was checked for shape alone.
 """
 import argparse
 import json
@@ -20,7 +26,32 @@ import pipeline  # noqa: E402  (jobs_dir only)
 ID = re.compile(r'^[0-9]{6,25}$')
 
 
-def validate(value):
+def unbacked_numbers(text, proof_text):
+    """Every result number in a draft that the member's evidence does not carry."""
+    import profile_checks as pc  # noqa: E402  (same folder, imported where it is used)
+    missing = set()
+    for hit in pc.RESULT_NUMBER.finditer(text):
+        core = re.search(r'\d[\d.,]*', hit.group(0)).group(0).rstrip('.,')
+        if not re.search(r'(?<![\d.,])' + re.escape(core) + r'(?!\d)', proof_text):
+            missing.add(hit.group(0).strip())
+    return sorted(missing)
+
+
+def off_upwork(text):
+    """Contact details and invitations to move the conversation, as the letter gate reads them."""
+    import application_check  # noqa: E402  (same folder, imported where it is used)
+    return [problem.replace('in the letter', 'in the draft').replace('the letter asks', 'the draft asks')
+            for problem in application_check.pc_contacts(text)]
+
+
+def proof_text():
+    """The evidence sections of the member's own file, and nothing else from it."""
+    import context_check  # noqa: E402  (same folder, imported where it is used)
+    me = ROOT / 'context' / 'me.md'
+    return context_check.proof_only(me.read_text(encoding='utf-8')) if me.is_file() else ''
+
+
+def validate(value, proof=None):
     problems = []
     if not isinstance(value, dict):
         return ['the root must be an object']
@@ -44,6 +75,11 @@ def validate(value):
             problems.append(f'draft {index} contains an em-dash')
         else:
             texts.append(text.strip())
+            for number in unbacked_numbers(text, proof if proof is not None else proof_text()):
+                problems.append(f'draft {index} claims "{number}", which the evidence sections of '
+                                f'context/me.md do not carry: omit it or record where it can be checked')
+            for problem in off_upwork(text):
+                problems.append(f'draft {index}: {problem}')
     if len(texts) != len(set(texts)):
         problems.append('draft texts must be meaningfully different')
     return problems

@@ -331,11 +331,23 @@ def cmd_set(args):
                     abort('--applied-at expects an ISO timestamp or unknown.')
             job['applied_at'] = observed or job['status_updated_at']
             job.pop('application_date_unknown', None)
-    if args.status in ('applied', 'lost', 'skipped') or (args.status == 'won' and not args.follow_up):
+    lane = (job.get('follow_up_plan') or {}).get('lane')
+    if args.status in ('applied', 'lost', 'skipped'):
+        job['next_follow_up'] = None
+        job.pop('follow_up_plan', None)
+    elif args.status == 'won' and lane != 'reactivation' and not args.follow_up:
+        # Winning ends a sales sequence. It must not end the reactivation lane, which
+        # exists only for won clients: recording a sent message with `set won` used to
+        # delete that plan, and the 60-day second touch went with it.
         job['next_follow_up'] = None
         job.pop('follow_up_plan', None)
     elif args.follow_up:
         job['next_follow_up'] = parse_follow_up(args.follow_up)
+    elif not job.get('follow_up_plan'):
+        # The member just acted, so the ball is with the client. A date the morning sync
+        # set while the client was waiting would otherwise keep the cockpit asking
+        # forever for a follow-up that has already gone out.
+        job['next_follow_up'] = None
     if args.status not in ('replied', 'call', 'offer', 'won'):
         job.pop('follow_up_plan', None)
     if getattr(args, 'call_at', None):

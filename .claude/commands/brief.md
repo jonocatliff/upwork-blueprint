@@ -83,8 +83,9 @@ about the timeline" beats "reply pending".
 
 Then three numbers: how many wait on the member, how many wait on a client, and how many
 have sat in their stage longer than a week. The last one is what a stalling pipeline looks
-like before it feels like one. The cockpit shows the same state per lead, from the same
-function, so the two cannot drift apart.
+like before it feels like one. Then stop: the cockpit is where the state lives, and this
+report is where the decisions are. Never retell the list it already shows, and when the two
+disagree, the pipeline record is right and the cockpit is a view of it.
 
 ## Step 4 · Draft what is due
 
