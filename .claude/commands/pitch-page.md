@@ -225,8 +225,12 @@ python3 code/pitch_generate.py <id> --hook "..." \
   Keep every recognizable motif upright in every section. Horizontal mirroring
   is acceptable when composition needs it; vertical flipping is not. Roofs,
   vehicles, people and tools look broken as soon as gravity is reversed.
-- When the job is tied to a local business website, offer the free SEO audit: it
-  is part of the offer on every such job. Make the free upfront work
+- When the job is tied to a local business website **and the member sells local SEO**,
+  offer the free audit: for them it is part of the offer on every such job. The signal is
+  `**Free SEO audit offered:**` in `context/me.md`, and without that line, whether their
+  services name SEO or an audit at all. A member who sells video editing has no audit to
+  give away, and promising one on their behalf is a promise they cannot keep.
+  Make the free upfront work
   explicit: the client sends the website, and the member returns the complete
   audit before the build. Sell the useful outcome, then name what the audit
   contains.

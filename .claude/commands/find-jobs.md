@@ -301,9 +301,18 @@ Write `data/fit.json`: per job id `{"fit": 0-40, "rationale": "<what the score b
 
 Run `python3 code/jobs.py score`. The score is the fit, minus the deductions the candidate step computed, plus or minus what the member's own outcomes have earned that pattern, so a job that fits perfectly and carries nothing against it scores 100. It logs every job with a fit of at least 60 and a score of at least 70, caps any job you named a trap at 60 so a generous client cannot lift a disguised full-time or operator role above a real build, and prints the ranking as a grade out of 10 with the points behind it. The deductions and their reasons ride along on the record, so a member asking "why is this a 7" gets the three words that took it there. Everything it turns down is written to `data/decisions.jsonl` with the points and the reason, which costs the member nothing and is what the next run learns from. Report grades to the member, never the raw points: the hundred exists for ranking and for the lessons, the grade is what a person decides on.
 
-## Step 6 · Open the best five
+## Step 6 · Open the ten you will show
 
-For the five highest new jobs, one at a time: `find_jobs` action `get` with the job id. Save to `data/details/<id>.json` these parts of the response, as returned: `connects_cost`, `can_apply`, `activityStat`, `preferred_qualifications`, `client_record`, `contractTerms`, `clientCompanyPublic` and the full `description`. The last two carry the experience level, engagement type, client city and timezone that `jobs.py detail` reads.
+**Open exactly the leads that will reach the member**, one at a time, highest first: the
+ten of Step 7, and a replacement for every one the full posting disqualifies, until ten
+stand or the bench above grade 7 runs out. Five was the old number, from when the report
+named a best lead rather than a working list, and it left half the list unopened. An
+unopened lead is a lead whose mandatory opening phrase, screening questions and
+self-capping budget nobody has seen, and those are exactly what kills an application
+after the Connects are spent. Ten one-at-a-time calls is not the pattern Upwork flags;
+fetching the whole candidate pool would be.
+
+For each of them: `find_jobs` action `get` with the job id. Save to `data/details/<id>.json` these parts of the response, as returned: `connects_cost`, `can_apply`, `activityStat`, `preferred_qualifications`, `client_record`, `contractTerms`, `clientCompanyPublic` and the full `description`. The last two carry the experience level, engagement type, client city and timezone that `jobs.py detail` reads.
 
 After reading that full description, add a `brief` object to the same file:
 
@@ -381,6 +390,7 @@ list's one-sentence headline `python3 code/pipeline.py headline <id> "<sentence>
    measured from each `connects_cost`, against the balance the connector reports. One
    line, no advice unless the balance runs out before the ten do. Measured 28 September
    2026: one local SEO job cost 7 Connects, so a ten-a-day habit runs near 70 a day.
-6. Use the compact completion report from `CLAUDE.md`. Next step: open the cockpit,
-   or `/pitch-page <id>` for the best lead. End with `Upwork calls: N`, measured,
-   never an estimated range.
+6. Use the compact completion report from `CLAUDE.md`. Next step: `/pitch-page <id>` for
+   the first lead on the list, or the cockpit to read all ten. Every lead you show has
+   its full posting saved, so `/pitch-page` costs no Upwork call unless the member comes
+   back to it a day later. End with `Upwork calls: N`, measured, never an estimated range.
