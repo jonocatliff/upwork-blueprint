@@ -89,8 +89,8 @@ Save each response's `jobs` list to `data/search/<name>.json` as `{"jobs": [...]
    member knows words their profile does not contain, and because a wrong term costs
    them a day of leads rather than a call.
 
-   **When the member sells something the catalog does not cover** — newsletter
-   automation, podcast editing, grant writing, whatever it is — build the list with
+   **When the member sells something the catalog does not cover**, such as newsletter
+   automation, podcast editing or grant writing, build the list with
    them instead of from the catalog. The four branches are the frame and they hold for
    any service: the tool the client already runs, the role they would write in a title,
    the words they use for the problem, and their industry. Ask for their version of each,
