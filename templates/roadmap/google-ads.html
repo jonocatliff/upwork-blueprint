@@ -59,7 +59,6 @@
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 6px 14px -6px var(--c);
   }
   .icon svg { width: 20px; height: 20px; }
-  .tile .icon { grid-row: auto; margin-bottom: 4px; }
   .node h3 { font-size: 16.5px; line-height: 1.15; grid-column: 2; align-self: center; }
   .node p { color: var(--graphite); font-size: 13px; grid-column: 2; }
 
@@ -104,7 +103,6 @@
   }
   .note { font-size: 13px; color: var(--pewter); text-align: center; }
   .detail { margin-top: -6px; }
-  .join { margin-top: -4px; }
 
   @media (max-width: 860px) {
     .flow { grid-template-columns: 1fr 1fr; }
@@ -120,19 +118,6 @@
     td.what { width: 250px; font-size: 13px; }
   }
 
-  /* The free audit. Three tiles, because eight bullets read as a second offer
-     and the page has to stay one page. */
-  .audit { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .tile {
-    background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
-    padding: 14px 15px 13px; display: grid; gap: 3px; justify-items: start;
-    box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12);
-  }
-  .tile h3 { font-size: 15.5px; line-height: 1.15; }
-  .tile p { font-size: 12.5px; color: var(--pewter); }
-  .free { margin-top: 12px; font-size: 13.5px; font-weight: 600; color: var(--blue-800); text-align: center; }
-  @media (max-width: 640px) { .audit { grid-template-columns: 1fr; } }
-
   /* Who is writing, and the one move the client makes */
   .who {
     background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
@@ -146,9 +131,19 @@
   .who p { color: var(--graphite); font-size: 14px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .proof { font-size: 12.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--blue-50); color: var(--blue-800); }
-  .next { background: var(--blue-950); border-radius: 18px; padding: 17px 20px 16px; display: grid; gap: 5px; }
+  .next { background: var(--blue-950); border-radius: 18px; padding: 17px 22px 16px;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px 22px; }
+  .next-copy { display: grid; gap: 4px; }
+  .cta { display: inline-flex; align-items: center; gap: 9px; white-space: nowrap;
+    padding: 12px 20px; border-radius: 999px; background: #fff; color: var(--blue-950);
+    font-size: 14.5px; font-weight: 700; text-decoration: none;
+    transition: transform .18s var(--ease), box-shadow .18s; }
+  .cta:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0, 0, 0, .28); }
+  @media (max-width: 640px) { .next { grid-template-columns: 1fr; }
+    .cta { justify-self: start; margin-top: 8px; } }
   .next h2 { font-size: 19px; color: #fff; }
-  .next p { color: #fff; font-size: 15px; max-width: 74ch; }
+  .next p.offer { color: var(--blue-200); font-size: 14.5px; max-width: 90ch; margin-bottom: 4px; }
+  .next p { color: #fff; font-size: 16px; font-weight: 600; max-width: 74ch; }
   .next p.quiet { color: var(--blue-200); font-size: 13px; }
 </style>
 
@@ -223,30 +218,15 @@
   </section>
 
   <h2 class="group"><span class="num" aria-hidden="true">3</span>What you get now</h2>
-  <section aria-label="The free audit">
-    <div class="audit">
-      <article class="tile" style="--c:var(--c-measure)">
-        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2 19 5.8v5.4c0 4-2.9 7.6-7 9-4.1-1.4-7-5-7-9V5.8z"/><path d="M9.3 11.9l2 2 3.5-3.9" opacity=".55"/></svg></span>
-        <h3>Is tracking honest</h3>
-        <p>Every other number rests on it</p>
-      </article>
-      <article class="tile" style="--c:var(--c-page)">
-        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5.9A1.9 1.9 0 0 1 6.9 4h2a1 1 0 0 1 .95.68l1.05 3.1a1 1 0 0 1-.4 1.15L8.9 10a12.5 12.5 0 0 0 5.1 5.1l1.07-1.6a1 1 0 0 1 1.15-.4l3.1 1.05a1 1 0 0 1 .68.95v2A1.9 1.9 0 0 1 18.1 20 13.1 13.1 0 0 1 5 5.9z"/></svg></span>
-        <h3>Calls counted</h3>
-        <p>Usually the biggest single gap</p>
-      </article>
-      <article class="tile" style="--c:var(--c-campaigns)">
-        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.2 4.6h15.6l-6.1 7.3v5.9l-3.4 1.7v-7.6z"/><path d="M18.6 15.2c1.1 1.3 1.6 2.1 1.6 2.8a1.6 1.6 0 0 1-3.2 0c0-.7.5-1.5 1.6-2.8z" opacity=".55"/></svg></span>
-        <h3>Where money leaks</h3>
-        <p>Terms, areas, networks</p>
-      </article>
+  <section class="next" aria-label="What you get now">
+    <div class="next-copy">
+      <p class="offer">The full analysis: whether your tracking tells the truth, whether your calls are counted, and where the money goes that never comes back.</p>
+      <p>Send me your website URL here on Upwork.</p>
+      <p class="quiet">Free, yours to keep, and no obligation either way.</p>
     </div>
-    <p class="free">Your free audit, yours to keep, with no obligation either way.</p>
-  </section>
-
-  <section class="next join" aria-label="The next step">
-    <p>Send me your website URL here on Upwork.</p>
-    <p class="quiet">That is all I need to start the audit.</p>
+    <!-- The member's own Upwork profile. Replace the id; nothing here may point
+         anywhere but Upwork before a contract exists. -->
+    <a class="cta" href="https://www.upwork.com/freelancers/~PUT-YOUR-PROFILE-ID-HERE">My profile<span aria-hidden="true">&rarr;</span></a>
   </section>
 
   <p class="note">No cost per lead promised before the account has data. Ad spend goes to Google and is separate from the fee.</p>
