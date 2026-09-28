@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Assembles the pitch page for one job: headline, walkthrough video,
-reviews, background, the live editable diagram, scope, and the next step.
+reviews, background, the plan, scope, and the next step.
+
+The plan is either the live editable diagram (`--graph`) or a link to the roadmap
+page published beside this one (`--roadmap`). SEO and Google Ads are programmes the
+member already runs, so a roadmap sells them better than a drawing; every other job
+gets its own diagram.
 
 Pure assembly. The diagram plan and every sentence are written by Claude from the
 job posting before this runs; this script checks them and fills the template.
@@ -11,6 +16,7 @@ something the evidence sections do not hold.
         --hook "..." \\
         --build-lede "..." \\
         --graph jobs/<job_id>/pitch-graph.json \\
+        (or, for a known programme, --roadmap "The 8-week build|<job_id>/roadmap") \\
         --kickoff "..." --kickoff "..." \\
         --updates "Twice a week|Upwork, then the client's workspace" \\
         [--loom-url https://www.loom.com/share/...] [--video-length "3 minute"] \\
@@ -195,6 +201,26 @@ def profile_url():
         return f'https://www.upwork.com/freelancers/{key}' if key else ''
     except (OSError, json.JSONDecodeError):
         return ''
+
+
+def roadmap_block(spec, points):
+    """A link to the roadmap page published beside this one.
+
+    The route is relative to the deployment, so it works without knowing the URL
+    before the deploy runs: the page sits at /<job id> and the roadmap at
+    /<job id>/roadmap. The points carry what the drawn plan carried, because a
+    lone button in the space a diagram used to fill reads as a missing section.
+    """
+    label, route = split_label(spec, 2, '--roadmap')
+    if len(points) < 2:
+        abort('--roadmap needs at least two --roadmap-point values: '
+              'a bare button says less than the diagram it replaced.')
+    chips = ''.join(f'<li>{esc(point)}</li>' for point in points)
+    return ('<div class="plan-roadmap">'
+            '<p class="plan-roadmap-lede">The plan, week by week</p>'
+            f'<ul class="plan-roadmap-points">{chips}</ul>'
+            f'<a class="plan-roadmap-link" href="{esc(route)}">{esc(label)}'
+            '<span class="arrow" aria-hidden="true">&rarr;</span></a></div>')
 
 
 def build_graph(spec):
@@ -464,7 +490,11 @@ def main(argv=None):
     ap.add_argument('job_id')
     ap.add_argument('--hook', required=True, help='the one headline, unmistakably about this job')
     ap.add_argument('--build-lede', required=True, help='one job-specific sentence explaining the proposed flow')
-    ap.add_argument('--graph', required=True, help='the plan as JSON, or a path to it')
+    ap.add_argument('--graph', default='', help='the plan as JSON, or a path to it')
+    ap.add_argument('--roadmap', default='',
+                    help='"Label|route" of a roadmap page beside this one, instead of a drawn plan')
+    ap.add_argument('--roadmap-point', action='append', default=[],
+                    help='one thing the roadmap covers, at least two, shown above the link')
     ap.add_argument('--kickoff', action='append', required=True)
     ap.add_argument('--updates', required=True, help='"cadence|platform" for client updates')
     ap.add_argument('--plan-outcome', action='append', default=[],
@@ -497,7 +527,14 @@ def main(argv=None):
     proof_text = (context_check.proof_only(PROOF.read_text(encoding='utf-8'))
                   if PROOF.is_file() else '')
     me_text = ME.read_text(encoding='utf-8') if ME.is_file() else ''
-    diagram_data, diagram_fallback = build_graph(args.graph)
+    # A job whose shape is already a known programme, SEO or Google Ads, links the
+    # roadmap the client can open instead of a bespoke drawing. Everything else
+    # draws, because a generic diagram of a specific job is worth nothing.
+    if not args.graph and not args.roadmap:
+        abort('pass --graph to draw the plan, or --roadmap to link one beside this page.')
+    if args.graph and args.roadmap:
+        abort('pass --graph or --roadmap, not both: the page shows one plan.')
+    diagram_data, diagram_fallback = build_graph(args.graph) if args.graph else ('', roadmap_block(args.roadmap, args.roadmap_point))
     url = profile_url()
 
     dither_path = pathlib.Path(args.dither_source) if args.dither_source else DITHER
@@ -549,14 +586,16 @@ def main(argv=None):
 
     page = TEMPLATE.read_text(encoding='utf-8')
     page = keep_or_strip(page, 'videos', bool(videos))
+    page = keep_or_strip(page, 'diagram', bool(diagram_data))
     page = keep_or_strip(page, 'showcase', bool(args.showcase))
     showcase = split_label(args.showcase, 4, '--showcase') if args.showcase else ['', '', '', '']
     showcase_image = pathlib.Path(args.showcase_image) if args.showcase_image else REPORT_COVER
     if args.showcase and not args.showcase_html and not args.showcase_video and not showcase_image.is_file():
         abort(f'lead magnet cover "{showcase_image}" does not exist.')
 
+    nodes = json.loads(diagram_data)['nodes'] if diagram_data else []
     js = DIAGRAM_JS.read_text(encoding='utf-8').replace(
-        '{{LOGOS_JSON}}', logos_json(json.loads(diagram_data)['nodes']))
+        '{{LOGOS_JSON}}', logos_json(nodes)) if diagram_data else ''
     fills = {
         '{{BODY_CLASS}}': '' if args.loom_url else 'no-video',
         '{{JOB_TITLE}}': esc(safe_job_title(job.get('title'))),
@@ -589,7 +628,8 @@ def main(argv=None):
         '{{FOOTER_LINKS}}': '<span class="dot">·</span>'.join(footer),
         '{{DITHER_SRC_NEXT}}': dither, '{{DITHER_SRC}}': dither,
         '{{DITHER_FIT}}': dither_fit,
-        '{{DIAGRAM_FALLBACK}}': diagram_fallback,
+        '{{DIAGRAM_FALLBACK}}': diagram_fallback if diagram_data else '',
+        '{{ROADMAP_BLOCK}}': '' if diagram_data else diagram_fallback,
     }
     for key, value in fills.items():
         page = page.replace(key, value)
@@ -602,9 +642,11 @@ def main(argv=None):
     out = pathlib.Path(args.out) if args.out else jobs_dir() / args.job_id / 'pitch.html'
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(page, encoding='utf-8')
-    LIBRARY.mkdir(parents=True, exist_ok=True)
-    (LIBRARY / f'{args.job_id}.json').write_text(diagram_data, encoding='utf-8')
-    print(f'written: {out}  ({len(page) // 1024} KB, {len(json.loads(diagram_data)["nodes"])} diagram nodes, '
+    if diagram_data:
+        LIBRARY.mkdir(parents=True, exist_ok=True)
+        (LIBRARY / f'{args.job_id}.json').write_text(diagram_data, encoding='utf-8')
+    plan = f'{len(nodes)} diagram nodes' if diagram_data else 'plan: the roadmap page'
+    print(f'written: {out}  ({len(page) // 1024} KB, {plan}, '
           f'{len(found)} reviews, video: {"yes" if args.loom_url else "not yet"})')
     return 0
 

@@ -47,18 +47,33 @@ category is not a reason to skip this: the specific combination is what the
 client is paying for.
 
 For SEO, choose the relevant lane from `context/tool-knowledge/seo.md` before
-drawing, and read `context/tool-knowledge/delivery.md` for how the work is
-sequenced. The default shape for a full SEO engagement is the eight-week build
-in `templates/roadmap/index.html`: four tracks that overlap rather than queue,
-each named by what the client ends up with rather than by the task. Edit the
-block in that file and it redraws; four tracks is what holds a client's
-attention. Put the posting's plugins, badges, privacy rules and performance
-targets inside the relevant track instead of turning each requirement into
-another box. For Google Ads, put verified conversion measurement before bidding
-and keep media spend separate from the implementation fee. These references guide the
-mechanism; they never supply proof about the member or facts about the client.
+planning, and read `context/tool-knowledge/delivery.md` for how the work is
+sequenced. Put the posting's plugins, badges, privacy rules and performance
+targets inside the track or step they belong to, instead of turning each
+requirement into another box. For Google Ads, put verified conversion measurement
+before bidding and keep media spend separate from the implementation fee. These
+references guide the mechanism; they never supply proof about the member or facts
+about the client.
 
 ## Step 4 · Read the posting into a plan
+
+**Decide the plan's shape first, because it changes the rest of this step.** SEO
+and Google Ads are programmes the member already runs the same way every time, so
+the client is better served by the roadmap than by a drawing of it: the roadmap
+shows weeks and what lands in each, and a bespoke diagram of a known programme only
+proves the member drew a diagram.
+
+- **The posting is mainly SEO, local SEO, Google Business Profile or Google Ads:**
+  copy `templates/roadmap/seo.html` or `templates/roadmap/google-ads.html` to
+  `jobs/<id>/roadmap.html` and edit its JSON block to this client: their city,
+  their trade, their words for what they end up with. Keep the tracks; change what
+  each one is called in their language, and the promise line if the scope is
+  narrower. Then assemble with `--roadmap` instead of `--graph`, and skip the rest
+  of this step. `pitch_deploy.py` publishes it at `<id>/roadmap`, which is the
+  route `--roadmap` points at.
+- **Anything else, or a job that mixes SEO with real automation work:** draw the
+  diagram as below. A job whose shape is its own is exactly what the diagram is
+  for.
 
 Write down, before drawing: the trigger, the systems they already run, the manual work today, where results must land, the phase two wishes, the constraints. Then five rules: use their words ("your Squarespace form", not "web form"); never invent a fact, draw a "which CRM? to confirm" node instead; mark scope with groups (what ships first, what comes later); every manual step in the posting is a step the diagram takes over; a requirement with its own sentence gets its own node.
 
@@ -83,8 +98,8 @@ Write the graph to `jobs/<id>/pitch-graph.json`:
   client-facing outcome labels, not technical buckets such as "Setup" or
   "Automation". The first phase must be the smallest useful result. The board
   turns each group's last connected step into its visible phase output.
-- **SEO website jobs:** use the five stages in `context/tool-knowledge/seo.md` as
-  the **phases**, not as the nodes. Each stage carries its own two or three steps,
+- **SEO website jobs:** use the four tracks in `context/tool-knowledge/seo.md` as
+  the **phases**, not as the nodes. Each track carries its own two or three steps,
   and the branch that matters is usually what happens to the old URLs and what the
   client has to supply. A plugin, badge, schema type or speed target belongs in a
   node note unless it changes the order or creates a real branch.
@@ -114,6 +129,8 @@ commercial term.
 python3 code/pitch_generate.py <id> --hook "..." \
   --build-lede "one job-specific sentence explaining the full flow" \
   --graph jobs/<id>/pitch-graph.json --kickoff "..." (repeat) \
+  (SEO or Google Ads instead of --graph:
+   --roadmap "The 8-week build|<id>/roadmap" --roadmap-point "..." (two to four)) \
   --updates "cadence|platform" \
   --plan-outcome "job-specific client benefit" (once per card) \
   --plan-image jobs/<id>/plan-01.jpg (once per card) \
