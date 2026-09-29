@@ -100,6 +100,11 @@
   .seg::before { content: ''; position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc((100% - 6px) / 2); border-radius: var(--radius-control); background: #fffffff2; box-shadow: 0 1px 4px #26496e1c; transform: translateX(calc(var(--segment-index, 0) * 100%)); transition: transform 180ms var(--ease-out); pointer-events: none; }
   .seg button { position: relative; justify-content: center; border: 0; border-radius: var(--radius-control); padding: 5px 11px; font-size: 12px; font-weight: 550; color: var(--text-2); background: transparent; }
   .seg button[aria-pressed="true"] { color: var(--text); }
+  /* The freshness filter has five options in a control built for two, so it wrapped into
+     a block. It sets its own column count and keeps the sliding indicator in step. */
+  .seg.wide { grid-template-columns: repeat(var(--segment-count, 2), auto); }
+  .seg.wide::before { width: calc((100% - 6px) / var(--segment-count, 2)); }
+  .seg.wide button { padding: 5px 9px; white-space: nowrap; }
   .tool { padding: 8px 12px; font-size: 12px; border-color: #ffffffbf; background: #ffffffa6; }
   .tool.on, .tool[aria-expanded="true"] { border-color: #bfd6f2; color: var(--brand); background: #eef5ffcc; }
   .search-box { position: relative; flex: 1; min-width: 240px; display: block; margin: 0; }

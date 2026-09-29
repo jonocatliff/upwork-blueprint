@@ -89,8 +89,9 @@ export default function ListPage() {
       </label>
       <button type="button" className={`due-toggle${dueOnly ? ' on' : ''}`} aria-pressed={dueOnly}
         onClick={() => setDueOnly(v => !v)}>{dueTotal ? `Needs me · ${dueTotal}` : 'Needs me'}</button>
-      {layout === 'board' ? null : <div className="seg" role="group" aria-label="Posted within"
-        style={{ '--segment-index': FRESH.findIndex(([h]) => h === fresh) } as React.CSSProperties}>
+      {layout === 'board' ? null : <div className="seg wide" role="group" aria-label="Posted within"
+        style={{ '--segment-index': FRESH.findIndex(([h]) => h === fresh),
+                 '--segment-count': FRESH.length } as React.CSSProperties}>
         {FRESH.map(([hours, label]) => <button key={label} onClick={() => setFresh(hours)}
           aria-pressed={fresh === hours}>{label}</button>)}
       </div>}
