@@ -111,9 +111,12 @@ function StepCell({ job }: { job: any }) {
   const step = nextStep(job);
   const state = waitingState(job);
   return <>
-    {step.command
-      ? <CopyButton compact text={step.command} label={step.command.split(' ')[0]} />
-      : <span className="step-hint">{step.label || '–'}</span>}
+    <span className="step-row">
+      {step.command
+        ? <CopyButton compact text={step.command} label={step.command.split(' ')[0]} />
+        : <span className="step-hint">{step.label || '–'}</span>}
+      <OnUpwork job={job} />
+    </span>
     <span className={`uw-sub state-${state.kind.replace(' ', '-')}${state.late ? ' tone-bad' : ''}`}>
       {/* The chip already says what to do, so the line under it says only how long
           this has been sitting. Without a chip it carries the state itself. */}
@@ -161,6 +164,23 @@ function Table({ jobs, sort, sortBy, drawerId, toggle }: {
   </table></div>;
 }
 
+// The posting itself, one click away. The list had it hidden behind the summary text
+// and the board had it nowhere, so reading what a client actually wrote meant searching
+// Upwork by title. The url survives prune, so this works on an old lead too.
+function OnUpwork({ job }: { job: any }) {
+  if (!job.url) return null;
+  return <a className="on-upwork" href={job.url} target="_blank" rel="noopener"
+    title="Open this job on Upwork" onClick={e => e.stopPropagation()}>
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="on-upwork-icon">
+      <path d="M6.5 3.5H3.2A.7.7 0 0 0 2.5 4.2v8.6a.7.7 0 0 0 .7.7h8.6a.7.7 0 0 0 .7-.7V9.5"
+        stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M9.5 2.5h4v4M13.5 2.5 7 9" stroke="currentColor" strokeWidth="1.5"
+        strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+    <span>Upwork</span>
+  </a>;
+}
+
 function Board({ jobs, oldestFirst, drawerId, toggle }: { jobs: any[]; oldestFirst: boolean; drawerId: string | null; toggle: (id: string) => void }) {
   return <div className="board">{BOARD.map(stage => {
     const list = jobs.filter(j => j.status === stage)
@@ -181,7 +201,10 @@ function Board({ jobs, oldestFirst, drawerId, toggle }: { jobs: any[]; oldestFir
           <div className={`card-state state-${state.kind.replace(' ', '-')}${state.late ? ' tone-bad' : ''}`}>
             {state.kind === 'waiting' && step.label && step.label !== 'Waiting' ? step.label : state.detail}
           </div>
-          {step.command ? <CopyButton compact text={step.command} label={step.command.split(' ')[0]} /> : null}
+          <div className="card-actions">
+            {step.command ? <CopyButton compact text={step.command} label={step.command.split(' ')[0]} /> : null}
+            <OnUpwork job={j} />
+          </div>
         </li>;
       }) : <li className="col-empty">Nothing here</li>}</ul>
     </section>;
