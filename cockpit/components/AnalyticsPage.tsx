@@ -50,6 +50,39 @@ function Outreach({ weeks }: { weeks: { week: string; count: number }[] }) {
 }
 
 
+const TIMINGS = [
+  ['speed_to_lead', 'Speed to lead', 'from the job being posted to your application'],
+  ['client_reply', 'Client reply time', 'from your application to their first message'],
+  ['time_to_close', 'Time to close', 'from your application to won, as you recorded it'],
+] as const;
+const MIN_MEDIAN = 20;
+
+function span(seconds: number) {
+  const hours = seconds / 3600;
+  if (hours < 1) return `${Math.max(1, Math.round(seconds / 60))} min`;
+  if (hours < 48) return `${Math.round(hours * 10) / 10} h`;
+  return `${Math.round(hours / 24 * 10) / 10} days`;
+}
+
+/** Medians of three gaps, only from leads Upwork's own record backs. */
+function Timings({ timings }: { timings?: Record<string, { n: number; median_s: number | null }> }) {
+  if (!timings) return null;
+  return <section className="funnel" aria-label="Timings">
+    <h2>Timings</h2>
+    <dl className="timings">
+      {TIMINGS.map(([key, label, note]) => {
+        const { n = 0, median_s = null } = timings[key] || {};
+        return <div key={key}>
+          <dt>{label}</dt>
+          {median_s != null ? <dd>{span(median_s)}</dd> : <dd className="few">{n} of {MIN_MEDIAN} needed</dd>}
+          <dd>{note}{median_s != null ? ` · median of ${n}` : ''}</dd>
+        </div>;
+      })}
+    </dl>
+    <p className="funnel-note">Only applications Upwork confirmed count, so a time never rests on when a command happened to run.</p>
+  </section>;
+}
+
 /** The one thing the cockpit tracks: from application to won. */
 export default function AnalyticsPage() {
   const { state } = useCockpit();
@@ -87,5 +120,6 @@ export default function AnalyticsPage() {
     </div>
     <p className="funnel-note">Every lead counts once at each stage it ever reached.</p>
     <Outreach weeks={state.outreach} />
+    <Timings timings={state.timings} />
   </section>;
 }

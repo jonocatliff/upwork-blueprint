@@ -572,6 +572,14 @@ def cmd_observe(args):
     }
     if args.event == 'applied':
         job.pop('application_date_unknown', None)
+        # posted_date is Upwork content and prune deletes it after 24 hours, so the
+        # one number it is for is worked out here, while it is still there.
+        posted = parse_verified_timestamp(job.get('posted_date'))
+        if posted:
+            lag = (datetime.datetime.fromisoformat(event_at)
+                   - datetime.datetime.fromisoformat(posted)).total_seconds()
+            if lag >= 0:
+                job['speed_to_lead_s'] = int(lag)
     save(jobs)
     print(f'{args.job_id}: verified {args.event} time recorded.')
 

@@ -201,6 +201,12 @@
   .funnel-label { fill: var(--text); font-size: 17px; font-weight: 600; dominant-baseline: middle; }
   .funnel-rate { fill: var(--text-3); font-size: 14px; dominant-baseline: middle; }
   .funnel-note { margin: 12px 0 20px; color: var(--text-3); font-size: 13px; }
+  .timings { max-width: 980px; margin: 0; padding: 12px 0; }
+  .timings div { display: grid; grid-template-columns: 220px 150px 1fr; align-items: baseline; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line, var(--card)); }
+  .timings dt { color: var(--text); font-size: 17px; font-weight: 600; }
+  .timings dd { margin: 0; color: var(--text); font-size: 22px; font-weight: 650; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .timings dd.few { color: var(--text-3); font-size: 14px; font-weight: 400; letter-spacing: 0; }
+  .timings dd + dd { color: var(--text-3); font-size: 14px; font-weight: 400; letter-spacing: 0; }
   @media (prefers-reduced-motion: reduce) { .funnel-chart polygon { transition: none; } }
   .uw-duechip.over { background: var(--red-soft); color: var(--red-deep); }
   .uw-flag.bar { background: var(--red-soft); color: var(--red-deep); }

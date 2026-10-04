@@ -17,6 +17,7 @@ import os
 import pathlib
 import re
 import shutil
+import statistics
 import subprocess
 import sys
 import time
@@ -215,6 +216,54 @@ def outreach(jobs, weeks=OUTREACH_WEEKS, today=None):
     return [{'week': key, 'count': value} for key, value in counts.items()]
 
 
+MIN_MEDIAN = 20
+
+
+def _when(value):
+    """A zoned timestamp as a datetime, or None. Naive times never enter a timing."""
+    try:
+        stamp = datetime.datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    except ValueError:
+        return None
+    return stamp if stamp.tzinfo else None
+
+
+def _verified(job, event):
+    """The time of an event only when Upwork's own record backs it, else None."""
+    proof = job.get(f'{event}_observation')
+    if isinstance(proof, dict) and proof.get('verified') is True:
+        return _when(job.get(f'{event}_at'))
+    return None
+
+
+def timings(jobs):
+    """Median seconds for three gaps, each with the number of leads behind it.
+
+    Only leads whose applied time (and reply time, where used) was observed from
+    Upwork count, so a stamp written when a command happened to run never moves a
+    median. A median shows from MIN_MEDIAN leads, below that only n. Time to close
+    ends at the won stamp, which is the member's own record, not Upwork's.
+    """
+    gaps = {'speed_to_lead': [], 'client_reply': [], 'time_to_close': []}
+    for job in jobs:
+        applied = _verified(job, 'applied')
+        if not applied:
+            continue
+        lag = job.get('speed_to_lead_s')
+        if isinstance(lag, int) and not isinstance(lag, bool) and lag >= 0:
+            gaps['speed_to_lead'].append(lag)
+        replied = _verified(job, 'replied')
+        if replied and replied >= applied:
+            gaps['client_reply'].append((replied - applied).total_seconds())
+        won = next((_when(h.get('at')) for h in job.get('history') or []
+                    if isinstance(h, dict) and h.get('status') == 'won'), None)
+        if won and won >= applied:
+            gaps['time_to_close'].append((won - applied).total_seconds())
+    return {name: {'n': len(values),
+                   'median_s': int(statistics.median(values)) if len(values) >= MIN_MEDIAN else None}
+            for name, values in gaps.items()}
+
+
 def build_state():
     jobs = pipeline.load()
     return {
@@ -225,6 +274,7 @@ def build_state():
                     'done': pipeline.applied_on(jobs, datetime.date.today().isoformat())},
         'funnel': funnel(jobs),
         'outreach': outreach(jobs),
+        'timings': timings(jobs),
     }
 
 
