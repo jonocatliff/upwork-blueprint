@@ -30,7 +30,7 @@ Usage:
     python3 code/pipeline.py summary
     python3 code/pipeline.py archive <job_id> [<job_id> ...] [--dry-run]
     python3 code/pipeline.py reset-search [--dry-run]
-    python3 code/pipeline.py prune [--hours 24] [--dry-run]
+    python3 code/pipeline.py prune [--hours N] [--dry-run]    N defaults to KEEP_HOURS, else 24
 
 Exits 1 when a job id does not exist: a silent no-op would be worse than an
 error that names the cause.
@@ -69,6 +69,25 @@ KEEP = 500
 # Upwork's words and numbers; score, rationale, status, notes and history are
 # the member's own work and stay.
 CACHED_FIELDS = ('description', 'client', 'budget', 'job_type', 'posted_date', 'details')
+
+
+def keep_hours():
+    """How long prune keeps Upwork content: 24 unless this clone sets KEEP_HOURS.
+
+    24 is Upwork's rule and stays the default for every member. A longer window is
+    one member's own decision about their own clone, so it lives in that clone's
+    .env (gitignored) or environment and never in a file that ships.
+    """
+    raw = os.environ.get('KEEP_HOURS')
+    if raw is None:
+        try:
+            for line in (ROOT / '.env').read_text(encoding='utf-8').splitlines():
+                key, _, value = line.partition('=')
+                if key.strip() == 'KEEP_HOURS':
+                    raw = value.strip()
+        except OSError:
+            pass
+    return int(raw) if raw and raw.isdigit() and int(raw) >= 1 else 24
 
 # Two of the member's own decisions live inside details: the bid they approved and
 # the internal estimate behind it. Pruning Upwork's content must not take them.
@@ -766,6 +785,8 @@ def cmd_summary(args):
 def cmd_prune(args):
     """Drops cached Upwork content older than --hours. Your own work stays."""
     jobs = load()
+    if args.hours is None:
+        args.hours = keep_hours()
     cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=args.hours)
     hits = fields = 0
     for j in jobs:
@@ -1038,8 +1059,8 @@ def build_parser():
     p.add_argument('--dry-run', action='store_true')
     p.set_defaults(func=cmd_reset_search)
 
-    p = sub.add_parser('prune', help="Drop Upwork content older than 24h (Upwork's caching rule).")
-    p.add_argument('--hours', type=int, default=24)
+    p = sub.add_parser('prune', help="Drop Upwork content older than 24h (Upwork's caching rule), or KEEP_HOURS if this clone sets it.")
+    p.add_argument('--hours', type=int, default=None)
     p.add_argument('--dry-run', action='store_true')
     p.set_defaults(func=cmd_prune)
     return ap
