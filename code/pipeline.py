@@ -30,7 +30,7 @@ Usage:
     python3 code/pipeline.py summary
     python3 code/pipeline.py archive <job_id> [<job_id> ...] [--dry-run]
     python3 code/pipeline.py reset-search [--dry-run]
-    python3 code/pipeline.py prune [--hours N] [--dry-run]    N defaults to KEEP_HOURS, else 24
+    python3 code/pipeline.py prune [--hours 24] [--dry-run]   saved chats keep KEEP_CHAT_HOURS (90 days)
 
 Exits 1 when a job id does not exist: a silent no-op would be worse than an
 error that names the cause.
@@ -71,23 +71,27 @@ KEEP = 500
 CACHED_FIELDS = ('description', 'client', 'budget', 'job_type', 'posted_date', 'details')
 
 
-def keep_hours():
-    """How long prune keeps Upwork content: 24 unless this clone sets KEEP_HOURS.
+CHAT_KEEP_HOURS = 2160
 
-    24 is Upwork's rule and stays the default for every member. A longer window is
-    one member's own decision about their own clone, so it lives in that clone's
-    .env (gitignored) or environment and never in a file that ships.
+
+def chat_keep_hours():
+    """How long prune keeps saved client chats: 90 days unless KEEP_CHAT_HOURS says otherwise.
+
+    Chats are what follow-ups and feedback learn from, so they are the one Upwork
+    response kept long. Everything else prune handles stays at --hours (24), because
+    readers treat a surviving profile or candidate list as fresh. A member who wants
+    Upwork's published 24 hours sets KEEP_CHAT_HOURS=24 in .env or the environment.
     """
-    raw = os.environ.get('KEEP_HOURS')
+    raw = os.environ.get('KEEP_CHAT_HOURS')
     if raw is None:
         try:
             for line in (ROOT / '.env').read_text(encoding='utf-8').splitlines():
                 key, _, value = line.partition('=')
-                if key.strip() == 'KEEP_HOURS':
+                if key.strip() == 'KEEP_CHAT_HOURS':
                     raw = value.strip()
         except OSError:
             pass
-    return int(raw) if raw and raw.isdigit() and int(raw) >= 1 else 24
+    return int(raw) if raw and raw.isdigit() and int(raw) >= 1 else CHAT_KEEP_HOURS
 
 # Two of the member's own decisions live inside details: the bid they approved and
 # the internal estimate behind it. Pruning Upwork's content must not take them.
@@ -785,9 +789,9 @@ def cmd_summary(args):
 def cmd_prune(args):
     """Drops cached Upwork content older than --hours. Your own work stays."""
     jobs = load()
-    if args.hours is None:
-        args.hours = keep_hours()
-    cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=args.hours)
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
+    cutoff = now_utc - datetime.timedelta(hours=args.hours)
+    chat_cutoff = now_utc - datetime.timedelta(hours=chat_keep_hours())
     hits = fields = 0
     for j in jobs:
         details = j.get('details') or {}
@@ -828,8 +832,10 @@ def cmd_prune(args):
                 j['details'] = fresh_details
             j['cache_pruned_at'] = now_iso()
     # A saved client thread is Upwork's content as well, whatever job it belongs to.
-    threads = [t for t in jobs_dir().glob('*/thread.json')
-               if datetime.datetime.fromtimestamp(t.stat().st_mtime, datetime.timezone.utc) < cutoff]
+    # Chats alone follow chat_keep_hours(); see there for why nothing else does.
+    threads = [t for pattern in (jobs_dir().glob('*/thread.json'), data_dir().glob('chats/*.json'))
+               for t in pattern
+               if t.is_file() and datetime.datetime.fromtimestamp(t.stat().st_mtime, datetime.timezone.utc) < chat_cutoff]
     # The saved profile and highlights are Upwork's answers about the member, so they
     # expire like any other response. Every reader treats them as optional.
     #
@@ -838,7 +844,7 @@ def cmd_prune(args):
     # not Upwork's content, and deleting it every day would throw away the input
     # /find-jobs learns from. The same goes for the skip reasons.
     raw_cache = [p for pattern in ('search/*.json', 'details/*.json', 'candidates.json',
-                                   'profile.json', 'highlights.json', 'chats/*.json')
+                                   'profile.json', 'highlights.json')
                  for p in data_dir().glob(pattern)
                  if p.is_file() and datetime.datetime.fromtimestamp(p.stat().st_mtime, datetime.timezone.utc) < cutoff]
     previews = [p for p in jobs_dir().glob('*/.pitch-preview.png')
@@ -1059,8 +1065,8 @@ def build_parser():
     p.add_argument('--dry-run', action='store_true')
     p.set_defaults(func=cmd_reset_search)
 
-    p = sub.add_parser('prune', help="Drop Upwork content older than 24h (Upwork's caching rule), or KEEP_HOURS if this clone sets it.")
-    p.add_argument('--hours', type=int, default=None)
+    p = sub.add_parser('prune', help="Drop Upwork content older than 24h (Upwork's caching rule). Saved chats follow KEEP_CHAT_HOURS, 90 days by default.")
+    p.add_argument('--hours', type=int, default=24)
     p.add_argument('--dry-run', action='store_true')
     p.set_defaults(func=cmd_prune)
     return ap

@@ -9,7 +9,7 @@ ended", "Kyle ended the contract") mixed in with real messages. This script is
 the one place that cleans them: oldest first, plain text, your messages marked as
 yours, events as events. The result is jobs/<id>/thread.json, which the cockpit's
 panel reads. It is Upwork content, so `pipeline.py prune` deletes it after
-24 hours.
+KEEP_CHAT_HOURS (90 days).
 """
 import argparse
 import datetime

@@ -105,7 +105,10 @@ One question about this is open, and you should know it before you run
 anything. Upwork's own connector guidance asks you to check with their support
 before scoring results with a model and before storing connector output. This
 Blueprint does both: `/find-jobs` scores postings, and `data/jobs.json` keeps
-what the connector returned until `prune` expires it. Nobody here has asked
+what the connector returned until `prune` expires it: 24 hours for job data,
+and 90 days for saved client chats, so your follow-ups and feedback can learn
+from them. Upwork's published rule is 24 hours for all of it; to follow it to
+the letter, set `KEEP_CHAT_HOURS=24` in `.env`. Nobody here has asked
 Upwork yet. The reasoning and the source are in
 [references/upwork.md](references/upwork.md).
 

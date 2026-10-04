@@ -12,7 +12,7 @@ Every claim carries its measurement date. **MEASURED** means called against a re
    Proposals and offers stay theirs to submit: one spends Connects, the other is
    a contract.
 3. Never buy Connects. Say what an application costs and what is left.
-4. `python3 code/pipeline.py prune` after every run. Upwork content is cached 24 hours at most; the member's own scores, notes and history stay.
+4. `python3 code/pipeline.py prune` after every run. Upwork content is cached 24 hours, saved chats 90 days (`KEEP_CHAT_HOURS`); the member's own work stays.
 5. No login leaves this machine.
 6. Every run ends with `Upwork calls: N`, counted rather than estimated. No fixed
    ceiling: a pipeline with twenty open leads legitimately costs more than one

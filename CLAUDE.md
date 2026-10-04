@@ -41,8 +41,8 @@ can do, and the two are not the same question.
   reach out to them elsewhere.
 - **Full job details one job at a time**, when a job is opened or before applying,
   never for a whole list.
-- **Prune after every run:** `python3 code/pipeline.py prune`. Upwork content may
-  be cached 24 hours at most; the member's own scores, notes and history stay.
+- **Prune after every run:** `python3 code/pipeline.py prune`. Upwork content is
+  cached 24 hours, saved chats 90 days (`KEEP_CHAT_HOURS`); the member's own work stays.
 - **Every run ends with `Upwork calls: N`.** "Well under the limit" is measured,
   not claimed.
 - **Connector writes are unproven.** Title, overview and skills are documented but

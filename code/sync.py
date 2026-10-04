@@ -9,7 +9,7 @@ connector, read only, and hands that snapshot to `apply`. Apply moves each job t
 the furthest stage Upwork shows evidence for, saves each client thread for the
 cockpit's chat window, adds proposals you sent outside the cockpit, and records
 when it ran. Status changes go through code/pipeline.py, the one writer. A saved
-thread is Upwork content, so `pipeline.py prune` deletes it after 24 hours.
+thread is Upwork content, so `pipeline.py prune` deletes it after KEEP_CHAT_HOURS (90 days).
 
 The snapshot, one JSON object (every list optional):
     {"proposals": [{"job_id", "title", "url", "status", "applied_at"}],
