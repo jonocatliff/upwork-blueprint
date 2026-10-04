@@ -1,7 +1,7 @@
 'use client';
 
 import { useCockpit } from '@/lib/context';
-import { funnelShapes, funnelSteps } from '@/lib/funnel.mjs';
+import { MIN_RATE, funnelShapes, funnelSteps } from '@/lib/funnel.mjs';
 
 // One hue from light to dark, checked with the dataviz ordinal validator against the white card.
 const RAMP = ['#86b6ef', '#4f94e4', '#4f94e4', '#1a6ad0', '#0c3f86'];
@@ -59,7 +59,7 @@ export default function AnalyticsPage() {
   // By key, not by position: adding a stage silently turned "won" into the offer count.
   const applied = steps.find(step => step.key === 'applied') || { count: 0 };
   const won = steps.find(step => step.key === 'won') || { count: 0 };
-  const winRate = applied.count ? Math.round(100 * won.count / applied.count) : null;
+  const winRate = applied.count >= MIN_RATE ? Math.round(100 * won.count / applied.count) : null;
   const total = steps.length * (HEIGHT + GAP) - GAP;
   return <section className="funnel" aria-label="Funnel">
     <h2>Funnel</h2>
@@ -71,14 +71,16 @@ export default function AnalyticsPage() {
         {shapes.map((shape, index) => {
           const mid = shape.y + HEIGHT / 2;
           const before = (shape.of || '').toLowerCase();
+          const band = shape.interval ? ` (${shape.interval[0]} to ${shape.interval[1]}%)` : '';
+          const tooFew = shape.n ? `too few to read: ${shape.n} of ${MIN_RATE} ${before}` : 'too few to read';
           return <g key={shape.key} className="funnel-step">
-            <title>{`${shape.label}: ${shape.count}${shape.rate != null ? ` (${shape.rate}% of ${before}, ${shape.overall}% of all applications)` : ''}`}</title>
+            <title>{`${shape.label}: ${shape.count}${shape.rate != null ? ` (${shape.rate}%${band} of ${before}${shape.overall != null ? `, ${shape.overall}% of all applications` : ''})` : ''}`}</title>
             <polygon points={shape.points} fill={RAMP[index]} />
             <text x={LABEL_X} y={mid - 6} className="funnel-count">{shape.count}</text>
             <text x={LABEL_X + 72} y={mid - 6} className="funnel-label">{shape.label}</text>
             <text x={LABEL_X + 72} y={mid + 16} className="funnel-rate">{shape.rate != null
-              ? `${shape.rate}% of ${before}${shape.overall != null && shape.overall !== shape.rate ? ` · ${shape.overall}% of all applications` : ''}`
-              : 'every lead you applied to'}</text>
+              ? `${shape.rate}%${band} of ${before}${shape.overall != null && shape.overall !== shape.rate ? ` · ${shape.overall}% of all applications` : ''}`
+              : index === 0 ? 'every lead you applied to' : tooFew}</text>
           </g>;
         })}
       </svg>

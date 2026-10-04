@@ -5,6 +5,22 @@
 // the minimum width, so the shape reads as a funnel and not as a missing chart.
 const STEPS = [['applied', 'Applications sent'], ['replied', 'Client replies'], ['call', 'Calls'], ['offer', 'Offers'], ['won', 'Won']];
 
+// A rate needs enough cases behind it. Below MIN_RATE leads reaching the stage
+// before, the step shows its count and nothing else: at n = 30 a 20 % rate could
+// be anywhere from 10 to 37 %. From MIN_RATE the rate carries its 95 % interval,
+// from CLEAN_RATE it stands alone.
+export const MIN_RATE = 50;
+export const CLEAN_RATE = 100;
+
+/** 95 % Wilson interval for k of n, in whole percent. */
+export function wilson(k, n) {
+  if (!n) return null;
+  const z = 1.96, p = k / n, z2 = z * z;
+  const centre = (p + z2 / (2 * n)) / (1 + z2 / n);
+  const half = (z * Math.sqrt(p * (1 - p) / n + z2 / (4 * n * n))) / (1 + z2 / n);
+  return [Math.max(0, Math.round(100 * (centre - half))), Math.min(100, Math.round(100 * (centre + half)))];
+}
+
 export function funnelSteps(counts = {}) {
   const value = key => Number((counts || {})[key]) || 0;
   return STEPS.map(([key, label], index) => {
@@ -19,9 +35,11 @@ export function funnelSteps(counts = {}) {
     // Two readings per stage: what the step before it converted, and what the whole
     // funnel converted. A good reply rate hides a bad close, and the other way round.
     const entry = value(STEPS[0][0]);
-    return { key, label, count: value(key), of,
-             rate: before ? Math.round(100 * value(key) / before) : null,
-             overall: index && entry ? Math.round(100 * value(key) / entry) : null };
+    const readable = before >= MIN_RATE;
+    return { key, label, count: value(key), of, n: before,
+             rate: readable ? Math.round(100 * value(key) / before) : null,
+             interval: readable && before < CLEAN_RATE ? wilson(value(key), before) : null,
+             overall: index && entry >= MIN_RATE ? Math.round(100 * value(key) / entry) : null };
   });
 }
 
