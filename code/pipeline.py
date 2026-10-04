@@ -838,7 +838,7 @@ def cmd_prune(args):
     # not Upwork's content, and deleting it every day would throw away the input
     # /find-jobs learns from. The same goes for the skip reasons.
     raw_cache = [p for pattern in ('search/*.json', 'details/*.json', 'candidates.json',
-                                   'profile.json', 'highlights.json')
+                                   'profile.json', 'highlights.json', 'chats/*.json')
                  for p in data_dir().glob(pattern)
                  if p.is_file() and datetime.datetime.fromtimestamp(p.stat().st_mtime, datetime.timezone.utc) < cutoff]
     previews = [p for p in jobs_dir().glob('*/.pitch-preview.png')
