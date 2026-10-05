@@ -37,6 +37,8 @@ profession outside freelancing is usually the strongest thing a new profile has.
 **Timezone and hours you answer messages:** not answered yet
 
 **Job Success Score:** not answered yet
+**Intro video:** not answered yet
+**Public Upwork profile URL:** not answered yet
 
 ## How you sound
 
@@ -58,8 +60,8 @@ Nothing recorded yet. One block per result: what you did, for whom (or what kind
 
 ## Reviews
 
-Nothing recorded yet. One block per review: the client's words, the job, the rating. /context collects them with you.
+Nothing recorded yet. One block per review: the client's words, the job, the rating, where it can be checked, the date, and verified or pending. /context collects them with you.
 
 ## Credentials
 
-Nothing recorded yet. Certificates, tools you are certified in, years of experience, with the date.
+Nothing recorded yet. One block per credential: certificates, tools you are certified in, or years of experience, where it can be checked, the date, and verified or pending.

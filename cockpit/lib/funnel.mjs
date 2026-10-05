@@ -1,8 +1,7 @@
 // The one number set the cockpit tracks: how many leads ever reached each
 // stage, and how many of the step before made it. code/cockpit.py counts them.
 // A stage with no earlier stage to measure against shows no rate at all: a zero
-// is a measurement, null is the absence of one. An empty funnel still draws at
-// the minimum width, so the shape reads as a funnel and not as a missing chart.
+// is a measurement, null is the absence of one. A zero count draws no area.
 const STEPS = [['applied', 'Applications sent'], ['replied', 'Client replies'], ['call', 'Calls'], ['offer', 'Offers'], ['won', 'Won']];
 
 // A rate needs enough cases behind it. Below MIN_RATE leads reaching the stage
@@ -45,13 +44,13 @@ export function funnelSteps(counts = {}) {
 
 const round = n => Math.round(n * 10) / 10;
 
-/** Trapezoids for a vertical funnel: each step's top edge is its own width, its bottom edge the next step's. */
-export function funnelShapes(steps, { width = 600, height = 84, gap = 2, minShare = 0.16 } = {}) {
+/** Equal-height bands: width and area follow the count, including zero. */
+export function funnelShapes(steps, { width = 600, height = 84, gap = 2 } = {}) {
   const max = Math.max(1, ...steps.map(step => step.count));
-  const widthOf = count => width * Math.max(minShare, count / max);
+  const widthOf = count => width * Math.max(0, count) / max;
   return steps.map((step, index) => {
     const top = widthOf(step.count);
-    const bottom = index + 1 < steps.length ? widthOf(steps[index + 1].count) : top * 0.82;
+    const bottom = top;
     const y = index * (height + gap);
     const corners = [[(width - top) / 2, y], [(width + top) / 2, y], [(width + bottom) / 2, y + height], [(width - bottom) / 2, y + height]];
     return { ...step, y, points: corners.map(([x, cy]) => `${round(x)},${round(cy)}`).join(' ') };

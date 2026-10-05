@@ -13,7 +13,7 @@ One sprint of six to eight weeks, in six phases. Two of them (onboarding, baseli
 4. Money pages and supporting content
 5. Proof and handover
 
-The week ranges under each phase below are a working split of the six to eight weeks, not a measured number. Only the durations under "Timeframes the source names" are measured or stated by the source.
+The week ranges under each phase below are a working split of the six to eight weeks, not a measured number. Only the durations under "Timeframes the source names" are measured or stated by the source. All timing here is internal planning guidance; pitch pages show phases and order without a delivery timeline.
 
 ## Why this order and not another
 
@@ -151,4 +151,4 @@ Four phases, each with the outcome in the client's own words. Add the fifth only
 4. **Build the pages that sell.** "You get pages for each service in each town you serve, written in your voice with your proof on them, each one built to get the form filled in."
 5. **Show what it did.** "You get the before and after against the numbers we froze on day one, plus the files and the map, so nothing depends on me still being here."
 
-Two things belong on the diagram as client responsibilities, not as steps: access and answers in week one, and approval on content before it goes live.
+Two things belong on the diagram as client responsibilities, not as steps: access and answers before the build, and approval on content before it goes live.

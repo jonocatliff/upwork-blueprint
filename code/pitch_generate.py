@@ -4,7 +4,7 @@ reviews, background, the plan, scope, and the next step.
 
 SEO and Google Ads jobs do not come through here at all: they get the one-page
 roadmap in templates/roadmap/ as their pitch page, because a programme the member
-runs the same way every time sells better as weeks than as a drawing.
+runs the same way every time sells better as phases than as a drawing.
 
 Pure assembly. The diagram plan and every sentence are written by Claude from the
 job posting before this runs; this script checks them and fills the template.
@@ -51,7 +51,6 @@ PIPELINE = ROOT / 'code' / 'pipeline.py'
 PROOF = ROOT / 'context' / 'me.md'
 ME = ROOT / 'context' / 'me.md'
 VIDEOS = ROOT / 'context' / 'videos.json'
-PROFILE = ROOT / 'data' / 'profile.json'
 LIBRARY = ROOT / 'data' / 'pitch-library'
 
 GRAPH_KINDS = {'source', 'step', 'sink', 'service', 'decision', 'note', 'datastore', 'milestone', 'actor'}
@@ -194,10 +193,9 @@ def profile_media(path):
 
 def profile_url():
     try:
-        data = json.loads(PROFILE.read_text(encoding='utf-8'))
-        key = data.get('data', {}).get('identity', {}).get('ciphertext')
-        return f'https://www.upwork.com/freelancers/{key}' if key else ''
-    except (OSError, json.JSONDecodeError):
+        url = context_check.field(ME.read_text(encoding='utf-8'), 'Public Upwork profile URL') or ''
+        return url if re.fullmatch(r'https://(?:www\.)?upwork\.com/freelancers/[^\s]+', url) else ''
+    except OSError:
         return ''
 
 

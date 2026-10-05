@@ -1,25 +1,25 @@
 # SEO delivery knowledge
 
-Distilled from a maintained local-SEO pipeline and the specs behind it (keyword method, 80-check on-page list, landing-page component stack, business profile field spec, citation tiers, the CMS audit-and-fix loop), all run on real client sites, so `/pitch-page` can build a work plan and a client diagram for any job naming SEO, local SEO, a website audit or keyword research. This file is the craft: what each task actually is and what it is measured against. The sequence, the week ranges and the acceptance logic live in `context/tool-knowledge/delivery.md`, and are not repeated here.
+Distilled from a maintained local-SEO pipeline and the specs behind it (keyword method, 80-check on-page list, landing-page component stack, business profile field spec, citation tiers, the CMS audit-and-fix loop), all run on real client sites, so `/pitch-page` can build a work plan and a client diagram for any job naming SEO, local SEO, a website audit or keyword research. This file is the craft: what each task actually is and what it is measured against. The sequence, internal timing guidance and acceptance logic live in `context/tool-knowledge/delivery.md` when the member has a copy, otherwise `starters/context/tool-knowledge/delivery.md`, and are not repeated here.
 
 ## The four tracks
 
-The client-facing shape of the work is four overlapping tracks across eight weeks, not a chain of phases. The editable template is `templates/roadmap/seo.html`: change the `ROWS` and `MS` lists in the script at the bottom of that file and the weeks redraw themselves.
+The client-facing shape of the work is four overlapping tracks across eight phases. The editable template is `templates/roadmap/seo.html`: change the `ROWS` and `MS` lists in the script at the bottom of that file and the phases redraw themselves. Phase numbers show order, not weeks or a delivery timeline; timing notes below guide internal planning only.
 
-| Track | Weeks | What the client gets |
+| Track | Phases | What the client gets |
 |---|---|---|
 | **Traffic** | 2 to 7 | Found on Google and Maps |
 | **Conversion** | 3 to 4 | A website built to get the call |
 | **Sales automation** | 1 to 8 | Every enquiry answered and followed up |
 | **Analytics** | 1 and 7 | What every lead is worth |
 
-Framing line: **"One system, built in 8 weeks. Not just SEO."** Closing line, which stays in: **"No ranking promises: results build over 2 to 3 months."**
+Framing line: **"One system across every phase."** Closing line: **"No ranking promises: the audit establishes the starting point."**
 
-**The overlap is the point.** A plan where every track waits for the one before it reads as eight weeks of nothing, and it is not how the work runs either. Four tracks is what fits a client's attention; five reads as a list and three looks thin. Every task below sits under the track it serves, and a task that serves no track does not belong in the scope.
+**The overlap is the point.** A plan where every track waits for the one before it hides work that can run in parallel. Four tracks is what fits a client's attention; five reads as a list and three looks thin. Every task below sits under the track it serves, and a task that serves no track does not belong in the scope.
 
 ---
 
-# Track 1 · Traffic (weeks 2 to 7)
+# Track 1 · Traffic (phases 2 to 7)
 
 **"Found on Google and Maps."** The widest track, and the one that carries the search craft: what the site is, what it says, and whether either surface can see it.
 
@@ -156,7 +156,7 @@ Fetch the live HTML, check whether the SEO plugin's signature is even in the hea
 
 ---
 
-# Track 2 · Conversion (weeks 3 to 4)
+# Track 2 · Conversion (phases 3 to 4)
 
 **"A website built to get the call."** Ranking without conversion is traffic into the bin, so this track is scored separately from the on-page list.
 
@@ -176,7 +176,7 @@ The launch checklist adds a second form at the bottom, an email-capture popup, a
 
 ---
 
-# Track 3 · Sales automation (weeks 1 to 8)
+# Track 3 · Sales automation (phases 1 to 8)
 
 **"Every enquiry answered and followed up."** The longest track, because it starts before anything is visible and is still running at handover. It covers everything that happens to a lead after the form, and everything that happens to a customer after the job.
 
@@ -190,11 +190,11 @@ The launch checklist adds a second form at the bottom, an email-capture popup, a
 
 ---
 
-# Track 4 · Analytics (weeks 1 and 7)
+# Track 4 · Analytics (phases 1 and 7)
 
-**"What every lead is worth."** Two short bars on purpose: freeze the numbers in week one, read them in week seven. It is the smallest track and the one that decides whether anything else can be proved.
+**"What every lead is worth."** Two short bars on purpose: freeze the numbers at the start, compare them at handover. It is the smallest track and the one that decides whether anything else can be proved.
 
-**Week one is the baseline,** dated and written down with its source. Without it the closing report shows activity instead of gain, and this is the step people skip. It also sets the do-not-touch list.
+**The first phase is the baseline,** dated and written down with its source. Without it the closing report shows activity instead of gain, and this is the step people skip. It also sets the do-not-touch list.
 
 **Search Console is a gate, not a nice-to-have.** It is the only source for which page sits just off page one, and it is what makes merges, deletions and prioritization decidable at all. Contradictions between two modules of the same report get reported, not smoothed.
 
@@ -206,15 +206,15 @@ The launch checklist adds a second form at the bottom, an email-capture popup, a
 
 ## For a pitch page
 
-Draw the four tracks, with the outcome in the client's words, and let the bars overlap. Drop a track only when it is genuinely out of scope, and say so rather than silently shortening the plan.
+Draw the four tracks, with the outcome in the client's words, and let the phase bars overlap. Show no delivery timeline. Drop a track only when it is genuinely out of scope, and say so rather than silently shortening the plan.
 
-1. **Traffic, weeks 2 to 7.** "You get found on Google and Maps: the pages people actually search for, built and fixed so both can see them."
-2. **Conversion, weeks 3 to 4.** "Your website is built to get the call, with your proof on the page and one obvious next step."
-3. **Sales automation, weeks 1 to 8.** "Every enquiry gets answered and followed up, and reviews keep coming in after every job."
-4. **Analytics, weeks 1 and 7.** "You know what every lead is worth, measured against the numbers we froze on day one."
+1. **Traffic, phases 2 to 7.** "You get found on Google and Maps: the pages people actually search for, built and fixed so both can see them."
+2. **Conversion, phases 3 to 4.** "Your website is built to get the call, with your proof on the page and one obvious next step."
+3. **Sales automation, phases 1 to 8.** "Every enquiry gets answered and followed up, and reviews keep coming in after every job."
+4. **Analytics, phases 1 and 7.** "You know what every lead is worth, measured against the numbers we froze at the start."
 
 The branch that matters on almost every SEO job is what happens to the old URLs; the second is what the client has to supply. Draw the redirect decision with both edges labelled, and draw the client-owned inputs (their CMS, their proof, their profile access, the verification wait, approval before publishing) as their own nodes rather than as steps.
 
 Terms a client recognizes without explanation: money pages, service area, business profile, reviews, redirects, site speed, mobile, what people actually search for, and where their enquiries come from. Terms that belong in a node note instead of on the diagram: canonical, schema, crawl budget, hub and spoke, cannibalization, first-hand experience signals, core web vitals. Cannibalization reads to a client as "two of your own pages compete for the same search, so neither one wins it".
 
-Keep the closing line: **no ranking promises, results build over 2 to 3 months.** Never show a volume, a difficulty score or a traffic estimate as promised demand, never put a position or a date on results, and never repeat the click-share percentages that circulate in this field, which have no primary source behind them. What the page shows is the work, its order, and what the client has to decide.
+Keep the closing line: **no ranking promises: the audit establishes the starting point.** Never show a volume, a difficulty score or a traffic estimate as promised demand, never put a position or a date on results, and never repeat the click-share percentages that circulate in this field, which have no primary source behind them. What the page shows is the work, its order, and what the client has to decide.

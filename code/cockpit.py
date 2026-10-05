@@ -167,17 +167,27 @@ def daily_target():
 FUNNEL = ('applied', 'replied', 'call', 'offer', 'won')
 
 
+def reached(job):
+    """The stages this member lead reached, including an explicit send timestamp."""
+    stages = [job.get('status')] + [h.get('status') for h in job.get('history') or []
+                                    if isinstance(h, dict)]
+    if job.get('applied_at'):
+        stages.append('applied')
+    rank = max((FUNNEL.index(s) + 1 for s in stages if s in FUNNEL), default=0)
+    return rank, 'call' in stages
+
+
+def applications(jobs):
+    """Every non-imported lead that ever reached application or a later stage."""
+    return [job for job in jobs if not job.get('imported') and reached(job)[0]]
+
+
 def funnel(jobs):
     """How many leads ever reached each stage, from applied to won."""
     # The mandatory stages count as reached: nobody wins without applying, and nobody
     # is offered without an answer. The call is the exception, because it is optional:
     # crediting it to every lead that reached an offer would invent calls nobody had.
-    def seen(job):
-        stages = [job.get('status')] + [h.get('status') for h in job.get('history') or []
-                                        if isinstance(h, dict)]
-        rank = max((FUNNEL.index(s) + 1 for s in stages if s in FUNNEL), default=0)
-        return rank, 'call' in stages
-    marks = [seen(job) for job in jobs if not job.get('imported')]
+    marks = [reached(job) for job in applications(jobs)]
     return {stage: sum(1 for rank, had_call in marks
                        if (had_call if stage == 'call' else rank > index))
             for index, stage in enumerate(FUNNEL)}
@@ -189,32 +199,35 @@ OUTREACH_WEEKS = 12
 def outreach(jobs, weeks=OUTREACH_WEEKS, today=None):
     """Applications sent per week, oldest first, so a member sees their own rhythm.
 
-    Counted from each lead's own history, which is where `/brief` records the send,
-    so a week with nothing in it is a week nothing went out rather than a gap in the
-    data. Weeks start on Monday and the last one is the current, unfinished week.
+    The funnel's application population, counted once per lead. Prefer the send
+    timestamp, then applied history; legacy leads use their earliest progressed
+    history, status update or discovery date. These fallbacks place a lead in a
+    week without claiming its send time was observed. Weeks start on Monday.
     """
     today = today or datetime.date.today()
     monday = today - datetime.timedelta(days=today.weekday())
     starts = [monday - datetime.timedelta(weeks=back) for back in range(weeks - 1, -1, -1)]
     counts = {start.isoformat(): 0 for start in starts}
     first = starts[0]
-    for job in jobs:
-        if job.get('imported'):
+    def date(value):
+        try:
+            return datetime.date.fromisoformat(str(value or '')[:10])
+        except ValueError:
+            return None
+
+    for job in applications(jobs):
+        events = [event for event in job.get('history') or [] if isinstance(event, dict)]
+        applied = [date(event.get('at')) for event in events if event.get('status') == 'applied']
+        progressed = [date(event.get('at')) for event in events if event.get('status') in FUNNEL]
+        when = (date(job.get('applied_at')) or min((day for day in applied if day), default=None)
+                or min((day for day in progressed if day), default=None)
+                or date(job.get('status_updated_at')) or date(job.get('found_at')))
+        if when is None or when < first or when > today:
             continue
-        for event in job.get('history') or []:
-            if not isinstance(event, dict) or event.get('status') != 'applied':
-                continue
-            stamp = str(event.get('at') or '')[:10]
-            try:
-                when = datetime.date.fromisoformat(stamp)
-            except ValueError:
-                continue
-            if when < first or when > today:
-                continue
-            week = when - datetime.timedelta(days=when.weekday())
-            key = week.isoformat()
-            if key in counts:
-                counts[key] += 1
+        week = when - datetime.timedelta(days=when.weekday())
+        key = week.isoformat()
+        if key in counts:
+            counts[key] += 1
     return [{'week': key, 'count': value} for key, value in counts.items()]
 
 

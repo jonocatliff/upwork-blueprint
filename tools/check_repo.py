@@ -51,7 +51,6 @@ def _private_patterns():
 
 
 LEAKS = _private_patterns() + [
-    (r'\b1898663420131815612\b', 'a specific Upwork org id'),
     (r'~0[0-9a-f]{17}', 'an Upwork profile id'),
     (r'/Users/[a-z]+/', 'an absolute home directory'),
 ]
@@ -523,6 +522,7 @@ def script_copy():
         root = pathlib.Path(temporary)
         shutil.copytree(ROOT / 'code', root / 'code',
                         ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
+        shutil.copytree(ROOT / 'starters', root / 'starters')
         (root / 'tools').mkdir()
         shutil.copy2(ROOT / SELF, root / SELF)
         shutil.copytree(ROOT / 'tools' / 'fixtures', root / 'tools' / 'fixtures')
@@ -590,6 +590,51 @@ def fixture_env():
     settings = pitch_deploy.deployment_config({'VERCEL_TOKEN': '   ', 'VERCEL_SCOPE': ''})
     assert settings['token'] == 'fixture-token'
     assert settings['scope'] == 'fixture-scope'
+
+
+def fixture_onboarding():
+    """The starter and saved search format must pass their own readers."""
+    import context_check
+    import jobs
+    starter = (ROOT / 'starters' / 'context' / 'me.md').read_text(encoding='utf-8')
+    filled = starter.replace('not answered yet', 'Fixture answer')
+    filled = re.sub(r'(?ms)(^## Your background\s*\n).*?(?=^## )',
+                    r'\1\n2019-2024: Built websites for local businesses.\n\n', filled)
+    blocks = {
+        'Results': '**Website conversion**\n- Result: Increased inquiries by 30%.\n'
+                   '- Where it can be checked: Fixture client report.\n'
+                   '- Date: 2025-01-10\n- Status: verified',
+        'Reviews': '**Website client review**\n- Words: Clear work and handover.\n'
+                   '- Rating: 5/5\n- Source: https://www.upwork.com/fixture-review\n'
+                   '- Status: verified',
+        'Credentials': '**Tool certification**\n- Certificate: Fixture platform, 2024.\n'
+                       '- Where it can be checked: Fixture credential register.\n'
+                       '- Status: verified',
+    }
+    for section, body in blocks.items():
+        filled = re.sub(rf'(?ms)(^## {section}\s*\n).*?(?=^## |\Z)',
+                        lambda match: match.group(1) + '\n' + body + '\n\n', filled)
+    me = ROOT / 'context' / 'me.md'
+    me.parent.mkdir()
+    me.write_text(filled, encoding='utf-8')
+    assert context_check.check_me(filled) == []
+    assert context_check.check_proof(context_check.proof_only(filled)) == []
+    assert context_check.status(filled) == ('complete', len(context_check.REQUIRED), 3, 0)
+    command = [sys.executable, str(ROOT / 'code' / 'context_check.py')]
+    result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True)
+    assert result.returncode == 0, result.stdout or result.stderr
+    incomplete = re.sub(r'(?m)^(\*\*Tools and systems you can name confidently:\*\*).*$',
+                        r'\1', filled)
+    me.write_text(incomplete, encoding='utf-8')
+    result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True)
+    assert result.returncode == 1 and 'Tools and systems' in result.stdout, result.stdout
+    assert context_check.status(incomplete)[0] == 'partial'
+    me.write_text('## Job search tracks\n\n'
+                  '- Websites: WordPress · Webflow (keep, reviewed 2026-10-05)\n\n'
+                  'Review: keep these terms.\n', encoding='utf-8')
+    themes = jobs.member_search_themes()
+    assert len(themes) == 1 and themes[0]['terms'] == ['WordPress', 'Webflow'], themes
+    assert themes[0]['query'] == 'WordPress, Webflow', themes
 
 
 def fixture_setup():
@@ -725,6 +770,13 @@ def fixture_pipeline():
     reviewed = (now - datetime.timedelta(days=2)).isoformat()
     sent = (now - datetime.timedelta(days=1)).isoformat()
     command = [sys.executable, str(ROOT / 'code' / 'pipeline.py')]
+    analytics_rows = [{'status': stage, 'found_at': reviewed}
+                      for stage in ('applied', 'replied', 'call', 'offer')]
+    analytics_rows += [{'status': 'lost', 'found_at': reviewed,
+                        'history': [{'status': 'applied', 'at': sent}] * 2},
+                       {'status': 'won', 'found_at': reviewed, 'imported': True}]
+    assert cockpit.funnel(analytics_rows)['applied'] == 5
+    assert sum(week['count'] for week in cockpit.outreach(analytics_rows)) == 5
 
     def run(arguments, value=None, success=True, script='pipeline.py'):
         call = command if script == 'pipeline.py' else [sys.executable, str(ROOT / 'code' / script)]
@@ -896,14 +948,14 @@ def script_worker(name, path=None):
     if name == 'import':
         script_import(pathlib.Path(path))
     else:
-        {'candidates': fixture_candidates, 'env': fixture_env, 'setup': fixture_setup,
+        {'candidates': fixture_candidates, 'env': fixture_env, 'onboarding': fixture_onboarding, 'setup': fixture_setup,
          'publish': fixture_publish, 'retention': fixture_retention, 'pipeline': fixture_pipeline}[name]()
 
 
 def check_scripts_run():
     findings = []
     tasks = [('import', path.name) for path in sorted((ROOT / 'code').glob('*.py'))]
-    tasks += [(name, None) for name in ('candidates', 'env', 'setup', 'publish', 'retention', 'pipeline')]
+    tasks += [(name, None) for name in ('candidates', 'env', 'onboarding', 'setup', 'publish', 'retention', 'pipeline')]
     for name, filename in tasks:
         with script_copy() as (root, env):
             command = [sys.executable, str(root / SELF), '--script-check', name]

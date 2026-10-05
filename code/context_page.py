@@ -66,10 +66,9 @@ def prose(body):
 
 
 def proof_items(body):
-    """Proof lines with their status, so verified and pending can be split."""
+    """Proof blocks with their status, so metadata stays beside the result."""
     items = []
-    for line in body:
-        line = line.strip()
+    for _, line in cc.entries('## Results\n' + '\n'.join(body)):
         if not line or EMPTY in line.lower() or line.startswith('One block per'):
             continue
         status = 'pending'

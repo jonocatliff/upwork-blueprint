@@ -100,7 +100,7 @@ export function CockpitProvider({ token, children }: { token: string; children: 
           </nav>
           {tracker.goal ? <div className="top-progress">
             <span>Applications today</span>
-            <strong>{tracker.done}<small>/ {tracker.goal}</small></strong>
+            <strong aria-label={`${tracker.done} of ${tracker.goal} applications today`}>{tracker.done}<small>/ {tracker.goal}</small></strong>
             <i role="progressbar" aria-label="Daily application target" aria-valuemin={0} aria-valuemax={tracker.goal}
               aria-valuenow={Math.min(tracker.goal, tracker.done)}><span style={{ width: `${Math.min(100, 100 * tracker.done / tracker.goal)}%` }} /></i>
           </div> : null}

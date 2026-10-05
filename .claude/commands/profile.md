@@ -22,9 +22,7 @@ leaves the rest as it is. Every run writes something.
 
 1. Run `python3 code/workspace.py`.
 2. Call `list_accounts`. **If the Upwork tools are not there**, walk the member through it and stop:
-   - This folder ships the connector in `.mcp.json`. Quit Claude, start it again here, and approve it when it asks whether to trust this project's MCP server. If it never asks, add it by hand: `claude mcp add --transport http upwork https://mcp.upwork.com/mcp`, then restart again. Connecting without the restart looks fine and leaves the connector invisible, the one mistake that throws no error.
-   - Type `/mcp`, pick upwork, log in to Upwork in the browser window that opens.
-   - Then `/profile` again.
+   Follow [README.md: Connect Upwork](../../README.md#connect-upwork), then run `/profile` again.
 3. Take the `org_uid` of the Freelancer account. Never write it into a file. More than one freelancer account: ask which.
 4. **Read the live profile, not the draft.** `get_profile` action `get` saved
    exactly as returned to `data/profile.json`, and `get_profile` action
@@ -82,14 +80,9 @@ Each of these matters only when it fails:
 4. **A claim the aggregate contradicts.** Compare every claim in the text against `data/profile.json`: a badge or a client count the connector's own numbers deny is the most expensive thing that can be wrong, because a client checks it in two seconds.
 5. **What nobody in the lane does.** From `references/profile.md`: no price, no "this is not for you if", no availability window, no date on a claim. Name one the member could add truthfully, because it is free and it is a differentiator in the same search.
 
-**Two things the connector cannot see**, measured 12 September 2026: neither the
-profile, the dashboard nor the contract list returns a Job Success Score or
-whether an intro video exists. The review count is there
-(`profileAggregates.totalFeedback`), those two are not. Ask for exactly them, in
-one message, with where to look ("open your profile on Upwork, the Job Success
-badge sits under your name"), and do not wait on the answer: an unanswered one
-is named as not measured and never estimated. `/context` asks the same two, so
-skip this when they are already answered in `context/me.md`.
+**Job Success Score and intro video** come from `context/me.md`, collected once
+by `/context`. The connector returns neither, measured 12 September 2026.
+An unanswered field is not measured, never estimated; name the gap without asking again.
 
 ## Step 3 · Read your facts
 

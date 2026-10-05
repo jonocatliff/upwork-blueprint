@@ -68,7 +68,7 @@ if python3 -c 'import sys; sys.path.insert(0, "code"); import lead_magnet_render
       note "the audit report template did not build: /lead-magnet cannot render a report until it does. Run 'cd templates/lead-magnet && npm install && npm run build' and read npm's own error. Everything else below still applies."
     fi
   else
-    note "Node.js is missing: /cockpit will not start and /lead-magnet cannot render its report. Install it from https://nodejs.org, then run this again."
+    note "Node.js is missing: /lead-magnet cannot render its report and /cockpit will not start. Install it from https://nodejs.org, then run this again."
   fi
 fi
 
@@ -117,9 +117,7 @@ env_has OPENAI_API_KEY || note "OPENAI_API_KEY in .env: /lead-magnet adds two ch
 echo
 echo "Your context, data and job files are yours now; git will not touch them."
 echo
-echo "Upwork itself: this folder ships the connector in .mcp.json, so the first time"
-echo "you start claude here it asks whether to trust it. Say yes, then type /mcp,"
-echo "pick upwork and log in. Nothing reaches Upwork until you do."
+echo "Connect Upwork once by following README.md, 'Connect Upwork', before the first command."
 echo
 echo "Next: /context. It reads this same list and tells you which of it you need"
 echo "now and which can wait, then asks about your background. After that: /profile"

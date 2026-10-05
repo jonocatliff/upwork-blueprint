@@ -31,3 +31,7 @@ node_modules/
 /templates/lead-magnet/dist/
 *.tsbuildinfo
 /tools/leaks.txt
+
+# Shared permissions ship; each member's saved approvals stay local.
+.claude/settings.local.json
+!.claude/settings.json

@@ -10,11 +10,19 @@ The full product goal and review standard are in [VISION.md](VISION.md).
    `git clone https://github.com/luka-commits/upwork-blueprint.git`
 2. Open a terminal in the folder and run `./setup.sh` once. It creates your own
    files, writes `.env` with your unique Vercel project and builds the audit report template
-3. Run `claude`, then type `/context`. It asks about your background once, and
-   every command after it writes from those answers
+3. Follow [Connect Upwork](#connect-upwork), then run `/context`. It asks about
+   your background once; later commands write from those answers
 
-Skipping step 2 still works: every command walks you through what it needs, the
-first time you run it. The setup script only saves you those interruptions.
+Skipping setup still works: each command walks you through its missing tools.
+
+## Connect Upwork
+
+1. Start `claude` in this folder and approve the project's `upwork` MCP server
+   when Claude Code asks (workspace trust).
+2. Run `/mcp`, choose upwork and finish the login in the browser.
+3. Quit Claude Code and start `claude` here once more before the first command.
+
+The shared allow rules apply after you accept the workspace trust dialog.
 
 ## The path (run it in this order, it mirrors the course)
 
@@ -29,15 +37,11 @@ first time you run it. The setup script only saves you those interruptions.
 | 7 | `/proposal` | Turns your sales call into the proposal you send, and says whether it is ready to start a project on |
 | 8 | `/won` | Turns a started contract into the handover brief and the onboarding. Run it again after delivery to record what came out of it |
 
-Step 1 runs before the connector and before you have any profile at all. No
-Upwork profile yet is the normal starting point here, not a problem to fix.
+/context also works before connecting or creating a public Upwork profile.
 
-For a local business in conversation, `/lead-magnet <job id> <website>`
-builds a three-part SEO audit from live Firecrawl, Apify and DataForSEO
-evidence. Nothing paid starts before the website is saved and you approve the
-expected cost. After a name check and your hand review, publish the finished audit
-to a public URL anyone holding the link can open. Your audits and pitch pages
-share your own Vercel project, created on the first publish after `vercel login`.
+For a local business in conversation, `/lead-magnet <job id> <website>` builds an
+SEO audit from Firecrawl, Apify and DataForSEO evidence after you approve its cost.
+Review it before publishing. Audits and pitches share your Vercel project.
 
 One helper: `/cockpit` shows your leads with the next command to copy. A lead you
 will not apply to leaves the list with `/find-jobs skip <job id> <reason>`, which
@@ -46,39 +50,46 @@ from.
 
 ## Requirements
 
-- [Claude Code](https://claude.com/claude-code) installed
-- An Upwork freelancer account
-- The official Upwork connector. `/profile` walks you through connecting it the first time
-- Python 3, plus its packages: `python3 -m pip install -r requirements.txt`, then
+- macOS or Linux. On Windows, use WSL; native Windows is unsupported.
+- [Claude Code](https://claude.com/claude-code) and an Upwork freelancer account
+- Python 3.10 or newer: `python3 -m pip install -r requirements.txt`, then
   `python3 -m playwright install chromium`. `/lead-magnet` stops before its first
   paid call without them. If pip refuses because the system Python is managed,
   make a virtual environment first: `python3 -m venv .venv && source .venv/bin/activate`
-- [Node.js](https://nodejs.org), the LTS version, for the cockpit and the report template
+  Activate it with `source .venv/bin/activate` in every new terminal before `claude`.
+- [Node.js](https://nodejs.org) 20.19+ (20.x) or 22.12+ for the cockpit and report template
 - Google Chrome, which `/pitch-page` uses to check the page on a phone screen
-- The Vercel CLI and a Vercel login or `VERCEL_TOKEN` for public pitch pages
+- Vercel CLI: `npm i -g vercel`, then `vercel login` (or set `VERCEL_TOKEN`).
+  If that install fails with EACCES, use `npm i -g --prefix "$HOME/.local" vercel`
+  and add `export PATH="$HOME/.local/bin:$PATH"` to your shell startup file.
+- Audit keys in `.env`: Firecrawl, Apify and DataForSEO. Page speed needs
+  `PAGESPEED_API_KEY` or local Lighthouse: `npm i -g lighthouse`.
+- Optional `GOOGLE_MAPS_API_KEY` enables Google Static Maps. Without it the audit
+  uses OpenStreetMap tiles; ranking measurements still run.
 
-`./setup.sh` checks all of this and tells you what is still missing, per command.
-`python3 code/tools_status.py` prints the same list from the other side: every
-tool whether it is there or not, what each one buys you, and what you lose by
-skipping it. `/context` shows you both on your first run, so nothing on this list
-has to be settled before you start.
-
-The Upwork connector is required for Upwork commands. Vercel is required to
-publish pitch pages and audits. The list names what each other tool enables.
+`./setup.sh` and `python3 code/tools_status.py` list what each command still needs.
+Upwork commands need the connector; publishing needs Vercel. /context can start
+before the audit tools are ready.
 
 ## What it costs to run
 
-Nothing until you run `/lead-magnet` or publish a pitch page. One full client
-audit, measured on a real run on 27 September 2026: 48 API calls, $0.25, under
-nine minutes. The keys are yours and the bills are yours; the package holds none.
-DataForSEO preflight requires $1 of credit, rather than estimating a whole run.
-After your first audit, check the remaining balance and top it up before the next.
-`OPENAI_API_KEY` and `KIE_AI_API_KEY` are optional, and what they buy is named in
-`.env.example`. Without `OPENAI_API_KEY` two chapters of the report say "not
-measured" and the rest is unaffected. `KIE_AI_API_KEY` only saves a detour:
-`/proposal` prints a prompt written for that client, and the page embeds whatever
-image is saved as `jobs/<id>/proposal-sketch.png`, drawn by any model you already
-use.
+| Item | Cost |
+|------|------|
+| Claude Code | a paid Claude plan that includes Claude Code, or API billing |
+| Upwork applications | About 70 Connects/day for ten applications; the actual job costs vary and /find-jobs counts them |
+| Public pitch pages | Vercel's free plan, within its limits |
+| Core audit APIs | About $0.25 per audit on the measured 27 September 2026 run (48 calls); each run asks you to approve its estimate |
+| Optional image and AI APIs | Usage billed separately; paid images require your yes after the cost is shown |
+
+The keys and bills are yours. Preflight needs at least $3 Apify and $1 DataForSEO
+credit, which are balance floors, not audit prices. Check balances between runs.
+Optional `OPENAI_API_KEY` adds AI-search and review analysis; without it those
+chapters say "not measured". `KIE_AI_API_KEY` generates images; you can instead
+use an image model you already have. Details are in `.env.example`.
+
+## Updating
+
+Run `git pull`, then `./setup.sh` again. Activate `.venv` first if you use it.
 
 ## What appears in your folder
 

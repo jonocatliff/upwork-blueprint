@@ -34,14 +34,13 @@ cockpit list. End with `Upwork calls: 0`, and do not continue into Step 0.
 
 ## Step 0 · Files, connector, window
 
-Run `python3 code/workspace.py`, `python3 code/pipeline.py prune` and `python3 code/pipeline.py reset-search` (yesterday's unused leads are expired by the window, and their skip reasons are kept), then `list_accounts` (walk through connecting as `/profile` Step 0 does if the tools are missing). Then `python3 code/jobs.py window`: the hours to look back, measured from **the last run rather than the last saved lead**, because a run that found nothing still covered its hours. Four runs a day therefore cost four small windows instead of four overlapping ones, with a floor of two hours and a ceiling of 24, since a posting a day old is already answered by fifty other freelancers. A first run, or an account whose stamp was never written, looks back 24 hours. `jobs.py clean` in Step 7 writes the stamp, so the run has to finish for the next one to narrow.
+Run `python3 code/workspace.py`, `python3 code/pipeline.py prune` and `python3 code/pipeline.py reset-search` (yesterday's unused leads expire, with skip reasons kept), then `list_accounts` (if missing, follow [README.md: Connect Upwork](../../README.md#connect-upwork)). Then `python3 code/jobs.py window`: the hours since **the last run rather than the last saved lead**, with a two-hour floor and 24-hour ceiling. A first run looks back 24 hours. `jobs.py clean` writes the stamp even when nothing was found, so the run must finish for the next one to narrow.
 
 ## Step 0b · Is this the first run, or a run with a direction?
 
-Look at `context/me.md` under "Job search tracks" and at `data/jobs.json`. **No tracks
-yet, or no application in the pipeline, means the first run**, and the first run has a
-different job: it does not hunt the best five, it finds out which searches are alive in
-this member's direction. Say which mode is running in one line.
+Look at `context/me.md` under "Job search tracks". **No tracks means the first run**:
+it finds which searches are alive instead of hunting the best ten.
+Saved tracks mean a later run even before any application. Name the mode in one line.
 
 **The first run explores.** When what the member sells matches one of the ready-made lanes
 in [references/jobs.md](../../references/jobs.md), offer that lane's terms and let them cut
@@ -55,10 +54,12 @@ density, not freshness. Measure them with Step 3a, and report per term what it c
 Connects, what the postings pay against the member's own rate in `context/me.md`,
 and how many ask for entry level.
 
-Close the first run by writing the three to five terms that survived under "Job search
-tracks" in `context/me.md`, each with its verdict and the date, and by naming the lane
-the evidence points at. That is the direction, decided by measurement rather than taste,
-and `/profile` will lead with it.
+Close the first run by saving three to five surviving terms under "Job search tracks"
+in `context/me.md` as `- Theme: term · term`. Keep verdicts and dates in prose outside
+that list. Name the lane the evidence supports, then run `python3 code/pipeline.py prune`
+and `python3 code/jobs.py clean`.
+Report the measured terms and `Upwork calls: N`, name `/find-jobs` next to find leads
+using these tracks, and stop here. With no surviving terms, name `/context offer` next.
 
 **Every later run exploits.** It runs the kept tracks, pages the dense ones, applies the
 lessons from Step 3b, honours the window from Step 0, and tests at most one new candidate
@@ -345,7 +346,12 @@ list's one-sentence headline `python3 code/pipeline.py headline <id> "<sentence>
 ## Step 7 · Close
 
 1. `python3 code/pipeline.py prune`, then `python3 code/jobs.py clean` (deletes this run's raw responses).
-2. Ask once, in one line, which of the leads you showed are a no and why. Take the
+2. **Show ten, and the bench is everything else that passed.** The run's job is ten
+   leads the member would actually apply to today. Show exactly ten, numbered, each one
+   line: who wants what, the grade, and what applying costs in Connects. Behind them
+   stands every other lead that passed the gate, in rank order, which is what
+   `python3 code/pipeline.py list` already prints. Open invitations come first, before the ten.
+3. Ask once, in one line, which of the leads you showed are a no and why. Take the
    answer in any shape, including none, and record each with
    `python3 code/pipeline.py set <id> skipped --note "not a fit: <reason>"`. Keep the
    prefix, because `python3 code/jobs.py rules` counts a reason only when the note
@@ -353,11 +359,7 @@ list's one-sentence headline `python3 code/pipeline.py headline <id> "<sentence>
    or client. This is the half of the record that needs a person, so it is asked once,
    here, and never chased. A lead the member rejects later takes the same route through
    `/find-jobs skip <id> <reason>`.
-3. **Show ten, and the bench is everything else that passed.** The run's job is ten
-   leads the member would actually apply to today. Show exactly ten, numbered, each one
-   line: who wants what, the grade, and what applying costs in Connects. Behind them
-   stands every other lead that passed the gate, in rank order, which is what
-   `python3 code/pipeline.py list` already prints. When the member turns one down, name
+   When the member turns one down, name
    the next one in the same breath, so the list is ten again before they ask, and keep
    going as long as the bench holds. **The bench floor is the gate itself**, so the bench is
    whatever passed beyond the ten shown. A lead below the gate is never offered as a refill,
@@ -365,7 +367,6 @@ list's one-sentence headline `python3 code/pipeline.py headline <id> "<sentence>
    already doubted. The bench is good for today only: tomorrow the 24-hour window has
    disqualified it, so an unused lead is a lead to use now or lose. The complete scored
    list lives in the cockpit.
-   Open invitations come first, before the ten, because they cost nothing.
 4. **Say it when ten is not there.** Fewer than ten at a 7 or better is a result, not a
    failure to hide: report how many there are and which cause it was. Too few dense tracks,
    limits set too tight, a quiet day, or the one that applies to a member with nothing in
@@ -373,10 +374,11 @@ list's one-sentence headline `python3 code/pipeline.py headline <id> "<sentence>
    8, and the gate eats them. Never pad the ten with leads the score turned down, and never
    lower the gate to fill a row.
 5. **Name the day's Connects bill once.** Ten applications cost what the ten jobs cost,
-   measured from each `connects_cost`, against the balance the connector reports. One
+   measured from each `connects_cost`. Call `get_freelancer_dashboard` action `check`
+   once for the Connects balance, and include this call in `Upwork calls: N`. One
    line, no advice unless the balance runs out before the ten do. Measured 28 September
    2026: one local SEO job cost 7 Connects, so a ten-a-day habit runs near 70 a day.
 6. Use the compact completion report from `CLAUDE.md`. Next step: `/pitch-page <id>` for
    the first lead on the list, or the cockpit to read all ten. Every lead you show has
-   its full posting saved, so `/pitch-page` costs no Upwork call unless the member comes
-   back to it a day later. End with `Upwork calls: N`, measured, never an estimated range.
+   its full posting saved; `/pitch-page` fetches again only if it has been pruned.
+   End with `Upwork calls: N`, measured, never an estimated range.

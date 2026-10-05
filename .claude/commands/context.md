@@ -107,12 +107,10 @@ Show the member what came back, in this order and in their words:
   it, and what happens without it. Say that every one of these can be skipped,
   and that skipping costs exactly the one thing named beside it.
 - **The Upwork connector**, last and on its own, because it is the only entry
-  nothing replaces. `/profile`, `/find-jobs` and `/brief` stop without it. To
-  connect: `/mcp`, pick upwork, log in, then restart Claude Code. Connecting
-  without the restart looks fine and leaves the connector invisible, which is the
-  one mistake here that throws no error.
+  nothing replaces. `/profile`, `/find-jobs` and `/brief` stop without it.
+  Follow [README.md: Connect Upwork](../../README.md#connect-upwork).
 
-Then say plainly that none of it blocks this command: `/context` writes two local
+Then say plainly that none of it blocks this command: `/context` writes one local
 file and sends nothing. Never wait for an install, never ask which keys they
 should buy, and never hold back the questions below because something is missing.
 
@@ -139,11 +137,8 @@ should buy, and never hold back the questions below because something is missing
 
    Skip all three without a word when the tools are not connected: this command
    runs before the connector and never waits for one.
-4. **Two answers no Upwork response carries**, measured 12 September 2026: the
-   Job Success Score and whether they have an intro video. Neither the profile
-   nor the dashboard nor the contract list returns them, and `/profile` needs
-   both. Ask them here, in the terms block, with where to look, and let an
-   unanswered one stay open rather than estimating it.
+4. **Job Success Score and intro video** are not in these responses, measured
+   12 September 2026. Step 3 collects them once; leave unknown values open.
 
 Never ask for anything one of these already answers.
 
@@ -262,6 +257,9 @@ already shown how they write.
 4. **How they want to sound**: the default is an approachable, professional sales
    expert who makes the next decision easy. Ask only what deviates from it, and
    take the rest from how they write in this conversation.
+5. **Job Success Score and intro video**, only if still unanswered: the score is
+   below their name on Upwork; ask whether a video exists. Save both in the starter fields.
+6. **Public Upwork profile URL**, copied from their profile, in `**Public Upwork profile URL:**`.
 
 ## Step 4 · Proof, and go after the numbers
 

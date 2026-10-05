@@ -29,12 +29,14 @@ REQUIRED = (
     'The one thing you want to be hired for',
     'Services you sell',
     'What you do NOT do',
+    'Tools and systems you can name confidently',
+    'Industries you want to work with',
     'Hourly rate',
     'Timezone and hours you answer messages',
     'Applications per day',
 )
 STATUS = re.compile(r'\b(verified|pending)\b', re.I)
-CHECKABLE = re.compile(r'(where to check|checked at|source:|https?://|upwork\.com)', re.I)
+CHECKABLE = re.compile(r'(where to check|where it can be checked|checked at|source:|https?://|upwork\.com)', re.I)
 
 
 def proof_only(text):
@@ -57,7 +59,7 @@ def proof_only(text):
 
 def field(text, label):
     """The value behind a bold label, or None when the label is missing."""
-    match = re.search(rf'^\*\*{re.escape(label)}[^:]*:\*\*\s*(.*)$', text, re.M | re.I)
+    match = re.search(rf'^\*\*{re.escape(label)}[^:\n]*:\*\*[ \t]*(.*)$', text, re.M | re.I)
     return match.group(1).strip() if match else None
 
 
@@ -69,29 +71,45 @@ def check_me(text):
             findings.append(f'me.md has no "{label}" line')
         elif not value or STARTER in value.lower():
             findings.append(f'me.md: {label} is still unanswered')
+    background = re.search(r'^## Your background\s*\n(.*?)(?=^## |\Z)', text, re.M | re.S)
+    body = re.sub(r'^\*\*[^:\n]+:\*\*[^\n]*', '', background.group(1), flags=re.M).strip() if background else ''
+    if not body or re.search(r'not filled in yet|not answered yet', body, re.I):
+        findings.append('me.md: Your background is still unanswered')
     return findings
 
 
 def entries(text):
-    """Every proof block: a heading line plus the lines under it."""
-    blocks = []
+    """Every proof entry, with its status and source kept in the same block."""
+    blocks, lines = [], []
     current = None
     for line in text.splitlines():
+        boundary = line.startswith(('## ', '### ')) or not line.strip()
+        if line.startswith('**') and ':**' not in line:
+            boundary = True
+        # A named metadata bullet stays with its entry. Consecutive unlabelled
+        # top-level bullets also support the older single-line entry format.
+        metadata = re.match(r'^- (?:\*\*)?[^:\n]{1,60}:', line)
+        if (line.startswith('- ') and lines and lines[0].startswith('- ')
+                and not metadata and not re.match(r'^- (?:\*\*)?(verified|pending)\b', line, re.I)):
+            boundary = True
+        if boundary and lines:
+            blocks.append((current, '\n'.join(lines).strip()))
+            lines = []
         if line.startswith('## '):
             current = line[3:].strip()
             continue
         if current and line.strip():
-            blocks.append((current, line.strip()))
+            lines.append(line)
+    if lines:
+        blocks.append((current, '\n'.join(lines).strip()))
     return blocks
 
 
 def check_proof(text):
     findings = []
-    body = [(section, line) for section, line in entries(text)
+    body = [(section, line) for section, line in entries(proof_only(text))
             if EMPTY_SECTION not in line.lower() and not line.startswith('One block per')]
     for section, line in body:
-        if not line.startswith(('-', '*', '**')) and not line[0].isdigit():
-            continue
         if not STATUS.search(line):
             findings.append(f'me.md, {section}: no verified or pending status: "{line[:50]}"')
         elif re.search(r'\bverified\b', line, re.I) and not CHECKABLE.search(line):
@@ -106,10 +124,16 @@ def answered(me_text):
 
 
 def proof_entries(text):
-    """Proof lines the member wrote, without the starter's own instructions."""
+    """Proof blocks the member wrote, without the starter's own instructions."""
     return [line for _, line in entries(proof_only(text))
-            if EMPTY_SECTION not in line.lower() and not line.startswith('One block per')
-            and line.startswith(('-', '*', '**'))]
+            if EMPTY_SECTION not in line.lower() and not line.startswith('One block per')]
+
+
+def verified_proof(text):
+    """Only entries explicitly verified, never a pending or instruction block."""
+    return '\n\n'.join(block for block in proof_entries(text)
+                       if re.search(r'\bverified\b', block, re.I)
+                       and not re.search(r'\bpending\b', block, re.I))
 
 
 def status(text):

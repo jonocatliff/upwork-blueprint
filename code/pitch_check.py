@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The gate for what goes to a client before a contract: the pitch page.
 
-    python3 code/pitch_check.py page jobs/<id>/pitch.html
+    python3 code/pitch_check.py page jobs/<id>/pitch.html [--ready]
 
 The page check exists because Upwork bans contact details before a contract,
 and a linked page counts: an email, a phone number, a booking link, a WhatsApp
@@ -106,11 +106,13 @@ def check_page(path, *, require_hero=False, ready=False):
 
 
 def main(argv):
-    if len(argv) != 2 or argv[0] != 'page':
+    ready = '--ready' in argv
+    args = [arg for arg in argv if arg != '--ready']
+    if len(args) != 2 or args[0] != 'page':
         print(__doc__, file=sys.stderr)
         return 2
-    problems = check_page(argv[1])
-    summary = 'no contact details, no placeholders'
+    problems = check_page(args[1], ready=ready)
+    summary = 'no contact details, no placeholders' if ready else 'no contact details; Loom may still be pending'
     for p in problems:
         print(f'FAIL  {p}')
     print(f'\n{"PASS  " + summary if not problems else f"{len(problems)} problem(s)."}')

@@ -45,16 +45,16 @@ Vercel got no application at all rather than one without a link.
 ## Step 3 · Understand the mechanism
 
 For every tool or delivery discipline the posting names, check
-`context/tool-knowledge/<tool>.md`. The shipped workspace already includes
-implementation references for SEO and Google Ads. Read only the
+`context/tool-knowledge/<tool>.md` if the member has a copy, otherwise the current
+`starters/context/tool-knowledge/<tool>.md`. Shipped references cover SEO and Google Ads. Read only the
 ones this job uses. If a named system is not covered, research it now with
-official docs first, then add the implementation decisions to its file with
+official docs first, then save decisions in `context/tool-knowledge/<tool>.md` with
 sources so the next job does not pay for the same discovery again. A familiar
 category is not a reason to skip this: the specific combination is what the
 client is paying for.
 
-For SEO, choose the relevant lane from `context/tool-knowledge/seo.md` before
-planning, and read `context/tool-knowledge/delivery.md` for how the work is
+For SEO, choose the relevant lane from `seo.md` before
+planning, and read `delivery.md`, using the same member-copy or starter rule, for how the work is
 sequenced. Put the posting's plugins, badges, privacy rules and performance
 targets inside the track or step they belong to, instead of turning each
 requirement into another box. For Google Ads, put verified conversion measurement
@@ -62,11 +62,27 @@ before bidding and keep media spend separate from the implementation fee. These
 references guide the mechanism; they never supply proof about the member or facts
 about the client.
 
+### Price guide, for every lane
+
+Estimate effort from the full posting, never the client's budget: low, likely and
+high hours; two to five milestones summing to likely; confidence; scope assumptions.
+
+```
+python3 code/pricing.py <id> --hours <low> <likely> <high> \
+  --confidence high|medium|low --contract-type fixed|hourly|unknown \
+  --milestone "Foundation|hours" --milestone "Build and QA|hours" \
+  --assumption "one concrete scope boundary"
+```
+
+Every lane runs this before Step 4. It uses the member's rate plus a scope-risk
+buffer of 5, 15 or 25 percent for high, medium or low confidence. The internal
+guide is never the bid, never appears on the page and never overrides approved terms.
+
 ## Step 4 · Read the posting into a plan
 
 **Decide which page this job gets, because it decides the whole command.** SEO and
 Google Ads are programmes the member runs the same way every time, so they get the
-one-page roadmap and nothing else: one page, weeks instead of a drawing, and no
+one-page roadmap and nothing else: one page, phases instead of a drawing, and no
 second page saying the same thing twice. Every other job gets the full pitch page
 built below.
 
@@ -89,15 +105,15 @@ built below.
     than letting it go unanswered. A request with no row reads as a request you
     missed.
 
-  - **Fill every blank, including the photo and the Loom link.** The photo goes in with
+  - **Fill every blank, including the photo and the public profile URL from `context/me.md`.** The photo goes in with
     `python3 code/photo.py <their photo> --into jobs/<id>/pitch.html`, which crops and sizes
     it and refuses one too heavy to embed. `pitch_check.py`
     refuses the page while it still says `<Your name>` or `PUT-YOUR-...`, and the
     photo has to be embedded as a `data:` URI because the deploy uploads one file
-    and nothing beside it. The walkthrough link is not optional: Step 7's cover
-    letter is built on it and `application_check.py` rejects a letter without it.
+    and nothing beside it. Remove the walkthrough link until the Loom is recorded;
+    restore it with the actual URL before the ready check and republish.
 
-  Keep the three groups, the four tracks and the week count. They are the reason
+  Keep the three groups and the four tracks; use phases without a delivery timeline. They are the reason
   to send a roadmap at all: the client sees that the whole funnel is covered, not
   one piece of it. Change the row wording to their trade and city, and the note at
   the foot if the scope is narrower.
@@ -128,32 +144,17 @@ Write the graph to `jobs/<id>/pitch-graph.json`:
   client-facing outcome labels, not technical buckets such as "Setup" or
   "Automation". The first phase must be the smallest useful result. The board
   turns each group's last connected step into its visible phase output.
-- **SEO website jobs:** use the four tracks in `context/tool-knowledge/seo.md` as
+- **SEO website jobs:** use the four tracks in `seo.md`, with the Step 3 fallback, as
   the **phases**, not as the nodes. Each track carries its own two or three steps,
   and the branch that matters is usually what happens to the old URLs and what the
   client has to supply. A plugin, badge, schema type or speed target belongs in a
   node note unless it changes the order or creates a real branch.
 
-Estimate the member's effort from this same scope, not from the client's budget.
-Use a low, likely and high hour case; two to five roadmap milestones whose hours
-sum to the likely case; a confidence level; and every assumption that could move
-the estimate. Then run:
-
-```
-python3 code/pricing.py <id> --hours <low> <likely> <high> \
-  --confidence high|medium|low --contract-type fixed|hourly|unknown \
-  --milestone "Foundation|hours" --milestone "Build and QA|hours" \
-  --assumption "one concrete scope boundary"
-```
-
-This is the internal price guide for the member. It uses the current
-Upwork profile rate and a visible scope-risk buffer of 5 percent on high
-confidence, 15 on medium and 25 on low: the less the scope is pinned down, the
-more the estimate carries the risk instead of the member. It never becomes the bid,
-never appears on the client pitch page and never overrides a client-approved
-commercial term.
-
 ## Step 5 · Show the flow, then assemble
+
+Images are optional. Before any paid generation, including kie.ai through
+`proposal_illustrate.py`, state the current model cost per image, count and total,
+then wait for an explicit yes. Unknown cost: continue without images.
 
 **Run `python3 code/graph_sketch.py jobs/<id>/pitch-graph.json` and put the sketch in front
 of the member before anything is generated.** It prints the diagram as text: one block per
@@ -210,13 +211,13 @@ python3 code/pitch_generate.py <id> --hook "..." \
   contract, the client's own workspace after hire.
 - **Working together:** lead with the client outcome, then how it happens. With a lead
   magnet, it is Step 01, so the sequence reads audit, onboarding, updates. Write one short, job-specific `--plan-outcome` for
-  each card. Generate one matching landscape illustration per card and pass it
+  each card. Optionally generate one matching landscape illustration per card and pass it
   with `--plan-image` in the same order. The card images must share one style,
   show the actual project inside the client's industry and contain no text,
   logos or generic diagrams. Make the system, work or finished outcome the
   subject. People may appear only as small context; never build the image around
   a person looking at a screen, pointing at a board or posing beside the work.
-  Generate the hero and card images as one coherent visual series. Inspect every
+  When images are chosen, generate the hero and card images as one coherent visual series. Inspect every
   source image before assembly, then inspect its actual crop on the finished
   page. Reject repeated compositions, fake readable UI, dominant people and any
   crop that hides the industry or the work.
@@ -398,6 +399,10 @@ That stage rests on their word; `/brief` checks once if no proposal ever shows u
 ## Step 9 · Report
 
 Run `python3 code/pipeline.py prune` first, because Step 1 fetched the full job. Then the completion report as CLAUDE.md defines it, with the public page and
-application linked. Say what the application costs in Connects and what the balance leaves. Next step: record the Loom walking through the pitch page,
-replace [LOOM LINK], submit on Upwork, then run `/pitch-page <id> submitted`.
+application linked. Say what the application costs in Connects and what the balance leaves.
+Next: record the Loom and return its URL here; add it to the page and replace [LOOM LINK] in the letter.
+Then run `python3 code/pitch_check.py page jobs/<id>/pitch.html --ready` and the ready
+application check again. Republish with `python3 code/pitch_deploy.py <id>` under the
+member's publish approval, confirm the live URL and say it was republished with the Loom.
+Only then submit on Upwork and run `/pitch-page <id> submitted`.
 End with `Upwork calls: N`.

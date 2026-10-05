@@ -76,8 +76,8 @@
   .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--pewter); }
   .legend span { display: inline-flex; align-items: center; gap: 6px; }
   .sw { width: 14px; height: 8px; border-radius: 3px; display: inline-block; }
-  /* On a phone the table shows two weeks of eight and nothing says the rest is a
-     swipe away, so a client reads a plan that stops in week two. The fade is drawn
+  /* On a phone the table shows two phases and nothing says the rest is a
+     swipe away, so a client reads a plan that stops in phase two. The fade is drawn
      on the container and hidden once the table fits, which is every desktop. */
   .scroll { position: relative; overflow-x: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px -12px rgba(11, 35, 95, 0.12); }
   table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 820px; }
@@ -101,11 +101,11 @@
   tr.ms td.what { background: var(--sand); color: var(--pewter); font-size: 12px; }
   .d { position: absolute; left: 50%; top: 9px; width: 10px; height: 10px; background: var(--ink); transform: translateX(-50%) rotate(45deg); border-radius: 1px; }
   .dl { position: absolute; left: 50%; top: 24px; transform: translateX(-50%); font-size: 10.5px; font-weight: 600; color: var(--graphite); white-space: nowrap; }
-  /* A milestone label is wider than its week column by design, so the cell has to
+  /* A milestone label is wider than its phase column by design, so the cell has to
      let it out: clipped, "First auto-reply" reads as "First auto-rep". */
   tr.ms td { overflow: visible; }
   @media (max-width: 720px) {
-    .scroll::after { content: "swipe for the later weeks"; position: sticky; left: 0; bottom: 0;
+    .scroll::after { content: "swipe for the later phases"; position: sticky; left: 0; bottom: 0;
       display: block; padding: 6px 14px; font-size: 11.5px; color: var(--pewter);
       background: linear-gradient(to top, var(--paper), rgba(255,255,255,0)); }
   }
@@ -200,10 +200,10 @@
        - the h1, which is the outcome this client asked for in their own words,
          not the name of a service. A posting about missed calls gets a headline
          about missed calls.
-       - the eyebrow, if the number of weeks changes for this scope.
+       - the eyebrow, to name the scope without a delivery promise.
        - the whole "Who I am" card, from context/me.md, plus the photo.
        - the four step cards, only if this client's words differ from these.
-       - the ROWS and MS lists in the script at the bottom, which draw the weeks,
+       - the ROWS and MS lists in the script at the bottom, which draw the phases,
          including the fifth entry that quotes what they asked for.
        - the audit line and the profile link in the closing block.
 
@@ -213,7 +213,7 @@
      instead of it. -->
 <main class="wrap">
   <header>
-    <span class="eyebrow">The 8-week build</span>
+    <span class="eyebrow">The build plan</span>
     <h1>More customers from Google, turned into booked jobs</h1>
   </header>
 
@@ -282,7 +282,7 @@
   </section>
 
 
-  <section class="detail" aria-label="The roadmap, week by week">
+  <section class="detail" aria-label="The roadmap, phase by phase">
     <div class="rm-head">
       <div class="legend">
         <span><i class="sw" style="background:var(--c-traffic)"></i>Traffic</span>
@@ -293,7 +293,7 @@
     </div>
     <div class="scroll">
       <table>
-        <thead><tr><th scope="col">WEEK</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead>
+        <thead><tr><th scope="col">PHASE</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
@@ -313,12 +313,12 @@
       <p class="offer">Free audit of your rankings, your Google profile and your website.</p>
       <p>Send me your website URL here on Upwork.</p>
     </div>
-    <!-- The member's own Upwork profile. Replace the id; nothing here may point
+    <!-- The member's Public Upwork profile URL from context/me.md. Nothing may point
          anywhere but Upwork before a contract exists. -->
     <a class="cta" href="https://www.upwork.com/freelancers/~PUT-YOUR-PROFILE-ID-HERE">My profile<span aria-hidden="true">&rarr;</span></a>
   </section>
 
-  <p class="note">No ranking promises: results build over 2 to 3 months.</p>
+  <p class="note">No ranking promises: the audit establishes the starting point.</p>
 </main>
 
 <script>

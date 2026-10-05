@@ -7,7 +7,7 @@ import { MIN_RATE, funnelShapes, funnelSteps } from '@/lib/funnel.mjs';
 const RAMP = ['#86b6ef', '#4f94e4', '#4f94e4', '#1a6ad0', '#0c3f86'];
 const WIDTH = 560, HEIGHT = 84, GAP = 2, LABEL_X = 610;
 
-const BAR_W = 46, BAR_GAP = 10, CHART_H = 132;
+const BAR_W = 46, BAR_GAP = 10, CHART_H = 132, BAR_TOP = 30;
 
 /** Applications per week. The funnel says how well it converted, this says whether
  *  it happened at all, which is the part a member is actually in charge of. */
@@ -27,7 +27,7 @@ function Outreach({ weeks }: { weeks: { week: string; count: number }[] }) {
       ? <><strong>{total}</strong> application{total === 1 ? '' : 's'} in {weeks.length} weeks · best week {best}{quiet ? ` · ${quiet} week${quiet === 1 ? '' : 's'} with none` : ''}</>
       : 'Nothing sent in the last twelve weeks.'}</p>
     <div className="funnel-card">
-      <svg className="funnel-chart" viewBox={`0 0 ${width} ${CHART_H + 34}`} role="img"
+      <svg className="funnel-chart" viewBox={`0 0 ${width} ${BAR_TOP + CHART_H + 34}`} role="img"
            aria-label={`Applications per week, ${total} in total`}>
         {weeks.map((week, index) => {
           const scale = best ? week.count / best : 0;
@@ -36,16 +36,16 @@ function Outreach({ weeks }: { weeks: { week: string; count: number }[] }) {
           const last = index === weeks.length - 1;
           return <g key={week.week}>
             <title>{`Week of ${label(week.week)}: ${week.count} application${week.count === 1 ? '' : 's'}`}</title>
-            <rect x={x} y={CHART_H - height} width={BAR_W} height={Math.max(height, 2)} rx={4}
+            <rect x={x} y={BAR_TOP + CHART_H - height} width={BAR_W} height={Math.max(height, 2)} rx={4}
                   fill={last ? '#86b6ef' : '#1a6ad0'} />
-            {week.count ? <text x={x + BAR_W / 2} y={CHART_H - height - 6} className="funnel-count"
-                                textAnchor="middle" fontSize={15}>{week.count}</text> : null}
-            <text x={x + BAR_W / 2} y={CHART_H + 22} className="funnel-rate" textAnchor="middle">{label(week.week)}</text>
+            {week.count ? <text x={x + BAR_W / 2} y={BAR_TOP + CHART_H - height - 14} className="outreach-count"
+                                textAnchor="middle">{week.count}</text> : null}
+            <text x={x + BAR_W / 2} y={BAR_TOP + CHART_H + 22} className="funnel-rate" textAnchor="middle">{label(week.week)}</text>
           </g>;
         })}
       </svg>
     </div>
-    <p className="funnel-note">Counted from each lead&rsquo;s own history, where /brief records the send. The last bar is this week, still running.</p>
+    <p className="funnel-note">The same applications as the funnel, within twelve weeks. Weeks use the send date, or the earliest saved stage or discovery date when it is missing; undated applications stay out. The last bar is this week, still running.</p>
   </section>;
 }
 
@@ -108,7 +108,7 @@ export default function AnalyticsPage() {
           const tooFew = shape.n ? `too few to read: ${shape.n} of ${MIN_RATE} ${before}` : 'too few to read';
           return <g key={shape.key} className="funnel-step">
             <title>{`${shape.label}: ${shape.count}${shape.rate != null ? ` (${shape.rate}%${band} of ${before}${shape.overall != null ? `, ${shape.overall}% of all applications` : ''})` : ''}`}</title>
-            <polygon points={shape.points} fill={RAMP[index]} />
+            {shape.count > 0 ? <polygon points={shape.points} fill={RAMP[index]} /> : null}
             <text x={LABEL_X} y={mid - 6} className="funnel-count">{shape.count}</text>
             <text x={LABEL_X + 72} y={mid - 6} className="funnel-label">{shape.label}</text>
             <text x={LABEL_X + 72} y={mid + 16} className="funnel-rate">{shape.rate != null

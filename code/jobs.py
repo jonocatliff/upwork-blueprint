@@ -98,7 +98,7 @@ def me_number(label):
     """One `**Label:**` figure from context/me.md, or None when it is not answered."""
     if not ME.is_file():
         return None
-    match = re.search(rf'(?im)^\*\*{re.escape(label)}:\*\*\s*\$?([\d,.]+)', ME.read_text(encoding='utf-8'))
+    match = re.search(rf'(?im)^\*\*{re.escape(label)}:\*\*[ \t]*\$?([\d,.]+)', ME.read_text(encoding='utf-8'))
     return float(match.group(1).replace(',', '')) if match else None
 
 
@@ -132,14 +132,23 @@ def member_limits():
     """
     rate = member_rate()
     share = me_number('Lowest share of your rate')
+    proposals = me_number('Maximum proposals on a job')
+    fixed_floor = me_number('Smallest project worth taking')
     limits = {
         'rate': rate,
-        'proposals': me_number('Maximum proposals on a job') or MAX_PROPOSALS,
-        'fixed_floor': member_floor(),
+        'proposals': proposals or MAX_PROPOSALS,
+        'fixed_floor': fixed_floor or FIXED_FLOOR,
         'hourly_share': (share / 100 if share else HOURLY_FLOOR),
         'min_rating': MIN_CLIENT_RATING,
     }
     limits['missing'] = [] if rate else ['hourly floor, because no rate is known']
+    limits['defaults'] = []
+    if not proposals:
+        limits['defaults'].append(f'maximum proposals: {MAX_PROPOSALS}')
+    if not fixed_floor:
+        limits['defaults'].append(f'smallest fixed-price project: ${FIXED_FLOOR}')
+    if not share:
+        limits['defaults'].append(f'lowest share of your rate: {int(HOURLY_FLOOR * 100)}%')
     return limits
 
 
@@ -202,6 +211,9 @@ def member_search_themes():
         item = line[2:].strip()
         if ':' in item:
             label, raw_terms = (part.strip() for part in item.split(':', 1))
+            # Older runs put a dated verdict in parentheses beside the terms.
+            # It is a decision about the theme, never part of a search query.
+            raw_terms = re.sub(r'\s*\([^)]*\)', '', raw_terms)
             terms = [term.strip() for term in re.split(r'\s*[·|]\s*', raw_terms) if term.strip()]
         else:
             label, terms = item, [item]
@@ -479,6 +491,8 @@ def cmd_candidates(args):
         print(f'    {j["snippet"][:220]}')
     for off in limits['missing']:
         print(f'LIMIT OFF: {off}')
+    for default in limits['defaults']:
+        print(f'DEFAULT LIMIT: {default}')
     gone = ', '.join(f'{v} {k}' for k, v in dropped.most_common()) or 'none'
     print(f'\n{len(fresh)} new candidate(s), {len(known)} already in the pipeline, dropped: {gone}.')
     print(f'Next: judge fit 0 to 10 for each and write data/fit.json, then run score. '

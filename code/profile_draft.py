@@ -57,10 +57,13 @@ def parse(text):
 def unproven_numbers(draft, proof_text):
     """Every result number in title, overview and portfolio titles the evidence lacks."""
     missing = set()
+    proof_text = context_check.verified_proof(proof_text)
+    proven = {re.search(r'\d[\d.,]*', match.group(0)).group(0).rstrip('.,')
+              for match in pc.RESULT_NUMBER.finditer(proof_text)}
     for text in [draft['title'], draft['overview']] + (draft['portfolio'] or []):
         for m in pc.RESULT_NUMBER.finditer(text):
             core = re.search(r'\d[\d.,]*', m.group(0)).group(0).rstrip('.,')
-            if not re.search(r'(?<![\d.,])' + re.escape(core) + r'(?!\d)', proof_text):
+            if core not in proven:
                 missing.add(m.group(0).strip())
     return sorted(missing)
 
@@ -80,9 +83,9 @@ def problems(draft, proof_text):
     # A first profile has no verified result, and the command tells it to lead with
     # the offer and the background instead of a number. Demanding a number anyway
     # left exactly one way out, inventing one, which the next check would catch and
-    # the client would not. No digit anywhere in the evidence means there is
-    # nothing to lead with, and the two number checks stand down.
-    if not re.search(r'\d', proof_text or ''):
+    # the client would not. Only a verified result number switches these checks
+    # on; pending entries and bare certificate years cannot supply a result.
+    if not pc.RESULT_NUMBER.search(context_check.verified_proof(proof_text)):
         skip |= {'opening_has_number', 'results_with_numbers'}
     for r in pc.run_checks(draft):
         if r['id'] not in skip and not r['passed']:

@@ -28,7 +28,7 @@ const COLUMNS: { key: SortKey | 'summary'; label: string; width?: number }[] = [
   { key: 'client', label: 'Client', width: 200 },
   { key: 'competition', label: 'Competition', width: 158 },
   { key: 'budget', label: 'Budget', width: 128 },
-  { key: 'step', label: 'Next step', width: 128 },
+  { key: 'step', label: 'Next step', width: 208 },
 ];
 
 export default function ListPage() {

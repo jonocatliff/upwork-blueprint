@@ -70,7 +70,7 @@ export function nextStep(job, today = todayIso()) {
     case 'new': {
       const skip = [`/find-jobs skip ${id} <reason>`];
       return has(job, 'pitch.html') && has(job, 'application.md')
-        ? step('Submit on Upwork', `Record the Loom, replace [LOOM LINK], submit on Upwork, then run /pitch-page ${id} submitted.`, null, skip)
+        ? step('Finish Loom', `Record the Loom and return its URL to /pitch-page ${id} for ready page and application checks and republishing. Then submit on Upwork and run /pitch-page ${id} submitted.`, null, skip)
         : step('Build pitch page', 'Builds the pitch page and the application.', `/pitch-page ${id}`, skip);
     }
     case 'applied':

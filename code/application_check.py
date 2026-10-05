@@ -113,11 +113,10 @@ def check(text, job_title='', proof_text='', ready=False):
         fails.append('generic phrasing: ' + ', '.join(f'"{h}"' for h in hits))
     if chr(0x2014) in text:
         fails.append('em-dash present: use a colon, comma or full stop')
-    # The one artifact every client reads before a contract exists, and nothing
-    # used to look at it. It is reported, not refused: the member decides what goes
-    # out, and the walkthrough video is the one address an application is built on.
+    # Contact details violate the pre-contract rule, so the application gate
+    # refuses them just as the pitch-page gate does.
     for problem in pc_contacts(text):
-        notes.append(problem)
+        fails.append(problem)
     if not has_video(letter) and LOOM_PLACEHOLDER not in letter:
         fails.append('no Loom or YouTube link: include the walkthrough URL or the [LOOM LINK] placeholder')
     # The placeholder is correct while the letter is being written and wrong the moment

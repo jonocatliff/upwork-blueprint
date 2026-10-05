@@ -159,10 +159,10 @@ In rough order of money, and this is the order the work gets ranked in:
 
 ## For a pitch page
 
-The default is the six-week build in `templates/roadmap/google-ads.html`: four
-tracks named by what the client ends up with, live in week 3 and tuned weekly
+The default is the phase roadmap in `templates/roadmap/google-ads.html`: four
+tracks named by what the client ends up with, verified before launch and tuned
 after that. Change the `ROWS` and `MS` lists in the script at the bottom of that
-file and the weeks redraw themselves. Use it for any job that is a build or an
+file and the phases redraw themselves. Show order, never a delivery timeline. Use it for a build or an
 ongoing account; draw a diagram instead only when the job mixes Ads with real
 automation work.
 

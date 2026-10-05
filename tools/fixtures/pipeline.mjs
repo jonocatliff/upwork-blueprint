@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { nextStep, waitingState, replyDrafts } from '../../cockpit/lib/next-step.mjs';
 import { daysInStage } from '../../cockpit/lib/list-view.mjs';
+import { funnelSteps, funnelShapes } from '../../cockpit/lib/funnel.mjs';
 
 let input = '';
 for await (const chunk of process.stdin) input += chunk;
@@ -23,3 +24,11 @@ assert.doesNotMatch(nextStep({ id: '730005', status: 'offer', artifacts: ['propo
 assert.match(nextStep({ id: '730005', status: 'new', artifacts: ['pitch.html', 'application.md'] }, today).detail, /\/pitch-page 730005 submitted/);
 assert.deepEqual(replyDrafts({ replies: { generated_at: today, drafts: [{ label: 'Direct', text: 'Fixture reply' }] } }),
   [{ label: 'Direct', text: 'Fixture reply' }]);
+
+const shapes = funnelShapes(funnelSteps({ applied: 5, replied: 3, call: 1, offer: 1, won: 0 }), { width: 500 });
+const widths = shapes.map(shape => {
+  const points = shape.points.split(' ').map(point => point.split(',').map(Number));
+  assert.equal(points[1][0] - points[0][0], points[2][0] - points[3][0]);
+  return points[1][0] - points[0][0];
+});
+assert.deepEqual(widths, [500, 300, 100, 100, 0]);

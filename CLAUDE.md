@@ -22,7 +22,7 @@ not at all. What each does is in its own frontmatter and, for the member, in
 `README.md`.
 
 `/profile` measures the live profile before it writes one, so it needs the
-connector. Everything after `/context` reads that one file. A focus argument runs only that part, at full depth; an input
+connector: follow [README.md: Connect Upwork](README.md#connect-upwork). Everything after `/context` reads that one file. A focus argument runs only that part, at full depth; an input
 matching no listed focus value gets that list and a question.
 
 ## The Upwork rules (CRITICAL, they protect the member's account)
@@ -108,7 +108,7 @@ yourself. Never hide an error or an approval gate to meet the limit.
 
 The member's own files are gitignored and listed in `README.md`; `git pull` never
 touches them. A conflict means something of theirs got tracked: say so rather than
-resolving it by hand. The commands call `python3`; on Windows `python` or `py`.
+resolving it by hand. The commands call `python3`; Windows requires WSL.
 
 - `.claude/commands/` - the nine entry points, the only way in
 - `code/` - every script, `pipeline.py` the one writer

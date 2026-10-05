@@ -93,13 +93,17 @@ export default function Drawer() {
 function TheJob({ job }: { job: any }) {
   const brief = deriveJobBrief(job);
   const posting = String((job.details || {}).description || job.description || '').trim();
+  const pastApplied = ['replied', 'call', 'offer', 'won', 'lost'].includes(job.status);
   return <section className="drawer-section">
     <h4>The job</h4>
     {brief.outcome ? <p className="drawer-outcome">{brief.outcome}</p> : null}
     {brief.scope.length ? <><h5>Key work</h5><ul className="drawer-list">{brief.scope.slice(0, 3).map((item: string) => <li key={item}>{item}</li>)}</ul></> : null}
     {brief.requirements.length ? <><h5>Must have</h5><ul className="drawer-list">{brief.requirements.slice(0, 4).map((item: string) => <li key={item}>{item}</li>)}</ul></> : null}
     {posting ? <details className="drawer-posting"><summary>Full posting</summary><div className="posting">{posting}</div></details>
-      : <p className="drawer-note">Full posting comes with /pitch-page.</p>}
+      : pastApplied ? <p className="drawer-note">{job.url
+        ? <a href={job.url} target="_blank" rel="noopener">Read the posting on Upwork</a>
+        : 'The saved summary is shown above.'}</p>
+        : <p className="drawer-note">Full posting comes with /pitch-page.</p>}
   </section>;
 }
 
