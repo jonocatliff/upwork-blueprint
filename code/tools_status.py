@@ -51,7 +51,10 @@ def python_packages():
     return True
 
 
-def chrome():
+def chrome(env):
+    named = env.get('CHROME_BIN')
+    if named and pathlib.Path(named).is_file():
+        return True
     if shutil.which('google-chrome') or shutil.which('chromium'):
         return True
     return pathlib.Path('/Applications/Google Chrome.app').is_dir()
@@ -78,10 +81,10 @@ def rows(env):
          '/lead-magnet, /pitch-page',
          "pip install -r requirements.txt, then playwright install chromium. The audit "
          "cannot start without them"),
-        ('Google Chrome', chrome(), 'optional',
+        ('Google Chrome', chrome(env), 'optional',
          'screenshots a page before you send it',
          '/pitch-page, /proposal', 'without it you check the page by eye'),
-        ('Vercel', vercel_signed_in() or has_key(env, 'VERCEL_TOKEN'), 'optional',
+        ('Vercel', vercel_signed_in() or has_key(env, 'VERCEL_TOKEN'), 'required',
          'puts your pitch page and audit on a link a client can open',
          '/pitch-page, /lead-magnet',
          "npm i -g vercel, then vercel login. Without it you still get the cover letter "
@@ -105,9 +108,6 @@ def rows(env):
         ('kie.ai', has_key(env, 'KIE_AI_API_KEY'), 'optional',
          'draws the sketch on the proposal page',
          '/proposal', 'without it the command prints the prompt for any image model you have'),
-        ('Supabase', shutil.which('supabase') is not None, 'optional',
-         'hosts your reports yourself instead of on Vercel',
-         '/lead-magnet', 'only worth it if you would rather not use Vercel'),
     ]
 
 

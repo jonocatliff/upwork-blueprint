@@ -61,8 +61,8 @@ FOLLOW_UP_GAPS = {
     'reactivation': (30, 60),
 }
 
-# Untouched jobs beyond this many fall out when new ones arrive, oldest first.
-# Anything a human moved past "new" is live pipeline and never falls out.
+# Old unused jobs beyond this many fall out when new ones arrive, oldest first.
+# Fresh intake and anything carrying the member's work never fall out.
 KEEP = 500
 
 # Upwork's terms cap caching of their content at 24 hours. These fields hold
@@ -241,10 +241,12 @@ def add_business_days(day, count):
 
 
 def trim(jobs):
-    """Caps untouched jobs at KEEP, dropping the oldest. Never touches live pipeline."""
-    live = [j for j in jobs if j.get('status') != 'new']
+    """Caps old unused jobs at KEEP. Fresh leads and the member's work stay."""
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
+    live = [j for j in jobs if protected_search_lead(j, now_utc)]
+    protected = {id(j) for j in live}
     room = max(0, KEEP - len(live))
-    untouched = sorted((j for j in jobs if j.get('status') == 'new'),
+    untouched = sorted((j for j in jobs if id(j) not in protected),
                        key=lambda j: j.get('found_at') or '', reverse=True)
     drop = {id(j) for j in untouched[room:]}
     return [j for j in jobs if id(j) not in drop], len(drop)
@@ -844,7 +846,7 @@ def cmd_prune(args):
     # not Upwork's content, and deleting it every day would throw away the input
     # /find-jobs learns from. The same goes for the skip reasons.
     raw_cache = [p for pattern in ('search/*.json', 'details/*.json', 'candidates.json',
-                                   'profile.json', 'highlights.json')
+                                   'profile.json', 'highlights.json', 'contracts.json')
                  for p in data_dir().glob(pattern)
                  if p.is_file() and datetime.datetime.fromtimestamp(p.stat().st_mtime, datetime.timezone.utc) < cutoff]
     previews = [p for p in jobs_dir().glob('*/.pitch-preview.png')
@@ -866,38 +868,60 @@ def cmd_prune(args):
           f'{len(raw_cache)} raw cache files and {len(previews)} pitch previews deleted.')
 
 
+def protected_search_lead(job, now_utc):
+    """A published page, application, decision or fresh intake keeps the lead."""
+    if (job.get('pitch_url') or job.get('lead_magnet_url') or job.get('status') != 'new'
+            or job.get('applied_at') or job.get('application_date_unknown')
+            or (jobs_dir() / str(job.get('id')) / 'application.md').is_file()):
+        return True
+    if any(event.get('status') in ('applied', 'replied', 'call', 'offer', 'won')
+           for event in job.get('history', []) if isinstance(event, dict)):
+        return True
+    try:
+        found = datetime.datetime.fromisoformat(str(job.get('found_at', '')).replace('Z', '+00:00'))
+    except ValueError:
+        return True
+    if found.tzinfo is None:
+        found = found.replace(tzinfo=datetime.timezone.utc)
+    return found > now_utc - datetime.timedelta(hours=24)
+
+
+def search_reset_record(job):
+    """Archive the decision and dates, never a copy of cached Upwork content."""
+    allowed = ('id', 'title', 'status', 'found_at', 'status_updated_at', 'applied_at',
+               'call_at', 'next_follow_up', 'cache_pruned_at', 'skip_reason')
+    record = {key: job[key] for key in allowed if key in job}
+    if not record.get('skip_reason'):
+        reasons = re.findall(r'not a fit:\s*([^.]*(?:\.|$))', job.get('notes') or '', re.I)
+        if reasons:
+            record['skip_reason'] = '; '.join(reason.strip().rstrip('.') for reason in reasons)
+    return record
+
+
 def cmd_reset_search(args):
-    """Remove never-applied search leads while preserving real funnel history."""
+    """Remove expired unused search leads while preserving the member's work."""
     jobs = load()
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
 
     def searched(job):
         return any(str(source).lower().startswith(('recommended', 'query-', 'title-', 'search-'))
                    for source in job.get('found_via', []))
 
-    def applied(job):
-        if job.get('applied_at') or job.get('application_date_unknown'):
-            return True
-        return any(event.get('status') in ('applied', 'replied', 'call', 'offer', 'won')
-                   for event in job.get('history', []) if isinstance(event, dict))
-
-    # A skipped lead carries the reason the member gave, and `jobs.py rules` counts those
-    # reasons as the lessons of the next run. Sweeping them away by default would delete
-    # the record that makes the search better, so they stay unless asked for.
-    keep = ('new',) if not args.with_skipped else ('new', 'skipped')
-    removed = [job for job in jobs if job.get('status') in keep
-               and searched(job) and not applied(job)]
+    removed = [job for job in jobs if searched(job)
+               and not protected_search_lead(job, now_utc)]
     if args.dry_run:
         print(f'DRY RUN: {len(removed)} never-applied search leads would be removed. '
-              f'{len(jobs) - len(removed)} applied leads, conversations and clients would stay. Nothing changed.')
+              f'{len(jobs) - len(removed)} protected leads would stay. Nothing changed.')
         return
     if not removed:
-        print(f'0 search leads removed. {len(jobs)} applied leads, conversations and clients kept.')
+        print(f'0 search leads removed. {len(jobs)} protected leads kept.')
         return
 
     stamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
     archive = data_dir() / 'search-resets' / stamp
     archive.mkdir(parents=True, exist_ok=False)
-    (archive / 'jobs.json').write_text(json.dumps(removed, indent=2, ensure_ascii=False), encoding='utf-8')
+    records = [search_reset_record(job) for job in removed]
+    (archive / 'jobs.json').write_text(json.dumps(records, indent=2, ensure_ascii=False), encoding='utf-8')
     save([job for job in jobs if job not in removed])
 
     import shutil
@@ -910,7 +934,7 @@ def cmd_reset_search(args):
             shutil.move(str(source), str(target))
             archived_workspaces += 1
     print(f'{len(removed)} never-applied search leads removed; {archived_workspaces} job workspaces archived. '
-          f'{len(jobs) - len(removed)} applied leads, conversations and clients kept. Backup: {archive}')
+          f'{len(jobs) - len(removed)} protected leads kept. Backup: {archive}')
 
 
 def cmd_archive(args):
@@ -1061,7 +1085,7 @@ def build_parser():
     p.add_argument('--with-skipped', action='store_true',
 
 
-                     help='also drop the leads the member skipped, losing their reasons')
+                     help='accepted for compatibility; skipped leads always stay')
     p.add_argument('--dry-run', action='store_true')
     p.set_defaults(func=cmd_reset_search)
 

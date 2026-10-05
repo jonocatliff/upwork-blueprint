@@ -11,13 +11,17 @@ import shutil
 import subprocess
 import tempfile
 from pipeline import jobs_dir, shown
+from pitch_deploy import load_dotenv
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 
 def browser_path():
+    env = dict(os.environ)
+    load_dotenv(ROOT / '.env', env)
+    load_dotenv(pathlib.Path.home() / '.config' / 'credentials.env', env)
     candidates = [
-        os.environ.get('CHROME_BIN'),
+        env.get('CHROME_BIN'),
         shutil.which('google-chrome'),
         shutil.which('chromium'),
         shutil.which('chromium-browser'),

@@ -49,24 +49,15 @@ class ModelUnavailable(RuntimeError):
 
 
 def key() -> str:
-    """The key from the environment first, then from .env in this repository.
-
-    Reading os.environ alone would leave a key that sits in .env unused: the run
-    would go out unauthenticated and the failure would look like a quota problem
-    rather than a missing key.
-    """
-    value = os.environ.get(KEY_NAME, "").strip()
-    if value:
-        return value
+    """The key from the environment and the usual configuration files."""
+    from pitch_deploy import load_dotenv
+    env = dict(os.environ)
     try:
-        path = workspace_root() / ".env"
-        if path.is_file():
-            for line in path.read_text(encoding="utf-8").splitlines():
-                if line.strip().startswith(f"{KEY_NAME}="):
-                    return line.split("=", 1)[1].strip().strip('"').strip("'")
+        load_dotenv(workspace_root() / ".env", env)
+        load_dotenv(Path.home() / ".config" / "credentials.env", env)
     except OSError:
         return ""
-    return ""
+    return env.get(KEY_NAME, "").strip()
 
 
 def _http_detail(error: urllib.error.HTTPError) -> str:

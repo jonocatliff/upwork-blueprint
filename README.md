@@ -9,7 +9,7 @@ The full product goal and review standard are in [VISION.md](VISION.md).
 1. Clone it anywhere on your computer:
    `git clone https://github.com/luka-commits/upwork-blueprint.git`
 2. Open a terminal in the folder and run `./setup.sh` once. It creates your own
-   files, writes `.env` from the example and builds the audit report template
+   files, writes `.env` with your unique Vercel project and builds the audit report template
 3. Run `claude`, then type `/context`. It asks about your background once, and
    every command after it writes from those answers
 
@@ -34,9 +34,10 @@ Upwork profile yet is the normal starting point here, not a problem to fix.
 
 For a local business in conversation, `/lead-magnet <job id> <website>`
 builds a three-part SEO audit from live Firecrawl, Apify and DataForSEO
-evidence. Nothing paid starts before the website is saved. A finished audit is
-published to a public URL, so anyone holding the link can open it; every audit
-and every pitch page shares one Vercel project.
+evidence. Nothing paid starts before the website is saved and you approve the
+expected cost. After a name check and your hand review, publish the finished audit
+to a public URL anyone holding the link can open. Your audits and pitch pages
+share your own Vercel project, created on the first publish after `vercel login`.
 
 One helper: `/cockpit` shows your leads with the next command to copy. A lead you
 will not apply to leaves the list with `/find-jobs skip <job id> <reason>`, which
@@ -62,14 +63,16 @@ tool whether it is there or not, what each one buys you, and what you lose by
 skipping it. `/context` shows you both on your first run, so nothing on this list
 has to be settled before you start.
 
-Only the Upwork connector has no substitute. Everything else is optional and
-costs exactly the one thing named beside it.
+The Upwork connector is required for Upwork commands. Vercel is required to
+publish pitch pages and audits. The list names what each other tool enables.
 
 ## What it costs to run
 
 Nothing until you run `/lead-magnet` or publish a pitch page. One full client
 audit, measured on a real run on 27 September 2026: 48 API calls, $0.25, under
 nine minutes. The keys are yours and the bills are yours; the package holds none.
+DataForSEO preflight requires $1 of credit, rather than estimating a whole run.
+After your first audit, check the remaining balance and top it up before the next.
 `OPENAI_API_KEY` and `KIE_AI_API_KEY` are optional, and what they buy is named in
 `.env.example`. Without `OPENAI_API_KEY` two chapters of the report say "not
 measured" and the rest is unaffected. `KIE_AI_API_KEY` only saves a detour:

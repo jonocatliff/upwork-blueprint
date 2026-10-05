@@ -26,6 +26,7 @@ import subprocess
 import sys
 import time
 from pipeline import jobs_dir, shown
+from pitch_deploy import load_dotenv
 import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -38,10 +39,17 @@ CHROME = ('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
           '/Applications/Chromium.app/Contents/MacOS/Chromium')
 
 
+def configured_env():
+    env = dict(os.environ)
+    load_dotenv(ROOT / '.env', env)
+    load_dotenv(pathlib.Path.home() / '.config' / 'credentials.env', env)
+    return env
+
+
 def chrome_binary():
     """The browser to drive: CHROME_BIN, then the PATH, then the macOS defaults."""
     import shutil
-    named = os.environ.get('CHROME_BIN')
+    named = configured_env().get('CHROME_BIN')
     if named and pathlib.Path(named).exists():
         return named
     for command in ('google-chrome', 'chromium', 'chromium-browser', 'chrome'):
@@ -63,21 +71,9 @@ def abort(message):
 
 
 def api_key():
-    env_file = ROOT / '.env'
-    if env_file.is_file():
-        for line in env_file.read_text(encoding='utf-8').splitlines():
-            if line.startswith('KIE_AI_API_KEY='):
-                value = line.split('=', 1)[1].strip().strip('"').strip("'")
-                if value:
-                    return value
-    value = os.environ.get('KIE_AI_API_KEY', '').strip()
+    value = configured_env().get('KIE_AI_API_KEY', '').strip()
     if value:
         return value
-    home = pathlib.Path.home() / '.config' / 'credentials.env'
-    if home.is_file():
-        for line in home.read_text(encoding='utf-8').splitlines():
-            if line.startswith('KIE_AI_API_KEY='):
-                return line.split('=', 1)[1].strip().strip('"').strip("'")
     abort('KIE_AI_API_KEY is missing. Put it in .env and run this again; the proposal page itself '
           'is finished without this drawing.')
 

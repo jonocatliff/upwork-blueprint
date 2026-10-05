@@ -23,6 +23,10 @@ import os
 import re
 import subprocess
 import sys
+import contextlib
+import shutil
+import tempfile
+import fnmatch
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 COMMANDS = ROOT / '.claude' / 'commands'
@@ -93,11 +97,32 @@ COCKPIT = ('cockpit/**/*.ts', 'cockpit/**/*.tsx', 'cockpit/**/*.mjs', 'cockpit/*
 TEMPLATES = ('templates/**/*.tsx', 'templates/**/*.ts', 'templates/**/*.css', 'templates/**/*.html')
 
 
+def glob_matches(parts, pattern):
+    """Match each path segment so a single star never crosses a slash."""
+    if not pattern:
+        return not parts
+    if pattern[0] == '**':
+        return (glob_matches(parts, pattern[1:])
+                or bool(parts) and glob_matches(parts[1:], pattern))
+    return (bool(parts) and fnmatch.fnmatchcase(parts[0], pattern[0])
+            and glob_matches(parts[1:], pattern[1:]))
+
+
 def shipped(*globs):
     """Every tracked-or-trackable file matching the globs: what a stranger receives."""
     found = []
-    for g in globs:
-        found += [p for p in ROOT.glob(g) if p.is_file() and '.git/' not in str(p)]
+    private = {'context', 'data', 'jobs', 'clients', 'outputs'}
+    for folder, directories, files in os.walk(ROOT):
+        directories[:] = [name for name in directories
+                          if name not in ('.git', 'node_modules', '__pycache__')
+                          and not (pathlib.Path(folder) == ROOT and name in private)]
+        for name in files:
+            path = pathlib.Path(folder) / name
+            rel = path.relative_to(ROOT).as_posix()
+            if rel == 'profile.md':
+                continue
+            if any(glob_matches(rel.split('/'), g.split('/')) for g in globs):
+                found.append(path)
     if not found:
         return []
     rels = [str(p.relative_to(ROOT)) for p in found]
@@ -309,7 +334,7 @@ def check_paths():
     for p in sorted(COMMANDS.glob('*.md')):
         for m in pat.finditer(p.read_text(encoding='utf-8')):
             rel = m.group(1)
-            if (ROOT / rel).exists() or rel.startswith(MEMBER_PATHS):
+            if rel.startswith(MEMBER_PATHS) or (ROOT / rel).exists():
                 continue
             findings.append(f'{p.name}: points at {rel}, which does not exist')
     return findings
@@ -319,19 +344,20 @@ def check_subcommands():
     findings = []
     pat = re.compile(r'python3 (code/[\w_]+\.py) ([a-z][\w-]*)')
     seen = set()
-    for p in sorted(COMMANDS.glob('*.md')) + [ROOT / 'CLAUDE.md']:
-        for m in pat.finditer(p.read_text(encoding='utf-8')):
-            script, cmd = m.groups()
-            if (script, cmd) in seen:
-                continue
-            seen.add((script, cmd))
-            if not (ROOT / script).is_file():
-                findings.append(f'{p.name}: calls {script}, which does not exist')
-                continue
-            r = subprocess.run([sys.executable, str(ROOT / script), cmd, '--help'],
-                               capture_output=True, text=True, cwd=ROOT)
-            if r.returncode != 0 and 'invalid choice' in r.stderr:
-                findings.append(f'{p.name}: calls `{script} {cmd}`, not a valid subcommand')
+    with script_copy() as (root, env):
+        for p in sorted(COMMANDS.glob('*.md')) + [ROOT / 'CLAUDE.md']:
+            for m in pat.finditer(p.read_text(encoding='utf-8')):
+                script, cmd = m.groups()
+                if (script, cmd) in seen:
+                    continue
+                seen.add((script, cmd))
+                if not (root / script).is_file():
+                    findings.append(f'{p.name}: calls {script}, which does not exist')
+                    continue
+                r = subprocess.run([sys.executable, str(root / script), cmd, '--help'],
+                                   capture_output=True, text=True, cwd=root, env=env)
+                if r.returncode and 'invalid choice' in r.stderr:
+                    findings.append(f'{p.name}: calls `{script} {cmd}`, not a valid subcommand')
     return findings
 
 
@@ -490,6 +516,233 @@ def check_starter_fields():
             for name in sorted(wanted) if f'**{name}:**' not in starter]
 
 
+@contextlib.contextmanager
+def script_copy():
+    """Copy only shipped scripts and fixtures; never walk member directories."""
+    with tempfile.TemporaryDirectory(prefix='blueprint-gate-') as temporary:
+        root = pathlib.Path(temporary)
+        shutil.copytree(ROOT / 'code', root / 'code',
+                        ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
+        (root / 'tools').mkdir()
+        shutil.copy2(ROOT / SELF, root / SELF)
+        shutil.copytree(ROOT / 'tools' / 'fixtures', root / 'tools' / 'fixtures')
+        shutil.copy2(ROOT / '.env.example', root / '.env.example')
+        shutil.copy2(ROOT / 'setup.sh', root / 'setup.sh')
+        env = {key: value for key, value in os.environ.items()
+               if not key.startswith('BLUEPRINT_') and key not in ('PYTHONPATH', 'PYTHONHOME')}
+        home = root / 'home'
+        home.mkdir()
+        (root / 'sitecustomize.py').write_text(
+            'import socket\n'
+            'def offline(*args, **kwargs):\n'
+            '    raise RuntimeError("The release gate must not use the network.")\n'
+            'socket.socket.connect = offline\n', encoding='utf-8')
+        env.update(HOME=str(home), PYTHONDONTWRITEBYTECODE='1', PYTHONPATH=str(root))
+        yield root, env
+
+
+def script_import(path):
+    """Import by path under its ordinary module name, without running main()."""
+    import importlib.util
+    sys.path.insert(0, str(ROOT / 'code'))
+    spec = importlib.util.spec_from_file_location(path.stem, path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+
+
+def fixture_candidates():
+    import datetime
+    fixture = ROOT / 'tools' / 'fixtures' / 'jobs.json'
+    rows = json.loads(fixture.read_text(encoding='utf-8'))
+    for row in rows['jobs']:
+        row['published_date'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    fixture.write_text(json.dumps(rows), encoding='utf-8')
+    result = subprocess.run([sys.executable, str(ROOT / 'code' / 'jobs.py'), 'candidates', str(fixture)],
+                            cwd=ROOT, capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr or result.stdout
+    candidates = json.loads((ROOT / 'data' / 'candidates.json').read_text(encoding='utf-8'))
+    assert {row['id'] for row in candidates} == {'700001', '700002'}, result.stdout
+
+
+def fixture_env():
+    import pitch_deploy
+    shutil.copy2(ROOT / '.env.example', ROOT / '.env')
+    settings = pitch_deploy.deployment_config({'VERCEL_PITCH_PROJECT': 'upwork-pitches-fixture'})
+    assert settings['project'] == 'upwork-pitches-fixture'
+    assert settings['domain'] == ''
+    fallback = pathlib.Path.home() / '.config' / 'credentials.env'
+    fallback.parent.mkdir()
+    fallback.write_text('VERCEL_PITCH_PROJECT=upwork-pitches-fallback\n'
+                        'VERCEL_PITCH_DOMAIN=upwork-pitches-fallback.vercel.app\n'
+                        'VERCEL_TOKEN=fixture-token\nVERCEL_SCOPE=fixture-scope\n', encoding='utf-8')
+    (ROOT / '.env').write_text('VERCEL_PITCH_PROJECT="   "\nVERCEL_PITCH_DOMAIN=   \n', encoding='utf-8')
+    settings = pitch_deploy.deployment_config({})
+    assert settings['project'] == 'upwork-pitches-fallback'
+    assert settings['domain'] == 'upwork-pitches-fallback.vercel.app'
+    exported = {'VERCEL_PITCH_PROJECT': 'upwork-pitches-exported',
+                'VERCEL_PITCH_DOMAIN': 'upwork-pitches-exported.vercel.app'}
+    settings = pitch_deploy.deployment_config(exported)
+    assert settings['project'] == exported['VERCEL_PITCH_PROJECT']
+    assert settings['domain'] == exported['VERCEL_PITCH_DOMAIN']
+    settings = pitch_deploy.deployment_config({'VERCEL_TOKEN': '   ', 'VERCEL_SCOPE': ''})
+    assert settings['token'] == 'fixture-token'
+    assert settings['scope'] == 'fixture-scope'
+
+
+def fixture_setup():
+    import pitch_deploy
+    source = (ROOT / 'setup.sh').read_text(encoding='utf-8')
+    script = source.split("python3 - <<'PY'\n", 1)[1].split('\nPY\n', 1)[0]
+    for value in ('', '"   "', "'   '"):
+        shutil.copy2(ROOT / '.env.example', ROOT / '.env')
+        with (ROOT / '.env').open('a', encoding='utf-8') as handle:
+            handle.write(f'\nVERCEL_PITCH_PROJECT={value}\n')
+        subprocess.run([sys.executable, '-c', script], cwd=ROOT, check=True)
+        settings = {}
+        pitch_deploy.load_dotenv(ROOT / '.env', settings)
+        assert re.fullmatch(r'upwork-pitches-[a-z0-9]{6}', settings['VERCEL_PITCH_PROJECT'])
+        first = (ROOT / '.env').read_bytes()
+        subprocess.run([sys.executable, '-c', script], cwd=ROOT, check=True)
+        assert (ROOT / '.env').read_bytes() == first
+    (ROOT / '.env').write_text('VERCEL_PITCH_PROJECT=existing-member-project\n', encoding='utf-8')
+    subprocess.run([sys.executable, '-c', script], cwd=ROOT, check=True)
+    assert (ROOT / '.env').read_text(encoding='utf-8') == 'VERCEL_PITCH_PROJECT=existing-member-project\n'
+
+
+def fixture_publish():
+    import pitch_deploy
+    from types import SimpleNamespace
+    from unittest.mock import patch
+    fixtures = ROOT / 'tools' / 'fixtures'
+    stdout = (fixtures / 'vercel-deploy.txt').read_text(encoding='utf-8')
+    assert pitch_deploy.production_host(stdout) == 'upwork-pitches-fixture-a1b2c3.vercel.app'
+    assert pitch_deploy.production_host('https://example.com') == ''
+    config = pitch_deploy.deployment_config({'VERCEL_PITCH_PROJECT': 'upwork-pitches-fixture'})
+    deployment = SimpleNamespace(stdout=stdout)
+    inspected = SimpleNamespace(returncode=0, stdout=json.dumps({'alias': ['member-stable.vercel.app']}))
+    with patch.object(pitch_deploy.subprocess, 'run', return_value=inspected) as runner:
+        assert pitch_deploy.resolve_host('vercel', config, deployment) == 'member-stable.vercel.app'
+        assert runner.call_args.args[0][1:4] == ['inspect', stdout.strip(), '--json']
+    assert pitch_deploy.deployment_config({'VERCEL_PITCH_PROJECT': config['project']})['domain'] == 'member-stable.vercel.app'
+    for inspected in (SimpleNamespace(returncode=0, stdout='{bad json'),
+                      SimpleNamespace(returncode=1, stdout=''),
+                      SimpleNamespace(returncode=0, stdout=json.dumps({'alias': ['untrusted.example.com']}))):
+        with patch.object(pitch_deploy.subprocess, 'run', return_value=inspected):
+            assert pitch_deploy.resolve_host('vercel', config, deployment) == pitch_deploy.production_host(stdout)
+    with patch.object(pitch_deploy.subprocess, 'run') as runner:
+        try:
+            pitch_deploy.resolve_host('vercel', config, SimpleNamespace(stdout='https://example.com'))
+        except SystemExit as error:
+            assert error.code == 1
+        else:
+            raise AssertionError('An unknown public address must stop publishing.')
+        runner.assert_not_called()
+    for source in (ROOT / 'code').glob('*.py'):
+        assert not re.search(r'\{[^}]*project[^}]*\}\.vercel\.app', source.read_text(encoding='utf-8')), source.name
+    output = ROOT / 'site'
+    pitch_deploy.write_site(output, [('700001', fixtures / 'client-page.html')], '700001')
+    root_page = (output / 'index.html').read_text(encoding='utf-8')
+    for private in ('Fixture Company', 'Fixture client job', 'Score: 72', 'Fixture Member'):
+        assert private not in root_page, private
+    assert (output / '700001' / 'index.html').read_bytes() == (fixtures / 'client-page.html').read_bytes()
+
+
+def fixture_retention():
+    import datetime
+    import pipeline
+    now = datetime.datetime.now(datetime.timezone.utc)
+    old = (now - datetime.timedelta(hours=48)).isoformat()
+    records = []
+    for index in range(6):
+        row = {'id': str(710001 + index), 'title': 'Fixture lead', 'status': 'new',
+               'found_at': old, 'status_updated_at': old, 'found_via': ['query-fixture'],
+               'notes': 'not a fit: Fixture skip reason.'}
+        row.update({field: {'fixture': 'cached'} if field in ('client', 'details') else 'cached'
+                    for field in pipeline.CACHED_FIELDS})
+        records.append(row)
+    records[0]['pitch_url'] = 'https://upwork-pitches-fixture.vercel.app/710001'
+    records[1]['lead_magnet_url'] = 'https://upwork-pitches-fixture.vercel.app/710002-audit'
+    records[3]['status'] = 'skipped'
+    records[4]['found_at'] = now.isoformat()
+    application = ROOT / 'jobs' / records[2]['id'] / 'application.md'
+    application.parent.mkdir(parents=True)
+    application.write_text('Fixture application', encoding='utf-8')
+    data = ROOT / 'data'
+    data.mkdir()
+    jobs = data / 'jobs.json'
+    jobs.write_text(json.dumps(records), encoding='utf-8')
+    contracts = data / 'contracts.json'
+    contracts.write_text('[{"client": "Fixture client"}]', encoding='utf-8')
+    expired = now.timestamp() - 48 * 3600
+    os.utime(contracts, (expired, expired))
+    command = [sys.executable, str(ROOT / 'code' / 'pipeline.py')]
+    subprocess.run(command + ['reset-search', '--with-skipped'], cwd=ROOT,
+                   capture_output=True, text=True, check=True)
+    saved = json.loads(jobs.read_text(encoding='utf-8'))
+    assert {row['id'] for row in saved} == {row['id'] for row in records[:-1]}
+    archives = list((data / 'search-resets').glob('*/jobs.json'))
+    assert len(archives) == 1
+    archived = json.loads(archives[0].read_text(encoding='utf-8'))
+    assert [row['id'] for row in archived] == [records[-1]['id']]
+    assert archived[0]['skip_reason'] == 'Fixture skip reason'
+    allowed = {'id', 'title', 'status', 'skip_reason'}
+    for row in archived:
+        assert not set(row) & set(pipeline.CACHED_FIELDS), row
+        assert all(key in allowed or key.endswith(('_at', '_date')) for key in row), row
+    subprocess.run(command + ['prune'], cwd=ROOT, capture_output=True, text=True, check=True)
+    assert {row['id'] for row in json.loads(jobs.read_text(encoding='utf-8'))} == {row['id'] for row in saved}
+    assert application.read_text(encoding='utf-8') == 'Fixture application'
+    pruned = json.loads(jobs.read_text(encoding='utf-8'))
+    assert pruned[0]['pitch_url'] == records[0]['pitch_url']
+    assert pruned[1]['lead_magnet_url'] == records[1]['lead_magnet_url']
+    for row in pruned[:-1]:
+        assert not set(row) & set(pipeline.CACHED_FIELDS), row
+    assert not contracts.exists()
+    contracts.write_text('[]', encoding='utf-8')
+    subprocess.run(command + ['prune'], cwd=ROOT, capture_output=True, text=True, check=True)
+    assert contracts.exists()
+    overflow = records[:-1] + [dict(records[-1], id=str(720001 + index))
+                               for index in range(pipeline.KEEP + 1)]
+    trimmed, removed = pipeline.trim(overflow)
+    assert {row['id'] for row in records[:-1]} <= {row['id'] for row in trimmed}
+    assert len(trimmed) == pipeline.KEEP and removed == len(overflow) - pipeline.KEEP
+
+
+def script_worker(name, path=None):
+    import socket
+    def offline(*args, **kwargs):
+        raise RuntimeError('The release gate must not use the network.')
+    socket.socket.connect = offline
+    sys.path.insert(0, str(ROOT / 'code'))
+    if name == 'import':
+        script_import(pathlib.Path(path))
+    else:
+        {'candidates': fixture_candidates, 'env': fixture_env, 'setup': fixture_setup,
+         'publish': fixture_publish, 'retention': fixture_retention}[name]()
+
+
+def check_scripts_run():
+    findings = []
+    tasks = [('import', path.name) for path in sorted((ROOT / 'code').glob('*.py'))]
+    tasks += [(name, None) for name in ('candidates', 'env', 'setup', 'publish', 'retention')]
+    for name, filename in tasks:
+        with script_copy() as (root, env):
+            command = [sys.executable, str(root / SELF), '--script-check', name]
+            if filename:
+                command.append(str(root / 'code' / filename))
+            try:
+                result = subprocess.run(command, cwd=root, env=env, capture_output=True,
+                                        text=True, timeout=30)
+            except subprocess.TimeoutExpired:
+                findings.append(f'{filename or name}: script check timed out after 30 seconds')
+                continue
+            if result.returncode:
+                findings.append(f'{filename or name}: script check failed:\n'
+                                f'{(result.stderr or result.stdout).strip()}')
+    return findings
+
+
 CHECKS = [
     ('personal data', check_leaks),
     ('language', check_language),
@@ -507,6 +760,7 @@ CHECKS = [
     ('product vision', check_vision),
     ('writing budget', check_writing_budget),
     ('starter fields', check_starter_fields),
+    ('scripts run', check_scripts_run),
 ]
 
 
@@ -539,4 +793,7 @@ def main():
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    if len(sys.argv) > 2 and sys.argv[1] == '--script-check':
+        script_worker(*sys.argv[2:])
+    else:
+        sys.exit(main())

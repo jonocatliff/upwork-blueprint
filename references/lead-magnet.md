@@ -28,13 +28,13 @@ keeps no hours. With `OPENAI_API_KEY` the report also says what the lowest revie
 complain about and whether AI search names the business at all; without the key
 those two rows are left out, never filled with a zero.
 
-The report remains at `jobs/<id>/lead-magnet.html` and is published automatically
-to the stable URL saved as `lead_magnet_url`. Publication uses the same
-pre-contract contact-details gate as a pitch page: it creates the link but never
-adds it to a message or sends anything. If publication fails after a successful
-build, the next run reuses that exact current report and retries only the free
-Vercel step. Changing the website or exact profile clears the URL and requires a
-fresh audit.
+The report remains at `jobs/<id>/lead-magnet.html` for the business-name check and
+the hand pass below. Then `code/lead_magnet_deploy.py <job-id>` publishes it to the
+stable URL saved as `lead_magnet_url`. Publication uses the same pre-contract
+contact-details gate as a pitch page: it creates the link but never sends it.
+If publication fails, the next run reuses that current report and retries only
+the free Vercel step. Changing the website or exact profile clears the URL and
+requires a fresh audit. Get the member's yes to the expected cost before a paid run.
 
 **An audit lives at `<job id>/audit`, a pitch page at `<job id>`.** Both are
 published to the same project, so every deploy restages every page published

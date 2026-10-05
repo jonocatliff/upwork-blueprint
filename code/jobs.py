@@ -13,6 +13,7 @@ on niche fit is never logged, whatever the rest says: a great client does not
 rescue an irrelevant job.
 """
 import argparse
+import collections
 import datetime
 import json
 import os

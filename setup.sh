@@ -15,17 +15,48 @@ python3 code/workspace.py
 
 [ -f .env ] || { cp .env.example .env; echo "created .env from the example."; }
 
+python3 - <<'PY'
+import pathlib
+import re
+import secrets
+import string
+import sys
+sys.path.insert(0, 'code')
+from pitch_deploy import load_dotenv
+
+path = pathlib.Path('.env')
+env = {}
+load_dotenv(path, env)
+if not env.get('VERCEL_PITCH_PROJECT'):
+    suffix = ''.join(secrets.choice(string.ascii_lowercase + string.digits) for _ in range(6))
+    lines = [line for line in path.read_text(encoding='utf-8').splitlines()
+             if not re.match(r'^\s*VERCEL_PITCH_PROJECT\s*=', line)]
+    lines.append(f'VERCEL_PITCH_PROJECT=upwork-pitches-{suffix}')
+    path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+PY
+echo "Vercel is required for /pitch-page and /lead-magnet; vercel login connects it, and the project is created on the first publish."
+
 # The commands read .env first and ~/.config/credentials.env after it, so a key kept
 # centrally is a key the run will find. Checking only .env reported gaps that were not
 # there, and a member who trusts that list buys a second key they already own.
 env_has() {
-  grep -qE "^$1=.+" .env 2>/dev/null && return 0
-  grep -qE "^$1=.+" "$HOME/.config/credentials.env" 2>/dev/null
+  python3 - "$1" <<'PY'
+import os
+import pathlib
+import sys
+sys.path.insert(0, 'code')
+from pitch_deploy import load_dotenv
+
+env = dict(os.environ)
+load_dotenv(pathlib.Path('.env'), env)
+load_dotenv(pathlib.Path.home() / '.config' / 'credentials.env', env)
+raise SystemExit(0 if str(env.get(sys.argv[1]) or '').strip() else 1)
+PY
 }
 missing=0
 note() { echo "  · $1"; missing=$((missing + 1)); }
 
-if [ ! -f templates/lead-magnet/dist/index.html ]; then
+if python3 -c 'import sys; sys.path.insert(0, "code"); import lead_magnet_render; raise SystemExit(0 if lead_magnet_render.needs_build() else 1)'; then
   if command -v npm >/dev/null; then
     echo "building the audit report template, about a minute..."
     # set -e is on, so an unguarded npm failure used to exit here and swallow the
@@ -58,7 +89,7 @@ with sync_playwright() as p: p.chromium.launch().close()
 fi
 
 if ! command -v google-chrome >/dev/null && ! command -v chromium >/dev/null \
-   && [ ! -d "/Applications/Google Chrome.app" ] && [ -z "${CHROME_BIN:-}" ]; then
+   && [ ! -d "/Applications/Google Chrome.app" ] && ! env_has CHROME_BIN; then
   note "Google Chrome: /pitch-page checks the finished page on a phone screen with it, and /proposal draws its sketch with it. Install it from google.com/chrome, or put the path in CHROME_BIN."
 fi
 
@@ -67,7 +98,7 @@ if [ ! -d cockpit/node_modules ] && command -v npm >/dev/null; then
 fi
 
 if ! command -v vercel >/dev/null; then
-  note "vercel: /pitch-page publishes the page for your client with it. Install with 'npm i -g vercel', then 'vercel login'."
+  note "vercel: /pitch-page and /lead-magnet require it to publish. Install with 'npm i -g vercel', then 'vercel login'."
 elif ! vercel whoami >/dev/null 2>&1 && ! env_has VERCEL_TOKEN; then
   note "vercel is installed but not signed in. Run 'vercel login', or put a VERCEL_TOKEN in .env."
 fi

@@ -37,6 +37,7 @@ import urllib.request
 from pathlib import Path
 
 from lead_magnet_workspace import workspace_root
+from pitch_deploy import load_dotenv
 
 ROOT = workspace_root()
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -199,17 +200,10 @@ def fetch(url: str) -> tuple[str, str]:
 
 
 def firecrawl_key() -> str:
-    key = os.environ.get("FIRECRAWL_API_KEY", "")
-    if key:
-        return key
-    # This portable skill reads only the repository-owned configuration. It
-    # must never inherit personal machine credentials when transferred.
-    for path in (ROOT / ".env",):
-        if path.exists():
-            for line in path.read_text().splitlines():
-                if "FIRECRAWL_API_KEY=" in line and not line.strip().startswith("#"):
-                    return line.split("=", 1)[1].strip().strip('"').strip("'")
-    return ""
+    env = dict(os.environ)
+    load_dotenv(ROOT / ".env", env)
+    load_dotenv(Path.home() / ".config" / "credentials.env", env)
+    return env.get("FIRECRAWL_API_KEY", "").strip()
 
 
 def firecrawl_blocker() -> str:
@@ -693,30 +687,11 @@ def browser_probe(url: str, embed_screenshot: bool = False) -> dict:
 
 
 def api_key() -> str:
-    """The PageSpeed key, from the environment or from .env beside this repo.
-
-    Read only from os.environ, the key sitting in .env was never picked up, so
-    every run went out anonymous and hit the shared quota. The failure looked
-    exactly like a real quota problem - "429, queries per day" - which is why it
-    survived several sessions of being worked around instead of fixed.
-    """
-    key = os.environ.get("PAGESPEED_API_KEY", "")
-    if key:
-        return key
-    # An empty assignment is not a key. Returning "" from here sends the run out
-    # anonymous, and a silent fall back to another source costs more than an
-    # abort: on 20 September 2026 one report printed 40.3 s from the local engine
-    # next to the sentence "Google's mark: 2.5 s", while Google's own test
-    # measured 8.5 s for the same page. Where the fallback still happens, the
-    # reason travels with the number (see main()).
-    env = ROOT / ".env"
-    if env.exists():
-        for line in env.read_text().splitlines():
-            if line.startswith("PAGESPEED_API_KEY="):
-                value = line.split("=", 1)[1].strip().strip('"').strip("'")
-                if value:
-                    return value
-    return ""
+    """The PageSpeed key from the environment and the usual configuration files."""
+    env = dict(os.environ)
+    load_dotenv(ROOT / ".env", env)
+    load_dotenv(Path.home() / ".config" / "credentials.env", env)
+    return env.get("PAGESPEED_API_KEY", "").strip()
 
 
 def lighthouse_local(url: str, embed_frames: bool = False) -> dict:

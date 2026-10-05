@@ -8,6 +8,8 @@ import datetime as dt
 import html
 import json
 from pathlib import Path
+import shutil
+import subprocess
 from typing import Any
 from urllib.parse import urlparse
 
@@ -82,6 +84,36 @@ def conclusion(score: float | None) -> str:
 
 
 TEMPLATE = Path(__file__).resolve().parents[1] / "templates" / "lead-magnet" / "dist" / "index.html"
+
+
+def needs_build(template: Path | None = None) -> bool:
+    """A build is stale when any template source is newer than it."""
+    template = TEMPLATE if template is None else template
+    if not template.is_file():
+        return True
+    folder = template.parent.parent
+    sources = [p for p in folder.iterdir() if p.is_file()]
+    sources += [p for p in (folder / "src").rglob("*") if p.is_file()]
+    built = template.stat().st_mtime
+    return any(p.stat().st_mtime > built for p in sources)
+
+
+def ensure_template(env: dict[str, str] | None = None) -> None:
+    fix = "Run 'cd templates/lead-magnet && npm install && npm run build' to fix the audit report template."
+    if needs_build():
+        npm = shutil.which("npm")
+        if not npm:
+            raise RuntimeError("Install Node.js, then run setup.sh to build the audit report template.")
+        done = subprocess.run([npm, "run", "build", "--silent"], cwd=TEMPLATE.parent.parent,
+                              env=env, capture_output=True, text=True)
+        if done.returncode or needs_build():
+            raise RuntimeError(fix)
+    try:
+        valid = TEMPLATE.read_text(encoding="utf-8").count("__LEAD_MAGNET_DATA__") == 1
+    except (OSError, UnicodeError):
+        valid = False
+    if not valid:
+        raise RuntimeError(fix)
 
 
 def safe_asset(value: Any) -> str:
@@ -295,11 +327,8 @@ def render(
     site: dict[str, Any] | None = None,
     extra: dict[str, Any] | None = None,
 ) -> str:
-    if not TEMPLATE.is_file():
-        raise RuntimeError(f"Lead magnet template is missing: {TEMPLATE}. Run npm run build in its parent directory.")
+    ensure_template()
     template = TEMPLATE.read_text(encoding="utf-8")
-    if template.count("__LEAD_MAGNET_DATA__") != 1:
-        raise RuntimeError("Lead magnet template must contain one data placeholder.")
     payload = json.dumps(proposal_data(business, cro, search, measured_at, location, site, extra),
                          ensure_ascii=False, separators=(",", ":"))
     payload = payload.replace("</", "<\\/")

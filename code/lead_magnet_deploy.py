@@ -85,8 +85,10 @@ def publish(job_id):
         pitch_deploy.write_site(stage, sorted(pages.items()), route)
         pitch_deploy.run(
             [vercel, 'link', '--yes', '--project', config['project'], '--cwd', str(stage), *options], config)
-        pitch_deploy.run([vercel, 'deploy', '--yes', '--prod', '--cwd', str(stage), *options], config)
-        url = f'https://{config["domain"]}/{route}'
+        deployment = pitch_deploy.run(
+            [vercel, 'deploy', '--yes', '--prod', '--cwd', str(stage), *options], config)
+        host = pitch_deploy.resolve_host(vercel, config, deployment)
+        url = f'https://{host}/{route}'
 
     title = re.search(r'<title>(.*?)</title>', source.read_text(encoding='utf-8'), re.I | re.S)
     pitch_deploy.verify_public(url, title.group(1).strip() if title else '')

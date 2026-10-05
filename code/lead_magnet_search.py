@@ -23,6 +23,7 @@ except ModuleNotFoundError:  # importlib-based local tests do not add this folde
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from lead_magnet_instrument import count_call, record_cost
 from lead_magnet_workspace import workspace_root
+from pitch_deploy import load_dotenv
 
 ROOT = workspace_root()
 API = "https://api.dataforseo.com/v3"
@@ -32,14 +33,11 @@ API = "https://api.dataforseo.com/v3"
 LABS_PROBLEMS: list[str] = []
 
 def creds() -> tuple[str, str]:
-    env = ROOT / ".env"
-    if env.exists():
-        for line in env.read_text().splitlines():
-            if line.startswith("DATAFORSEO_LOGIN="):
-                os.environ.setdefault("DATAFORSEO_LOGIN", line.split("=", 1)[1])
-            if line.startswith("DATAFORSEO_PASSWORD="):
-                os.environ.setdefault("DATAFORSEO_PASSWORD", line.split("=", 1)[1])
-    login, pw = os.environ.get("DATAFORSEO_LOGIN"), os.environ.get("DATAFORSEO_PASSWORD")
+    env = dict(os.environ)
+    load_dotenv(ROOT / ".env", env)
+    load_dotenv(Path.home() / ".config" / "credentials.env", env)
+    login, pw = (str(env.get(name) or "").strip()
+                 for name in ("DATAFORSEO_LOGIN", "DATAFORSEO_PASSWORD"))
     if not login or not pw:
         sys.exit("DATAFORSEO_LOGIN and DATAFORSEO_PASSWORD missing from .env")
     return login, pw

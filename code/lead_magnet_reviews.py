@@ -29,6 +29,7 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timedelta, timezone
 import json
+import os
 from pathlib import Path
 import sys
 import time
@@ -36,13 +37,13 @@ import urllib.error
 import urllib.parse
 
 try:
-    from lead_magnet_gbp import ACTOR, budget_blocker, request, token
+    from lead_magnet_gbp import ACTOR, budget_blocker, request
     from lead_magnet_instrument import count_call, record_cost, step
     from lead_magnet_workspace import workspace_root
     import lead_magnet_model as model
 except ModuleNotFoundError:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from lead_magnet_gbp import ACTOR, budget_blocker, request, token
+    from lead_magnet_gbp import ACTOR, budget_blocker, request
     from lead_magnet_instrument import count_call, record_cost, step
     from lead_magnet_workspace import workspace_root
     import lead_magnet_model as model
@@ -70,24 +71,16 @@ Reviews:
 
 
 def apify_token() -> str:
-    """The token from the environment first, then from .env in this repository.
-
-    The sibling profile module reads the environment only, which leaves a token
-    that sits in .env unused when a member runs this module by hand.
-    """
-    found = token()
-    if found:
-        return found
+    """The token from the environment and the usual configuration files."""
+    from pitch_deploy import load_dotenv
+    env = dict(os.environ)
     try:
-        path = workspace_root() / ".env"
-        if path.is_file():
-            for line in path.read_text(encoding="utf-8").splitlines():
-                name, _, value = line.strip().partition("=")
-                if name in APIFY_KEY_NAMES and value.strip().strip('"').strip("'"):
-                    return value.strip().strip('"').strip("'")
+        load_dotenv(workspace_root() / ".env", env)
+        load_dotenv(Path.home() / ".config" / "credentials.env", env)
     except OSError:
         return ""
-    return ""
+    return next((env[name].strip() for name in APIFY_KEY_NAMES
+                 if str(env.get(name) or "").strip()), "")
 
 
 def parse_date(value: object) -> datetime | None:

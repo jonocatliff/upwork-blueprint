@@ -78,8 +78,12 @@ NO_BROWSER = ("no browser to render the page; install Playwright "
 
 
 def chrome_binary() -> str | None:
+    from pitch_deploy import load_dotenv
+    env = dict(os.environ)
+    load_dotenv(Path(__file__).resolve().parents[1] / ".env", env)
+    load_dotenv(Path.home() / ".config" / "credentials.env", env)
     candidates = [
-        os.environ.get("CHROME_BIN"),
+        env.get("CHROME_BIN"),
         shutil.which("google-chrome"),
         shutil.which("chromium"),
         shutil.which("chromium-browser"),

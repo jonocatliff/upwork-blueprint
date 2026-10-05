@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and publish one checked SEO audit from a saved Upwork lead source."""
+"""Build one SEO audit for local review from a saved Upwork lead source."""
 
 from __future__ import annotations
 
@@ -14,6 +14,8 @@ import shutil
 import subprocess
 import sys
 from urllib.parse import urlparse
+from pitch_deploy import load_dotenv
+import lead_magnet_render
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,26 +33,23 @@ def runtime_error(env: dict[str, str], *, find_spec=importlib.util.find_spec, wh
                 if find_spec(module) is None]
     if packages:
         return f"Install {', '.join(packages)} from requirements.txt before starting the paid audit."
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as playwright:
+            playwright.chromium.launch(headless=True).close()
+    except Exception:
+        return "Run 'python3 -m playwright install chromium' and check headless Chromium before starting the paid audit."
+    try:
+        lead_magnet_render.ensure_template(env)
+    except (RuntimeError, OSError) as error:
+        return str(error)
     if not env.get("PAGESPEED_API_KEY", "").strip() and which("lighthouse") is None:
         return "Add PAGESPEED_API_KEY to .env or install local Lighthouse before starting the paid audit."
     return ""
 
 
 def load_env(path: Path, env: dict[str, str]) -> None:
-    if not path.is_file():
-        return
-    for raw in path.read_text(encoding="utf-8").splitlines():
-        line = raw.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        key, value = line.split("=", 1)
-        key = key.strip()
-        value = value.strip().strip('"').strip("'")
-        # An empty line in .env is a blank the member has not filled in, not an
-        # answer. Stored as one it shadowed the same key in the fallback file, so
-        # running setup.sh could switch working credentials off.
-        if value and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", key):
-            env.setdefault(key, value)
+    load_dotenv(path, env)
 
 
 def command(parts: list[str], *, cwd: Path, env: dict[str, str], stdout: Path | None = None) -> str:
@@ -153,18 +152,6 @@ def artifact_is_current(path: Path, source_updated_at: str) -> bool:
         return False
 
 
-def publish(job_id: str, env: dict[str, str]) -> str:
-    output = command(
-        [sys.executable, str(ROOT / "code" / "lead_magnet_deploy.py"), job_id],
-        cwd=ROOT,
-        env=env,
-    )
-    match = re.search(r"Published (https://[^\s]+)", output)
-    if not match:
-        raise RuntimeError("The audit deploy finished without a public URL.")
-    return match.group(1)
-
-
 def run(job_id: str, *, dry_run: bool = False) -> Path | None:
     if not ID.fullmatch(job_id):
         raise RuntimeError("Use the numeric Upwork job ID.")
@@ -187,16 +174,13 @@ def run(job_id: str, *, dry_run: bool = False) -> Path | None:
             "paid_services": ["Firecrawl", "Apify", "DataForSEO"],
             "missing_credentials": missing,
             "would_send_or_publish": False,
-            "production_run_publishes": True,
+            "production_run_publishes": False,
         }))
         return None
     folder = jobs_dir(env) / job_id
     final = folder / "lead-magnet.html"
-    if not job.get("lead_magnet_url") and artifact_is_current(
-            final, str(job.get("lead_magnet_source_updated_at") or "")):
-        command([sys.executable, str(ROOT / "code" / "preflight.py"), "vercel"], cwd=ROOT, env=env)
-        public_url = publish(job_id, env)
-        print(json.dumps({"report": str(final), "published": True, "public_url": public_url,
+    if artifact_is_current(final, str(job.get("lead_magnet_source_updated_at") or "")):
+        print(json.dumps({"report": str(final), "published": False,
                           "reused_existing_audit": True, "sent": False}))
         return final
     if missing:
@@ -310,9 +294,8 @@ def run(job_id: str, *, dry_run: bool = False) -> Path | None:
     evidence_root = folder / "lead-magnet-data"
     evidence_root.mkdir(exist_ok=True)
     stage.rename(evidence_root / stamp)
-    public_url = publish(job_id, env)
     print(json.dumps({"report": str(final), "evidence": str(evidence_root / stamp), "sent": False,
-                      "published": True, "public_url": public_url}))
+                      "published": False}))
     return final
 
 
