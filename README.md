@@ -6,6 +6,11 @@ The full product goal and review standard are in [VISION.md](VISION.md).
 
 ## Quick start
 
+Before you clone: `/context` runs on a Claude plan alone. Every Upwork command
+needs the free Upwork connector. Publishing a pitch page or audit needs a free
+Vercel account, and only `/lead-magnet` needs paid keys. Details are in
+[Requirements](#requirements) and [What it costs to run](#what-it-costs-to-run).
+
 1. Clone it anywhere on your computer:
    `git clone https://github.com/luka-commits/upwork-blueprint.git`
 2. Open a terminal in the folder and run `./setup.sh` once. It creates your own
@@ -24,6 +29,10 @@ Skipping setup still works: each command walks you through its missing tools.
 
 The shared allow rules apply after you accept the workspace trust dialog.
 
+What Claude Code reads during a command, including Upwork responses and your
+`context/` files, is sent to Anthropic as part of the conversation, as in any
+Claude Code session. `RESEARCH.md` is background reading; no command uses it.
+
 ## The path (run it in this order, it mirrors the course)
 
 | Step | Command | What it does |
@@ -37,7 +46,9 @@ The shared allow rules apply after you accept the workspace trust dialog.
 | 7 | `/proposal` | Turns your sales call into the proposal you send, and says whether it is ready to start a project on |
 | 8 | `/won` | Turns a started contract into the handover brief and the onboarding. Run it again after delivery to record what came out of it |
 
-/context also works before connecting or creating a public Upwork profile.
+/context also works before connecting or creating a public Upwork profile. Run it
+first: every later command writes from it, and `/find-jobs` on an empty `me.md`
+has nothing to score leads against.
 
 For a local business in conversation, `/lead-magnet <job id> <website>` builds an
 SEO audit from Firecrawl, Apify and DataForSEO evidence after you approve its cost.

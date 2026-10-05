@@ -38,6 +38,7 @@ Run `python3 code/workspace.py`, `python3 code/pipeline.py prune` and `python3 c
 
 ## Step 0b · Is this the first run, or a run with a direction?
 
+If `python3 code/context_check.py --status` says `untouched`, stop and send the member to `/context`.
 Look at `context/me.md` under "Job search tracks". **No tracks means the first run**:
 it finds which searches are alive instead of hunting the best ten.
 Saved tracks mean a later run even before any application. Name the mode in one line.

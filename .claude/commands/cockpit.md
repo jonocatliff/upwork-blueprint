@@ -17,7 +17,7 @@ then open it. The cockpit never runs a command. First start may need Node.js and
    If Node.js is missing, ask the member to install its LTS version from
    nodejs.org and open a new terminal.
 3. Wait for readiness, then open the exact URL printed after "Cockpit running"
-   (on macOS `open`, on Windows `start`, on Linux `xdg-open`). Never substitute
+   (on macOS `open`, on Linux and WSL `xdg-open`). Never substitute
    the default port for the selected port or open a failed launch.
 
 End with the compact completion report from `CLAUDE.md`, including the clickable
