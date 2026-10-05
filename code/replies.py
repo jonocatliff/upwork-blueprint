@@ -132,8 +132,8 @@ def cmd_sent(args):
         print(f'ABORT: no draft labelled {args.label!r}. Labels present: {labels}', file=sys.stderr)
         return 1
     text = ' '.join(str(picked[0].get('text', '')).split())
-    out = subprocess.run([sys.executable, str(ROOT / 'code' / 'pipeline.py'), 'note', args.job_id,
-                          f'sent to the client: {text}'], capture_output=True, text=True)
+    out = subprocess.run([sys.executable, str(ROOT / 'code' / 'pipeline.py'), 'acted', args.job_id,
+                          '--note', f'sent to the client: {text}'], capture_output=True, text=True)
     if out.returncode:
         print(out.stderr.strip(), file=sys.stderr)
         return 1

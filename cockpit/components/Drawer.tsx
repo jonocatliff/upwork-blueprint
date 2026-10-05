@@ -179,7 +179,7 @@ function Conversation({ job }: { job: any }) {
   const thread = job.thread || {};
   const all: any[] = Array.isArray(thread.messages) ? thread.messages : [];
   if (!all.length) {
-    // A missing thread is a fact worth stating: prune deletes it after a day and only a
+    // A missing thread is a fact worth stating: prune follows KEEP_CHAT_HOURS (90 days by default) and only a
     // /brief run brings it back, so silence here would read as a client who said nothing.
     return <section className="drawer-section" aria-label="Conversation">
       <h4>Conversation</h4>
@@ -204,9 +204,10 @@ function Drafts({ job }: { job: any }) {
   if (!drafts.length) return null;
   return <section className="drawer-section">
     <h4>Reply drafts</h4>
-    {drafts.map((text, index) => <div key={index} className="drawer-answer">
-      <pre className="drawer-text">{text}</pre>
-      <CopyButton text={text} label="Copy draft" />
+    {drafts.map((draft, index) => <div key={index} className="drawer-answer">
+      <h5>{draft.label}</h5>
+      <pre className="drawer-text">{draft.text}</pre>
+      <CopyButton text={draft.text} label="Copy draft" />
     </div>)}
   </section>;
 }

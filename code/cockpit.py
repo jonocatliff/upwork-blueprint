@@ -177,7 +177,7 @@ def funnel(jobs):
                                         if isinstance(h, dict)]
         rank = max((FUNNEL.index(s) + 1 for s in stages if s in FUNNEL), default=0)
         return rank, 'call' in stages
-    marks = [seen(job) for job in jobs]
+    marks = [seen(job) for job in jobs if not job.get('imported')]
     return {stage: sum(1 for rank, had_call in marks
                        if (had_call if stage == 'call' else rank > index))
             for index, stage in enumerate(FUNNEL)}
@@ -199,6 +199,8 @@ def outreach(jobs, weeks=OUTREACH_WEEKS, today=None):
     counts = {start.isoformat(): 0 for start in starts}
     first = starts[0]
     for job in jobs:
+        if job.get('imported'):
+            continue
         for event in job.get('history') or []:
             if not isinstance(event, dict) or event.get('status') != 'applied':
                 continue

@@ -6,8 +6,8 @@
 // <reason>` stays available on every new lead. `applied` waits. `replied`, `call` and `offer`
 // answer a waiting client first and a due follow-up second, where due means
 // `next_follow_up <= today`; a future date stays Waiting. `/proposal` is offered
-// in conversation and after the call, never once an offer exists. `won`
-// writes the handover once and then carries nothing. `lost` and `skipped` carry
+// in conversation, after the call, or at offer when no proposal exists. `won`
+// writes the handover and records the result once. `lost` and `skipped` carry
 // no task even when a date is set and a client is waiting.
 //
 // The list never shows a date the reader has to subtract from today: it says
@@ -28,6 +28,20 @@ const has = (job, name) => (job.artifacts || []).includes(name);
 // apply only where nothing is planned at all, so the two numbers never disagree
 // about the same lead and neither should be changed to match the other.
 const CHASE_DAYS = 2;
+const LANE_STEPS = { hot: 3, warm: 3, light: 2, reactivation: 2 };
+
+export function stageEnteredAt(job) {
+  const entry = [...(job.history || [])].reverse().find(item => item?.status === job.status);
+  return entry?.at || job.status_updated_at || job.found_at || '';
+}
+
+function parked(job) {
+  if (job.follow_up_plan) return false;
+  const last = (job.follow_up_history || []).at(-1);
+  if (!last || (last.action === 'cleared' && String(last.reason || '').startsWith('The client replied'))) return false;
+  return last.action === 'cleared' || (last.action === 'sent'
+    && (last.completed || last.step >= LANE_STEPS[last.lane]));
+}
 
 /** Whole days from a stamp to today, or null when there is no usable stamp. */
 function daysSince(stamp, today) {
@@ -39,11 +53,12 @@ function daysSince(stamp, today) {
 
 /** The chase a member owes when nothing else is scheduled: due every two days. */
 function chase(job, today, command, extras) {
-  const silent = daysSince(job.status_updated_at, today);
+  if (parked(job)) return step('Parked', 'The follow-up sequence has stopped. Wait for the client to return.', null, extras);
+  const silent = daysSince(job.last_activity_at || stageEnteredAt(job), today);
   if (silent == null) return step('Waiting', WAITING, null, extras);
   const over = silent - CHASE_DAYS;
   if (over >= 0) {
-    return step('Follow up', `No answer for ${silent} day${silent === 1 ? '' : 's'}. Draft a nudge, then send it on Upwork.`, command, extras);
+    return step('Follow up', `No answer for ${silent} day${silent === 1 ? '' : 's'}. Draft a nudge; approve one message or send it on Upwork.`, command, extras);
   }
   return step('Waiting', `Follow up in ${-over} day${over === -1 ? '' : 's'} unless they answer.`, null, extras);
 }
@@ -55,10 +70,7 @@ export function nextStep(job, today = todayIso()) {
     case 'new': {
       const skip = [`/find-jobs skip ${id} <reason>`];
       return has(job, 'pitch.html') && has(job, 'application.md')
-        // /pitch-page moves it to Applied on the member's yes, in the run that built it.
-        // Naming /brief here sent a member looking for the command that does nothing of
-        // the sort, and left the lead reading as unsubmitted for the rest of the day.
-        ? step('Submit on Upwork', 'Record the Loom, put its link into the cover letter where it says [LOOM LINK], submit on Upwork, then tell /pitch-page you did.', null, skip)
+        ? step('Submit on Upwork', `Record the Loom, replace [LOOM LINK], submit on Upwork, then run /pitch-page ${id} submitted.`, null, skip)
         : step('Build pitch page', 'Builds the pitch page and the application.', `/pitch-page ${id}`, skip);
     }
     case 'applied':
@@ -70,9 +82,10 @@ export function nextStep(job, today = todayIso()) {
       // for again, and a published audit is not rebuilt.
       const audit = job.lead_magnet_url ? [] : [job.lead_magnet_source ? `/lead-magnet ${id}` : `/lead-magnet ${id} <website>`];
       const proposal = `/proposal ${id} <transcript path or notes>`;
-      const extras = [...(job.status === 'replied' ? [proposal] : []), ...audit];
-      if (job.client_waiting) return step('Reply', 'The client is waiting. Draft a reply, then send it on Upwork.', `/brief ${id}`, extras);
-      if (job.next_follow_up && job.next_follow_up <= today) return step('Follow up', 'A follow-up is due. Draft a nudge, then send it on Upwork.', `/brief ${id}`, extras);
+      const extras = [...(job.status === 'replied' || (job.status === 'offer' && !has(job, 'proposal.md')) ? [proposal] : []), ...audit];
+      if (job.client_waiting) return step('Reply', 'The client is waiting. Draft a reply; approve one message or send it on Upwork.', `/brief ${id}`, extras);
+      if (job.next_follow_up && job.next_follow_up <= today) return step('Follow up', 'A follow-up is due. Draft a nudge; approve one message or send it on Upwork.', `/brief ${id}`, extras);
+      if (job.next_follow_up && job.next_follow_up > today) return step('Waiting', `Follow up ${whenText(dueIn(job.next_follow_up, today))}.`, null, extras);
       if (job.status === 'call') {
         // Booked for later: the chase stops until the call has happened.
         if (job.call_at && job.call_at > today) {
@@ -91,13 +104,22 @@ export function nextStep(job, today = todayIso()) {
       // In conversation: chase until there is a call.
       return chase(job, today, `/brief ${id}`, extras);
     }
-    case 'won':
+    case 'won': {
       // A won lead used to show nothing at all, which reads as finished when the work has
       // not started. The second /won pass is the one step nobody else owns: it records what
       // was delivered, and that is what makes the next proposal provable.
-      return has(job, 'project.md')
-        ? step('Record the result', 'After delivery: what came out of it, with a number and where it can be checked.', `/won ${id}`)
+      if (job.client_waiting) return step('Reply', 'The client is waiting. Draft a reply; approve one message or send it on Upwork.', `/brief ${id}`);
+      if (has(job, 'project.md') && !job.result_recorded_at) return step('Record the result', 'After delivery: what came out of it, with a number and where it can be checked.', `/won ${id}`);
+      if (job.follow_up_plan?.lane === 'reactivation') {
+        return job.next_follow_up && job.next_follow_up <= today
+          ? step('Follow up', 'Draft a message; approve one message or send it on Upwork.', `/brief ${id}`)
+          : step('Waiting', `Follow up ${whenText(dueIn(job.next_follow_up, today))}.`);
+      }
+      if (parked(job)) return step('Parked', 'The follow-up sequence has stopped. Wait for the client to return.');
+      if (has(job, 'project.md')) return { ...NOTHING, extras: [] };
+      return job.imported ? { ...NOTHING, extras: [] }
         : step('Write handover', 'Turns the contract into the handover brief and the onboarding.', `/won ${id}`);
+    }
     default:
       return { ...NOTHING, extras: [] };
   }
@@ -124,13 +146,13 @@ export function whenText(days) {
 }
 
 export function waitingState(job, today = todayIso(), now = Date.now()) {
-  const at = Date.parse(job.status_updated_at || job.found_at || '');
+  const at = Date.parse(job.last_activity_at || stageEnteredAt(job));
   const days = Number.isNaN(at) ? null : Math.max(0, Math.floor((now - at) / 864e5));
   const age = days == null ? '' : days === 0 ? 'today' : days === 1 ? '1 day' : `${days} days`;
   const step = nextStep(job, today);
   const acting = Boolean(step.command) || step.label === 'Reply' || step.label === 'Follow up';
   const due = dueIn(job.next_follow_up, today);
-  if (job.next_follow_up && job.next_follow_up > today) {
+  if (step.label !== 'Reply' && job.next_follow_up && job.next_follow_up > today) {
     return { kind: 'follow-up set', detail: `Follow up ${whenText(due)}`, age, days, due };
   }
   if (acting) {
@@ -139,13 +161,14 @@ export function waitingState(job, today = todayIso(), now = Date.now()) {
     return { kind: 'act', detail: due != null && due < 0 ? `${detail} · ${whenText(due)}` : detail,
              age, days, due, late: due != null && due < 0 };
   }
-  return { kind: 'waiting', detail: age ? `Waiting ${age}` : 'Waiting', age, days, due };
+  return { kind: 'waiting', detail: step.label === 'Parked' ? 'Parked' : age ? `Waiting ${age}` : 'Waiting', age, days, due };
 }
 
 export function replyDrafts(job) {
   const replies = job.replies || {};
   const drafts = (Array.isArray(replies.drafts) ? replies.drafts : [])
-    .map(draft => String(draft?.text || '').trim()).filter(Boolean);
+    .map(draft => ({ label: String(draft?.label || '').trim(), text: String(draft?.text || '').trim() }))
+    .filter(draft => draft.text);
   if (!drafts.length) return [];
   const clientTimes = ((job.thread || {}).messages || [])
     .filter(message => message?.kind !== 'event' && message?.from !== 'me')

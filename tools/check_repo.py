@@ -526,6 +526,8 @@ def script_copy():
         (root / 'tools').mkdir()
         shutil.copy2(ROOT / SELF, root / SELF)
         shutil.copytree(ROOT / 'tools' / 'fixtures', root / 'tools' / 'fixtures')
+        shutil.copytree(ROOT / 'cockpit' / 'lib', root / 'cockpit' / 'lib')
+        shutil.copytree(ROOT / 'templates' / 'proposal', root / 'templates' / 'proposal')
         shutil.copy2(ROOT / '.env.example', root / '.env.example')
         shutil.copy2(ROOT / 'setup.sh', root / 'setup.sh')
         env = {key: value for key, value in os.environ.items()
@@ -709,6 +711,182 @@ def fixture_retention():
     assert len(trimmed) == pipeline.KEEP and removed == len(overflow) - pipeline.KEEP
 
 
+def fixture_pipeline():
+    """The application-to-won contract, entirely on this worker's throwaway copy."""
+    import datetime
+    import io
+    import pipeline
+    import cockpit
+    import sync as sync_io
+    from types import SimpleNamespace
+    from unittest.mock import patch
+    now = datetime.datetime.now(datetime.timezone.utc)
+    old = (now - datetime.timedelta(days=20)).isoformat()
+    reviewed = (now - datetime.timedelta(days=2)).isoformat()
+    sent = (now - datetime.timedelta(days=1)).isoformat()
+    command = [sys.executable, str(ROOT / 'code' / 'pipeline.py')]
+
+    def run(arguments, value=None, success=True, script='pipeline.py'):
+        call = command if script == 'pipeline.py' else [sys.executable, str(ROOT / 'code' / script)]
+        result = subprocess.run(call + arguments, input=json.dumps(value) if value is not None else None,
+                                cwd=ROOT, capture_output=True, text=True)
+        assert (result.returncode == 0) == success, result.stderr or result.stdout
+        return result
+
+    def apply_in_process(snapshot, no_writes=False):
+        calls = []
+
+        def run_local(*arguments, stdin=None):
+            calls.append(arguments)
+            with patch.object(sys, 'stdin', io.StringIO(stdin or '')):
+                return pipeline.main(list(arguments)) == 0
+
+        with contextlib.ExitStack() as stack:
+            stack.enter_context(patch.object(sync_io, 'run_pipeline', side_effect=run_local))
+            stack.enter_context(patch.object(sys, 'stdin', io.StringIO(json.dumps(snapshot))))
+            stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+            if no_writes:
+                stack.enter_context(patch.object(pipeline, 'save', side_effect=AssertionError(
+                    'Replaying a snapshot must not write the pipeline.')))
+            sync_io.cmd_apply(SimpleNamespace(file='-'))
+        return calls
+
+    rows = [
+        {'id': '730001', 'title': 'Fixture call', 'status': 'call', 'found_at': old,
+         'call_at': '2030-01-01', 'next_follow_up': '2030-01-02'},
+        {'id': '730002', 'title': 'Fixture offer', 'status': 'offer', 'found_at': old},
+        {'id': '730003', 'title': 'Fixture sequence', 'status': 'replied', 'found_at': old,
+         'follow_up_plan': {'lane': 'light', 'step': 2, 'max_steps': 2,
+                            'reviewed_at': reviewed, 'reason': 'Fixture close'},
+         'next_follow_up': sent[:10]},
+        {'id': '730006', 'title': 'Fixture first reply', 'status': 'applied', 'found_at': old},
+    ]
+    run(['add', '--file', '-'], rows)
+    before = pipeline.find(pipeline.load(), '730001')
+    assert '--force' in run(['set', '730001', 'replied'], success=False).stderr
+    assert pipeline.find(pipeline.load(), '730001') == before
+    run(['acted', '730001', '--note', 'Fixture activity'])
+    acted = pipeline.find(pipeline.load(), '730001')
+    assert acted['last_activity_at'] > before['last_activity_at']
+    assert acted['notes'] == 'Fixture activity'
+    assert {k: v for k, v in acted.items() if k not in ('last_activity_at', 'notes')} == {
+        k: v for k, v in before.items() if k not in ('last_activity_at', 'notes')}
+    run(['set', '730001', 'replied', '--force'])
+    assert pipeline.find(pipeline.load(), '730001')['status'] == 'replied'
+    run(['record', '730001', '--file', '-'], {'follow_up_source': 'waiting'})
+    run(['set', '730001', 'replied', '--follow-up', '2030-01-02'])
+    assert 'follow_up_source' not in pipeline.find(pipeline.load(), '730001')
+
+    snapshot = {
+        'offers': [{'job_id': '730002', 'state': 'expired'}],
+        'contracts': [{'contract_id': 'contract-fixture', 'title': 'Fixture repeat project',
+                       'status': 'ACTIVE', 'client_name': 'Fixture Repeat Client'}],
+        'proposals': [{'job_id': '730004', 'proposal_id': 'proposal-fixture', 'room_id': 'room-fixture',
+                       'title': 'Fixture historical hire', 'status': 'hired', 'applied_at': now.isoformat()}],
+        'threads': [{'job_id': '730003', 'room_id': 'sequence-room', 'awaiting_reply_from': 'them',
+                     'messages': [{'from': 'me', 'name': 'Fixture Member', 'at': sent, 'text': 'Closing the loop.'}]},
+                    {'job_id': '730006', 'room_id': 'reply-room', 'awaiting_reply_from': 'you',
+                     'messages_complete': True,
+                     'messages': [{'from': 'client', 'name': 'Fixture Client', 'at': sent, 'text': 'Can we talk?'}]},
+                    {'job_id': '730001', 'room_id': 'manual-room', 'awaiting_reply_from': 'them', 'messages': []}],
+    }
+    run(['apply', '--file', '-'], snapshot, script='sync.py')
+    saved = pipeline.load()
+    assert pipeline.find(saved, '730002')['status'] == 'lost'
+    complete = pipeline.find(saved, '730003')
+    assert not complete.get('follow_up_plan') and not complete.get('next_follow_up')
+    assert len(complete['follow_up_history']) == 1 and complete['follow_up_history'][0]['completed']
+    assert complete['last_activity_at'] == sent
+    first_reply = pipeline.find(saved, '730006')
+    assert first_reply['status'] == 'replied' and first_reply['last_activity_at'] == sent
+    assert first_reply['history'][-1]['at'] > first_reply['last_activity_at']
+    assert first_reply['follow_up_source'] == 'waiting'
+    assert first_reply['next_follow_up'] == now.date().isoformat()
+    assert pipeline.find(saved, '730001')['next_follow_up'] == '2030-01-02'
+    imported = next(row for row in saved if row.get('contract_id') == 'contract-fixture')
+    assert imported['status'] == 'won' and imported['imported'] is True
+    hired = pipeline.find(saved, '730004')
+    assert hired['proposal_id'] == 'proposal-fixture' and hired['room_id'] == 'room-fixture'
+    assert hired['imported'] is True
+    assert all(value == 0 for value in cockpit.funnel([hired, imported]).values())
+    assert all(week['count'] == 0 for week in cockpit.outreach([hired, imported]))
+    assert pipeline.applied_on([hired], now.date().isoformat()) == 0
+    calls = apply_in_process(snapshot, no_writes=True)
+    assert len(pipeline.load()) == len(saved)
+    assert pipeline.find(pipeline.load(), '730003') == complete
+    assert not any(call[0] in ('acted', 'follow-up') for call in calls), calls
+    no_waiting = {'threads': [dict(snapshot['threads'][1], awaiting_reply_from='them')]}
+    run(['apply', '--file', '-'], no_waiting, script='sync.py')
+    no_longer_waiting = pipeline.find(pipeline.load(), '730006')
+    assert no_longer_waiting['next_follow_up'] is None and 'follow_up_source' not in no_longer_waiting
+    apply_in_process(no_waiting, no_writes=True)
+    later_contract = dict(snapshot['contracts'][0], job_id='740001')
+    run(['apply', '--file', '-'], {'contracts': [later_contract]}, script='sync.py')
+    assert len(pipeline.load()) == len(saved)
+    assert next(row for row in pipeline.load() if row.get('contract_id') == 'contract-fixture')['id'] == imported['id']
+    active_import = {'proposals': [{'job_id': '730007', 'title': 'Fixture imported conversation', 'status': 'accepted'}],
+                     'threads': [{'job_id': '730007', 'room_id': 'import-room', 'awaiting_reply_from': 'them',
+                                  'messages': [{'from': 'client', 'at': sent, 'text': 'Fixture answer'}]}]}
+    run(['apply', '--file', '-'], active_import, script='sync.py')
+    assert pipeline.find(pipeline.load(), '730007')['last_activity_at'] == sent
+    run(['add', '--file', '-'], {'id': '730008', 'title': 'Fixture message window', 'status': 'replied', 'found_at': old})
+    history = [{'from': 'me', 'at': (now - datetime.timedelta(days=21, minutes=index)).isoformat(),
+                'text': 'Already recorded.'} for index in range(20)]
+    history += [{'from': 'client', 'at': reviewed, 'text': 'New question.'},
+                {'from': 'me', 'at': sent, 'text': 'New answer.'}]
+    activity_snapshot = {'threads': [{'job_id': '730008', 'room_id': 'activity-room',
+                                     'awaiting_reply_from': 'them', 'messages': history}]}
+    calls = apply_in_process(activity_snapshot)
+    assert sum(call[0] == 'acted' for call in calls) == 1, calls
+    assert pipeline.find(pipeline.load(), '730008')['last_activity_at'] == sent
+    assert not apply_in_process(activity_snapshot, no_writes=True)
+    for action in ('plan', 'sent', 'clear'):
+        run(['record', '730008', '--file', '-'], {'follow_up_source': 'waiting'})
+        arguments = ['follow-up', '730008', action]
+        if action == 'plan':
+            arguments += ['--lane', 'light', '--due', '2030-01-02', '--reason', 'Fixture sequence']
+        run(arguments)
+        assert 'follow_up_source' not in pipeline.find(pipeline.load(), '730008')
+    unknown = run(['apply', '--file', '-'], {'offers': [{'job_id': '730002', 'state': 'unknown-fixture'}]}, script='sync.py')
+    assert 'unknown offers status' in unknown.stderr
+    run(['prune'])
+    retained = pipeline.find(pipeline.load(), '730004')
+    assert retained['proposal_id'] == hired['proposal_id'] and retained['room_id'] == hired['room_id']
+    run(['new', imported['id']], script='client_workspace.py')
+    assert pipeline.find(pipeline.load(), imported['id'])['client_slug'] == 'fixture-repeat-client'
+    run(['new', imported['id']], script='client_workspace.py')
+    assert len(list((ROOT / 'clients').iterdir())) == 1
+    run(['record', imported['id'], '--file', '-'], {'result_recorded_at': reviewed})
+    run(['record', imported['id'], '--file', '-'], {'result_recorded_at': sent})
+    assert pipeline.find(pipeline.load(), imported['id'])['result_recorded_at'] == reviewed
+
+    with patch.dict(os.environ, {}, clear=True):
+        (ROOT / '.env').unlink(missing_ok=True)
+        assert pipeline.chat_keep_hours() == 2160
+        for raw, expected in [('24 # strict', 24), ('"24"', 24), ('0', 0), ('invalid', 24)]:
+            (ROOT / '.env').write_text(f'KEEP_CHAT_HOURS={raw}\n', encoding='utf-8')
+            assert pipeline.chat_keep_hours() == expected
+        with patch.dict(os.environ, {'KEEP_CHAT_HOURS': '"0" # strict'}):
+            assert pipeline.chat_keep_hours() == 0
+
+    proposal = {'member': 'Fixture Freelancer', 'client': 'Fixture Client', 'headline': 'Fixture plan',
+                'summary': 'Fixture summary', 'call_notes': [{'said': 'Fixture words', 'means': 'Fixture work'}]}
+    run(['730001', '--file', '-'], proposal, script='proposal_generate.py')
+    page = (ROOT / 'jobs' / '730001' / 'proposal.html').read_text(encoding='utf-8')
+    assert '{{' not in page and 'class="missing"' in page and 'class="gantt" style=' not in page
+    assert 'member' not in page.lower() and 'class="cta"' not in page
+    assert 'href=""' not in page and 'href="#"' not in page
+    run(['730001', '--file', '-'], dict(proposal, weeks=3, cta_href='https://www.upwork.com'), script='proposal_generate.py')
+    page = (ROOT / 'jobs' / '730001' / 'proposal.html').read_text(encoding='utf-8')
+    assert 'WK 3' in page and 'href="https://www.upwork.com"' in page
+    run(['730001', '--file', '-'], dict(proposal, weeks=0), success=False, script='proposal_generate.py')
+    run(['730001', '--file', '-'], dict(proposal, cta_href='#'), success=False, script='proposal_generate.py')
+    node = subprocess.run(['node', str(ROOT / 'tools' / 'fixtures' / 'pipeline.mjs')],
+                          input=json.dumps({'before': before, 'acted': acted, 'complete': complete, 'hired': hired}),
+                          cwd=ROOT, capture_output=True, text=True)
+    assert node.returncode == 0, node.stderr or node.stdout
+
+
 def script_worker(name, path=None):
     import socket
     def offline(*args, **kwargs):
@@ -719,13 +897,13 @@ def script_worker(name, path=None):
         script_import(pathlib.Path(path))
     else:
         {'candidates': fixture_candidates, 'env': fixture_env, 'setup': fixture_setup,
-         'publish': fixture_publish, 'retention': fixture_retention}[name]()
+         'publish': fixture_publish, 'retention': fixture_retention, 'pipeline': fixture_pipeline}[name]()
 
 
 def check_scripts_run():
     findings = []
     tasks = [('import', path.name) for path in sorted((ROOT / 'code').glob('*.py'))]
-    tasks += [(name, None) for name in ('candidates', 'env', 'setup', 'publish', 'retention')]
+    tasks += [(name, None) for name in ('candidates', 'env', 'setup', 'publish', 'retention', 'pipeline')]
     for name, filename in tasks:
         with script_copy() as (root, env):
             command = [sys.executable, str(root / SELF), '--script-check', name]

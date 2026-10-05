@@ -536,8 +536,12 @@ the answer down. [Upwork documented, unresolved]
 member to check with support before scheduled activity, AI filtering or scoring of
 results, storing connector output, hosted clients, or chaining several tools into
 one flow. Two of those describe what the Blueprint does: `/find-jobs` scores
-postings with a model, and `pipeline.py` stores connector output until prune
-expires it. A human starts every run and nothing is scheduled, which was the part
+postings with a model, and `pipeline.py` prunes cached job fields in `data/jobs.json`
+after 24 hours. Chats live in `jobs/<id>/thread.json`, retained for 90 days by default
+so follow-ups and feedback can learn from them. `KEEP_CHAT_HOURS=24` selects the
+published 24-hour window; `0` retains no chats. Quotes and inline comments are accepted;
+an invalid explicit value warns and uses 24 hours. The longer default is this system's
+choice, not Upwork approval. A human starts every run and nothing is scheduled, which was the part
 to be careful about. The rest is unanswered. Recorded 26 September 2026, Maker
 School evidence snapshot, source R21. [Upwork documented, unanswered]
 

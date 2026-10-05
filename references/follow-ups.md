@@ -114,7 +114,8 @@ Maximum steps are ceilings. Choose fewer when the thread is weak, the ask is
 already stale, the client moved the conversation elsewhere or another message
 would add no reason to answer.
 
-For each active sequence, write the decision only through:
+Keep an existing plan; never restart a finished or stopped sequence unless the client returns.
+For a new sequence, write the decision only through:
 
 `python3 code/pipeline.py follow-up <id> plan --lane <lane> --due <date> --reason "<conversation-based reason>"`
 
@@ -132,11 +133,8 @@ Each follow-up adds one new reason to answer: a useful observation, a narrowed
 decision, a relevant next step or a graceful close. A pure "just checking in"
 message is not a draft.
 
-Report this in chat, in three short groups: due today, coming up, parked. Put
-the decision and reason before supporting detail, name each due job by its
-title, and keep it to active or recently parked items. Nothing is written to a
-file: `data/jobs.json` already holds every plan, due date and reason, and the
-cockpit renders the same three groups from it.
+Report each due lead's decision and reason in chat. The cockpit shows each lead's
+next action, waiting date or Parked state in its existing board and list.
 
 ### Report
 

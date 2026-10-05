@@ -1,9 +1,12 @@
 ---
 description: Builds a one-page pitch site for one job and the application to submit with your Loom: cover letter and bid.
-argument-hint: "<job id> [more job ids]"
+argument-hint: "<job id> [more job ids] | <job id> submitted"
 ---
 
 # /pitch-page
+
+**`/pitch-page <id> submitted`:** only run `python3 code/pipeline.py set <id> applied`
+and report `Upwork calls: 0`, then stop before any other step. It records the member's submission.
 
 **Several ids run one after another**, because `/find-jobs` hands over ten and applying to
 one at a time is the day's real ceiling. Each page still gets its own sketch, its own
@@ -389,13 +392,12 @@ themselves.
 --ready`.** Same gate, one more refusal: the `[LOOM LINK]` placeholder, correct while the
 letter is written and wrong the moment it is pasted.
 
-Never mark Applied until the member confirms they submitted, then run
-`python3 code/pipeline.py set <id> applied`. That stage rests on their word, so `/brief`
-asks again if no proposal ever shows up.
+Never mark Applied until the member submits on Upwork, then runs `/pitch-page <id> submitted`.
+That stage rests on their word; `/brief` checks once if no proposal ever shows up.
 
 ## Step 9 · Report
 
 Run `python3 code/pipeline.py prune` first, because Step 1 fetched the full job. Then the completion report as CLAUDE.md defines it, with the public page and
 application linked. Say what the application costs in Connects and what the balance leaves. Next step: record the Loom walking through the pitch page,
-replace [LOOM LINK] in the cover letter and submit on Upwork; `/brief` then
-moves the lead to Applied. End with `Upwork calls: N`.
+replace [LOOM LINK], submit on Upwork, then run `/pitch-page <id> submitted`.
+End with `Upwork calls: N`.

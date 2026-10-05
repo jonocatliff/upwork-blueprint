@@ -5,8 +5,8 @@
     python3 code/proposal_generate.py <job id> --file -        # JSON on stdin
 
 Writes jobs/<id>/proposal.html from templates/proposal/template.html. The markdown
-proposal stays the thing the member pastes into Upwork chat; this is the page they can
-link once a contract exists, and the artifact a client actually reads twice.
+proposal stays the thing the member pastes into Upwork chat. The member delivers
+the page themselves unless a real CTA URL was provided.
 
 Every value the call did not settle is rendered as a visible "open" marker, never as a
 zero and never as a rounded guess: a missing number is honest, an invented one is a claim
@@ -14,11 +14,12 @@ the first milestone exposes.
 
 The JSON, all strings unless noted:
 
-    client, headline, subline, price, price_note, quote, cost_line, stones_note,
+    member, client, headline, summary, date, price, price_note, stones_note,
+    call_notes (array of {said, means}),
     cta, cta_href, fine (array), included (array),
     milestones (array of {label, amount}), weeks (number),
     rows (array of {label, from, to, kind, colour}),
-    labels (object, optional, overrides the six section labels)
+    labels (object, optional, overrides the four section labels)
 """
 import argparse
 import base64
@@ -27,6 +28,7 @@ import html
 import json
 import pathlib
 import sys
+from urllib.parse import urlparse
 from pipeline import jobs_dir, shown
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -171,16 +173,26 @@ def main(argv=None):
 
     # No default. A delivery schedule is a commitment, and six weeks nobody agreed to
     # is the kind of invented number a client holds the member to on the first call.
-    if not data.get('weeks'):
-        abort('weeks is missing: a schedule the call did not settle cannot be drawn. '
-              'Agree the length with the member, or leave the plan out of the page.')
-    weeks = int(data['weeks'])
-    if not 1 <= weeks <= 12:
-        abort(f'weeks is {weeks}; a post-call plan runs 1 to 12 weeks.')
+    weeks = data.get('weeks')
+    if weeks not in (None, ''):
+        if isinstance(weeks, bool) or not isinstance(weeks, int) or not 1 <= weeks <= 12:
+            abort(f'weeks is {weeks}; a post-call plan runs 1 to 12 whole weeks.')
+    else:
+        weeks = None
     labels = {**DEFAULT_LABELS, **(data.get('labels') or {})}
     today = datetime.date.today().strftime('%d %B %Y')
 
     page = TEMPLATE.read_text(encoding='utf-8')
+    href = str(data.get('cta_href') or '').strip()
+    if href:
+        parsed = urlparse(href)
+        if parsed.scheme != 'https' or not parsed.hostname or parsed.username or parsed.password or any(c.isspace() for c in href):
+            abort('cta_href needs a real HTTPS URL, or leave it empty for manual delivery.')
+    else:
+        page = page.replace('<a class="cta" href="{{CTA_HREF}}">{{CTA}}</a>', '')
+    plan = (f'<div class="gantt" style="grid-template-columns: 42mm repeat({weeks}, 1fr) 18mm">'
+            f'<span></span>{week_heads(weeks)}{gantt_rows(data.get("rows") or [], weeks)}</div>'
+            if weeks else f'<p>{OPEN}</p>')
     fields = {
         '{{LANG}}': esc(args.lang),
         '{{TITLE}}': value(data.get('headline')),
@@ -193,9 +205,7 @@ def main(argv=None):
         '{{PRICE}}': value(data.get('price')),
         '{{PRICE_NOTE}}': value(data.get('price_note')),
         '{{SKETCH}}': sketch(args.job_id),
-        '{{WEEKS}}': str(weeks),
-        '{{WEEK_HEADS}}': week_heads(weeks),
-        '{{GANTT_ROWS}}': gantt_rows(data.get('rows') or [], weeks),
+        '{{PLAN}}': plan,
         '{{SUMMARY}}': value(data.get('summary')),
         '{{FACTS}}': call_notes(data.get('call_notes')),
         '{{INCLUDED}}': benefits(data.get('included')),
@@ -203,7 +213,7 @@ def main(argv=None):
         '{{STONES_NOTE}}': value(data.get('stones_note')),
         '{{FINE}}': ''.join(f'<p>{value(line)}</p>' for line in (data.get('fine') or [''])),
         '{{CTA}}': value(data.get('cta')),
-        '{{CTA_HREF}}': esc(data.get('cta_href') or '#'),
+        '{{CTA_HREF}}': esc(href),
     }
     for key, label in (('L_STATE', 'state'), ('L_PLAN', 'plan'),
                        ('L_INCLUDED', 'included'), ('L_STONES', 'stones')):

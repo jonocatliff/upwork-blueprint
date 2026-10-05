@@ -16,7 +16,9 @@ Usage:
     python3 code/pipeline.py describe <job_id> "Plain-language summary of the work"
     python3 code/pipeline.py headline <job_id> "One sentence of at most 14 words"
     python3 code/pipeline.py observe <job_id> applied|replied <ISO timestamp> --source <source> --verified
-    python3 code/pipeline.py set <job_id> <status> [--follow-up +3d|YYYY-MM-DD] [--note "..."]
+    python3 code/pipeline.py set <job_id> <status> [--force] [--follow-up +3d|YYYY-MM-DD] [--note "..."]
+    python3 code/pipeline.py acted <job_id> --note "..." [--at <ISO timestamp>]
+    python3 code/pipeline.py record <job_id> --file <metadata.json>|-
     python3 code/pipeline.py follow-up <job_id> plan --lane <lane> --due <date> --reason "..."
     python3 code/pipeline.py follow-up <job_id> sent [--on YYYY-MM-DD]
     python3 code/pipeline.py follow-up <job_id> clear --reason "..."
@@ -91,7 +93,13 @@ def chat_keep_hours():
                     raw = value.strip()
         except OSError:
             pass
-    return int(raw) if raw and raw.isdigit() and int(raw) >= 1 else CHAT_KEEP_HOURS
+    if raw is None:
+        return CHAT_KEEP_HOURS
+    value = raw.split('#', 1)[0].strip().strip('\"\'').strip()
+    if value.isdigit():
+        return int(value)
+    print('WARNING: invalid KEEP_CHAT_HOURS; using 24 hours, not the 90-day default.', file=sys.stderr)
+    return 24
 
 # Two of the member's own decisions live inside details: the bid they approved and
 # the internal estimate behind it. Pruning Upwork's content must not take them.
@@ -296,6 +304,7 @@ def cmd_add(args):
         if rec['status'] not in STATUSES:
             abort(f'unknown status "{rec["status"]}" on {jid}. Allowed: {", ".join(STATUSES)}')
         rec.setdefault('status_updated_at', rec['found_at'])
+        rec.setdefault('last_activity_at', rec['status_updated_at'])
         rec.setdefault('next_follow_up', None)
         rec.setdefault('notes', '')
         add_history(rec, rec['status'], rec['found_at'])
@@ -344,9 +353,17 @@ def cmd_set(args):
         abort('applied proposals cannot have a follow-up before the client replies.')
     jobs = load()
     job = find(jobs, args.job_id)
+    current = job.get('status')
+    if (args.status in ('new', *ACTIVE, 'won') and current != args.status
+            and (current in ('lost', 'skipped') or STATUSES.index(args.status) < STATUSES.index(current))
+            and not args.force):
+        abort(f'{args.job_id}: {current} -> {args.status} goes backward; use --force to confirm it.')
     job['status'] = args.status
-    job['status_updated_at'] = now_iso()
-    add_history(job, args.status)
+    if current != args.status:
+        job['status_updated_at'] = now_iso()
+        activity = verified_timestamp(args.activity_at) if args.activity_at else job['status_updated_at']
+        job['last_activity_at'] = max(job.get('last_activity_at') or '', activity)
+        add_history(job, args.status, job['status_updated_at'])
     # applied_at is the day of the FIRST application and never moves. The daily
     # target counts it, so a later reply must not shift the day you applied.
     if args.status == 'applied' and not job.get('applied_at'):
@@ -380,6 +397,8 @@ def cmd_set(args):
         job['next_follow_up'] = None
     if args.status not in ('replied', 'call', 'offer', 'won'):
         job.pop('follow_up_plan', None)
+    if args.follow_up or not job.get('next_follow_up'):
+        job.pop('follow_up_source', None)
     if getattr(args, 'call_at', None):
         job['call_at'] = parse_follow_up(args.call_at)
     elif args.status != 'call':
@@ -391,10 +410,66 @@ def cmd_set(args):
     print(f'{job["id"]} -> {args.status}{follow}')
 
 
+def cmd_acted(args):
+    """Record activity without changing the stage, history or scheduled sequence."""
+    text = ' '.join(args.note.split())
+    if not text:
+        abort('activity needs a note.')
+    stamp = verified_timestamp(args.at) if args.at else now_iso()
+    jobs = load()
+    job = find(jobs, args.job_id)
+    previous = parse_verified_timestamp(job.get('last_activity_at'))
+    if args.at and previous and previous >= stamp:
+        print(f'{args.job_id}: activity already recorded.')
+        return
+    job['last_activity_at'] = stamp
+    job['notes'] = (job.get('notes', '') + ' ' + text).strip()
+    save(jobs)
+    print(f'{args.job_id}: activity recorded.')
+
+
+def cmd_record(args):
+    """Store connector identity and workflow markers through the sole writer."""
+    value = read_json_arg(args.file)
+    allowed = {'proposal_id', 'room_id', 'contract_id', 'contract_client', 'client_slug',
+               'submission_checked_at', 'result_recorded_at', 'next_follow_up', 'follow_up_source'}
+    if not isinstance(value, dict) or not value or set(value) - allowed:
+        abort('metadata needs only ' + ', '.join(sorted(allowed)) + '.')
+    for key, item in value.items():
+        if key == 'follow_up_source':
+            if item not in (None, 'waiting'):
+                abort('follow_up_source needs waiting or null to remove it.')
+        elif key.endswith('_at'):
+            value[key] = verified_timestamp(item)
+        elif key == 'next_follow_up':
+            if item is not None:
+                value[key] = parse_follow_up(item)
+        elif not isinstance(item, str) or not item.strip():
+            abort(f'{key} needs a non-empty string.')
+    if 'client_slug' in value and not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', value['client_slug']):
+        abort('client_slug needs a lowercase folder name.')
+    jobs = load()
+    job = find(jobs, args.job_id)
+    changed = False
+    for key, item in value.items():
+        if key == 'follow_up_source' and item is None:
+            changed = key in job or changed
+            job.pop(key, None)
+        elif (key not in ('submission_checked_at', 'result_recorded_at') or not job.get(key)) and job.get(key) != item:
+            job[key] = item
+            changed = True
+    if not changed:
+        print(f'{args.job_id}: metadata already recorded.')
+        return
+    save(jobs)
+    print(f'{args.job_id}: metadata recorded.')
+
+
 def cmd_follow_up(args):
     """Plan, advance or stop a context-chosen follow-up sequence."""
     jobs = load()
     job = find(jobs, args.job_id)
+    source = job.pop('follow_up_source', None)
 
     if args.action == 'plan':
         if not args.lane or not args.due:
@@ -437,16 +512,17 @@ def cmd_follow_up(args):
         reason = ' '.join((args.reason or '').split())
         job.pop('follow_up_plan', None)
         job['next_follow_up'] = None
-        if reason:
-            job.setdefault('follow_up_history', []).append({
-                'action': 'cleared', 'at': now_iso(), 'reason': reason[:500],
-            })
+        job.setdefault('follow_up_history', []).append({
+            'action': 'cleared', 'at': now_iso(), 'reason': reason[:500],
+        })
         save(jobs)
         print(f'{args.job_id}: follow-up sequence cleared.')
         return
 
     plan = job.get('follow_up_plan')
     if not isinstance(plan, dict):
+        if source:
+            save(jobs)
         print(f'{args.job_id}: no active follow-up sequence.')
         return
     # The member sends on Upwork and confirms it in Claude Code. One send per day
@@ -458,6 +534,8 @@ def cmd_follow_up(args):
     history = job.get('follow_up_history') or []
     if any(entry.get('action') == 'sent' and entry.get('on') == sent_day.isoformat()
            for entry in history):
+        if source:
+            save(jobs)
         print(f'{args.job_id}: this confirmed follow-up was already recorded.')
         return
     confirmation = f'manual:{sent_day.isoformat()}'
@@ -466,10 +544,12 @@ def cmd_follow_up(args):
     step = plan.get('step')
     if not gaps or not isinstance(step, int) or not 1 <= step <= len(gaps):
         abort(f'{args.job_id}: follow-up plan is invalid; clear it and review the conversation again.')
-    stamp = now_iso()
+    stamp = verified_timestamp(args.at) if args.at else now_iso()
+    job['last_activity_at'] = max(job.get('last_activity_at') or '', stamp)
     job.setdefault('follow_up_history', []).append({
         'action': 'sent', 'at': stamp, 'on': sent_day.isoformat(), 'lane': lane, 'step': step,
         'confirmation': confirmation,
+        'completed': step == len(gaps),
     })
     if step == len(gaps):
         job.pop('follow_up_plan', None)
@@ -748,7 +828,7 @@ def cmd_list(args):
 
 
 def applied_on(jobs, day):
-    return sum(1 for j in jobs if not j.get('application_date_unknown') and str(j.get('applied_at') or next(
+    return sum(1 for j in jobs if not j.get('imported') and not j.get('application_date_unknown') and str(j.get('applied_at') or next(
         (h.get('at') for h in j.get('history', []) if h.get('status') == 'applied'), ''))[:10] == day)
 
 
@@ -835,8 +915,7 @@ def cmd_prune(args):
             j['cache_pruned_at'] = now_iso()
     # A saved client thread is Upwork's content as well, whatever job it belongs to.
     # Chats alone follow chat_keep_hours(); see there for why nothing else does.
-    threads = [t for pattern in (jobs_dir().glob('*/thread.json'), data_dir().glob('chats/*.json'))
-               for t in pattern
+    threads = [t for t in jobs_dir().glob('*/thread.json')
                if t.is_file() and datetime.datetime.fromtimestamp(t.stat().st_mtime, datetime.timezone.utc) < chat_cutoff]
     # The saved profile and highlights are Upwork's answers about the member, so they
     # expire like any other response. Every reader treats them as optional.
@@ -1021,7 +1100,20 @@ def build_parser():
     p.add_argument('--note')
     p.add_argument('--applied-at', help='Verified submission timestamp, or unknown when sync only knows the current stage.')
     p.add_argument('--call-at', help='The day the call happens, YYYY-MM-DD. Until then the lead is left alone.')
+    p.add_argument('--force', action='store_true', help='Confirm a backward move or reopen a closed lead.')
+    p.add_argument('--activity-at', help='Observed activity time for sync; otherwise the member acted now.')
     p.set_defaults(func=cmd_set)
+
+    p = sub.add_parser('acted', help='Record activity without moving a lead.')
+    p.add_argument('job_id')
+    p.add_argument('--note', required=True)
+    p.add_argument('--at', help='Verified message time, for sync replay.')
+    p.set_defaults(func=cmd_acted)
+
+    p = sub.add_parser('record', help='Store connector identity and workflow markers.')
+    p.add_argument('job_id')
+    p.add_argument('--file', required=True, help='JSON metadata. "-" reads stdin.')
+    p.set_defaults(func=cmd_record)
 
     p = sub.add_parser('follow-up', help='Plan, advance or clear a contextual follow-up sequence.')
     p.add_argument('job_id')
@@ -1030,6 +1122,7 @@ def build_parser():
     p.add_argument('--due')
     p.add_argument('--reason')
     p.add_argument('--on', help='Date a follow-up was sent, for replay and tests.')
+    p.add_argument('--at', help='Verified message time, for sync replay.')
     p.set_defaults(func=cmd_follow_up)
 
     p = sub.add_parser('note', help='Add a line to a job\'s timeline.')

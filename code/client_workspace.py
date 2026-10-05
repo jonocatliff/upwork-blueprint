@@ -21,8 +21,10 @@ data/ and jobs/. The pipeline record keeps the slug, so the cockpit can point at
 """
 import argparse
 import datetime
+import json
 import pathlib
 import re
+import subprocess
 import sys
 
 import pipeline
@@ -43,6 +45,15 @@ def slugify(text):
 
 
 def client_name(job):
+    if job.get('contract_client'):
+        return str(job['contract_client'])
+    try:
+        thread = json.loads((pipeline.jobs_dir() / str(job['id']) / 'thread.json').read_text(encoding='utf-8'))
+        for message in thread.get('messages') or []:
+            if message.get('from') == 'client' and message.get('name'):
+                return str(message['name'])
+    except (OSError, json.JSONDecodeError):
+        pass
     client = job.get('client') or {}
     for key in ('company_name', 'name'):
         if client.get(key):
@@ -97,8 +108,13 @@ def cmd_new(args):
         abort(f'job {args.job_id} is "{job.get("status")}", not won. A client folder is for a '
               'started contract, not for a hope.')
 
-    slug = slugify(args.slug or client_name(job))
+    slug = slugify(args.slug or job.get('client_slug') or client_name(job))
     folder = CLIENTS / slug
+    result = subprocess.run([sys.executable, str(ROOT / 'code' / 'pipeline.py'),
+                             'record', str(args.job_id), '--file', '-'],
+                            input=json.dumps({'client_slug': slug}), capture_output=True, text=True)
+    if result.returncode:
+        abort(result.stderr.strip())
     if folder.exists():
         # /won runs a second time after delivery, so an existing folder is the normal
         # case then, not a collision. Opening it again would duplicate the client.
@@ -117,7 +133,7 @@ def cmd_new(args):
     else:
         copied = 'no project.md yet: run /won first, then copy the brief in'
 
-    pipeline.main(['set', str(args.job_id), 'won', '--note', f'client workspace clients/{slug}'])
+    pipeline.main(['note', str(args.job_id), f'client workspace clients/{slug}'])
     print(f'clients/{slug} opened with context.md and {", ".join(FOLDERS)}. {copied}.')
     print('Fill the open lines in context.md from the proposal before the first delivery day.')
     return 0

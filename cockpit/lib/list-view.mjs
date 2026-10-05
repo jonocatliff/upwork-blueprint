@@ -3,14 +3,14 @@
 // and an empty query is not a filter. A lead without a score ranks below every
 // scored lead instead of counting as a zero, and an unknown bid count like
 // `20 to 50` sorts last under competition.
-import { nextStep } from './next-step.mjs';
+import { nextStep, stageEnteredAt } from './next-step.mjs';
 import { ORDER } from './stages.mjs';
 
 const amount = value => {
   const match = String(value ?? '').replace(/,/g, '').match(/\d+(\.\d+)?/);
   return match ? parseFloat(match[0]) : -1;
 };
-const changedAt = job => job.status_updated_at || job.found_at || '';
+const changedAt = stageEnteredAt;
 const score = job => job.score ?? -1;
 
 export function searchJobs(jobs, query) {
@@ -47,6 +47,6 @@ export function sortJobs(jobs, sort = null) {
 }
 
 export function daysInStage(job, now = Date.now()) {
-  const at = Date.parse(job.status_updated_at || '');
+  const at = Date.parse(stageEnteredAt(job));
   return Number.isNaN(at) ? null : Math.max(0, Math.floor((now - at) / 864e5));
 }

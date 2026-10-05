@@ -12,19 +12,21 @@ when it ran. Status changes go through code/pipeline.py, the one writer. A saved
 thread is Upwork content, so `pipeline.py prune` deletes it after KEEP_CHAT_HOURS (90 days).
 
 The snapshot, one JSON object (every list optional):
-    {"proposals": [{"job_id", "title", "url", "status", "applied_at"}],
+    {"proposals": [{"job_id", "proposal_id", "room_id", "title", "url", "status", "applied_at"}],
      "no_rooms":  ["job_id"],
-     "offers":    [{"job_id", "title", "state"}],
-     "contracts": [{"job_id", "title", "status"}],
+     "offers":    [{"job_id", "offer_id", "title", "state", "client_name"}],
+     "contracts": [{"job_id", "contract_id", "title", "status", "client_name"}],
      "threads":   [{"job_id", "room_id", "awaiting_reply_from", "messages_complete", "messages":
                     [{"from": "client"|"me", "name", "at", "text"}]}]}
-Offers and contracts without a job_id are matched by exact title.
+Offers and contracts without a job_id are matched by stored contract id or unique
+exact title. An unmatched record needs a stable offer_id or contract_id to import.
 
 `applied_at` is the proposal's Upwork creation time. `messages_complete` is true
 only when connector pagination explicitly proves there are no older messages.
 """
 import argparse
 import datetime
+import hashlib
 import json
 import os
 import pathlib
@@ -43,7 +45,9 @@ EXITS = ('lost', 'skipped')
 # Upwork's proposal words. "Accepted" means submitted, not that the client said yes.
 PROPOSAL_STAGE = {'accepted': 'applied', 'pending': 'applied', 'activated': 'applied',
                   'offered': 'offer', 'hired': 'won', 'declined': 'lost', 'withdrawn': 'lost'}
-OFFER_STAGE = {'awaiting_your_acceptance': 'offer', 'contract_started': 'won'}
+OFFER_STAGE = {'awaiting_your_acceptance': 'offer', 'contract_started': 'won',
+               'declined': 'lost', 'withdrawn': 'lost', 'expired': 'lost'}
+CONTRACT_STAGE = {'active': 'won', 'paused': 'won', 'closed': 'won'}
 
 
 def data_dir():
@@ -56,6 +60,19 @@ def run_pipeline(*args, stdin=None):
     if r.returncode:
         print(r.stderr.strip(), file=sys.stderr)
     return r.returncode == 0
+
+
+def record_metadata(job, value):
+    """Record only changed metadata, including removal of the waiting marker."""
+    changed = {key: item for key, item in value.items() if job.get(key) != item}
+    if not changed:
+        return True
+    if not run_pipeline('record', job['id'], '--file', '-', stdin=json.dumps(changed)):
+        return False
+    job.update(changed)
+    if changed.get('follow_up_source', 'waiting') is None:
+        job.pop('follow_up_source', None)
+    return True
 
 
 def verified_timestamp(value):
@@ -111,6 +128,30 @@ def first_complete_client_message(thread):
     return min(stamps, default=None)
 
 
+def source_stage(item, kind):
+    key, stages = {'proposals': ('status', PROPOSAL_STAGE), 'offers': ('state', OFFER_STAGE),
+                   'contracts': ('status', CONTRACT_STAGE)}[kind]
+    raw = str(item.get(key) or '')
+    stage = stages.get(raw.lower())
+    if stage is None:
+        print(f'WARNING: unknown {kind} status {raw!r}.', file=sys.stderr)
+    return stage
+
+
+def matched_id(item, jobs):
+    if item.get('contract_id'):
+        matches = [j['id'] for j in jobs if j.get('contract_id') == str(item['contract_id'])]
+        if len(matches) == 1:
+            return matches[0]
+    if item.get('job_id'):
+        return str(item['job_id'])
+    title = str(item.get('title') or '').strip().lower()
+    matches = [j['id'] for j in jobs if title and str(j.get('title') or '').strip().lower() == title
+               and not (item.get('contract_id') and j.get('contract_id')
+                        and str(item['contract_id']) != j['contract_id'])]
+    return matches[0] if len(matches) == 1 else None
+
+
 def evidence(snapshot, jobs):
     """Per job id: the furthest stage Upwork shows, and whether it says lost."""
     by_title = {}
@@ -126,13 +167,9 @@ def evidence(snapshot, jobs):
             seen.setdefault(job_id, set()).add(stage)
         return job_id
 
-    for p in snapshot.get('proposals') or []:
-        note(p.get('job_id'), p.get('title'), PROPOSAL_STAGE.get(str(p.get('status', '')).lower()))
-    for o in snapshot.get('offers') or []:
-        note(o.get('job_id'), o.get('title'), OFFER_STAGE.get(str(o.get('state', '')).lower()))
-    for c in snapshot.get('contracts') or []:
-        if str(c.get('status', '')).upper() in ('ACTIVE', 'PAUSED', 'CLOSED'):
-            note(c.get('job_id'), c.get('title'), 'won')
+    for kind in ('proposals', 'offers', 'contracts'):
+        for item in snapshot.get(kind) or []:
+            note(matched_id(item, jobs), item.get('title'), source_stage(item, kind))
     for t in snapshot.get('threads') or []:
         if any(isinstance(m, dict) and m.get('from') == 'client' for m in t.get('messages') or []):
             note(t.get('job_id'), None, 'replied')
@@ -142,7 +179,7 @@ def evidence(snapshot, jobs):
 def target(current, stages):
     """The status Upwork's evidence calls for, or None when nothing should move."""
     best = max((s for s in stages if s in RANK), key=RANK.get, default=None)
-    if 'lost' in stages and not ({'offer', 'won'} & stages) and current not in ('won', 'lost'):
+    if 'lost' in stages and 'won' not in stages and current not in ('won', 'lost'):
         return 'lost'
     if current in EXITS:
         # Only real movement reopens a closed lead: an offer or a started contract.
@@ -157,18 +194,43 @@ def cmd_apply(args):
     snapshot = json.loads(raw)
     jobs = pipeline.load()
     known = {j['id'] for j in jobs}
+    first_import = not (data_dir() / 'sync.json').is_file()
 
     added = []
-    for p in snapshot.get('proposals') or []:
-        jid = str(p.get('job_id') or '')
-        stage = PROPOSAL_STAGE.get(str(p.get('status', '')).lower())
-        if jid and jid not in known and stage:
-            record = {'id': jid, 'title': p.get('title') or 'Untitled job', 'url': p.get('url') or '',
-                      'status': stage, 'found_via': ['sync'], 'notes': 'sent outside the cockpit'}
-            record['application_date_unknown'] = True
-            if run_pipeline('add', '--file', '-', stdin=json.dumps(record)):
-                added.append(jid)
-                known.add(jid)
+    for kind in ('proposals', 'offers', 'contracts'):
+        for item in snapshot.get(kind) or []:
+            jid = matched_id(item, jobs)
+            stage = source_stage(item, kind)
+            if not jid and stage:
+                identity = item.get('contract_id') or item.get('offer_id')
+                if identity:
+                    # A decimal local id works with every lead command. The source
+                    # kind is included so unrelated platform ids cannot collide.
+                    digest = hashlib.sha256(f'{kind}:{identity}'.encode()).digest()
+                    jid = str(int.from_bytes(digest[:10], 'big'))
+                else:
+                    print(f'WARNING: unmatched {kind} record has no stable id; not imported.', file=sys.stderr)
+            if jid and jid not in known and stage:
+                record = {'id': jid, 'title': item.get('title') or 'Untitled job', 'url': item.get('url') or '',
+                          'status': stage, 'found_via': ['sync'], 'notes': 'imported Upwork history',
+                          'imported': first_import or kind != 'proposals', 'application_date_unknown': True}
+                activity = max((verified_timestamp(message.get('at')) or ''
+                                for thread in snapshot.get('threads') or [] if str(thread.get('job_id')) == jid
+                                for message in thread.get('messages') or [] if isinstance(message, dict)
+                                and message.get('from') in ('me', 'client') and message.get('kind') != 'event'), default='')
+                if activity:
+                    record['last_activity_at'] = activity
+                if run_pipeline('add', '--file', '-', stdin=json.dumps(record)):
+                    added.append(jid)
+                    known.add(jid)
+                    jobs = pipeline.load()
+            if jid in known:
+                metadata = {key: str(item[key]) for key in ('proposal_id', 'room_id', 'contract_id') if item.get(key)}
+                if item.get('client_name'):
+                    metadata['contract_client'] = str(item['client_name'])
+                if metadata:
+                    record_metadata(next(j for j in jobs if j['id'] == jid), metadata)
+                item['job_id'] = jid
     jobs = pipeline.load()
 
     today = datetime.date.today().isoformat()
@@ -181,7 +243,14 @@ def cmd_apply(args):
         new = target(job.get('status'), stages)
         if new:
             date_args = ['--applied-at', 'unknown'] if new == 'applied' else []
-            if run_pipeline('set', jid, new, *date_args):
+            force = ['--force'] if job.get('status') in EXITS else []
+            activity = max((verified_timestamp(message.get('at')) or ''
+                            for message in (threads.get(jid) or {}).get('messages') or []
+                            if isinstance(message, dict) and message.get('from') in ('me', 'client')
+                            and message.get('kind') != 'event'), default='')
+            activity = activity or verified_timestamp(job.get('last_activity_at') or job.get('status_updated_at'))
+            activity_args = ['--activity-at', activity] if activity else []
+            if run_pipeline('set', jid, new, *date_args, *force, *activity_args):
                 moved.append({'id': jid, 'from': job.get('status'), 'to': new})
                 job['status'] = new
 
@@ -208,17 +277,51 @@ def cmd_apply(args):
     for jid, stamp in reply_observations.items():
         run_pipeline('observe', jid, 'replied', stamp, '--source', 'upwork-thread', '--verified')
 
-    # A client waiting on you is a follow-up due today, whatever the stage says.
+    # A sync replays message times, never poll time. Observed sends advance the
+    # sequence before client replies stop it, so the same nudge is not drafted twice.
     for jid, t in threads.items():
-        job = next((j for j in jobs if j['id'] == jid), None)
+        job = next((j for j in pipeline.load() if j['id'] == jid), None)
         if not job:
             continue
         thread_io.save(jid, t.get('messages') or [], t.get('room_id'), t.get('awaiting_reply_from'))
+        if t.get('room_id'):
+            record_metadata(job, {'room_id': str(t['room_id'])})
+        messages = [(verified_timestamp(m.get('at')), m) for m in t.get('messages') or []
+                    if isinstance(m, dict) and m.get('from') in ('me', 'client') and m.get('kind') != 'event']
+        messages = sorted((pair for pair in messages if pair[0]), key=lambda pair: pair[0])
+        activity_at = verified_timestamp(job.get('last_activity_at')) or ''
+        new_messages = [pair for pair in messages if pair[0] > activity_at]
+        plan = job.get('follow_up_plan') or {}
+        last = (job.get('follow_up_history') or [{}])[-1]
+        follow_up_at = max(verified_timestamp(plan.get('reviewed_at')) or '',
+                           verified_timestamp(last.get('at')) or '')
+        for stamp, message in (pair for pair in messages if follow_up_at and pair[0] > follow_up_at):
+            plan = job.get('follow_up_plan') or {}
+            reviewed = verified_timestamp(plan.get('reviewed_at'))
+            if message.get('from') == 'me' and reviewed and stamp > reviewed:
+                if run_pipeline('follow-up', jid, 'sent', '--on', stamp[:10], '--at', stamp):
+                    job = next(j for j in pipeline.load() if j['id'] == jid)
+            last = (job.get('follow_up_history') or [{}])[-1]
+            stopped_at = verified_timestamp(last.get('at'))
+            if (message.get('from') == 'client' and stopped_at and stamp > stopped_at
+                    and (last.get('action') == 'cleared' or last.get('completed'))):
+                if run_pipeline('follow-up', jid, 'clear', '--reason', 'The client replied; review the new message first.'):
+                    job = next(j for j in pipeline.load() if j['id'] == jid)
+        if new_messages:
+            stamp, message = new_messages[-1]
+            if stamp > (verified_timestamp(job.get('last_activity_at')) or ''):
+                run_pipeline('acted', jid, '--at', stamp, '--note',
+                             'Client replied on Upwork.' if message.get('from') == 'client' else 'Member sent a message on Upwork.')
+        job = next(j for j in pipeline.load() if j['id'] == jid)
         if t.get('awaiting_reply_from') == 'you' and job.get('status') not in ('lost', 'skipped'):
             if job.get('follow_up_plan'):
                 run_pipeline('follow-up', jid, 'clear', '--reason', 'The client replied; review the new message first.')
-            if job.get('status') in ('replied', 'call', 'offer', 'won') and run_pipeline('set', jid, job['status'], '--follow-up', today):
+                job = next(j for j in pipeline.load() if j['id'] == jid)
+            if job.get('status') in ('replied', 'call', 'offer', 'won') and record_metadata(
+                    job, {'next_follow_up': today, 'follow_up_source': 'waiting'}):
                 waiting.append(jid)
+        elif not job.get('follow_up_plan') and job.get('follow_up_source') == 'waiting':
+            record_metadata(job, {'next_follow_up': None, 'follow_up_source': None})
 
     # Expiration needs fresh evidence that this exact proposal was checked and
     # still has no room. Absence from a limited proposal page proves nothing.
@@ -236,7 +339,7 @@ def cmd_apply(args):
     for m in moved:
         print(f'moved   {m["id"]}  {m["from"]} -> {m["to"]}')
     for jid in added:
-        print(f'added   {jid}  (a proposal sent outside the cockpit)')
+        print(f'added   {jid}  (imported Upwork history)')
     for jid in waiting:
         print(f'waiting {jid}  (the client is waiting for your reply)')
     print(f'\n{len(moved)} moved, {len(added)} added, {len(threads)} threads saved, '

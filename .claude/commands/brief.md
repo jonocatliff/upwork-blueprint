@@ -18,48 +18,45 @@ this repository.
 **With a job id** it does one lead: refresh that thread, say where it stands, draft what is
 due. **Without one** it does the whole pipeline.
 
-Roadmap: read Upwork (about a minute), apply it, say where every lead stands, draft what is
-due, then put each draft to you on its own. The reading half needs nothing from you. The
-last part is one question per message, and no answer leaves that draft for you to handle.
+## ROADMAP
+
+WHAT HAPPENS: read Upwork, apply it, report every active lead and draft due messages. About two minutes before drafts.
+I NEED FROM YOU: one decision per message and any closure reason; reading needs no input.
+WHAT MIGHT GO WRONG: missing IDs or ambiguous pagination can leave a thread unverified; an unconfirmed send stays manual.
 
 ## Step 1 · Read what Upwork shows
 
-Skip this step when `data/sync.json` is younger than two hours and the member did not ask
-for a fresh pull; say so in one line and go to Step 3, because Upwork content may be cached
-for 24 hours and a second pull inside a coffee break buys nothing.
+With an id, always refresh that lead's thread. Otherwise skip this step when
+`data/sync.json` is younger than two hours and no fresh pull was requested; say so and go to Step 3.
 
 Use `list_accounts` for the `org_uid` once. Then, all read only:
 
-1. `list_freelancer_proposals` action `list`, first page, sorted by `MODIFIEDDATETIME`
-   descending. The status filter was measured broken on 12 September: requested statuses
-   returned empty or the same mixed list. Use one documented status only if the tool
-   requires it, classify every returned item from its own `status`, and never read an empty
-   page as proof that no proposal exists. If the first response is empty and the pipeline
-   has applied jobs, try one other documented status and report the connector uncertainty.
-   Keep each proposal's Upwork creation timestamp as `applied_at` when present: it repairs
-   imported applications whose date was unknown, even when their stage does not move.
-2. `list_offers` action `list_mine`, first page.
-3. `list_contracts` action `search` with `contract_statuses` `ACTIVE`, first page.
-4. For every job in `python3 code/pipeline.py list --status applied --limit 0`, then the
-   same call with `--status replied`, `--status call` and `--status offer`, each `--limit 0` (without
-   `--limit 0` the list stops at 25) that has a proposal from step 1:
-   `list_freelancer_proposals` action `get_room` with its proposal id. When it explicitly
-   returns no room, add that job id to `no_rooms`; never add an unchecked job. A room:
-   `get_messages` action `list_messages`, newest 30 messages. Take `awaiting_reply_from`
-   from the room card (`get_messages` action `list_rooms` once, limit 50, covers them all).
-   Set `messages_complete` true only when the pagination metadata explicitly proves there is
-   no older page. Missing or ambiguous pagination means false. Never infer completeness
-   because fewer than 30 messages happened to return.
-
-Keep it that narrow: one first page per proposal attempt, one page for offers and
-contracts, threads only for jobs already in the pipeline. Reading every room in the account
-is outside this member-started sync.
+1. Read active records with `python3 code/cockpit.py state`: applied, replied, call,
+   offer, and won with a reactivation plan. With an id, use only that record.
+2. Page only to backfill missing `proposal_id`. Use `list_freelancer_proposals`
+   action `list`, sorted by `MODIFIEDDATETIME` descending, and its documented pagination.
+   Stop when every missing active lead is matched or pages run out; with no missing IDs,
+   skip the list. On the first sync (`data/sync.json` absent), read one page to import account history.
+   The status filter was measured broken on 12 September: classify each returned status.
+   An empty response proves nothing; try one other documented status if needed and report uncertainty.
+   Match by job id, keep `proposal_id` and creation time as `applied_at`. Use `get_room`
+   for every selected lead with a proposal id but no stored room, including previously matched leads. Persist both IDs through
+   `python3 code/pipeline.py record <id> --file -` for known leads; new ones go in the snapshot.
+   Explicitly no room: add only that checked job id to `no_rooms`. Stop paging once matched,
+   even if a matched proposal has no room; it can be checked directly by proposal id next run.
+3. Without an id, read `list_offers` action `list_mine` and `list_contracts` action
+   `search` with `contract_statuses` `ACTIVE`, one page each. Keep their stable IDs and client names.
+4. Refresh every selected thread by stored `room_id`, even when its proposal was not listed.
+   Use `get_messages` action `list_messages`, newest 30 messages. Read room cards for
+   `awaiting_reply_from`; page `list_rooms` only until selected rooms are covered or pages end.
+   Name missing room metadata instead of assuming who owes the reply. Set `messages_complete`
+   true only when pagination explicitly proves no older page; fewer than 30 messages is no proof.
 
 ## Step 2 · Apply it
 
 Write one JSON object as the docstring of `code/sync.py` describes (proposals with
-`job_id`, `title`, `url`, `status` and `applied_at` when returned; `no_rooms` with only job
-ids explicitly checked in this run; offers with `state`; contracts with `status`; threads
+`job_id`, `proposal_id`, `room_id`, `title`, `url`, `status` and `applied_at` when returned; `no_rooms` with only job
+ids checked this run; offers with `offer_id`, `state`; contracts with `contract_id`, `status`; both with `client_name`; threads
 with `job_id`, `room_id`, `awaiting_reply_from`, `messages_complete` and the messages as
 `from` client or me, `name`, `at`, `text`, oldest first), then:
 
@@ -69,11 +66,14 @@ It moves jobs only forward, adds proposals submitted on Upwork, saves each threa
 application to Lost after 14 full days only when this run verified that its proposal still
 has no room, turns a client waiting on you into a follow-up due today, and records the time
 of this sync. Then `python3 code/pipeline.py prune`.
+First-sync creations are imported history, excluded from funnel and application counts;
+an imported Hired proposal does not ask for a handover. Unmatched offers and contracts are imported too.
 
 ## Step 3 · Where every lead stands
 
 The part the member reads first. One line per open lead, ordered by what needs them
-soonest, from `python3 code/pipeline.py list --limit 0`:
+soonest, from `python3 code/cockpit.py state`: client from the card or saved thread;
+time in stage from the latest history entry for its current status, with `status_updated_at` as a legacy fallback.
 
 **who** · **stage and how long they have sat in it** · **waiting, acting, or a follow-up
 already set for a date** · **the one action item, in their words**.
@@ -84,8 +84,8 @@ about the timeline" beats "reply pending".
 Then three numbers: how many wait on the member, how many wait on a client, and how many
 have sat in their stage longer than a week. The last one is what a stalling pipeline looks
 like before it feels like one. Then stop: the cockpit is where the state lives, and this
-report is where the decisions are. Never retell the list it already shows, and when the two
-disagree, the pipeline record is right and the cockpit is a view of it.
+report is where the decisions are. The pipeline record is right when they disagree.
+On the member's word, close a lead with `python3 code/pipeline.py set <id> lost --note "<reason>"`.
 
 ## Step 4 · Draft what is due
 
@@ -105,8 +105,8 @@ Name the moment, because it decides the next command:
   does not. When the thread names a date, add `--call-at <YYYY-MM-DD>`: until that
   day the lead is left alone, and from the day after, its task is the one-pager,
   `/proposal <id> <transcript path or notes>`.
-- **Nothing was scheduled and the client owes an answer:** the cockpit asks for a nudge
-  every two days, counted from the last thing that happened on the lead. Recording the send
+- **Nothing was scheduled and the client owes an answer:** unless its sequence finished or
+  stopped, the cockpit asks every two days from `last_activity_at`. Recording the send
   clears the stale date and the two days count again. Set an explicit date with
   `--follow-up` only when the conversation gives you one, such as "call me after the 12th".
 - **The client sent their website:** the pitch page promised the free audit. The drafts
@@ -121,10 +121,9 @@ Name the moment, because it decides the next command:
   in one line what it found that matters most, and name the next step. This is the moment
   `/lead-magnet` hands back to, and it is worth its own draft: the audit was the promise the
   application was won on.
-- **A lead says applied and Upwork has never shown a proposal for it:** ask once whether it
-  was actually submitted. That stage was set on the member's word, so a lead they wrote and
-  never pasted sits in the pipeline forever, counts in the day's application total and can
-  never reach the fourteen-day exit, which needs a proposal to expire. On a no, run
+- **An applied lead older than three days has no `proposal_id` and no `submission_checked_at`:**
+  record `submission_checked_at` with the current ISO time through `pipeline.py record`,
+  then ask once whether it was submitted, even if the member never answers. On a no, run
   `python3 code/pipeline.py set <id> skipped --note "never submitted"`. Ask only for leads
   older than three days, and only once each.
 - **The client named a result or left a review:** this is the only place where
@@ -171,11 +170,12 @@ client and what it answers, and ask about that one. A list of five with a single
 underneath is the thing this step exists to prevent, and "all of them" answers none of them.
 
 **On a yes**, put that one message into the thread through the connector, then read the room
-back to see it arrived. Say what went out and to whom. Record it with
+back to see it arrived. Apply that refreshed thread through `code/sync.py` Step 2,
+so the saved waiting state and observed follow-up send match the room. Record it with
 `python3 code/replies.py sent <id> --label "<the label they chose>"`, which writes that
 draft's own words into the lead's log, because the send leaves no trace here otherwise and a
 week later nobody can say which version went out. Then
-`python3 code/pipeline.py set <id> <status>`, and with
+`python3 code/pipeline.py acted <id> --note "Message sent on Upwork"`, and
 `python3 code/pipeline.py follow-up <job id> sent` when it was a follow-up, because the
 sequence advances on arrival, never on the draft.
 
