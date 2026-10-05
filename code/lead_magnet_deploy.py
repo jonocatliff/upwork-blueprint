@@ -92,6 +92,7 @@ def publish(job_id):
 
     title = re.search(r'<title>(.*?)</title>', source.read_text(encoding='utf-8'), re.I | re.S)
     pitch_deploy.verify_public(url, title.group(1).strip() if title else '')
+    pitch_deploy.save_host(host, config)
     pitch_deploy.run(
         [sys.executable, str(ROOT / 'code' / 'pipeline.py'), 'lead-magnet-url', job_id, url], config, ROOT)
     print(f'Published {url}')

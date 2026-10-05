@@ -667,10 +667,19 @@ def fixture_publish():
     assert pitch_deploy.production_host('https://example.com') == ''
     config = pitch_deploy.deployment_config({'VERCEL_PITCH_PROJECT': 'upwork-pitches-fixture'})
     deployment = SimpleNamespace(stdout=stdout)
-    inspected = SimpleNamespace(returncode=0, stdout=json.dumps({'alias': ['member-stable.vercel.app']}))
+    # The shape Vercel CLI 50.1.6 returned on a live deploy on 5 October 2026: the
+    # short project alias is public, the longer team alias sits behind Vercel login.
+    inspected = SimpleNamespace(returncode=0, stdout=json.dumps({'aliases': [
+        'upwork-pitches-fixture-team-projects.vercel.app', 'upwork-pitches-fixture.vercel.app']}))
     with patch.object(pitch_deploy.subprocess, 'run', return_value=inspected) as runner:
-        assert pitch_deploy.resolve_host('vercel', config, deployment) == 'member-stable.vercel.app'
+        assert pitch_deploy.resolve_host('vercel', config, deployment) == 'upwork-pitches-fixture.vercel.app'
         assert runner.call_args.args[0][1:4] == ['inspect', stdout.strip(), '--json']
+    legacy = SimpleNamespace(returncode=0, stdout=json.dumps({'alias': ['member-stable.vercel.app']}))
+    with patch.object(pitch_deploy.subprocess, 'run', return_value=legacy):
+        assert pitch_deploy.resolve_host('vercel', config, deployment) == 'member-stable.vercel.app'
+    # Resolving keeps nothing; only a host that just opened publicly is saved.
+    assert pitch_deploy.deployment_config({'VERCEL_PITCH_PROJECT': config['project']})['domain'] == ''
+    pitch_deploy.save_host('member-stable.vercel.app', config)
     assert pitch_deploy.deployment_config({'VERCEL_PITCH_PROJECT': config['project']})['domain'] == 'member-stable.vercel.app'
     for inspected in (SimpleNamespace(returncode=0, stdout='{bad json'),
                       SimpleNamespace(returncode=1, stdout=''),

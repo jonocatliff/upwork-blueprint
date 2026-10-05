@@ -129,7 +129,8 @@ def resolve_host(vercel, config, deployment):
     if not result.returncode:
         try:
             info = json.loads(result.stdout)
-            aliases = info.get('alias', []) if isinstance(info, dict) else []
+            # Vercel CLI 50 names the list `aliases`; older output used `alias`.
+            aliases = (info.get('aliases') or info.get('alias') or []) if isinstance(info, dict) else []
         except json.JSONDecodeError:
             pass
     aliases = aliases if isinstance(aliases, list) else []
@@ -143,7 +144,6 @@ def resolve_host(vercel, config, deployment):
                 else plain[0] if plain else min(aliases, key=len))
     if not HOST_RE.fullmatch(host):
         abort('Vercel returned an invalid public hostname.')
-    save_host(host, config)
     return host
 
 
@@ -231,6 +231,8 @@ def publish(job_id):
 
     title = re.search(r'<title>(.*?)</title>', source.read_text(encoding='utf-8'), re.I | re.S)
     verify_public(url, title.group(1).strip() if title else '')
+    # Only an address that just opened publicly is kept for the next run.
+    save_host(host, config)
     run([sys.executable, str(ROOT / 'code' / 'pipeline.py'), 'pitch-url', job_id, url], config, ROOT)
     print(f'Published {url}')
     return url
