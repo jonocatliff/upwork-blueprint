@@ -116,7 +116,8 @@ resolving it by hand. The commands call `python3`; Windows requires WSL.
   does not act on; read the folder before claiming it lacks something
 - `templates/` - the pitch page, the audit report, the proposal, and the
   roadmaps a client sees, one for SEO and one for Google Ads; each redraws from
-  the `ROWS` and `MS` lists at the bottom of its own file
+  the `ROWS` and `MS` lists at the bottom of its own file. `templates/profile/`
+  holds one measured profile orientation per lane for `/profile`
 - `cockpit/` - the read-only dashboard · `starters/` - the empties
 - `RESEARCH.md` - what we know about Upwork that this system does not act on:
   scores, badges, what the market pays, which sources did not hold. Nothing

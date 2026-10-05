@@ -106,6 +106,7 @@ public.
 
 ## Step 4 · Write profile.md
 
+For a member in SEO, Google Ads, WordPress or GoHighLevel, read the matching file in `templates/profile/` first: orientation and measured vocabulary, never text to paste.
 Every finding from Steps 1 and 2 is fixed here rather than listed. A finding this
 command cannot fix itself, because it needs the member's hands on Upwork, becomes
 a line in `## Profile fields` or `## Completeness` with what it costs. Nothing
