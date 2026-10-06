@@ -5,10 +5,10 @@ argument-hint: "[a CV file, a LinkedIn or portfolio URL, or focus: background | 
 
 # /context
 
-The first command, before the connector and before any text a client reads. It
-fills `context/me.md`, and every later command writes from
+The first command, run once the Upwork connector is connected and before any text a
+client reads. It fills `context/me.md`, and every later command writes from
 it. Nothing here is public, and nothing is sent: it reads your own profile
-when the connector is there, and writes one local file.
+and the market, and writes one local file.
 
 Follow `references/copy.md` for how to ask. Read
 [references/profile.md](../../references/profile.md) first: it says which facts
@@ -94,10 +94,13 @@ argument skips this question and goes straight to that block.
 This is the first command a member runs, so it is the one place where the state
 of their machine gets named before it costs them a run halfway through.
 
-Run `./setup.sh` (safe at any time: it creates missing files, never overwrites),
-then `python3 code/tools_status.py`. Then check the Upwork connector yourself.
-Its tools are either in this session or they are not, and that is the one line
-the script cannot fill in, because no process on this machine can see it.
+Check the Upwork connector first: call `list_accounts`. With no answer, stop, show
+the three steps in [README.md: Connect Upwork](../../README.md#connect-upwork) and
+wait. Nothing below runs until it answers, because the interview reads the live
+profile and checks demand on Upwork.
+
+Then run `./setup.sh` (safe at any time: it creates missing files, never
+overwrites) and `python3 code/tools_status.py`.
 
 Show the member what came back, in this order and in their words:
 
@@ -106,18 +109,14 @@ Show the member what came back, in this order and in their words:
 - **What is missing**, one line each: what it would buy them, which command wants
   it, and what happens without it. Say that every one of these can be skipped,
   and that skipping costs exactly the one thing named beside it.
-- **The Upwork connector**, last and on its own, because it is the only entry
-  nothing replaces. `/profile`, `/find-jobs` and `/brief` stop without it.
-  Follow [README.md: Connect Upwork](../../README.md#connect-upwork).
-
-Then say plainly that none of it blocks this command: `/context` writes one local
+Then say plainly that none of that blocks this command: `/context` writes one local
 file and sends nothing. Never wait for an install, never ask which keys they
-should buy, and never hold back the questions below because something is missing.
+should buy, and never hold back the questions below because one of them is missing.
 
 1. Run `python3 code/workspace.py`.
 2. Read `context/me.md`. A line reading "not answered yet"
    is an open question, anything else is an answer to confirm, not to ask again.
-3. **When the connector is there, read the profile they already have.**
+3. **Read the profile they already have.**
    `get_profile` action `get` saved to `data/profile.json`, `get_profile` action
    `list_highlights` to `data/highlights.json`, and `list_contracts` action
    `search` on closed contracts, which names what clients actually hired them
@@ -135,8 +134,7 @@ should buy, and never hold back the questions below because something is missing
    verified. A contract title proves they were hired, never that a number
    happened.
 
-   Skip all three without a word when the tools are not connected: this command
-   runs before the connector and never waits for one.
+   The connector answered in Step 0, so make all three calls.
 4. **Job Success Score and intro video** are not in these responses, measured
    12 September 2026. Step 3 collects them once; leave unknown values open.
 
@@ -212,17 +210,21 @@ without a deliverable and a price makes every later command invent one.
    - **leaning**, they name two or three candidates: the profile leads with the
      strongest one, the search covers all of them, and the first ten
      applications decide instead of an opinion.
-   - **open**, no tendency yet: propose two or three directions out of their
-     background with the reason each, let them pick one to test, and keep the
-     search wide until replies say something. Never write a specialization into
-     a profile that the member has not chosen.
+   - **open**, no tendency yet: keep the search wide until replies say something.
+     Never write a specialization into a profile that the member has not chosen.
 
-   With nothing in the background to point at, offer the Blueprint's default
-   four, each one a lane a beginner can enter with tool skill rather than years:
-   GoHighLevel for agencies and local businesses, workflow automation with Make
-   or n8n, AI assistants and chatbots on top of either, and small business
-   websites. Pick by overlap with the jobs they have held, not by what sounds
+   **Offer the lanes first, for every member.** Read `templates/profile/lanes.md`:
+   five lanes, each with its services and the course that teaches it. Show all
+   five and let the member tick every service they can picture doing, then narrow
+   to two or three by overlap with the jobs they have held, not by what sounds
    biggest, and say that the first ten applications test the choice.
+   **Custom additions come second.** A direction out of their background that no
+   lane covers is offered after the lanes with the reason, labelled custom: no
+   template, no course, harder to sell. Search Upwork for it and for something
+   similar (`find_jobs` search only, rows only, call budget stated first) and show
+   postings in the last 7 days, median price and proposal counts, with n and
+   today's date, next to the same figures for the lanes. Flag low demand and let
+   the member decide; never block.
 4. **What you do not do.** One line. It protects every later proposal.
 5. **The industries they want to work with**, in their own words, written as
    `**Industries you want to work with:**` in `context/me.md`. This is a preference,
@@ -359,5 +361,5 @@ rebuilt any time with the same command.
 Then the completion report as CLAUDE.md defines it: how many questions stayed
 open and which single answer would be worth the most. Next step: `/profile`, which measures
 the live profile and then writes the one that fixes it.
-End with `Upwork calls: N`: zero without the connector, three with it, for the
-profile, its highlights and the closed contracts.
+End with `Upwork calls: N`: the account check, the profile, its highlights and the
+closed contracts, plus one search per custom direction checked.
