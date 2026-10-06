@@ -254,8 +254,11 @@ already shown how they write.
    proof in the chosen branches, the rates in
    [references/jobs.md](../../references/jobs.md) and one live search for those
    branches (rows only, hourly ranges and fixed-price medians, with n and today's
-   date). You read those pages; the member gets a number, never a link or a page
-   to read. Label what is measured and what is guess, then ask what they would
+   date). Add a peer check: search the web for published rates of people doing the
+   same work from similar countries, and read the few public Upwork profiles you
+   find through `get_profile` with a `profile_key`. You read those pages; the
+   member gets a number, never a link or a page to read. Label what is measured
+   and what is guess, then ask what they would
    actually quote: a number they cannot defend on a call is worth nothing. Where
    they live decides which clients and hours fit, never a discount, and never talk
    them down to compete. Whatever they land on goes into the `**Hourly rate:**` line as
