@@ -110,12 +110,12 @@ exists. **No markdown:** Upwork shows asterisks as asterisks, so structure comes
 emoji or prose. **Results carry numbers, not adjectives**, one line each:
 `BUILT/DELIVERED [what] for [kind of company], achieving [specific result with number] in [timeframe]`.
 
-**One line is one sentence of 6 to 14 words**, paragraphs 1 to 3 sentences; prose beats checkmark
-lists. **The perspective flips twice:** hook in "you" and "your", middle in "I build" and "I help",
-close as an imperative back to "you". Near the end, a **keyword block** for search rather than humans,
-covering spellings the prose never uses. **Answer one objection**, usually "it will not break" or "you
-will own it". **Close with one imperative plus permission**, such as "send me what you have, even if
-it is messy", never by talking about yourself.
+**Write prose that flows,** connected sentences and short paragraphs, with no sentence-length rule:
+the two top earners of 16 write long prose and lists sat with lower earnings (measured 26 September
+2026, correlation only). **Reasoned, not measured:** hook in "you", middle in "I build", close as an
+imperative back to "you"; only 2 of 16 profiles do it. Search spellings the skills list cannot carry
+go into the sentences. **Answer one objection**, usually "it will not break" or "you will own it".
+**Close with one imperative plus permission**, such as "send me what you have, even if it is messy".
 
 **Proof, strongest first. S:** video testimonials, detailed case studies with hard numbers, Top Rated,
 100% Job Success, $100K+ earned on Upwork. **A:** top 1% for a skill, major press, 100+ reviews, 100+

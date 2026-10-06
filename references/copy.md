@@ -78,11 +78,11 @@ of the person who built this repository.
 ## The craft, measured
 
 Sixteen real profiles were read and counted on 26 September 2026, and three
-measured top earners on top of that. The findings live once, in
-[profile.md](profile.md), with the counts and the sample attached to each. Read them before writing anything a client sees, and
-take from them the two that decide most: **one line is one sentence of 6 to 14
-words**, and **the perspective flips twice**, opening on the reader's problem,
-moving to what gets delivered, closing as an imperative back to the reader.
+measured top earners on top of that. The counts and samples are in
+[RESEARCH.md](../RESEARCH.md), the rules in [profile.md](profile.md). Two things decide
+most: **write flowing prose**, with no sentence-length rule, because the two top earners
+write long sentences, and **open on the reader's problem, then what gets delivered, then
+an imperative back to the reader**, which is reasoned, not measured.
 
 ## Every file a member opens stays legible
 
