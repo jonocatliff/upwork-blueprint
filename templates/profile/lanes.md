@@ -4,7 +4,7 @@ The five lanes `/context` offers every member first. A member ticks every servic
 
 ## 1. GoHighLevel CRM automations
 
-Course: the sales automation and GoHighLevel course.
+Course: "Sales: Turn Leads To Customers".
 Profile orientation: `gohighlevel.md`.
 
 - CRM build and clean-up: pipelines, custom fields, tags
@@ -16,7 +16,7 @@ Profile orientation: `gohighlevel.md`.
 
 ## 2. Website building
 
-Course: the CRO course.
+Course: "CRO: 2x Your Website Leads".
 Profile orientation: `wordpress.md`.
 
 - Business websites on WordPress
@@ -27,7 +27,7 @@ Profile orientation: `wordpress.md`.
 
 ## 3. SEO
 
-Course: the SEO course.
+Course: "SEO: How To Rank #1 On Google".
 Profile orientation: `seo-cro.md`.
 
 - Technical SEO audit and fixes
@@ -38,7 +38,7 @@ Profile orientation: `seo-cro.md`.
 
 ## 4. Google Ads
 
-Course: the Google Ads course and the CRO course.
+Courses: "Google Ads: 5+ Leads Daily" and "CRO: 2x Your Website Leads".
 Profile orientation: `google-ads-cro.md`.
 
 - Search campaign set-up
@@ -49,7 +49,7 @@ Profile orientation: `google-ads-cro.md`.
 
 ## 5. Automations
 
-Course: the Claude Code Masterclass.
+Course: "Claude: Automate Anything".
 Profile orientation: none yet.
 
 - Workflow automation with Make or n8n
