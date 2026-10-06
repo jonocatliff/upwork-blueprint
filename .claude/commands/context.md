@@ -308,9 +308,12 @@ years and systems built. `/profile` leads with the highest tier that exists.
 
 Every entry carries **where it can be checked**, the date and a status:
 
-- **verified** when the member says where it can be checked, or an Upwork
-  aggregate carries it.
-- **pending** for everything else. A pending claim never reaches a client.
+- **verified** when the member gives a clear number or outcome and says where it
+  can be checked, in their own words ("my records", "the client"), or an Upwork
+  aggregate carries it. Take a clear figure as given: ask once for the place,
+  accept any answer, never ask twice, and never hold a claim back because the
+  place is vague.
+- **pending** for estimates and anything vague. A pending claim never reaches a client.
 
 **When there is nothing on the ladder at all**, help instead of pressing. Go
 looking with them: a system they built for the job they hold now, an unpaid build
