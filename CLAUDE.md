@@ -22,8 +22,17 @@ not at all. What each does is in its own frontmatter and, for the member, in
 `README.md`.
 
 `/profile` measures the live profile before it writes one, so it needs the
-connector: follow [README.md: Connect Upwork](README.md#connect-upwork). Everything after `/context` reads that one file. A focus argument runs only that part, at full depth; an input
+connector. Everything after `/context` reads that one file. A focus argument runs only that part, at full depth; an input
 matching no listed focus value gets that list and a question.
+
+## Connecting Upwork comes first
+
+A member never gets sent off to read a file for this. When the Upwork tools are not
+in the session, at the start of it or when a command finds them missing, say hello
+in one line and walk the member through
+[README.md: Connect Upwork](README.md#connect-upwork) in the chat: one step at a
+time, what they will see, then wait for their confirmation. The login happens in
+their browser and the restart is theirs. Check with `list_accounts` afterwards.
 
 ## The Upwork rules (CRITICAL, they protect the member's account)
 

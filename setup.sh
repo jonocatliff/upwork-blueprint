@@ -117,7 +117,7 @@ env_has OPENAI_API_KEY || note "OPENAI_API_KEY in .env: /lead-magnet adds two ch
 echo
 echo "Your context, data and job files are yours now; git will not touch them."
 echo
-echo "Connect Upwork once by following README.md, 'Connect Upwork', before the first command."
+echo "Connect Upwork before the first command: start claude here and it walks you through it."
 echo
 echo "Next: /context. It reads this same list and tells you which of it you need"
 echo "now and which can wait, then asks about your background. After that: /profile"

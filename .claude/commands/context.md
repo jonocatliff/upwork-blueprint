@@ -94,10 +94,10 @@ argument skips this question and goes straight to that block.
 This is the first command a member runs, so it is the one place where the state
 of their machine gets named before it costs them a run halfway through.
 
-Check the Upwork connector first: call `list_accounts`. With no answer, stop, show
-the three steps in [README.md: Connect Upwork](../../README.md#connect-upwork) and
-wait. Nothing below runs until it answers, because the interview reads the live
-profile and checks demand on Upwork.
+Check the Upwork connector first: call `list_accounts`. With no answer, walk the
+member through connecting it as CLAUDE.md says and wait. Nothing below runs until
+it answers, because the interview reads the live profile and checks demand on
+Upwork.
 
 Then run `./setup.sh` (safe at any time: it creates missing files, never
 overwrites) and `python3 code/tools_status.py`.

@@ -21,8 +21,8 @@ leaves the rest as it is. Every run writes something.
 ## Step 0 · The connector, and what is live right now
 
 1. Run `python3 code/workspace.py`.
-2. Call `list_accounts`. **If the Upwork tools are not there**, walk the member through it and stop:
-   Follow [README.md: Connect Upwork](../../README.md#connect-upwork), then run `/profile` again.
+2. Call `list_accounts`. **If the Upwork tools are not there**, walk the member through
+   connecting as CLAUDE.md says and stop; they run `/profile` again after the restart.
 3. Take the `org_uid` of the Freelancer account. Never write it into a file. More than one freelancer account: ask which.
 4. **Read the live profile, not the draft.** `get_profile` action `get` saved
    exactly as returned to `data/profile.json`, and `get_profile` action

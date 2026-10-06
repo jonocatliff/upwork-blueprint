@@ -34,7 +34,7 @@ cockpit list. End with `Upwork calls: 0`, and do not continue into Step 0.
 
 ## Step 0 · Files, connector, window
 
-Run `python3 code/workspace.py`, `python3 code/pipeline.py prune` and `python3 code/pipeline.py reset-search` (yesterday's unused leads expire, with skip reasons kept), then `list_accounts` (if missing, follow [README.md: Connect Upwork](../../README.md#connect-upwork)). Then `python3 code/jobs.py window`: the hours since **the last run rather than the last saved lead**, with a two-hour floor and 24-hour ceiling. A first run looks back 24 hours. `jobs.py clean` writes the stamp even when nothing was found, so the run must finish for the next one to narrow.
+Run `python3 code/workspace.py`, `python3 code/pipeline.py prune` and `python3 code/pipeline.py reset-search` (yesterday's unused leads expire, with skip reasons kept), then `list_accounts` (if missing, walk the member through connecting as CLAUDE.md says and stop). Then `python3 code/jobs.py window`: the hours since **the last run rather than the last saved lead**, with a two-hour floor and 24-hour ceiling. A first run looks back 24 hours. `jobs.py clean` writes the stamp even when nothing was found, so the run must finish for the next one to narrow.
 
 ## Step 0b · Is this the first run, or a run with a direction?
 
