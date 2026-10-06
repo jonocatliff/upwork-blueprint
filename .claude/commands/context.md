@@ -249,12 +249,15 @@ the only one here a member may want to think about. Points 2 and 3 are one
 question, and point 4 usually needs none at all, because this conversation has
 already shown how they write.
 
-1. **Hourly rate**, and the smallest project worth taking. Ask what they have in
-   mind rather than proposing a figure: a rate invented here is a number they
-   have to defend on a call. Without an idea yet, point them at the two pages in
-   [references/jobs.md](../../references/jobs.md) and let them come back with a
-   number. Never talk them down to compete, and never apply a discount for where
-   somebody lives. Whatever they land on goes into the `**Hourly rate:**` line as
+1. **Hourly rate**, and the smallest project worth taking. Recommend a range, and
+   say it is a recommendation: built from their live Upwork rate, their years and
+   proof in the chosen branches, the two pages in
+   [references/jobs.md](../../references/jobs.md) and one live search for those
+   branches (rows only, hourly ranges and fixed-price medians, with n and today's
+   date). Label what is measured and what is guess, then ask what they would
+   actually quote: a number they cannot defend on a call is worth nothing. Where
+   they live decides which clients and hours fit, never a discount, and never talk
+   them down to compete. Whatever they land on goes into the `**Hourly rate:**` line as
    a number, because `/pitch-page` prices every bid from it and stops without
    one. The live rate sits in `data/profile.json` too, but `prune` deletes that
    file after a day, so `context/me.md` is its only lasting home. A range is fine
