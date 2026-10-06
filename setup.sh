@@ -58,7 +58,7 @@ note() { echo "  · $1"; missing=$((missing + 1)); }
 
 if python3 -c 'import sys; sys.path.insert(0, "code"); import lead_magnet_render; raise SystemExit(0 if lead_magnet_render.needs_build() else 1)'; then
   if command -v npm >/dev/null; then
-    echo "building the audit report template, about a minute..."
+    echo "Building the audit report template, about a minute. I'd tell you a construction joke, but I'm still working on it."
     # set -e is on, so an unguarded npm failure used to exit here and swallow the
     # whole list below. A member then saw a stack trace and never learned which
     # keys or tools he still needs. The build is optional; the list is not.
@@ -117,7 +117,8 @@ env_has OPENAI_API_KEY || note "OPENAI_API_KEY in .env: /lead-magnet adds two ch
 echo
 echo "Your context, data and job files are yours now; git will not touch them."
 echo
-echo "Connect Upwork before the first command: start claude here and it walks you through it."
+echo "Upwork is next. Start claude here and it walks you through connecting it."
+echo "(I'd tell you a joke about the connector, but it takes a few tries to get through.)"
 echo
-echo "Next: /context. It reads this same list and tells you which of it you need"
+echo "Then /context. It reads this same list and tells you which of it you need"
 echo "now and which can wait, then asks about your background. After that: /profile"

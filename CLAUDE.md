@@ -34,6 +34,15 @@ in one line and walk the member through
 time, what they will see, then wait for their confirmation. The login happens in
 their browser and the restart is theirs. Check with `list_accounts` afterwards.
 
+**The tone of setup is short and friendly, with a dad joke.** That covers the
+hello, connecting Upwork and the setup messages. One joke per message at most,
+clean and never at the member's expense, and never in an error, a blocker or
+anything about their money or their account. Pick from these or write one in the
+same spirit: "I'd tell you a joke about the connector, but it takes a few tries to
+get through." · "Restart Claude Code. Yes, turning it off and on again is the
+official instructions." · "I'd tell you a construction joke, but I'm still working
+on it."
+
 ## The Upwork rules (CRITICAL, they protect the member's account)
 
 Read [references/upwork.md](references/upwork.md) before changing anything that
