@@ -25,6 +25,9 @@ TITLE_MAX = 70
 # Upwork's overview field limit, as its form states it.
 OVERVIEW_MAX = 5000
 SKILLS_MAX = 20
+# The three role models set a ceiling, not a target to hit: a draft may run up to 20 %
+# over their average length and shorter is always fine.
+CEILING = 1.2
 # Checks that read fields a draft does not contain.
 NOT_FOR_DRAFTS = {'certificates', 'rate_set', 'complete'}
 
@@ -44,9 +47,20 @@ def items(block):
             for l in block.splitlines() if l.startswith('- ')]
 
 
+def reference_averages(text):
+    """`- overview: 1850` lines under `## Reference averages`, in characters. Empty without the section."""
+    found = {}
+    for line in section(text, 'Reference averages').splitlines():
+        m = re.match(r'-\s*(title|overview)\s*:\s*(\d+)', line.strip(), re.I)
+        if m:
+            found[m.group(1).lower()] = int(m.group(2))
+    return found
+
+
 def parse(text):
     portfolio = items(section(text, 'Portfolio titles'))
     return {
+        'averages': reference_averages(text),
         'name': '', 'title': fenced(section(text, 'Title')),
         'overview': fenced(section(text, 'Overview')), 'rate': None,
         'skills': items(section(text, 'Skills')), 'employment': [], 'education': [],
@@ -97,6 +111,10 @@ def problems(draft, proof_text):
         found.append(f'overview is {len(draft["overview"])} characters, the field holds {OVERVIEW_MAX}')
     if len(draft['skills']) > SKILLS_MAX:
         found.append(f'{len(draft["skills"])} skills, Upwork takes {SKILLS_MAX}')
+    for field, average in draft.get('averages', {}).items():
+        if average and len(draft[field]) > average * CEILING:
+            found.append(f'{field} is {len(draft[field])} characters, the role models average {average}: '
+                         f'stay under {round(average * CEILING)}')
     if re.search(r'\*\*|^#', draft['overview'], re.M):
         found.append('overview uses markdown, which Upwork shows as raw symbols')
     for field in ('title', 'overview'):

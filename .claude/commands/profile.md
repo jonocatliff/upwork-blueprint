@@ -87,18 +87,18 @@ An unanswered field is not measured, never estimated; name the gap without askin
 **Three role models.** The connector cannot search for freelancers (checked 6 October
 2026), and a freelancer login or a web search did not surface profiles either. So the
 member adds a client profile to the same login (Account Settings, no job is posted)
-and searches Upwork's talent search with their country,
-the Top Rated filter and the keywords from their title. Among the results favour high
-earnings, many finished jobs and recent work. They paste three to five profile
+and searches Upwork's talent search with their country, the Top Rated filter and the
+keywords from their title. Among the results favour high earnings, many finished jobs and recent work. They paste three to five profile
 addresses (the `~` in them is the key); if they will not, say so and go on without
 role models. Read each with `get_profile` action `get` and its `profile_key`, rank by
 success, not badge (earnings bucket, then jobs and reviews), pick the three closest by
 skills in common and rate band, name the criteria and say the job success score and
 hours are not visible. Give four chat lines per profile: title, how the overview opens,
-skills and rate band, and the one thing worth borrowing, with the URL, then the three
-averages: title length, overview length, skills. Step 4 aims at them within Upwork's
-limits and the gate, taking structure and ideas, never sentences: copied text gets
-flagged. Keep none in a file (Upwork content).
+skills and rate band, and the one thing worth borrowing, with the URL. Then write
+`## Reference averages` in profile.md: `- title: N` and `- overview: N` in characters,
+the three URLs and the date; the gate fails an overview over the average plus 20 %.
+Fill one gap none of them fills. Structure and ideas only, never sentences: copied
+text gets flagged. Keep no profile text in a file (Upwork content).
 
 ## Step 3 · Read your facts
 
