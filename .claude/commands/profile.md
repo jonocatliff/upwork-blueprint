@@ -86,10 +86,14 @@ An unanswered field is not measured, never estimated; name the gap without askin
 
 **Three role models.** The connector cannot search for freelancers (checked 6 October
 2026: `get_profile` reads one profile by `profile_key`, and a job's client history
-names no freelancer), so candidates come from two places. Ask the member once to find
-their branch on Google or on Upwork's public hire pages, which need no client account,
-and paste three to five profile addresses with a `~` in them that they would like to
-be; add eight to ten public profile URLs from a web search. Read each with `get_profile` action `get` and its `profile_key`. Rank by
+names no freelancer), so candidates come from two places. Tell the member how to
+search, with keywords from their branch and the skills Step 1 counted: on Google,
+`site:upwork.com/freelancers "<skill>" "<skill>"`, or Upwork's public hire pages, which
+need no client account. Tell them what to look for, as a starting point and not a
+measurement: higher earnings, many finished jobs, recent work, a rate within reach of
+theirs, and a profile that does what they want to do. They paste three to five
+addresses with a `~` in them; add eight to ten public profile URLs from a web search
+of your own. Read each with `get_profile` action `get` and its `profile_key`. Rank by
 success, not by badge: earnings bucket first, then jobs and reviews. Pick the three
 closest to the member by skills in common and rate band, and say which criteria chose
 each, and that the job success score and hours are not visible. Give the member four
