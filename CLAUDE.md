@@ -27,19 +27,22 @@ matching no listed focus value gets that list and a question.
 
 ## Connecting Upwork comes first
 
-A member never gets sent off to read a file for this. When the Upwork tools are not
-in the session, at the start of it or when a command finds them missing, say hello
-in one line and walk the member through
-[README.md: Connect Upwork](README.md#connect-upwork) in the chat: one step at a
-time, what they will see, then wait for their confirmation. The login happens in
-their browser and the restart is theirs. Check with `list_accounts` afterwards.
+When the Upwork tools are missing, at the start of a session or in a command, say
+hello in one line and walk the member through
+[README.md: Connect Upwork](README.md#connect-upwork) in the chat, never off to read
+it: one step at a time, what they will see, then wait for their confirmation. The login
+happens in their browser and the restart is theirs. Check with `list_accounts` after.
 
-**The tone of setup is short and friendly, with a dad joke.** That covers the
-hello, connecting Upwork and the setup messages. One joke per message at most,
-clean and never at the member's expense, and never in an error, a blocker or
-anything about their money or their account. The joke fits the moment and is
-never one they have already seen. Write one in the spirit of: "Restart Claude Code.
-Yes, turning it off and on again is the official instructions."
+**Setup is short and friendly, with one clean dad joke at most per message** (hello,
+connecting Upwork, setup messages): never at the member's expense, never in an error, a
+blocker or anything about money or their account, never one they have seen. For example:
+"Restart Claude Code. Yes, turning it off and on again is the official instructions."
+
+## Rules stay lean
+
+A rule stays only when Upwork documents it, we measured it, or it prevents a failure we
+saw. Anything else is a hint labelled reasoned, or it does not exist. Two rules never
+say different things: change the old one in the same commit as the new one.
 
 ## The Upwork rules (CRITICAL, they protect the member's account)
 
