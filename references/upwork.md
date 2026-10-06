@@ -67,7 +67,7 @@ Stop when the requested fact is known; never broaden a search to make an empty r
 
 **MEASURED 12 September 2026: the `status` filter on `list_freelancer_proposals` action `list` does not filter.** Read each proposal's own `status` field, never trust the filter, and treat an empty list as proof of nothing. What each value returned is in `RESEARCH.md`.
 
-**No room exists until the client writes**, so an applied proposal gets no draft, no follow-up and no task. `/brief` moves one to `lost` after 14 full days without a reply.
+**No room exists until the client writes**, so an applied proposal gets no draft, no follow-up and no task. `/brief` asks after 14 full days without a reply whether to set it to `lost`.
 
 **MEASURED since 14 August 2026, reading only:** `get_freelancer_dashboard` action `check` (one call returns contracts, Connects, invitations, unread rooms, offers and Upwork's match feed), `list_freelancer_proposals` (records with creation time and job id), `get_messages`, `list_contracts`, `list_accounts` (each `org_uid`; the tool description says to call it first), `get_account`, `set_tool_permission` action `get`. Message authorship is response-shape dependent: a 14 August response had no author field, 12 September responses exposed sender information. Never infer authorship from message order.
 

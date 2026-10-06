@@ -11,7 +11,7 @@ assert.equal(daysInStage(before), daysInStage(acted));
 assert.equal(nextStep(complete, today).label, 'Parked');
 assert.equal(waitingState(complete, today).detail, 'Parked');
 assert.equal(nextStep({ ...complete, client_waiting: true }, today).label, 'Reply');
-assert.equal(nextStep({ ...complete, follow_up_plan: { lane: 'light', step: 1 }, next_follow_up: today }, today).label, 'Follow up');
+assert.equal(nextStep({ ...complete, follow_up_plan: { lane: 'active', step: 1 }, next_follow_up: today }, today).label, 'Follow up');
 assert.equal(nextStep({ ...complete, follow_up_history: [{ action: 'cleared' }] }, today).label, 'Parked');
 assert.equal(nextStep(hired, today).label, '');
 assert.equal(nextStep({ id: '730005', status: 'won', artifacts: ['project.md'], result_recorded_at: today }, today).label, '');

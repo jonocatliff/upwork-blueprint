@@ -1,12 +1,11 @@
 # Follow-up rules
 
-What: a context-based sequence for dormant leads and previous clients.
-Measured: 12 September 2026 against the first imported conversation.
+What: a context-based sequence for leads in touch and for previous clients.
+Basis: reasoned; the only data point is one imported conversation (12 September 2026).
 Next: run `/brief` without a job id each morning; it runs this sequence first.
 
 The point is to make the next decision easy, not to maximize message count.
-Every interval below is a ceiling. Conversation context can shorten a sequence
-or stop it, but never extend its maximum.
+Context can stop a sequence or move its date.
 
 ## Reply now
 
@@ -14,32 +13,13 @@ When `awaiting_reply_from` is `you`, answer today. This is a reply, not a dorman
 lead follow-up, and it does not consume a sequence step. A client question,
 requested change, call request or offer always outranks scheduled follow-ups.
 
-## Hot lead
+## In touch
 
-Use `hot` when the client asked about a call, price, proposal, start date or
-decision, or when an offer is close but one concrete item blocks it.
-
-Allow up to three follow-ups. After a sent message, wait 1, then 3, then 7
-business days. The first should close the named decision. The second should
-reduce scope or answer a likely blocker. The third should close the loop without
-guilt or fake urgency.
-
-## Warm lead
-
-Use `warm` after at least two substantive client turns, a reviewed deliverable or
-a specific next step without an immediate buying signal.
-
-Allow up to three follow-ups. Wait 2, then 5, then 10 business days. Use the
-conversation's open loop. Add a useful observation or make the next choice
-smaller. A generic status request does not count as value.
-
-## Light lead
-
-Use `light` after one short client response or weak engagement with no specific
-next step.
-
-Allow two follow-ups. Wait 3, then 7 business days. The second is the close. Park
-the lead after that unless the client returns.
+Use `active` for every lead that has answered (`replied`, `call` or `offer`).
+Follow up nearly every business day until the client declines or says they have no
+interest. Each message gives one new reason to answer: close the named decision,
+reduce scope, answer a likely blocker or make the next choice smaller. A generic
+status request does not count as value.
 
 ## Previous client
 
@@ -54,21 +34,21 @@ change or next project based on the completed work. Do not send a vague
 ## Applied, lost, skipped and new
 
 An `applied` proposal has no room until the client writes, so it has no follow-up
-and creates no task. Sync moves it to `lost` after 14 full days without a client
-reply. No draft and no reminder mean the system is working correctly.
+and creates no task. After 14 full days without a client reply `/brief` lists it as
+stale and asks whether to set `lost`; Lost is always the member's call.
 
 Do not follow up with `new` or `skipped` jobs. A `lost` lead gets one future
 check only when the client explicitly named timing or budget as the reason and a
 date makes sense. Otherwise it stays closed.
 
-## Context beats the lane
+## Context beats the cadence
 
 Stop immediately after an explicit no, a request for no more contact, evidence
 that another freelancer was hired, or a move to another agreed communication
 channel. Do not duplicate the conversation across channels.
 
 Honor a date the client named. Follow up on the next business day after a missed
-promise, not according to the generic lane.
+promise, not on the generic cadence.
 
 Count meaningful client turns, not message bubbles. Three short bubbles sent in
 one minute are one turn. Multiple unanswered member messages reduce the next
@@ -76,14 +56,10 @@ sequence, never increase it.
 
 ## What each message earns
 
-Step one reopens the exact decision. Step two adds a new reason to answer. The
-last step gives a clean close. Every message should be understandable without
-reading a sales template, grounded in the thread and written as the member.
-
-The first measured thread supports the timing principle, not a universal
-conversion claim: a useful delivery follow-up and one later reminder produced a
-client reply two days later. The bare "just checking in" message added no value,
-so this system excludes that pattern.
+The first message reopens the exact decision, later ones add a new reason to
+answer. Every message should be understandable without reading a sales template,
+grounded in the thread and written as the member. The bare "just checking in"
+message added no value in the one thread read, so this system excludes it.
 
 ## Workflow
 
@@ -110,9 +86,8 @@ Use the status, `awaiting_reply_from`, last meaningful message, explicit dates,
 client engagement and consecutive messages from the member. Apply the lane,
 cadence and stop conditions above.
 
-Maximum steps are ceilings. Choose fewer when the thread is weak, the ask is
-already stale, the client moved the conversation elsewhere or another message
-would add no reason to answer.
+Stop when the thread is weak, the client moved the conversation elsewhere or
+another message would add no reason to answer.
 
 Keep an existing plan; never restart a finished or stopped sequence unless the client returns.
 For a new sequence, write the decision only through:

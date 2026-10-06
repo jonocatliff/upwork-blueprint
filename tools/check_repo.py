@@ -817,7 +817,7 @@ def fixture_pipeline():
          'call_at': '2030-01-01', 'next_follow_up': '2030-01-02'},
         {'id': '730002', 'title': 'Fixture offer', 'status': 'offer', 'found_at': old},
         {'id': '730003', 'title': 'Fixture sequence', 'status': 'replied', 'found_at': old,
-         'follow_up_plan': {'lane': 'light', 'step': 2, 'max_steps': 2,
+         'follow_up_plan': {'lane': 'reactivation', 'step': 2, 'max_steps': 2,
                             'reviewed_at': reviewed, 'reason': 'Fixture close'},
          'next_follow_up': sent[:10]},
         {'id': '730006', 'title': 'Fixture first reply', 'status': 'applied', 'found_at': old},
@@ -905,7 +905,7 @@ def fixture_pipeline():
         run(['record', '730008', '--file', '-'], {'follow_up_source': 'waiting'})
         arguments = ['follow-up', '730008', action]
         if action == 'plan':
-            arguments += ['--lane', 'light', '--due', '2030-01-02', '--reason', 'Fixture sequence']
+            arguments += ['--lane', 'active', '--due', '2030-01-02', '--reason', 'Fixture sequence']
         run(arguments)
         assert 'follow_up_source' not in pipeline.find(pipeline.load(), '730008')
     unknown = run(['apply', '--file', '-'], {'offers': [{'job_id': '730002', 'state': 'unknown-fixture'}]}, script='sync.py')

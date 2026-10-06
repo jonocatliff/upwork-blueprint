@@ -326,14 +326,18 @@ def cmd_apply(args):
     # Expiration needs fresh evidence that this exact proposal was checked and
     # still has no room. Absence from a limited proposal page proves nothing.
     no_rooms = {str(jid) for jid in snapshot.get('no_rooms') or []}
+    stale = []
     for job in pipeline.load():
         if job.get('status') == 'applied' and (job.get('next_follow_up') or job.get('follow_up_plan')):
             run_pipeline('follow-up', job['id'], 'clear', '--reason', 'Applied proposals cannot be followed up before the client replies.')
-        if job['id'] in no_rooms and applied_expired(job) and run_pipeline('set', job['id'], 'lost', '--note', 'No client reply within 14 days.'):
-            moved.append({'id': job['id'], 'from': 'applied', 'to': 'lost'})
+        # Lost is the member's call, never the sync's. A proposal that sat 14 days
+        # without a room is only listed, so /brief can ask.
+        if job['id'] in no_rooms and applied_expired(job):
+            stale.append(job['id'])
 
     record = {'synced_at': datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds'),
-              'moved': moved, 'added': added, 'threads': len(threads), 'awaiting_you': waiting}
+              'moved': moved, 'added': added, 'threads': len(threads), 'awaiting_you': waiting,
+              'stale_applications': stale}
     data_dir().mkdir(parents=True, exist_ok=True)
     (data_dir() / 'sync.json').write_text(json.dumps(record, indent=2), encoding='utf-8')
     for m in moved:

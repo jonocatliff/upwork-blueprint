@@ -62,10 +62,10 @@ with `job_id`, `room_id`, `awaiting_reply_from`, `messages_complete` and the mes
 
 `python3 code/sync.py apply --file -`
 
-It moves jobs only forward, adds proposals submitted on Upwork, saves each thread, moves an
-application to Lost after 14 full days only when this run verified that its proposal still
-has no room, turns a client waiting on you into a follow-up due today, and records the time
-of this sync. Then `python3 code/pipeline.py prune`.
+It moves jobs only forward, adds proposals submitted on Upwork, saves each thread, lists
+as stale an application that sat 14 full days with no room (ask the member whether to set
+Lost, never set it yourself), turns a client waiting on you into a follow-up due today, and
+records the time of this sync. Then `python3 code/pipeline.py prune`.
 First-sync creations are imported history, excluded from funnel and application counts;
 an imported Hired proposal does not ask for a handover. Unmatched offers and contracts are imported too.
 

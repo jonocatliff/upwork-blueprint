@@ -57,11 +57,12 @@ CLOSED = ('won', 'lost', 'skipped')
 # the reviewer from the conversation. Later steps are mechanical so a missed
 # morning cannot silently stretch or compress the sequence.
 FOLLOW_UP_GAPS = {
-    'hot': (1, 3, 7),
-    'warm': (2, 5, 10),
-    'light': (3, 7),
+    'active': (1,),
     'reactivation': (30, 60),
 }
+# 'active' has no last step: while a client is in touch the follow-up comes nearly every
+# business day, and it ends when the client declines or says they have no interest.
+UNBOUNDED = ('active',)
 
 # Old unused jobs beyond this many fall out when new ones arrive, oldest first.
 # Fresh intake and anything carrying the member's work never fall out.
@@ -499,13 +500,14 @@ def cmd_follow_up(args):
         job['follow_up_plan'] = {
             'lane': lane,
             'step': 1,
-            'max_steps': len(FOLLOW_UP_GAPS[lane]),
+            'max_steps': None if lane in UNBOUNDED else len(FOLLOW_UP_GAPS[lane]),
             'reason': reason[:500],
             'reviewed_at': now_iso(),
         }
         job['next_follow_up'] = due
         save(jobs)
-        print(f'{args.job_id}: {lane} follow-up 1 of {len(FOLLOW_UP_GAPS[lane])} due {due}.')
+        of = '' if lane in UNBOUNDED else f' of {len(FOLLOW_UP_GAPS[lane])}'
+        print(f'{args.job_id}: {lane} follow-up 1{of} due {due}.')
         return
 
     if args.action == 'clear':
@@ -542,26 +544,28 @@ def cmd_follow_up(args):
     lane = plan.get('lane')
     gaps = FOLLOW_UP_GAPS.get(lane)
     step = plan.get('step')
-    if not gaps or not isinstance(step, int) or not 1 <= step <= len(gaps):
+    last = lane not in UNBOUNDED
+    if not gaps or not isinstance(step, int) or step < 1 or (last and step > len(gaps)):
         abort(f'{args.job_id}: follow-up plan is invalid; clear it and review the conversation again.')
     stamp = verified_timestamp(args.at) if args.at else now_iso()
     job['last_activity_at'] = max(job.get('last_activity_at') or '', stamp)
     job.setdefault('follow_up_history', []).append({
         'action': 'sent', 'at': stamp, 'on': sent_day.isoformat(), 'lane': lane, 'step': step,
         'confirmation': confirmation,
-        'completed': step == len(gaps),
+        'completed': last and step == len(gaps),
     })
-    if step == len(gaps):
+    if last and step == len(gaps):
         job.pop('follow_up_plan', None)
         job['next_follow_up'] = None
         message = f'{args.job_id}: {lane} sequence complete after follow-up {step}.'
     else:
         next_step = step + 1
-        due = add_business_days(sent_day, gaps[next_step - 1]).isoformat()
+        due = add_business_days(sent_day, gaps[min(next_step, len(gaps)) - 1]).isoformat()
         plan['step'] = next_step
         plan['reviewed_at'] = stamp
         job['next_follow_up'] = due
-        message = f'{args.job_id}: follow-up {step} sent; {next_step} of {len(gaps)} due {due}.'
+        of = '' if not last else f' of {len(gaps)}'
+        message = f'{args.job_id}: follow-up {step} sent; {next_step}{of} due {due}.'
     save(jobs)
     print(message)
 
