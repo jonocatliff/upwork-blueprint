@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-"""The one page that shows a member what is now in their own file.
+"""The one clean page that shows a member what is now in their own file.
 
     python3 code/context_page.py [--open]
 
 /context ends by reporting what it wrote. A report in a terminal scrolls away,
-and the file it wrote is markdown with starter lines still in it, which
-is a poor thing to read back. This renders both into one page: what they sell,
-how they work, what they can prove, and what is still open, with anything still
-unanswered shown as a gap rather than hidden.
+and the file it wrote is markdown with starter lines still in it. This renders
+the short version on one page: who you are, what you sell, your terms, what you
+can prove, and what is still open, in that order and nothing more.
 
 Output is `context/overview.html`, which is gitignored like everything else in
 that folder. It is built from the files alone and reaches no service.
@@ -26,6 +25,40 @@ import context_check as cc  # noqa: E402
 OUT = ROOT / 'context' / 'overview.html'
 STARTER = 'not answered yet'
 EMPTY = 'nothing recorded yet'
+SHOWN = 6        # entries listed per group, the rest become "and N more"
+CLIP = 220       # characters of a long answer before it is cut at a word
+
+CSS = """
+  :root { color-scheme: light; --bg: #f5f6f8; --card: #fff; --line: #e6e9ee;
+          --t1: #101828; --t2: #475467; --t3: #7b8794; --accent: #1f6f6b;
+          --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--t2); font: 15px/1.55 var(--sans);
+         -webkit-font-smoothing: antialiased; }
+  main { max-width: 640px; margin: 0 auto; padding: 36px 20px 56px; }
+  h1 { font-size: 26px; line-height: 1.2; color: var(--t1); margin: 0 0 4px; letter-spacing: -.01em; }
+  .sub { color: var(--t3); font-size: 13.5px; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 6px 22px; }
+  section { padding: 16px 0; border-top: 1px solid var(--line); }
+  section:first-child { border-top: 0; }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .07em; color: var(--t3); margin: 0 0 8px; }
+  p { margin: 0 0 6px; color: var(--t1); }
+  .big { font-size: 17px; font-weight: 600; }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; margin: 0; }
+  dt { color: var(--t3); font-size: 13.5px; }
+  dd { margin: 0; color: var(--t1); }
+  ul { margin: 0; padding-left: 18px; color: var(--t1); }
+  li { margin-bottom: 3px; }
+  .muted { color: var(--t3); font-size: 13.5px; }
+  .open { color: #94531b; }
+  .next { margin: 18px 2px 0; color: var(--t2); }
+  .next strong { color: var(--accent); }
+  @media (max-width: 480px) { dl { grid-template-columns: 1fr; gap: 0; } dt { margin-top: 8px; } }
+"""
+
+
+def esc(text):
+    return html.escape(str(text), quote=False)
 
 
 def sections(text):
@@ -43,181 +76,113 @@ def sections(text):
     return found
 
 
-def labelled(body):
-    """The `**Label:** value` pairs in a section, unanswered ones included."""
-    pairs = []
-    for line in body:
-        match = re.match(r'^\*\*(.+?):\*\*\s*(.*)$', line.strip())
-        if match:
-            label, value = match.group(1).strip(), match.group(2).strip()
-            pairs.append((label, value, STARTER in value.lower() or not value))
-    return pairs
+def answers(me):
+    """Every `**Label:** value` in the file as {label: value or None when unanswered}."""
+    found = {}
+    for _, body in me.items():
+        for line in body:
+            match = re.match(r'^\*\*(.+?):\*\*\s*(.*)$', line.strip())
+            if match:
+                value = match.group(2).strip()
+                found[match.group(1).strip()] = None if (not value or STARTER in value.lower()) else value
+    return found
 
 
-def prose(body):
-    """The lines of a section that are not label pairs and not blank."""
-    out = []
-    for line in body:
-        line = line.strip()
-        if not line or re.match(r'^\*\*(.+?):\*\*', line):
-            continue
-        out.append(line)
-    return out
+def pick(found, start):
+    """The answer whose label begins with `start`; None when open or absent."""
+    for label, value in found.items():
+        if label.lower().startswith(start.lower()):
+            return value
+    return None
 
 
-def proof_items(body):
-    """Proof blocks with their status, so metadata stays beside the result."""
-    items = []
-    for _, line in cc.entries('## Results\n' + '\n'.join(body)):
-        if not line or EMPTY in line.lower() or line.startswith('One block per'):
-            continue
-        status = 'pending'
-        if re.search(r'\bverified\b', line, re.I):
-            status = 'verified'
-        items.append((line, status))
-    return items
+def clip(text, limit=CLIP):
+    if len(text) <= limit:
+        return text
+    return text[:limit].rsplit(' ', 1)[0].rstrip(',;:') + '…'
 
 
-def esc(text):
-    return html.escape(str(text), quote=False)
+def short(label):
+    """A label without its parenthesis: 'How settled ... (decided, leaning, open)' reads as a gap."""
+    return re.sub(r'\s*\(.*?\)', '', label).strip()
 
 
-def field_rows(pairs):
-    rows = []
-    for label, value, missing in pairs:
-        shown = 'still open' if missing else esc(value)
-        cls = ' class="gap"' if missing else ''
-        rows.append(f'<div class="row"><dt>{esc(label)}</dt>'
-                    f'<dd{cls}>{shown}</dd></div>')
-    return '\n'.join(rows)
+def proof_blocks(body):
+    """(title, verified) for each `###` block. Verified only when no pending is in it."""
+    blocks, title, lines = [], None, []
+    for line in body + ['### ']:
+        if line.startswith('### '):
+            if title:
+                text = '\n'.join(lines)
+                if EMPTY not in text.lower():
+                    verified = bool(re.search(r'\bverified\b', text, re.I)) and not re.search(r'\bpending\b', text, re.I)
+                    blocks.append((title, verified))
+            title, lines = line[4:].strip(), []
+        elif title is not None:
+            lines.append(line)
+    return blocks
+
+
+def listing(items, more_word='more'):
+    shown = ''.join(f'<li>{esc(i)}</li>' for i in items[:SHOWN])
+    extra = len(items) - SHOWN
+    tail = f'<li class="muted">and {extra} {more_word}</li>' if extra > 0 else ''
+    return f'<ul>{shown}{tail}</ul>'
 
 
 def build(me_text, proof_text, open_points):
     me = dict(sections(me_text))
     proof = dict(sections(proof_text))
+    found = answers(me)
 
-    def block(title, key, note=''):
-        body = me.get(key, [])
-        pairs, lines = labelled(body), prose(body)
-        if not pairs and not lines:
-            return ''
-        inner = field_rows(pairs)
-        if lines:
-            text = ' '.join(lines)
-            if STARTER in text.lower() or 'Not filled in yet' in text or 'Not set yet' in text:
-                inner = f'<p class="gap">Still open. {esc(note)}</p>' + inner
-            else:
-                inner = f'<p class="prose">{esc(text)}</p>' + inner
-        return f'<section><h2>{esc(title)}</h2><dl>{inner}</dl></section>'
+    who = pick(found, 'Profession')
+    one = pick(found, 'The one thing')
+    sells = pick(found, 'Services you sell')
+    terms = [(label, pick(found, key)) for label, key in (
+        ('Hourly rate', 'Hourly rate'), ('Smallest project', 'Smallest project'),
+        ('Timezone', 'Timezone'), ('Applications a day', 'Applications per day'))]
 
-    results = proof_items(proof.get('Results', []))
-    reviews = proof_items(proof.get('Reviews', []))
-    creds = proof_items(proof.get('Credentials', []))
-    everything = results + reviews + creds
-    verified = [t for t, s in everything if s == 'verified']
-    pending = [t for t, s in everything if s == 'pending']
+    blocks = []
+    for name in ('Results', 'Reviews', 'Credentials'):
+        blocks += proof_blocks(proof.get(name, []))
+    verified = [t for t, ok in blocks if ok]
+    pending = [t for t, ok in blocks if not ok]
+    gaps = [short(label) for label, value in found.items() if value is None]
 
-    def proof_list(items, kind):
-        if not items:
-            return f'<p class="gap">Nothing {kind} yet.</p>'
-        return '<ul>' + ''.join(f'<li>{esc(t)}</li>' for t in items) + '</ul>'
+    top = f'<p class="big">{esc(one)}</p>' if one else '<p class="muted">Still open: the one thing you want to be hired for.</p>'
+    top += f'<p>{esc(clip(who))}</p>' if who else ''
+    sells_html = f'<p>{esc(clip(sells))}</p>' if sells else '<p class="muted">Still open.</p>'
+    rows = ''.join(f'<dt>{esc(label)}</dt><dd>{esc(clip(value, 90))}</dd>' for label, value in terms if value)
+    terms_html = f'<dl>{rows}</dl>' if rows else '<p class="muted">Still open.</p>'
 
-    parts = [
-        block('What you sell', 'What you do'),
-        block('How you work', 'How you work'),
-        block('Your background', 'Your background',
-              'Run /context background to fill it in.'),
-        block('How you sound', 'How you sound'),
-        block('Your daily target', 'Your daily target'),
-        block('Job search tracks', 'Job search tracks',
-              '/find-jobs proposes them on its first run.'),
-    ]
+    proof_html = ''
+    if verified:
+        proof_html += listing(verified)
+    else:
+        proof_html += '<p class="muted">Nothing verified yet. The first delivered job fills this.</p>'
+    if pending:
+        proof_html += (f'<p class="muted" style="margin-top:8px">{len(pending)} pending, never shown to a client '
+                       f'until you can say where it can be checked.</p>')
 
-    verdict = ('Nothing is open. Every command after this one has what it needs.'
-               if not open_points else
-               f'{open_points} question{"s" if open_points != 1 else ""} still open. '
-               f'Nothing here blocks the next command; each gap is a claim that '
-               f'stays unmade until you fill it.')
+    open_html = ''
+    if gaps:
+        open_html = ('<section><h2>Still open</h2>' + listing(gaps) +
+                     '<p class="muted" style="margin-top:6px">None of it blocks the next command.</p></section>')
 
-    return f"""<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Your Upwork context</title>
-<style>
-  :root {{
-    color-scheme: light;
-    --bg: #f2f4f7; --card: #fff; --soft: #f8fafc; --line: #e4e8ee;
-    --t1: #101828; --t2: #475467; --t3: #7b8794; --accent: #1f6f6b;
-    --accent-lt: #e2f0ef; --good: #15683f; --good-lt: #e3f2ea; --gap: #94531b;
-    --gap-lt: #fbeedb; --shadow: 0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.05);
-    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  }}
-  * {{ box-sizing: border-box; }}
-  body {{ margin: 0; background: var(--bg); color: var(--t2); font-family: var(--sans);
-         font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }}
-  .wrap {{ max-width: 780px; margin: 0 auto; padding: 40px 20px 72px; }}
-  h1 {{ font-size: 30px; line-height: 1.15; color: var(--t1); margin: 0 0 6px; letter-spacing: -.01em; }}
-  h2 {{ font-size: 17px; color: var(--t1); margin: 0 0 12px; letter-spacing: -.005em; }}
-  .lede {{ color: var(--t2); margin: 0 0 8px; }}
-  .stamp {{ font-size: 13px; color: var(--t3); margin: 0 0 26px; }}
-  .verdict {{ background: var(--accent-lt); border-radius: 10px; padding: 15px 18px;
-              color: var(--t1); font-size: 14.5px; margin-bottom: 26px; }}
-  section {{ background: var(--card); border: 1px solid var(--line); border-radius: 12px;
-             padding: 20px 22px; box-shadow: var(--shadow); margin-bottom: 14px; }}
-  dl {{ margin: 0; }}
-  .row {{ display: grid; grid-template-columns: minmax(0,230px) 1fr; gap: 4px 18px;
-          padding: 8px 0; border-top: 1px solid var(--line); }}
-  .row:first-child {{ border-top: 0; padding-top: 0; }}
-  dt {{ color: var(--t3); font-size: 13.5px; }}
-  dd {{ margin: 0; color: var(--t1); font-size: 14.5px; }}
-  .gap {{ color: var(--gap); background: var(--gap-lt); border-radius: 4px;
-          padding: 1px 7px; display: inline-block; font-size: 13.5px; }}
-  p.gap {{ display: block; margin: 0 0 10px; }}
-  .prose {{ margin: 0 0 12px; color: var(--t2); font-size: 14.5px; }}
-  ul {{ margin: 0; padding-left: 18px; }}
-  li {{ margin-bottom: 7px; color: var(--t1); font-size: 14.5px; }}
-  .split {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 14px; }}
-  .tag {{ display: inline-block; font-size: 11.5px; font-weight: 600; letter-spacing: .06em;
-          text-transform: uppercase; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; }}
-  .tag.v {{ background: var(--good-lt); color: var(--good); }}
-  .tag.p {{ background: var(--gap-lt); color: var(--gap); }}
-  footer {{ margin-top: 30px; font-size: 13px; color: var(--t3); }}
-  @media (max-width: 560px) {{ .row {{ grid-template-columns: 1fr; }} }}
-</style>
-</head>
-<body>
-<div class="wrap">
-  <h1>Your Upwork context</h1>
-  <p class="lede">What every command reads before it writes a word for you or a client.</p>
-  <p class="stamp">Built from context/me.md. Nothing on this page left your machine.</p>
-
-  <div class="verdict">{esc(verdict)}</div>
-
-  {''.join(p for p in parts if p)}
-
-  <section>
-    <h2>What you can prove</h2>
-    <div class="split">
-      <div>
-        <span class="tag v">verified</span>
-        {proof_list(verified, 'verified')}
-      </div>
-      <div>
-        <span class="tag p">pending</span>
-        {proof_list(pending, 'pending')}
-      </div>
-    </div>
-    <p class="prose" style="margin-top:14px">A pending entry never reaches a client. It becomes
-    verified the moment you can say where it can be checked.</p>
-  </section>
-
-  <footer>Rebuild this page any time with <code>python3 code/context_page.py</code>.</footer>
-</div>
-</body>
-</html>
-"""
+    return ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+            '<title>Your Upwork context</title>\n<style>' + CSS + '</style>\n</head>\n<body>\n<main>\n'
+            '  <h1>Your Upwork context</h1>\n'
+            '  <p class="sub">What every command reads before it writes for you. Built from context/me.md on this machine.</p>\n'
+            '  <div class="card">\n'
+            f'    <section><h2>You</h2>{top}</section>\n'
+            f'    <section><h2>What you sell</h2>{sells_html}</section>\n'
+            f'    <section><h2>Your terms</h2>{terms_html}</section>\n'
+            f'    <section><h2>What you can prove</h2>{proof_html}</section>\n'
+            f'    {open_html}\n'
+            '  </div>\n'
+            '  <p class="next">Next: <strong>/profile</strong> measures your live profile and writes the one that fixes it.</p>\n'
+            '</main>\n</body>\n</html>\n')
 
 
 def main(argv=None):
