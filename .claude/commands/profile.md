@@ -84,6 +84,16 @@ Each of these matters only when it fails:
 by `/context`. The connector returns neither, measured 12 September 2026.
 An unanswered field is not measured, never estimated; name the gap without asking again.
 
+**Three role models.** For the member's lead branch, find three public Top Rated
+profiles closest to them (same branch, similar level, similar country where it
+shows): search the web for public Upwork profile URLs, then `get_profile` action
+`get` with each `profile_key`. Give the member four lines per profile in the chat:
+the title, how the overview opens, the skills and rate band, and the one thing worth
+borrowing, with the public URL beside it. They are inspiration for structure and
+ideas, never sentences to copy: copied text gets flagged, and a client who read it
+elsewhere trusts neither profile. Keep none of it in a file, it is Upwork content;
+Step 4 uses the patterns and never their words.
+
 ## Step 3 · Read your facts
 
 `context/me.md` holds the background, the offer, the terms
