@@ -347,9 +347,9 @@ list's one-sentence headline `python3 code/pipeline.py headline <id> "<sentence>
 ## Step 7 · Close
 
 1. `python3 code/pipeline.py prune`, then `python3 code/jobs.py clean` (deletes this run's raw responses).
-2. **Show ten, and the bench is everything else that passed.** The run's job is ten
-   leads the member would actually apply to today. Show exactly ten, numbered, each one
-   line: who wants what, the grade, and what applying costs in Connects. Behind them
+2. **Show the daily target, and the bench is everything else that passed.** The target
+   is ten unless `Applications per day` in `context/me.md` says otherwise. Show that
+   many, numbered, each one line: who wants what, the grade, and what applying costs in Connects. Behind them
    stands every other lead that passed the gate, in rank order, which is what
    `python3 code/pipeline.py list` already prints. Open invitations come first, before the ten.
 3. Ask once, in one line, which of the leads you showed are a no and why. Take the

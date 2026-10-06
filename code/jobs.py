@@ -50,7 +50,6 @@ MAX_DEDUCTION = 2      # doubts shave a fit, they never outweigh it: on a ten-po
                        # three would let a nine fail, and a nine is the member's own work
 LESSON_CAP = 1         # what measured outcomes may move a score, in either direction
 BEGINNER_DEDUCTION = 1 # the cap while the evidence sections are still empty
-MAX_PROPOSALS = 40     # hard no: the queue is longer than the Connects are worth
 MIN_CLIENT_RATING = 3.0
 FIXED_FLOOR = 250      # hard no below this on fixed price
 HOURLY_FLOOR = 0.6     # hard no below this share of the member's own rate
@@ -136,15 +135,13 @@ def member_limits():
     fixed_floor = me_number('Smallest project worth taking')
     limits = {
         'rate': rate,
-        'proposals': proposals or MAX_PROPOSALS,
+        'proposals': proposals,   # None unless the member set a maximum: no default cap
         'fixed_floor': fixed_floor or FIXED_FLOOR,
         'hourly_share': (share / 100 if share else HOURLY_FLOOR),
         'min_rating': MIN_CLIENT_RATING,
     }
     limits['missing'] = [] if rate else ['hourly floor, because no rate is known']
     limits['defaults'] = []
-    if not proposals:
-        limits['defaults'].append(f'maximum proposals: {MAX_PROPOSALS}')
     if not fixed_floor:
         limits['defaults'].append(f'smallest fixed-price project: ${FIXED_FLOOR}')
     if not share:
@@ -280,7 +277,7 @@ def cmd_rules(args):
         'sources': ['Upwork recommendations', 'Semantic search themes'],
         'filters': ['Already applied', 'Already in the pipeline', 'Outside the search window',
                     'Unverified payment', 'Full-time role',
-                    f'More than {_LIMITS["proposals"]:g} proposals',
+                    *([f'More than {_LIMITS["proposals"]:g} proposals'] if _LIMITS['proposals'] else []),
                     f'Client rated under {MIN_CLIENT_RATING} by at least 3 freelancers',
                     f'Fixed price under ${_LIMITS["fixed_floor"]:g}',
                     f'Hourly top under {int(_LIMITS["hourly_share"] * 100)}% of the member rate'],
@@ -359,7 +356,8 @@ def disqualified(job, limits):
     if str(job.get('engagement') or '').upper() == 'FULL_TIME':
         return 'full-time role, not a project'
     proposals = job.get('proposals')
-    if isinstance(proposals, (int, float)) and proposals > limits['proposals']:
+    if (limits['proposals'] and isinstance(proposals, (int, float))
+            and proposals > limits['proposals']):
         return f'{int(proposals)} proposals, over your cap of {limits["proposals"]:g}'
     rating, reviews = c.get('rating'), c.get('total_reviews')
     if rating is not None and rating < limits['min_rating'] and (reviews or 0) >= 3:
@@ -406,12 +404,6 @@ def deductions(job, rate):
     the job actually is.
     """
     out = []
-    proposals = job.get('proposals')
-    if isinstance(proposals, (int, float)):
-        if proposals > 25:
-            out.append((2, f'{int(proposals)} proposals'))
-        elif proposals > 10:
-            out.append((1, f'{int(proposals)} proposals'))
     c = job.get('client') or {}
     if c.get('hires') == 0 and (c.get('posted_jobs') or 0) >= 2:
         out.append((1, 'has posted before and never hired'))

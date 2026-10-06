@@ -35,11 +35,11 @@ carry a quarter to nearly half of the automation set alone. Current shares are i
 
 ## Ten a day, and a bench of ten
 
-The run's unit is not a score, it is **ten leads worth applying to today**, with ten
-more behind them. One turned down is replaced from the bench in the same breath, so
-the member always reads ten. Fewer than ten is reported as what it is, with the cause
-named: too few dense tracks, limits set too tight, or a quiet day. Padding the ten with
-leads the score turned down wastes Connects on purpose.
+The run's unit is not a score, it is **ten leads worth applying to today**, by default:
+the member's own `Applications per day` in `context/me.md` replaces ten, with as many
+more behind them. One turned down is replaced from the bench in the same breath. Fewer
+is reported as what it is, with the cause named: too few dense tracks, limits set too
+tight, or a quiet day. Padding the list with leads the score turned down wastes Connects.
 
 **What it costs.** Measured 28 September 2026: one local SEO job cost 7 Connects. Say the
 day's bill and the balance once, never buy Connects, and never talk a member out of their
@@ -205,22 +205,20 @@ arrive: the filters cost nothing and every one of them turns ten random rows int
 ten rows worth reading.
 
 **These figures are a starting point, not a rule.** Three of the five scale with
-experience, and the wrong figure is expensive in both directions: a beginner capped at
-forty proposals spends Connects on races they cannot win, and an established member
-floored at a hundred dollars takes work that pays worse than their afternoon.
+experience, and the wrong figure is expensive in both directions: an established member
+floored at a hundred dollars takes work that pays worse than their afternoon, and a
+beginner floored too high finds nothing.
 `/find-jobs` therefore opens by showing these numbers with a recommendation for that
 person, and whatever they answer is written into `context/me.md` and read from there on
-every later run. Three tiers: **no reviews yet** caps proposals near 15, because a queue of
-forty goes to someone with a record, puts the fixed floor near 100, because the first two
-reviews are worth more than the first two hundred dollars, and halves the hourly floor,
-since the rate is still a hope. **A rate and a few finished contracts** fits the figures
-below. **A high rate with proof and a narrow niche** raises the hourly floor toward 80
-percent and drops the cap toward 25, and their honest day is three good leads rather than
-ten.
+every later run. Three tiers: **no reviews yet** puts the fixed floor near 100, because
+the first two reviews are worth more than the first two hundred dollars, and halves the
+hourly floor, since the rate is still a hope. **A rate and a few finished contracts** fits
+the figures below. **A high rate with proof and a narrow niche** raises the hourly floor
+toward 80 percent, and their honest day is three good leads rather than ten.
 
 | Limit | Default | Filter | Why this number |
 |---|---|---|---|
-| Competition | 40 proposals | `proposals_max` | Measured 28 September 2026: a single SEO term returned postings at 106 and 122 proposals. Connects spent there buy a lottery ticket |
+| Competition | no cap unless the member sets one | `proposals_max` | Typical postings carry 18 to 41 proposals (26 September 2026), so a default cap would cut half of ordinary work. The count is shown on every lead |
 | Fixed price floor | $250 | `budget_min` | Below it the writing costs more than the job pays |
 | Hourly floor | 60% of the member's rate | `rate_min` | The same day returned hourly postings at $3 to $5 |
 | Engagement | no `FULL_TIME` | `job_type`, `workload` | An employee disguised as a contract, and the one trap a generous budget hides best |
