@@ -218,12 +218,14 @@ without a deliverable and a price makes every later command invent one.
    must choose from: five branches with steady demand on Upwork, each with a course
    in the community, and their own direction works too. Say "branches", not
    "lanes". Show them with their services and ask which match what they can deliver
-   today and which they could grow into, then recommend two, three at most, by
-   overlap with the jobs they have held, not by what sounds biggest. Taking all five
-   is allowed when they want it. Say that the first ten applications test the choice.
-   **Custom additions come second.** A direction out of their background that no
-   lane covers is offered after the lanes with the reason, labelled custom: no
-   template, no course, harder to sell. Search Upwork for it and for something
+   today and which they could grow into. Keep it light: take their picks as given,
+   name the two or three to lead with in one line (all five is allowed when they
+   want it), and never audit what they left out or ask why. Say that the first ten
+   applications test the choice.
+   **Custom additions come after the branches.** Ask once whether they want to add
+   a branch or service of their own from their interests or profile, and offer one
+   or two ideas out of their background. Label each custom: no template, no
+   course, harder to sell. Search Upwork for it and for something
    similar (`find_jobs` search only, rows only, call budget stated first) and show
    postings in the last 7 days, median price and proposal counts, with n and
    today's date, next to the same figures for the lanes. Flag low demand and let
