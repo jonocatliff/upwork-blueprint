@@ -214,18 +214,18 @@ Run `python3 code/profile_draft.py check profile.md`. It re-runs the same checks
 
 ## Step 6 · Put it live, one field at a time
 
-The connector's 12 September tool description documents `update_profile`
-previews for the title (`update_title`), overview (`update_overview`), full skill
-set (`set_skills`, whose real cap is read in the live editor rather than remembered), availability, employment,
-education and languages; the title, overview and skills writes remain untested.
-Use a write only when that action is present and it returns the documented
-preview. Otherwise hand over the paste-ready version and
-click path. Hourly rate, portfolio and video stay manual.
+The connector documents `update_profile` previews (checked 6 October 2026) for the
+title, overview, skills (at most 20), the video (`set_video`, a public YouTube link
+the member gives you), availability, employment (country as ISO code, role up to 50
+characters), education, languages and other experience; none has run from this repo.
+First save the live title, overview and skills in `profile-before.md`, the member's
+own words, so they can go back. Use a write only when its action returns the
+documented preview, otherwise hand over the paste-ready version and click path.
+Hourly rate, portfolio, photo, categories and the linked account stay manual.
 
-For each writable field, create the preview and show exactly what would replace
-what. Call `confirm_preview` only after an explicit yes for that field. One
-field, one yes; "approve all" is not a yes for each. If the returned behavior
-differs from the documented preview flow, stop and keep the manual handoff.
+For each writable field, create the preview and show what would replace what. Call
+`confirm_preview` only after an explicit yes for that field, never one "approve all".
+If the behavior differs from the documented preview flow, stop: manual handoff.
 
 ## Step 7 · Report
 
