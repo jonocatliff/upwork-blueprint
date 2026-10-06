@@ -1,6 +1,6 @@
 # Default lanes
 
-The five lanes `/context` offers every member first. A member ticks every service they can picture doing, and `/context` narrows that to two or three. The course named under each lane is the lesson in the community classroom to watch before the first application. A direction that fits none of these is a custom addition, offered after the lanes.
+The five branches we recommend, offered to every member first. They are a recommendation, not a menu: steady demand on Upwork, each with a course in the community, and a member's own direction works too. The member names what they can deliver today and what they could grow into, and `/context` narrows that to two or three. The course under each branch is the lesson in the community classroom to watch before the first application. A direction that fits none of these is a custom addition, offered after them.
 
 ## 1. GoHighLevel CRM automations
 

@@ -213,11 +213,14 @@ without a deliverable and a price makes every later command invent one.
    - **open**, no tendency yet: keep the search wide until replies say something.
      Never write a specialization into a profile that the member has not chosen.
 
-   **Offer the lanes first, for every member.** Read `templates/profile/lanes.md`:
-   five lanes, each with its services and the course that teaches it. Show all
-   five and let the member tick every service they can picture doing, then narrow
-   to two or three by overlap with the jobs they have held, not by what sounds
-   biggest, and say that the first ten applications test the choice.
+   **Offer the five branches first, for every member.** Read
+   `templates/profile/lanes.md`. Frame them as our recommendation, never a menu they
+   must choose from: five branches with steady demand on Upwork, each with a course
+   in the community, and their own direction works too. Say "branches", not
+   "lanes". Show them with their services and ask which match what they can deliver
+   today and which they could grow into, then narrow to two or three by overlap
+   with the jobs they have held, not by what sounds biggest, and say that the
+   first ten applications test the choice.
    **Custom additions come second.** A direction out of their background that no
    lane covers is offered after the lanes with the reason, labelled custom: no
    template, no course, harder to sell. Search Upwork for it and for something
