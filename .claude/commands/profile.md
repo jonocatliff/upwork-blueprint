@@ -86,23 +86,19 @@ An unanswered field is not measured, never estimated; name the gap without askin
 
 **Three role models.** The connector cannot search for freelancers (checked 6 October
 2026: `get_profile` reads one profile by `profile_key`, and a job's client history
-names no freelancer), so candidates come from two places. Tell the member how to
-search, with keywords from their branch and the skills Step 1 counted: on Google,
-`site:upwork.com/freelancers "<skill>" "<skill>"`, or Upwork's public hire pages, which
-need no client account. Tell them what to look for, as a starting point and not a
-measurement: higher earnings, many finished jobs, recent work, a rate within reach of
-theirs, and a profile that does what they want to do. They paste three to five
-addresses with a `~` in them; add eight to ten public profile URLs from a web search
-of your own. Read each with `get_profile` action `get` and its `profile_key`. Rank by
-success, not by badge: earnings bucket first, then jobs and reviews. Pick the three
-closest to the member by skills in common and rate band, and say which criteria chose
-each, and that the job success score and hours are not visible. Give the member four
-lines per profile in the chat:
-the title, how the overview opens, the skills and rate band, and the one thing worth
-borrowing, with the public URL beside it. They are inspiration for structure and
-ideas, never sentences to copy: copied text gets flagged, and a client who read it
-elsewhere trusts neither profile. Keep none of it in a file, it is Upwork content;
-Step 4 uses the patterns and never their words.
+names none), so candidates come from two places. Tell the member how to search, with
+the skills Step 1 counted: on Google, `site:upwork.com/freelancers "<skill>" "<skill>"`,
+or Upwork's public hire pages, no client account needed. Look for higher earnings, many
+finished jobs, recent work, a rate within reach and a profile doing what they want to
+do, as a starting point and not a measurement. They paste three to five addresses with
+a `~`; add eight to ten from your own web search. Read each with `get_profile` action
+`get` and its `profile_key`, rank by success, not badge (earnings bucket, then jobs and
+reviews), and pick the three closest by skills in common and rate band. Say which
+criteria chose each, and that the job success score and hours are not visible. Give
+four chat lines per profile: title, how the overview opens, skills and rate band, and
+the one thing worth borrowing, with the URL. Inspiration for structure and ideas,
+never sentences: copied text gets flagged and a client who read it elsewhere trusts
+neither profile. Keep none in a file (Upwork content); Step 4 uses patterns, not words.
 
 ## Step 3 · Read your facts
 
