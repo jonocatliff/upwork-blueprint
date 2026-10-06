@@ -117,10 +117,9 @@ imperative back to "you"; only 2 of 16 profiles do it. Search spellings the skil
 go into the sentences. **Answer one objection**, usually "it will not break" or "you will own it".
 **Close with one imperative plus permission**, such as "send me what you have, even if it is messy".
 
-**Proof, strongest first. S:** video testimonials, detailed case studies with hard numbers, Top Rated,
-100% Job Success, $100K+ earned on Upwork. **A:** top 1% for a skill, major press, 100+ reviews, 100+
-projects, spoke at events. **B:** hours saved, client revenue earned, named big-brand work.
-**C:** certifications, years of experience, following, systems built.
+**What goes into the hook and the three bullets:** the results a client cares about most, with
+numbers: leads gained, revenue earned, hours saved, a named brand, and a detailed case study when one
+exists. Not what the profile page already shows: a Top Rated badge, the Job Success Score, earnings.
 
 **Free differentiators**, because almost nobody does them: a price, a disqualification line ("this
 is not for you if"), an availability window, a date on a claim, a numeric guarantee. Name one the

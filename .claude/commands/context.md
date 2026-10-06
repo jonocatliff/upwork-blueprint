@@ -301,10 +301,8 @@ report" is proof. "Significant time savings" is nothing.
 
 Write each result in the shape the formula uses, so `/profile` can lift it
 without rewriting: BUILT or DELIVERED [what] for [kind of company], achieving
-[result with number] in [timeframe]. Then tag its tier from
-`references/profile.md`: S for testimonials and case studies with hard
-numbers, A for reach and volume, B for outcome numbers, C for certificates,
-years and systems built. `/profile` leads with the highest tier that exists.
+[result with number] in [timeframe]. `/profile` leads with the results a client
+cares about most.
 
 Every entry carries **where it can be checked**, the date and a status:
 
@@ -359,7 +357,7 @@ their own words, so a wrong line is visible without opening anything.
 with its price beside it, the rate, and what they do not do.
 
 **What you can prove.** Every proof entry, verified and pending kept apart,
-highest tier first. A pending claim never reaches a client, so say plainly which
+strongest first. A pending claim never reaches a client, so say plainly which
 ones those are and what would move them to verified.
 
 **Where it lives.** [context/me.md](../../context/me.md), the one file every later
