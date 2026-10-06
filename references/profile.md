@@ -82,12 +82,10 @@ projects with role, deliverable, result, period and where the evidence lives,
 with missing metrics marked unknown. **Commercial fit:** scope, availability and
 a rate built from the member's own work.
 
-**Draft order:** title, then the first sentence, then two or three short case
-cards, then services and process, then the portfolio and the factual fields. A
-case card reads: context, problem, the member's role, deliverable, documented
-outcome and period, evidence and permission. An unmeasured outcome is described
-by what the system does, without inventing a number, and a placeholder is never
-published as a claim.
+**Draft order:** title, then the overview (hook, three results, how you work, close),
+then skills, portfolio titles and the factual fields. An unmeasured outcome is
+described by what the system does, without inventing a number, and a placeholder is
+never published as a claim.
 
 **When sources disagree**, this order settles it: the member's own verified
 evidence for claims about the member, current Upwork policy for conduct, and the
@@ -106,8 +104,7 @@ then a role noun, then a deliverable noun. No verbs, no price, no years, no badg
 **Only the first 250 or so characters appear in the search results list** (360016252373), so the
 opening decides alone. **Open with the client's problem or an outcome**, no greeting, no biography, no
 restated job title, and put a **verified hard number inside those first 250 characters** when one
-exists. **No markdown:** Upwork shows asterisks as asterisks, so structure comes from Unicode bold,
-emoji or prose. **Results carry numbers, not adjectives**, one line each:
+exists. **No markdown:** Upwork shows asterisks as asterisks. **Results carry numbers, not adjectives**, one line each:
 `BUILT/DELIVERED [what] for [kind of company], achieving [specific result with number] in [timeframe]`.
 
 **Write prose that flows,** connected sentences and short paragraphs, with no sentence-length rule:
@@ -133,8 +130,8 @@ member could add truthfully. No word list is banned; the structure above does th
 - **Portfolio.** Four items is where completeness caps out. A title carries a number only when the
   evidence sections of `context/me.md` tie it to that project. Linking a real Upwork job notifies that
   client, who has three days to object. **No contact details in the files or the pages they link to.**
-- **Intro video.** A YouTube link with monetisation off, 30 to 90 seconds in practice, no documented
-  limit. Worth 10% of completeness, the only documented reason to make one.
+- **Intro video.** A YouTube link with monetisation off. Worth 10% of completeness, the only
+  documented reason to make one.
 - **Hourly rate.** The connector cannot set it. A band from the discipline and the experience level a
   client would pick, moved by verified proof alone, never a country discount, never empty. It anchors
   every later bid, so `context/me.md` carries it.

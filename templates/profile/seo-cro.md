@@ -17,7 +17,7 @@ cannot back.
   median of $20 to $50. None of the 20 SEO titles named conversion, landing pages or
   funnels.
 - **So:** SEO leads the title. Conversion is the second half of the promise, traffic
-  that turns into calls, and its terms ride in the skills and the keyword block.
+  that turns into calls, and its terms ride in the skills and the text.
 
 ## What successful SEO profiles do (8 measured)
 

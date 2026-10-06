@@ -101,28 +101,6 @@ def term_in_skills(term, skills):
     return False
 
 
-def structured_lines(overview):
-    """Lines that open with a bullet, an emoji or Unicode bold: how structure survives
-    Upwork stripping markdown."""
-    count = 0
-    for line in overview.splitlines():
-        s = line.strip()
-        if not s:
-            continue
-        first = s[0]
-        if 0x1D400 <= ord(first) <= 0x1D7FF or not first.isalnum() and first not in '"\'(':
-            count += 1
-    return count
-
-
-def has_keyword_line(overview):
-    for line in overview.splitlines():
-        items = [i.strip() for i in line.split(',') if i.strip()]
-        if len(items) >= 6 and all(len(i.split()) <= 4 for i in items[1:-1]):
-            return True
-    return False
-
-
 def run_checks(p):
     overview = p['overview']
     opening = overview[:OPENING]
@@ -151,10 +129,6 @@ def run_checks(p):
          bool(opening_number), f'found: {opening_number.group(0)}' if opening_number else 'none'),
         ('results_with_numbers', 'At least three result lines carry a number', 'top-earners',
          len(numbered_lines) >= 3, f'{len(numbered_lines)} line(s) with a number'),
-        ('visual_structure', 'Readable structure: paragraphs, bullets or headers', 'top-earners',
-         bool(overview.strip()), f'{structured_lines(overview)} structured line(s); prose is supported'),
-        ('keyword_block', 'A line listing the tools you work with, for search', 'top-earners',
-         has_keyword_line(overview), 'found' if has_keyword_line(overview) else 'none'),
         ('closing_ask', 'Ends with a concrete next step for the client', 'top-earners',
          bool(ASK.search(ending)), 'found' if ASK.search(ending) else 'ends without an ask'),
         ('skills_count', f'At least {SKILLS_PASS} skills, ideally all {SKILLS_TARGET}', 'top-earners',
