@@ -251,10 +251,11 @@ already shown how they write.
 
 1. **Hourly rate**, and the smallest project worth taking. Recommend a range, and
    say it is a recommendation: built from their live Upwork rate, their years and
-   proof in the chosen branches, the two pages in
+   proof in the chosen branches, the rates in
    [references/jobs.md](../../references/jobs.md) and one live search for those
    branches (rows only, hourly ranges and fixed-price medians, with n and today's
-   date). Label what is measured and what is guess, then ask what they would
+   date). You read those pages; the member gets a number, never a link or a page
+   to read. Label what is measured and what is guess, then ask what they would
    actually quote: a number they cannot defend on a call is worth nothing. Where
    they live decides which clients and hours fit, never a discount, and never talk
    them down to compete. Whatever they land on goes into the `**Hourly rate:**` line as

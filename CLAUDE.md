@@ -105,6 +105,9 @@ Three lines at the top, decision before data, no tables, no raw payloads, no wal
 The full shape is in [references/copy.md](references/copy.md), which every command
 that writes for a member or a client already reads.
 
+A question gets an answer. Read the page or the file yourself and give the
+recommendation; never hand a member a link or a file to read in your place.
+
 This holds for the whole run, not only the report. The one-line description beside
 every command Claude Code runs is the member's line too: say what the step is for,
 never the shell it types. A member watching `wc -l references/profile.md`
