@@ -138,6 +138,13 @@ Written Saturday 12 September 2026 · clears every draft check · every number b
 **Next:** answer the open questions below, then paste the sections in the order at the bottom.
 ```
 
+**Take a position.** In the chat, recommend one title, one overview opening and one
+skill order, each with its reason in two lines from what Steps 1 and 2 measured. When
+the member objects, answer it on its merits once: change the draft only for a reason
+the evidence supports, otherwise keep it and say so plainly. Never open with "fair
+point", never fold under a preference, and never hand back a menu of three with
+"which one?". Variants come only when they ask.
+
 Then these sections, with these exact headings. The gate reads the first four (`## Title`, `## Overview`, `## Skills`, `## Portfolio titles`); the last two are for you alone:
 
 - **`## Title`**: the recommended title alone in a fenced `text` block, two to five blocks split by |, each block a word a client types. **The limit is 70 characters**, measured from the connector's own write action and from a real title that came back cut at exactly 70, and the draft gate fails anything longer. Strong profiles run 55 to 70, so use the room without padding to fill it. Below it, four to seven variants as a list, each with its angle in bold (tool first, outcome first, niche first, audience first). Picking is faster than explaining.
