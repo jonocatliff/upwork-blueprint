@@ -95,10 +95,10 @@ role models. Read each with `get_profile` action `get` and its `profile_key`, ra
 success, not badge (earnings bucket, then jobs and reviews), pick the three closest by
 skills in common and rate band, name the criteria and say the job success score and
 hours are not visible. Give four chat lines per profile: title, how the overview opens,
-skills and rate band, and the one thing worth borrowing, with the URL. Inspiration for
-structure and ideas, never sentences: copied text gets flagged and a client who read
-it elsewhere trusts neither profile. Keep none in a file (Upwork content); Step 4 uses
-patterns, not words.
+skills and rate band, and the one thing worth borrowing, with the URL, then the three
+averages: title length, overview length, skills. Step 4 aims at them within Upwork's
+limits and the gate, taking structure and ideas, never sentences: copied text gets
+flagged. Keep none in a file (Upwork content).
 
 ## Step 3 · Read your facts
 
