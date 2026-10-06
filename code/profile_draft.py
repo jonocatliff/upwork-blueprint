@@ -29,7 +29,9 @@ SKILLS_MAX = 20
 # over their average length and shorter is always fine.
 CEILING = 1.2
 # Checks that read fields a draft does not contain.
-NOT_FOR_DRAFTS = {'certificates', 'rate_set', 'complete'}
+# keyword_block is here because the overview weaves its search words into the prose;
+# a separate comma list reads as a list of fragments.
+NOT_FOR_DRAFTS = {'certificates', 'rate_set', 'complete', 'keyword_block'}
 
 
 def section(text, name):
