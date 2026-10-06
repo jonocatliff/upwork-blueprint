@@ -84,10 +84,16 @@ Each of these matters only when it fails:
 by `/context`. The connector returns neither, measured 12 September 2026.
 An unanswered field is not measured, never estimated; name the gap without asking again.
 
-**Three role models.** For the member's lead branch, find three public Top Rated
-profiles closest to them (same branch, similar level, similar country where it
-shows): search the web for public Upwork profile URLs, then `get_profile` action
-`get` with each `profile_key`. Give the member four lines per profile in the chat:
+**Three role models.** The connector cannot search for freelancers (checked 6 October
+2026: `get_profile` reads one profile by `profile_key`, and a job's client history
+names no freelancer), so candidates come from two places. Ask the member once to open
+Upwork's talent search for their branch, sort by earnings and paste three to five
+profile URLs they would like to be, and add eight to ten public profile URLs from a
+web search. Read each with `get_profile` action `get` and its `profile_key`. Rank by
+success, not by badge: earnings bucket first, then jobs and reviews. Pick the three
+closest to the member by skills in common and rate band, and say which criteria chose
+each, and that the job success score and hours are not visible. Give the member four
+lines per profile in the chat:
 the title, how the overview opens, the skills and rate band, and the one thing worth
 borrowing, with the public URL beside it. They are inspiration for structure and
 ideas, never sentences to copy: copied text gets flagged, and a client who read it
