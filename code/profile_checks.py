@@ -19,8 +19,6 @@ import sys
 
 TAG = re.compile(r'</?untrusted_participant_content>')
 GREETING = re.compile(r"^\W*(hi|hey|hello|dear|greetings|welcome|my name|i am|i'm|i´m)\b", re.I)
-BANNED = ('i would love to', "i'm excited", 'i am excited', 'passionate', 'results-driven',
-          'rockstar', 'ninja')
 ASK = re.compile(r'\?|\b(send me|tell me|share|message me|invite me|let me know|drop me)\b', re.I)
 # Words that describe a person rather than name a searchable thing.
 STOP = {'expert', 'specialist', 'and', 'the', 'for', 'with', 'developer', 'consultant',
@@ -134,7 +132,6 @@ def run_checks(p):
     uncovered = [t for t in title_terms(p['title']) if not term_in_skills(t, p['skills'])]
     numbered_lines = [l for l in overview.splitlines() if RESULT_NUMBER.search(l)]
     opening_number = RESULT_NUMBER.search(opening)
-    banned = [b for b in BANNED if b in lower]
     portfolio = p['portfolio'] or []
     certificates = p['certificates'] or []
     outcome_titles = [t for t in portfolio if RESULT_NUMBER.search(t)]
@@ -154,8 +151,6 @@ def run_checks(p):
          bool(opening_number), f'found: {opening_number.group(0)}' if opening_number else 'none'),
         ('results_with_numbers', 'At least three result lines carry a number', 'top-earners',
          len(numbered_lines) >= 3, f'{len(numbered_lines)} line(s) with a number'),
-        ('no_banned_phrases', 'None of the phrases every top earner avoids', 'top-earners',
-         not banned, 'none' if not banned else 'found: ' + ', '.join(banned)),
         ('visual_structure', 'Readable structure: paragraphs, bullets or headers', 'top-earners',
          bool(overview.strip()), f'{structured_lines(overview)} structured line(s); prose is supported'),
         ('keyword_block', 'A line listing the tools you work with, for search', 'top-earners',
@@ -164,11 +159,9 @@ def run_checks(p):
          bool(ASK.search(ending)), 'found' if ASK.search(ending) else 'ends without an ask'),
         ('skills_count', f'At least {SKILLS_PASS} skills, ideally all {SKILLS_TARGET}', 'top-earners',
          len(p['skills']) >= SKILLS_PASS, f'{len(p["skills"])} skill(s)'),
-        ('portfolio_count', 'At least two portfolio projects', 'upwork',
-         len(portfolio) >= 2, f'{len(portfolio)} project(s)'),
-        ('portfolio_outcomes', 'At least half the portfolio titles name a measurable result',
-         'top-earners', bool(portfolio) and len(outcome_titles) * 2 >= len(portfolio),
-         f'{len(outcome_titles)} of {len(portfolio)} carry a number'),
+        ('portfolio', 'At least two portfolio projects, half of them with a measurable result in the title',
+         'upwork', len(portfolio) >= 2 and len(outcome_titles) * 2 >= len(portfolio),
+         f'{len(portfolio)} project(s), {len(outcome_titles)} with a number'),
         # Only one of forty measured postings asked for a certificate, so this is not
         # about what clients want. It is here because Upwork's own partner
         # certification page says the certification feeds search and matching.

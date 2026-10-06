@@ -122,11 +122,9 @@ go into the sentences. **Answer one objection**, usually "it will not break" or 
 projects, spoke at events. **B:** hours saved, client revenue earned, named big-brand work.
 **C:** certifications, years of experience, following, systems built.
 
-**Banned phrases:** "I would love to", "I'm excited", "passionate", "results-driven", "rockstar",
-"ninja", an opening that restates a job title, a close on a broad claim such as "AI is the future of
-business". **Free differentiators**, because almost nobody does them: a price, a disqualification
-line ("this is not for you if"), an availability window, a date on a claim, a numeric guarantee.
-Name one the member could add truthfully.
+**Free differentiators**, because almost nobody does them: a price, a disqualification line ("this
+is not for you if"), an availability window, a date on a claim, a numeric guarantee. Name one the
+member could add truthfully. No word list is banned; the structure above does the work.
 
 ## The other fields
 

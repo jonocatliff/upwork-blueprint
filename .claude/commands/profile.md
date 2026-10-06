@@ -153,7 +153,7 @@ point", never fold under a preference, and never hand back a menu of three with
 
 Then these sections, with these exact headings. The gate reads the first four (`## Title`, `## Overview`, `## Skills`, `## Portfolio titles`); the last two are for you alone:
 
-- **`## Title`**: the recommended title alone in a fenced `text` block, two to five blocks split by |, each block a word a client types. **The limit is 70 characters**, measured from the connector's own write action and from a real title that came back cut at exactly 70, and the draft gate fails anything longer. Strong profiles run 55 to 70, so use the room without padding to fill it. Below it, four to seven variants as a list, each with its angle in bold (tool first, outcome first, niche first, audience first). Picking is faster than explaining.
+- **`## Title`**: the recommended title alone in a fenced `text` block, two to five blocks split by |, each block a word a client types. **The limit is 70 characters**, measured from the connector's own write action and from a real title that came back cut at exactly 70, and the draft gate fails anything longer. Write one title, with its reason in a line.
 - **`## Overview`**: the first two lines once on their own as a quote, because they carry the click. Then the whole overview in one fenced `text` block. No markdown inside it: Upwork shows asterisks as asterisks, so structure comes from Unicode bold, emoji or plain prose. Offer prose first when the member writes well, because the two highest earners in the measured sample use it and lists sat with the lower ones. The shape, in this order: (1) one hook sentence in "you" and "your" on who you are and what the client gets, the services in one clause, with a verified number inside the first 250 characters when one exists; (2) three bullets, strongest proof tier first, each a verified result (BUILT or DELIVERED what, for whom, achieving what, with its number); (3) how you work and one objection answered, plus a differentiator only when it tells the client something Upwork does not already show; (4) search words and spellings the skills list cannot carry, such as "GHL", woven into those sentences, never a separate list; (5) a close as one imperative plus permission back to "you". It reads as one flow, connected sentences with the three bullets as the only list. Never restate what the profile page already shows: location, job and review totals, earnings, the skills list. With fewer than three verified results, use those and ask the member to confirm the rest, never invent one. A good ask invites the client to send their website on Upwork.
 - **`## Skills`**: one `- Skill` line each, in Upwork's exact spelling. Upwork's own help says 15 in one place and 20 in another, so fill what the live editor actually offers and claim no number from memory (the skill for GoHighLevel is called HighLevel). Use the names Step 1 counted in real postings; mark any you could not confirm with "(check the spelling in Upwork's list)".
 - **`## Portfolio titles`**: one `- New title (was: old title)` line per project. A number goes in a title only when the proof ties it to that project.
@@ -163,35 +163,28 @@ Then these sections, with these exact headings. The gate reads the first four (`
   item the overview leads with, the process beat matches the services, and the ask is the
   overview's ask word for word. Change the title or the direction later and this script
   changes with it, otherwise the profile and the video sell two different people.
-  Spoken language, written to be read aloud, with a time per beat so they can hold it:
-  **the client's problem in one sentence** (8 seconds, and never a greeting or a name
-  first, because a client who wanted a CV would read one), **what the member does about
-  it** (15 seconds), **up to three verified proofs, or the background instead when there
-  are none** (20 seconds), **how working together runs, in two or three steps** (20
-  seconds), **the ask, the same imperative plus permission the overview closes on** (10
-  seconds). That lands near 75 seconds; Upwork documents no length limit and 30 to 90
-  seconds is practice.
+  Spoken language, written to be read aloud, in five beats: **the client's problem in one
+  sentence** (never a greeting or a name first, because a client who wanted a CV would read
+  one), **what the member does about it**, **up to three verified proofs, or the background
+  instead when there are none**, **how working together runs, in two or three steps**, and
+  **the ask, the same imperative plus permission the overview closes on**.
 
   **The format, because it has to be readable while recording.** One block per beat, in
   this shape, and nothing else between them:
 
   ```
-  ### 0:00 to 0:08 · The problem
+  ### The problem
   The spoken words, exactly as they are to be said, one sentence per line.
   **On screen:** one short direction.
   ```
 
-  Speaking pace runs near 150 words a minute, so the whole script lands between 150 and
-  190 words. Write contractions, the way people talk. One sentence per line so the eye
-  finds its place after looking at the camera. No greeting, no name in the first
-  sentence, no jargon a client would not use out loud, and no sentence longer than 14
-  words. The last beat repeats the overview's ask word for word, so the profile and the
-  video make the same promise.
-
-  Close the section with two lines: the total word count with the estimated seconds, and
-  "read it aloud once before recording; anything that trips your tongue gets cut". It is
-  a YouTube link with monetisation off, worth 10% of completeness, and a profile goes
-  live without it while a profile waiting for it never does.
+  Write contractions, the way people talk, one sentence per line so the eye finds its
+  place after looking at the camera. No greeting, no name in the first sentence, no jargon
+  a client would not use out loud. The last beat repeats the overview's ask word for word,
+  so the profile and the video make the same promise. Close with "read it aloud once before
+  recording; anything that trips your tongue gets cut". It is a YouTube link with
+  monetisation off, worth 10% of completeness, and a profile goes live without it while a
+  profile waiting for it never does.
 - **`## Profile fields`**: the rest of the profile, written out and ready to paste,
   because completeness is the only ranking lever Upwork admits to and these fields
   carry half of it. One short block each, from `context/me.md` and nothing invented:

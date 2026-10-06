@@ -193,7 +193,7 @@ let the answer steer the rest. Point 2 is where the listening matters: a service
 without a deliverable and a price makes every later command invent one.
 
 1. **The one thing you want to be hired for.** Their words, not a category.
-2. **What they actually sell**, at most five things. What this block is after is
+2. **What they actually sell.** What this block is after is
    the expertise and the direction, not a price list. "GoHighLevel automation for
    agencies" is a better answer than a catalogue of packages nobody has bought
    yet, and a member who has never quoted a fixed price has not failed this
@@ -356,7 +356,7 @@ show them what is now in their files. Not a list of filenames, the content, in
 their own words, so a wrong line is visible without opening anything.
 
 **What you are on record as.** The one thing they are hired for, each service
-with its price beside it, the rate, and what they do not do. Six lines at most.
+with its price beside it, the rate, and what they do not do.
 
 **What you can prove.** Every proof entry, verified and pending kept apart,
 highest tier first. A pending claim never reaches a client, so say plainly which
