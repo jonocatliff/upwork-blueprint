@@ -1,5 +1,5 @@
 ---
-description: Everything about you, once: your work history, what you can do, what you will not do, your rate and every result you can prove. Every other command reads it.
+description: Everything about you, once: your work history, what you can do, what you will not do and every result you can prove. Every other command reads it.
 argument-hint: "[a CV file, a LinkedIn or portfolio URL, or focus: background | offer | terms | voice | proof]"
 ---
 
@@ -33,7 +33,7 @@ answer that opens a door to either is worth following even when it is not on the
 list, and that judgement is the whole difference between an interview and a form.
 
 **Ask with the slots in mind.** Every answer here lands somewhere later: the
-title needs three or four words a client types into search, the first 250
+title needs a position (the role a client types, then who it is for), the first 250
 characters of the overview need an outcome or a hard number, each portfolio title
 needs its own number, the video script needs up to three proofs, and
 `/find-jobs` needs the track, its services and the tool names. A loose answer is not a small
@@ -78,7 +78,7 @@ Step 0, then the four blocks.
 
 **partial** or **complete** means the member has been through this before. Do
 not interview them again. Say what stands, in their words, in under ten lines:
-what they are hired for, the services with their prices, the rate, and how many
+what they are hired for, the services with their prices, and how many
 proof entries carry a verified status. Then name what is still open as one list
 and ask which of it they want to fill now. Wait for that answer. A focus
 argument skips this question and goes straight to that block.
@@ -326,7 +326,7 @@ show them what is now in their files. Not a list of filenames, the content, in
 their own words, so a wrong line is visible without opening anything.
 
 **What you are on record as.** The one thing they are hired for, each service
-with its price beside it, the rate, and what they do not do.
+with its price beside it, and what they do not do.
 
 **What you can prove.** Every proof entry, verified and pending kept apart,
 strongest first. A pending claim never reaches a client, so say plainly which

@@ -37,7 +37,7 @@ one documented way a beginner is easier to find.
 
 **How the text is matched:** a boolean match against the profile text, where AND, OR and NOT work only
 in capitals. **"Title search" matches the profile title alone**, so a title missing the client's words
-drops out of that search completely. Categories and skills are ANDed filters: an empty slot is a
+drops out of that search completely, so a position title still carries the searchable role noun. Categories and skills are ANDed filters: an empty slot is a
 search never appeared in.
 
 ## The field limits, and where Upwork contradicts itself

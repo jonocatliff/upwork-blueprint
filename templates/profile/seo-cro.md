@@ -45,8 +45,8 @@ SEO Specialist for Local Businesses | Google Business Profile
 Every block must also be one of the skills below: the `/profile` gate refuses a title
 word it cannot find there, and "CRO" is not an Upwork skill.
 
-Other shapes: `Technical SEO | SEO Audit | Local SEO | Conversion Rate Optimization`
-for audit-led work, `Shopify SEO | Technical SEO | SEO Audit | Landing Page Optimization` for stores.
+Other shapes: `Technical SEO Auditor | Site Audits for Growing Websites` for audit-led work,
+`Shopify SEO Expert | Technical SEO for Online Stores` for stores.
 Shopify SEO had the steadier demand of the two on 5 October: 5.6 new jobs a day, three of
 them still under ten proposals after a day, real fixed budgets of $1,000 to $2,000.
 

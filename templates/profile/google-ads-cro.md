@@ -45,9 +45,8 @@ position (role, then who it is for), not a stack of keywords.
 Google Ads Specialist | PPC & Tracking for Lead Generation
 ```
 
-Other shapes: `Google Ads Audit | PPC | Google Tag Manager | Conversion Tracking` for
-audit-led work, `Google Ads | Meta Ads | PPC Campaign Management | Conversion Tracking`
-for members who run both.
+Other shapes: `Google Ads Auditor | PPC Account Audits for Lead Generation` for audit-led work,
+`Google Ads & Meta Ads Specialist | PPC for Local Businesses` for members who run both.
 
 ## Overview
 

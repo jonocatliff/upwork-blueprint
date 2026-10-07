@@ -65,7 +65,7 @@ can do, and the two are not the same question.
 - **Every run ends with `Upwork calls: N`.** "Well under the limit" is measured,
   not claimed.
 - **Connector writes are unproven.** Title, overview and skills are documented but
-  untested; rate, portfolio and video stay manual. Label that, and always give
+  untested; rate, portfolio, photo and categories stay manual. Label that, and always give
   paste-ready text as the fallback.
 
 ## Hard rules
