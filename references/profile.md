@@ -113,8 +113,7 @@ exists. **No markdown:** Upwork shows asterisks as asterisks. **Results carry nu
 **Write prose that flows,** connected sentences and short paragraphs, with no sentence-length rule:
 the two top earners of 16 write long prose and lists sat with lower earnings (measured 26 September
 2026, correlation only). **Reasoned, not measured:** hook in "you", middle in "I build", close as an
-imperative back to "you"; only 2 of 16 profiles do it. Search spellings the skills list cannot carry
-go into the sentences. **Answer one objection**, usually "it will not break" or "you will own it".
+imperative back to "you"; only 2 of 16 profiles do it. **Answer one objection**, usually "it will not break" or "you will own it".
 **Close with one imperative plus permission**, such as "send me what you have, even if it is messy".
 
 **What goes into the hook and the three bullets:** the results a client cares about most, with
