@@ -17,7 +17,7 @@ Read first: [references/profile.md](../../references/profile.md), which holds ev
 
 **Focus:** $ARGUMENTS. A focus writes only that section of `profile.md` and
 leaves the rest as it is. Every run writes something. **`video`** is the script
-generator for the intro video: Steps 0 and 1 only, then the script from `context/me.md`
+generator for the intro video: Steps 1, 4 and 5 only, then the script from `context/me.md`
 and an existing `profile.md`, with no live read and no role models.
 
 ## Step 0 · The connector
@@ -118,7 +118,7 @@ First three lines, then the decisions:
 ```
 # Your Upwork profile
 
-Written 6 October 2026 · clears every draft check · every number backed by your own evidence
+Written <today's date> · every number backed by your own evidence
 **Next:** answer the open questions below, then put the sections live in Step 6.
 ```
 
@@ -129,7 +129,7 @@ supports, otherwise keep it and say so plainly. Never open with "fair point", ne
 fold under a preference, and never hand back a menu with "which one?". Variants come
 only when they ask.
 
-Then these sections, with these exact headings. The gate reads `## Title`, `## Overview`, `## Skills`, `## Portfolio titles` and `## Reference averages`; the rest is for you alone:
+Then these sections, with these exact headings. The gate reads `## Title`, `## Overview`, `## Skills`, `## Portfolio titles` and `## Reference averages`; the member pastes or acts on the rest:
 
 - **`## Title`**: the recommended title alone in a fenced `text` block, two to five blocks split by |, each block a word a client types. **The limit is 70 characters**, measured from the connector's own write action and from a real title that came back cut at exactly 70, and the draft gate fails anything longer. Write one title, with its reason in a line.
 - **`## Overview`**: the first two lines once on their own as a quote, because they carry the click. Then the whole overview in one fenced `text` block, no markdown inside it: Upwork shows asterisks as asterisks. The shape, in this order: (1) one hook in "you" and "your" on who you are and what the client gets, built from the recorded direction so it fits the title and the services, with a verified number inside the first 250 characters when one exists; (2) three bullets, the results a client cares about most first, each a verified result (BUILT or DELIVERED what, for whom, achieving what, with its number); (3) how you work and one objection answered, plus a differentiator only when it tells the client something Upwork does not already show; (4) search words and spellings the skills list cannot carry, such as "GHL", woven into those sentences, never a separate list; (5) a close as one imperative plus permission back to "you". It reads as one flow, connected sentences with the three bullets as the only list. Never restate what the profile page already shows: location, job and review totals, earnings, badges, the skills list. With fewer than three verified results, use those and ask the member to confirm the rest, never invent one.

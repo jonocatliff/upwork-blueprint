@@ -67,12 +67,6 @@ Three limits keep this an interview rather than an interrogation:
 Open each block by saying what it is for and roughly how long it takes, so the
 member can see the end of it from the start.
 
-`CLAUDE.md` tells every command to batch its questions, and this command is the
-exception it is written against. There, questions interrupt work the member
-wants finished, so they are collected. Here the questions are the work. Batching
-them turns the one conversation about who this person is into a form, and a form
-gets form answers: three words where the profile needs a number.
-
 ## Has this already run?
 
 Run `python3 code/workspace.py`, then `python3 code/context_check.py --status`.
@@ -187,7 +181,7 @@ handling. Say which is which and why, in two lines.
 
 ## Step 2 · The offer
 
-A conversation, after Step 1 is written. Open with the first question below and
+A conversation, after Step 1 is answered. Open with the first question below and
 let the answer steer the rest. Point 2 is where the listening matters: a service
 without a deliverable and a price makes every later command invent one.
 
@@ -245,7 +239,7 @@ without a deliverable and a price makes every later command invent one.
 
 The shortest block, and often one exchange. Open with the rate, because it is
 the only one here a member may want to think about. Points 2 and 3 are one
-question, and point 4 usually needs none at all, because this conversation has
+message, and point 4 usually needs none at all, because this conversation has
 already shown how they write.
 
 1. **Hourly rate**, and the smallest project worth taking. Recommend a range, and
@@ -374,4 +368,5 @@ Then the completion report as CLAUDE.md defines it: how many questions stayed
 open and which single answer would be worth the most. Next step: `/profile`, which measures
 the live profile and then writes the one that fixes it.
 End with `Upwork calls: N`: the account check, the profile, its highlights and the
-closed contracts, plus one search per custom direction checked.
+closed contracts, plus one search per custom direction checked, one for the rate
+and one read per peer profile.
