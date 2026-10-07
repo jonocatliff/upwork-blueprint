@@ -139,16 +139,17 @@ Then these sections, with these exact headings. The gate reads `## Title`, `## O
   is the overview's hook said out loud, the proof beat is the same results the overview
   leads with, the process beat matches the services, and the ask is the overview's close
   word for word. Change the title or the direction later and this script changes with it.
-  Spoken language, written to be read aloud, in five beats: **the client's problem in one
-  sentence** (never a greeting or a name first), **what the member does about it**,
-  **up to three verified proofs, or the background instead when there are none**,
-  **how working together runs, in two or three steps**, and **the ask**.
+  Spoken language, written to be read aloud, 45 seconds in total unless the member names
+  another length, in five beats with a starting split of 6, 9, 15, 8 and 7 seconds: **the
+  client's problem in one sentence** (never a greeting or a name first), **what the member
+  does about it**, **up to three verified proofs, or the background instead when there are
+  none**, **how working together runs, in two or three steps**, and **the ask**.
 
   **The format, because it has to be readable while recording.** One block per beat, in
   this shape, and nothing else between them:
 
   ```
-  ### The problem
+  ### 0:00 to 0:06 · The problem
   The spoken words, exactly as they are to be said, one sentence per line.
   **On screen:** one short direction.
   ```
