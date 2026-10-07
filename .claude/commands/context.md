@@ -247,9 +247,9 @@ another number into `**Applications per day:**` themselves. Mention that once.
 2. **How they want to sound**: the default is an approachable, professional sales
    expert who makes the next decision easy. Ask only what deviates from it, and
    take the rest from how they write in this conversation.
-3. **Job Success Score and intro video**, only if still unanswered: the score is
-   below their name on Upwork; ask whether a video exists. Save both in the starter fields.
-4. **Public Upwork profile URL**, copied from their profile, in `**Public Upwork profile URL:**`.
+3. **Only when the live read found a profile:** its public URL into
+   `**Public Upwork profile URL:**` and the Job Success Score from below their name. A
+   new member has neither, and `/profile` records the intro video: ask nothing.
 
 ## Step 4 · Proof, and go after the numbers
 
