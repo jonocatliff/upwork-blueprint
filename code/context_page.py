@@ -236,7 +236,7 @@ def build(me_text, proof_text):
     reviews_html = ''.join(entry_html(r) for r in reviews) or '<p class="muted">None recorded yet.</p>'
 
     gaps = [short(label) for label, value in found.items()
-            if value is None and not label.startswith(('Applications per day', 'Smallest project', 'What you do NOT'))]
+            if value is None and not label.startswith(('Applications per day', 'Smallest project', 'What you do NOT', 'Hourly rate'))]
     open_html = ''
     if gaps:
         shown = ''.join(f'<li>{esc(g)}</li>' for g in gaps[:6])

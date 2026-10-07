@@ -21,13 +21,13 @@ Read first [references/profile.md](../../references/profile.md), the profile sec
 
 `context/me.md` holds background, offer, terms and provable results (`/about-me` writes it; this command interviews nobody). Build everything from its recorded direction (lead branch, offer, audience, country). Never reopen it or suggest another lead branch; a proof/direction mismatch is one line under "Decide first". Ask only for role-model addresses, the rate and a yes per field.
 
-Run `python3 code/context_check.py`. Open questions never stop you: draft from what exists and list every gap under "# Decide first" atop `profile.md`. Only if `profile.md` is the untouched starter does `/about-me` come first.
+Run `python3 code/context_check.py`. Open questions never stop you: draft from what exists and list every gap under "# Decide first" atop `profile.md`. If `python3 code/context_check.py --status` says untouched, `/about-me` comes first.
 
 **Use the member's own concrete figures, verified or not, worded as their claim; invent none.** The gate checks every number against `context/me.md`. A claim without a figure stays out. With no usable result, lead with offer and background (normal for a first profile).
 
 ## Step 2 · What is live, if anything
 
-Call `get_profile` action `get`, save as returned to `data/profile.json`, then `list_highlights` to `data/highlights.json`; skip both if the files are under 24 hours old. The score comes from what Upwork serves, never from a draft.
+Call `get_profile` action `get`, save as returned to `data/profile.json`, then `list_highlights` to `data/highlights.json`; skip both if the files are under 24 hours old.
 
 **No or nearly empty profile** is a normal start: say so in one line, skip the rest of Step 2, let Step 5 list what to create. Never invent a score or infer experience.
 
@@ -57,7 +57,7 @@ Fix every Step 2 finding in the draft. A finding needing the member's hands beco
 
 Write in the member's own voice per `references/profile.md` and `references/copy.md` (plain words, no em-dashes).
 
-First three lines, then the decisions:
+First three lines, then a `# Decide first` block with the open items, then the sections:
 
 ```
 # Your Upwork profile

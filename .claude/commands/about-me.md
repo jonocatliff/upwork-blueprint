@@ -19,7 +19,7 @@ An interview, not a form. Open each block by saying what it is for and roughly h
 
 - **At most three exchanges per block.** Then take what exists, say what stayed open, go on.
 - **Never ask what an answer already gave.** Confirm it in half a line.
-- **One question at a time**, unless two are one (timezone and answering hours).
+- **Batch the independent questions of a block** into one message; keep dependent ones apart.
 
 ## Has this already run?
 
@@ -55,7 +55,7 @@ List back one line per job and ask only what is missing. Everything a CV claims 
 
 Open the block and say why: a profession outside freelancing is usually a new profile's strongest asset.
 
-Ask only this first: **1. Every job you have held**, with years and what you did. No filter. Follow up on gaps, then ask only what the answer left out: 2. what you were good at, in their words; 3. education, certificates and languages with the year; 4. what you built or delivered for someone, paid or not, on or off Upwork.
+If a CV was read, list its jobs back for a yes or no and ask only about gaps; otherwise ask: **1. Every job you have held**, with years and what you did. No filter. Follow up on gaps, then ask only what the answer left out: 2. what you were good at, in their words; 3. education, certificates and languages with the year; 4. what you built or delivered for someone, paid or not, on or off Upwork.
 
 Then say in two lines which parts transfer to the work they want and which are only biography.
 
@@ -98,7 +98,7 @@ Every entry carries **where it can be checked**, the date and a status:
   aggregate carries it. Take a clear figure as given: ask once for the place,
   accept any answer, never ask twice, and never hold a claim back because the
   place is vague.
-- **pending** for estimates and anything vague. A pending claim never reaches a client.
+- **pending** for estimates and anything vague. A pending claim with a concrete figure may appear as the member's own claim; one without a figure stays out.
 
 **Nothing on the ladder?** Help: look together for a system built for the current job, an unpaid build for a friend, a study or course project with a result, volunteer work, or a process improved at work. Record what it proves as pending with its source. If still empty, write "Nothing recorded yet" and move on; `/profile` then leads with the offer and background.
 
@@ -116,12 +116,12 @@ Run `python3 code/context_check.py`. It counts what is open: unanswered starter 
 
 Before the completion report, show the member what is now in their files, in their own words, so a wrong line is visible.
 
-**On record as:** the one thing they are hired for, each service with its price. **What you can prove:** every proof entry, verified and pending apart, strongest first; say which are pending (never reach a client) and what would verify them. **Where it lives:** [context/me.md](../../context/me.md), read by every later command; name any other file this run created or changed and say it is the member's own, never touched by `git pull`.
+**On record as:** the one thing they are hired for, each service. **What you can prove:** every proof entry, verified and pending apart, strongest first; say which are pending and what would verify them. **Where it lives:** [context/me.md](../../context/me.md), read by every later command; name any other file this run created or changed and say it is the member's own, never touched by `git pull`.
 
 Then run `python3 code/context_page.py --open`: it renders [context/overview.html](../../context/overview.html) (what they sell, how they work, proof verified and pending, gaps marked) and opens it. Say it can be rebuilt with the same command.
 
 Then the completion report as CLAUDE.md defines it: how many questions stayed
-open and which single answer would be worth the most. Next step: `/profile`, which measures
-the live profile and then writes the one that fixes it.
+open and which single answer would be worth the most. Next step: `/profile`, which
+writes your profile.
 End with `Upwork calls: N`: the account check, the profile, its highlights and the
 closed contracts, plus one search per custom direction checked.

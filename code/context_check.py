@@ -30,7 +30,6 @@ REQUIRED = (
     'Services you sell',
     'Tools and systems you can name confidently',
     'Industries you want to work with',
-    'Hourly rate',
     'Timezone and hours you answer messages',
 )
 STATUS = re.compile(r'\b(verified|pending)\b', re.I)
