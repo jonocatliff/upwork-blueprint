@@ -2,7 +2,7 @@
 
 Your facts, in your words, and every result you can back up. Every command reads
 this before it writes anything for you.
-Last verified: not yet. Next: run /context, it fills this in with you.
+Last verified: not yet. Next: run /about-me, it fills this in with you.
 
 Two halves, and the line between them matters. Everything down to "Job search
 tracks" is what you say about yourself. The three sections after it are what you
@@ -60,7 +60,7 @@ Nothing recorded yet. One block per result: what you did, for whom (or what kind
 
 ## Reviews
 
-Nothing recorded yet. One block per review: the client's words, the job, the rating, where it can be checked, the date, and verified or pending. /context collects them with you.
+Nothing recorded yet. One block per review: the client's words, the job, the rating, where it can be checked, the date, and verified or pending. /about-me collects them with you.
 
 ## Credentials
 

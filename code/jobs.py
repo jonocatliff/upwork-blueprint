@@ -124,7 +124,7 @@ def member_limits():
     None of these is a number this repository gets to decide for everybody. A member
     without a single review wins nothing in a queue of forty proposals, so their cap
     belongs lower than an established one's; a member at sixty dollars an hour loses
-    nothing by refusing fifteen. `/context` proposes per person, the member answers,
+    nothing by refusing fifteen. `/about-me` proposes per person, the member answers,
     and this reads the answer. `missing` names every limit that is switched off
     because the figure behind it is unknown, because a silent limit is worse than a
     loose one.

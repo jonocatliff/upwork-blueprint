@@ -10,7 +10,7 @@ facts, present or not, so the answer is visible without installing anything.
 
 One entry is not measurable from here. Whether the Upwork connector is logged in
 is visible to Claude, which sees its tools, and to nobody else, so it is listed
-with the state `ask-claude` and /context fills it in.
+with the state `ask-claude` and /about-me fills it in.
 """
 import argparse
 import json

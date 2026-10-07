@@ -141,7 +141,7 @@ member could add truthfully. No word list is banned; the structure above does th
   client who books a call on "fluent" and meets "conversational" is a refund.
 - **The rest, one line each.** Photo: a real portrait, no sunglasses, logos, clipart, group photos or
   edits. Education: optional, never padded. Availability: the hours they can really answer in.
-  Categories: the direction from `/context`, not the old job. Linked account: the cheapest percentage
+  Categories: the direction from `/about-me`, not the old job. Linked account: the cheapest percentage
   point on the list. Certificates: only what can be checked, never the lead, and Skill Certifications
   are discontinued. Other experiences: volunteer work, a side project, a system built at a
   non-freelance job. **Upwork accepts no new testimonial requests**, so never tell a member to ask.

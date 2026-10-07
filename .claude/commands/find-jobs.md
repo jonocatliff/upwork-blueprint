@@ -38,7 +38,7 @@ Run `python3 code/workspace.py`, `python3 code/pipeline.py prune` and `python3 c
 
 ## Step 0b · Is this the first run, or a run with a direction?
 
-If `python3 code/context_check.py --status` says `untouched`, stop and send the member to `/context`.
+If `python3 code/context_check.py --status` says `untouched`, stop and send the member to `/about-me`.
 Look at `context/me.md` under "Job search tracks". **No tracks means the first run**:
 it finds which searches are alive instead of hunting the best ten.
 Saved tracks mean a later run even before any application. Name the mode in one line.
@@ -60,7 +60,7 @@ in `context/me.md` as `- Theme: term · term`. Keep verdicts and dates in prose 
 that list. Name the lane the evidence supports, then run `python3 code/pipeline.py prune`
 and `python3 code/jobs.py clean`.
 Report the measured terms and `Upwork calls: N`, name `/find-jobs` next to find leads
-using these tracks, and stop here. With no surviving terms, name `/context offer` next.
+using these tracks, and stop here. With no surviving terms, name `/about-me offer` next.
 
 **Every later run exploits.** It runs the kept tracks, pages the dense ones, applies the
 lessons from Step 3b, honours the window from Step 0, and tests at most one new candidate

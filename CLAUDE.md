@@ -15,14 +15,14 @@ voice skill from outside this repo and never insert the builder's identity.
 
 ## The path
 
-`/context` · `/profile` · `/find-jobs` · `/pitch-page` · `/brief` ·
+`/about-me` · `/profile` · `/find-jobs` · `/pitch-page` · `/brief` ·
 `/lead-magnet` · `/proposal` · `/won`, plus the helper `/cockpit`. A lead the
 member rejects leaves through `/find-jobs skip <id> <reason>`, which calls Upwork
 not at all. What each does is in its own frontmatter and, for the member, in
 `README.md`.
 
 `/profile` measures the live profile before it writes one, so it needs the
-connector. Everything after `/context` reads that one file. A focus argument runs only that part, at full depth; an input
+connector. Everything after `/about-me` reads that one file. A focus argument runs only that part, at full depth; an input
 matching no listed focus value gets that list and a question.
 
 ## Connecting Upwork comes first

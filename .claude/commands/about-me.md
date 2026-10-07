@@ -3,7 +3,7 @@ description: Everything about you, once: your work history, what you can do, wha
 argument-hint: "[a CV file, a LinkedIn or portfolio URL, or focus: background | offer | terms | voice | proof]"
 ---
 
-# /context
+# /about-me
 
 The first command, run once the Upwork connector is connected and before any text a
 client reads. It fills `context/me.md`, and every later command writes from
@@ -103,7 +103,7 @@ Show the member what came back, in this order and in their words:
 - **What is missing**, one line each: what it would buy them, which command wants
   it, and what happens without it. Say that every one of these can be skipped,
   and that skipping costs exactly the one thing named beside it.
-Then say plainly that none of that blocks this command: `/context` writes one local
+Then say plainly that none of that blocks this command: `/about-me` writes one local
 file and sends nothing. Never wait for an install, never ask which keys they
 should buy, and never hold back the questions below because one of them is missing.
 

@@ -3,7 +3,7 @@
 
     python3 code/context_page.py [--open]
 
-/context ends by reporting what it wrote. A report in a terminal scrolls away,
+/about-me ends by reporting what it wrote. A report in a terminal scrolls away,
 and the file it wrote is markdown with starter lines still in it. This renders
 it as one page laid out like a CV, with the sections of `context/me.md`:
 background, what you do and results on the left, how you work, credentials,

@@ -4,7 +4,7 @@
     python3 code/context_check.py [--quiet]
     python3 code/context_check.py --status
 
-/context fills context/me.md. Everything after it, from the profile to a
+/about-me fills context/me.md. Everything after it, from the profile to a
 proposal, quotes that file, so a starter line left in place turns
 into "not answered yet" inside something a client reads. This counts what is
 still open and refuses a proof entry that cannot be checked.
@@ -136,7 +136,7 @@ def verified_proof(text):
 
 
 def status(text):
-    """untouched, partial or complete, so /context knows which command it is.
+    """untouched, partial or complete, so /about-me knows which command it is.
 
     Asking a member a second time for what they already answered is the fastest
     way to lose them, and running the interview against a file that is still the
@@ -156,7 +156,7 @@ def main(argv=None):
                         help='context/me.md by default')
     parser.add_argument('--quiet', action='store_true', help='print nothing when clean')
     parser.add_argument('--status', action='store_true',
-                        help='untouched, partial or complete, for the start of /context')
+                        help='untouched, partial or complete, for the start of /about-me')
     args = parser.parse_args(argv)
     if not args.me.is_file():
         if args.status:

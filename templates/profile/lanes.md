@@ -1,6 +1,6 @@
 # Default lanes
 
-The five branches we recommend, offered to every member first. They are a recommendation, not a menu: steady demand on Upwork, each with a course in the community, and a member's own direction works too. The member names what they can deliver today and what they could grow into, and `/context` recommends two, three at most; all five is allowed when they want it. The course under each branch is the lesson in the community classroom to watch before the first application. A direction that fits none of these is a custom addition, offered after them.
+The five branches we recommend, offered to every member first. They are a recommendation, not a menu: steady demand on Upwork, each with a course in the community, and a member's own direction works too. The member names what they can deliver today and what they could grow into, and `/about-me` recommends two, three at most; all five is allowed when they want it. The course under each branch is the lesson in the community classroom to watch before the first application. A direction that fits none of these is a custom addition, offered after them.
 
 ## 1. GoHighLevel CRM automations
 

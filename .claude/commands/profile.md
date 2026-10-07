@@ -30,13 +30,13 @@ and an existing `profile.md`, with no live read and no role models.
 ## Step 1 · Read your facts
 
 `context/me.md` holds the background, the offer, the terms and every result the
-member can back up. `/context` writes them; this command writes copy and interviews
+member can back up. `/about-me` writes them; this command writes copy and interviews
 nobody. **The direction it recorded** (lead branch, offer, audience, country) is what
 everything below is built from.
 
 Run `python3 code/context_check.py`. Open questions never stop this command: write
 the draft from what exists and name every gap under "# Decide first" at the top of
-`profile.md`. Only when that file is still the untouched starter does `/context` come
+`profile.md`. Only when that file is still the untouched starter does `/about-me` come
 first, because then there is nothing to write from.
 
 **Never use a pending claim in client-facing copy.** Verified means the member said

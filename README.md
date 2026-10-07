@@ -6,7 +6,7 @@ The full product goal and review standard are in [VISION.md](VISION.md).
 
 ## Quick start
 
-Before you clone: `/context` runs on a Claude plan alone. Every Upwork command
+Before you clone: `/about-me` runs on a Claude plan alone. Every Upwork command
 needs the free Upwork connector. Publishing a pitch page or audit needs a free
 Vercel account, and only `/lead-magnet` needs paid keys. Details are in
 [Requirements](#requirements) and [What it costs to run](#what-it-costs-to-run).
@@ -15,7 +15,7 @@ Vercel account, and only `/lead-magnet` needs paid keys. Details are in
    `git clone https://github.com/luka-commits/upwork-blueprint.git`
 2. Open a terminal in the folder and run `./setup.sh` once. It creates your own
    files, writes `.env` with your unique Vercel project and builds the audit report template
-3. Follow [Connect Upwork](#connect-upwork), then run `/context`. It asks about
+3. Follow [Connect Upwork](#connect-upwork), then run `/about-me`. It asks about
    your background once; later commands write from those answers
 
 Skipping setup still works: each command walks you through its missing tools.
@@ -37,7 +37,7 @@ Claude Code session. `RESEARCH.md` is background reading; no command uses it.
 
 | Step | Command | What it does |
 |------|---------|--------------|
-| 1 | `/context` | Your work history, your offer, your terms and every result you can prove |
+| 1 | `/about-me` | Your work history, your offer, your terms and every result you can prove |
 | 2 | `/profile` | Measures your live profile, then writes the version that fixes it |
 | 3 | `/find-jobs` | Ten leads a day worth applying to, scored against what you sell, straight into your cockpit |
 | 4 | `/pitch-page` | A one-page pitch site plus the cover letter and bid you submit with your Loom |
@@ -46,7 +46,7 @@ Claude Code session. `RESEARCH.md` is background reading; no command uses it.
 | 7 | `/proposal` | Turns your sales call into the proposal you send, and says whether it is ready to start a project on |
 | 8 | `/won` | Turns a started contract into the handover brief and the onboarding. Run it again after delivery to record what came out of it |
 
-/context also works before connecting or creating a public Upwork profile. Run it
+/about-me also works before connecting or creating a public Upwork profile. Run it
 first: every later command writes from it, and `/find-jobs` on an empty `me.md`
 has nothing to score leads against.
 
@@ -79,7 +79,7 @@ from.
   uses OpenStreetMap tiles; ranking measurements still run.
 
 `./setup.sh` and `python3 code/tools_status.py` list what each command still needs.
-Upwork commands need the connector; publishing needs Vercel. /context can start
+Upwork commands need the connector; publishing needs Vercel. /about-me can start
 before the audit tools are ready.
 
 ## What it costs to run
