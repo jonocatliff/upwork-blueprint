@@ -37,16 +37,10 @@ def has_key(env, *names):
 
 
 def python_packages():
-    """Both packages and the browser, because either one alone stops the run."""
+    """Pillow, the one package the image steps import."""
     try:
         import PIL  # noqa: F401
-        from playwright.sync_api import sync_playwright
     except ImportError:
-        return False
-    try:
-        with sync_playwright() as p:
-            p.chromium.launch().close()
-    except Exception:
         return False
     return True
 
@@ -74,37 +68,20 @@ def rows(env):
          'reads your profile and the job market',
          '/profile, /find-jobs, /brief', 'nothing replaces it, and only you can connect it'),
         ('Node.js', shutil.which('node') is not None, 'optional',
-         'runs the cockpit and builds the report template',
-         '/dashboard, /lead-magnet', 'install from nodejs.org, or work from the chat'),
+         'runs the cockpit',
+         '/dashboard', 'install from nodejs.org, or work from the chat'),
         ('Python packages', python_packages(), 'optional',
-         'opens a client page the way their customer sees it',
-         '/lead-magnet, /proposal',
-         "pip install -r requirements.txt, then playwright install chromium. The audit "
-         "cannot start without them"),
+         'sizes your photo and the proposal sketch so each page stays one file',
+         '/proposal, /sales-call-proposal',
+         'pip install -r requirements.txt. Without it the pages are built without those images'),
         ('Google Chrome', chrome(env), 'optional',
          'screenshots a page before you send it',
          '/proposal, /sales-call-proposal', 'without it you check the page by eye'),
         ('Vercel', vercel_signed_in() or has_key(env, 'VERCEL_TOKEN'), 'required',
-         'puts your pitch page and audit on a link a client can open',
-         '/proposal, /lead-magnet',
+         'puts your pitch page on a link a client can open',
+         '/proposal',
          "npm i -g vercel, then vercel login. Without it you still get the cover letter "
-         "and the bid, with no page to link, and /lead-magnet cannot publish an audit at all"),
-        ('Firecrawl', has_key(env, 'FIRECRAWL_API_KEY'), 'optional',
-         "reads the client's website",
-         '/lead-magnet', 'firecrawl.dev. The audit cannot start without it'),
-        ('Apify', has_key(env, 'APIFY_API_TOKEN', 'APIFY_TOKEN', 'APIFY_API_TOKEN_PAID'),
-         'optional', 'reads their Google Business Profile',
-         '/lead-magnet', 'apify.com. The audit cannot start without it'),
-        ('DataForSEO', has_key(env, 'DATAFORSEO_LOGIN') and has_key(env, 'DATAFORSEO_PASSWORD'),
-         'optional', 'reads where they rank and who outranks them',
-         '/lead-magnet', 'dataforseo.com, one dollar of free credit, no card'),
-        ('PageSpeed or Lighthouse', has_key(env, 'PAGESPEED_API_KEY') or
-         shutil.which('lighthouse') is not None, 'optional',
-         'measures how fast their page loads',
-         '/lead-magnet', 'either one is enough, and Lighthouse is free and local'),
-        ('OpenAI', has_key(env, 'OPENAI_API_KEY'), 'optional',
-         'adds two chapters: whether AI search names them, and what their worst reviews say',
-         '/lead-magnet', 'without it those two say "not measured" and the rest is unaffected'),
+         "and the bid, with no page to link"),
         ('kie.ai', has_key(env, 'KIE_AI_API_KEY'), 'optional',
          'draws the sketch on the proposal page',
          '/sales-call-proposal', 'without it the command prints the prompt for any image model you have'),

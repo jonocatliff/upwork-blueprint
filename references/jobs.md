@@ -171,8 +171,7 @@ still get dropped.
 
 **Lane A, getting found and getting enquiries.** SEO, Google Ads and the website that carries
 them. One buyer, a local business owner who wants the phone to ring, and the lane this repo
-already delivers for: the lead magnet is a local SEO audit and both roadmap templates are SEO
-and Google Ads.
+already delivers for: both roadmap templates are SEO and Google Ads.
 
 ```
 - Local SEO: Google Business Profile · Google Maps ranking · local SEO

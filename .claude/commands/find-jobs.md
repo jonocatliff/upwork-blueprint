@@ -15,8 +15,9 @@ Read first: [references/upwork.md](../../references/upwork.md) for what is allow
 
 Run `python3 code/pipeline.py get <job id>`. Only a Not applied lead (status
 `new`) can be skipped. A lead further along moves through `/brief`, so say that
-and stop. Without a reason, ask for one line and wait: a useful reason names the
-fact that rules the job out, such as budget, scope, tool or client, never a mood.
+and stop. Without a reason, ask with one single choice (budget, scope, tool, client) and
+wait: a useful reason names the fact that rules the job out, never a mood, and a typed
+detail is saved with the pick ([references/copy.md: How to ask](../../references/copy.md#how-to-ask)).
 
 Then `python3 code/pipeline.py set <job id> skipped --note "not a fit: <reason>"`.
 Keep the prefix. `python3 code/jobs.py rules` counts a reason only when the note
@@ -53,7 +54,7 @@ Call `list_freelancer_proposals` action `invitations` once. Open invitations are
 
 Save each response's `jobs` list to `data/search/<name>.json` as `{"jobs": [...]}`, every job with its fields as returned. The file name becomes the job's "found via", which is how weak tracks get noticed later.
 
-0. **Show the terms and the limits, and ask, before spending a single call.** List what you are about to search, one line per track with its source: their own file, the catalog in [references/jobs.md](../../references/jobs.md), or a skill name harvested from the last run. Under it, the hard no's as `python3 code/jobs.py rules` reports them, with one recommendation per number for this person, drawn from their file and profile and the tiers in jobs.md, with half a line of why. Then one question: does this fit, what is missing, what goes. Wait for the answer. This is the one gate in this command: a wrong term or limit costs the member a day of leads.
+0. **Show the terms and the limits, and ask, before spending a single call.** List what you are about to search, one line per track with its source: their own file, the catalog in [references/jobs.md](../../references/jobs.md), or a skill name harvested from the last run. Under it, the hard no's as `python3 code/jobs.py rules` reports them, with one recommendation per number for this person, drawn from their file and profile and the tiers in jobs.md, with half a line of why. Then ask in one call ([references/copy.md: How to ask](../../references/copy.md#how-to-ask)): the tracks as checkboxes, ticked meaning searched today, and each limit as a single choice with your recommendation first and a tighter and a looser value beside it. A missing term is typed. Wait for the answer. This is the one gate in this command: a wrong term or limit costs the member a day of leads.
 
    Save the answers in `context/me.md` as `**Maximum proposals on a job:**` and `**Lowest share of your rate:**`, so the next run reads them instead of asking. Never ask for a smallest project. A limit whose figure is unknown prints as `LIMIT OFF` in the candidate step: name it out loud.
 
@@ -195,8 +196,10 @@ list's one-sentence headline `python3 code/pipeline.py headline <id> "<sentence>
    many, numbered, each one line: who wants what, the grade, and what applying costs in Connects. Behind them
    stands every other lead that passed the gate, in rank order, which is what
    `python3 code/pipeline.py list` already prints. Open invitations come first, before the ten.
-3. Ask once, in one line, which of the leads you showed are a no and why. Take the
-   answer in any shape, including none, and record each with
+3. Ask once which of the leads you showed are a no, as checkboxes over the numbered
+   leads with "keep all of them" among them, then why in one more call: one single
+   choice per lead turned down (budget, scope, tool, client), a typed detail kept with
+   it. Take any answer, including none, and record each with
    `python3 code/pipeline.py set <id> skipped --note "not a fit: <reason>"`. Keep the
    prefix, because `python3 code/jobs.py rules` counts a reason only when the note
    carries it. A reason names the fact that rules it out, such as budget, scope, tool
