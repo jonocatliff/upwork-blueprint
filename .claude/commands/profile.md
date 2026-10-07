@@ -136,7 +136,7 @@ Then these sections, with these exact headings. The gate reads `## Title`, `## O
 - **`## Skills`**: one `- Skill` line each, in Upwork's exact spelling, as many as the live editor offers (the skill for GoHighLevel is called HighLevel). Use the names Step 3 counted in real postings; mark any you could not confirm with "(check the spelling in Upwork's list)".
 - **`## Portfolio titles`**: one `- New title (was: old title)` line per project. A number goes in a title only when the proof ties it to that project.
 - **`## Reference averages`**: from the role models, `- title: N` and `- overview: N` in characters, the three URLs and today's date. The gate fails a title or overview more than 20 % over these; with no role models there is no ceiling beyond Upwork's limits.
-- **`## Video script`**: one connected intro pitch, only the words to read, about 45
+- **`## Video script`**: one connected intro pitch in a fenced `text` block, only the words to read, about 45
   seconds (around 100 words) unless the member names another length. It is **derived from
   the sections above, never invented next to them**: same direction, same results as the
   overview. It runs in one piece, with no headings and no sentences that announce a

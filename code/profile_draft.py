@@ -63,7 +63,7 @@ def parse(text):
         'averages': reference_averages(text),
         'name': '', 'title': fenced(section(text, 'Title')),
         'overview': fenced(section(text, 'Overview')), 'rate': None,
-        'video': section(text, 'Video script').strip(),
+        'video': (fenced(section(text, 'Video script')) or section(text, 'Video script')).strip(),
         'skills': items(section(text, 'Skills')), 'employment': [], 'education': [],
         'languages': [], 'aggregates': {}, 'portfolio': portfolio or None, 'certificates': None,
     }

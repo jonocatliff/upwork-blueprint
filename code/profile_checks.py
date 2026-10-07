@@ -28,7 +28,7 @@ STOP = {'expert', 'specialist', 'and', 'the', 'for', 'with', 'developer', 'consu
 # count of something. Tool names like n8n or A2P and bare years are not results;
 # counting any digit made every automation profile pass the number checks.
 RESULT_NUMBER = re.compile(
-    r'\$\s?\d[\d.,]*\s?[KkMm]?\+?|\b\d[\d.,]*\s?%|\b\d[\d.,]*\+|\b\d+(\.\d+)?x\b|\b\d{1,3}(,\d{3})+\b|'
+    r'\$\s?\d[\d.,]*\s?[KkMm]?\+?|\b\d[\d.,]*\s?(?:%|percent\b)|\b\d[\d.,]*\+|\b\d+(\.\d+)?x\b|\b\d{1,3}(,\d{3})+\b|'
     r'\b\d+\s?(?:[a-z-]+\s)?(hours?|hrs|clients?|leads?|projects?|jobs?|patients?|customers?|stores?|'
     r'funnels?|sales|signups?|bookings?|calls?|days?|weeks?|months?|minutes?|times|'
     r'stars?|reviews?)\b', re.I)
