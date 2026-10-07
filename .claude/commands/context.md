@@ -239,8 +239,8 @@ without a deliverable and a price makes every later command invent one.
 
 The shortest block, and often one exchange. Point 2 usually needs no question,
 because this conversation has already shown how they write. Not asked here: the
-hourly rate and the smallest project, which `/profile` settles once it has seen what
-others charge, and the applications per day, which is ten until the member writes
+hourly rate, which `/profile` settles once it has seen what others charge, and the
+applications per day, which is ten until the member writes
 another number into `**Applications per day:**` themselves. Mention that once.
 
 1. **Timezone and the hours** they answer messages.

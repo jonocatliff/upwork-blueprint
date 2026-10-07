@@ -108,11 +108,11 @@ n and today's date), the rate bands of the role models and, for a starter, mainl
 No reviews yet: starting near the bottom of the range and raising it with each review is
 fine. Where they live decides which clients and hours fit, never a discount. Label what is
 measured and what is a guess, then ask what they would actually quote: a number they
-cannot defend on a call is worth nothing. Ask the **smallest project worth taking** in
-the same exchange. After their yes write both into `context/me.md`, the rate as a number
-in the `**Hourly rate:**` line (a range is fine, the figure they quote first comes first)
-and the project size in `**Smallest project worth taking:**`, because `/pitch-page` prices
-every bid from them and stops without one, and `data/profile.json` is deleted after a day.
+cannot defend on a call is worth nothing. After their yes write it into the
+`**Hourly rate:**` line of `context/me.md` as a number (a range is fine, the figure they
+quote first comes first), because `/pitch-page` prices every bid from it and stops
+without one, and `data/profile.json` is deleted after a day. Never ask for a smallest
+project: a beginner has no basis for one.
 
 ## Step 4 · Write profile.md
 
