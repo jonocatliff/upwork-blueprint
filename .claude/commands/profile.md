@@ -66,7 +66,7 @@ Written <today's date> · every number backed by your own evidence
 **Next:** answer the open questions below, then put the sections live in Step 6.
 ```
 
-**Take a position.** In chat recommend one title, one hook, one skill order, each with a two-line reason from facts and role models. If the member objects, answer on the merits once: change the draft only for evidence-backed reasons, else keep it and say so. Never open with "fair point", fold under a preference or hand back a menu. Variants only when asked.
+**Take a position.** In chat recommend one title, one hook, one skill order, each with a two-line reason from facts and role models. If the member objects, answer on the merits once: change the draft only for evidence-backed reasons, else keep it and say so. Never open with "fair point", fold under a preference or hand back a menu. Variants only when asked. Write `profile.md` once the member has said yes to the title, hook and skill order, then run the gate.
 
 Then these sections with these exact headings (the gate reads `## Title`, `## Overview`, `## Skills`, `## Portfolio titles`, `## Reference averages`):
 
@@ -86,7 +86,7 @@ Run `python3 code/profile_draft.py check profile.md`: it re-checks Upwork's limi
 
 ## Step 6 · Put it live, one field at a time, and report
 
-The connector documents `update_profile` previews for title, overview, skills (the draft carries up to 15, the tool accepts 20), video (`set_video`, public YouTube link), availability, employment (country as ISO code, role up to 50 characters), education, languages and other experience; none has run from this repo. Before writing over a live title, overview or skills, save them to `profile-before.md` in the repository root (gitignored). Write only when the action returns the documented preview, otherwise hand over the paste-ready text and click path. Hourly rate, portfolio, photo, categories and the linked account stay manual.
+The connector documents `update_profile` previews for title, overview, skills (the draft carries up to 15, the tool accepts 20), video (`set_video`, public YouTube link), availability, employment (country as ISO code, role up to 50 characters), education, languages and other experience; the title write was tested on 7 October 2026 (at least 4 characters, overview at least 100, skills at least one), the rest is untested. Before writing over a live title, overview or skills, save them to `profile-before.md` in the repository root (gitignored). Write only when the action returns the documented preview, otherwise hand over the paste-ready text and click path. Hourly rate, portfolio, photo, categories and the linked account stay manual.
 
 For each writable field create the preview and show what replaces what. Call `confirm_preview` only after an explicit yes for that field, never one "approve all". If behavior differs from the documented preview flow, stop and hand over manually.
 
