@@ -140,10 +140,10 @@ Then these sections, with these exact headings. The gate reads `## Title`, `## O
   seconds (around 100 words) unless the member names another length. It is **derived from
   the sections above, never invented next to them**: same direction, same results as the
   overview. It runs in one piece, with no headings and no sentences that announce a
-  section: the name and who the member helps, then the verified results in one sentence
-  (up to three, each with its number; the background when there are none), then how
-  working together starts and one small invitation. Client first names only when the
-  member gave them.
+  section: the name and who the member helps, then specific examples (what the member
+  built, for whom, with what result and number; with no clear example, the member's
+  experience or another strength from `context/me.md`, never an invented example), then
+  one small invitation. Client first names only when the member gave them.
 
   Write it the way you would explain your work to someone you just met: friendly, warm
   and a little excited, easy to approach. Plain words, contractions, one idea per
