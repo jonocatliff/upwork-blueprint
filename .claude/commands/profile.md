@@ -84,6 +84,8 @@ Then these sections with these exact headings (the gate reads `## Title`, `## Ov
 
 Run `python3 code/profile_draft.py check profile.md`: it re-checks Upwork's limits, the `## Reference averages` ceiling, and every number against the evidence sections of `context/me.md`, video script included. With `video` focus add `--only video`. Exit 1: fix and rerun. Never loosen claims or add a number to pass; those sections change only with the member's word or the connector's.
 
+When the gate passes, **always print the video script in full in the chat**, as a quote the member can read aloud, with the recording steps below it (record it, upload as a public YouTube video, send the link). Never only point to the file. Do the same for the title and the overview in the preview message.
+
 ## Step 6 · Put it live, with one yes, and report
 
 The connector documents `update_profile` previews for title, overview, skills (the draft carries up to 15, the tool accepts 20), video (`set_video`, public YouTube link), availability, employment (country as ISO code, role up to 50 characters), education, languages and other experience; the title write was tested on 7 October 2026 (at least 4 characters, overview at least 100, skills at least one), the rest is untested. Before writing over a live title, overview or skills, save them to `profile-before.md` in the repository root (gitignored). Write only when the action returns the documented preview, otherwise hand over the paste-ready text and click path. Hourly rate, portfolio, photo, categories and the linked account stay manual.
