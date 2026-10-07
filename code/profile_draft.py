@@ -72,7 +72,7 @@ def parse(text):
 def unproven_numbers(draft, proof_text):
     """Every result number in title, overview and portfolio titles the evidence lacks."""
     missing = set()
-    proof_text = context_check.verified_proof(proof_text)
+    proof_text = context_check.usable_proof(proof_text)
     proven = {re.search(r'\d[\d.,]*', match.group(0)).group(0).rstrip('.,')
               for match in pc.RESULT_NUMBER.finditer(proof_text)}
     for text in [draft['title'], draft['overview'], draft.get('video', '')] + (draft['portfolio'] or []):
@@ -100,7 +100,7 @@ def problems(draft, proof_text):
     # left exactly one way out, inventing one, which the next check would catch and
     # the client would not. Only a verified result number switches these checks
     # on; pending entries and bare certificate years cannot supply a result.
-    verified = context_check.verified_proof(proof_text)
+    verified = context_check.usable_proof(proof_text)
     if not pc.RESULT_NUMBER.search(verified):
         skip |= {'opening_has_number', 'results_with_numbers'}
     # Three result lines are a recommendation. A member with fewer verified results

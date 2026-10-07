@@ -42,11 +42,11 @@ the draft from what exists and name every gap under "# Decide first" at the top 
 `profile.md`. Only when that file is still the untouched starter does `/about-me` come
 first, because then there is nothing to write from.
 
-**Never use a pending claim in client-facing copy.** Verified means the member said
-where it can be checked, or an Upwork aggregate carries it. With no verified result at
-all, the draft leads with the offer and the background instead of a number, which is
-the normal case for a first profile. A result the member already claimed in their own
-profile is a question, not evidence, even though it was already public.
+**Use the member's own numbers, and invent none.** A result they stated with a concrete
+figure may go into the copy, worded as their own claim, verified or not; the gate checks
+every number against `context/me.md`. A claim with no figure, and any number that is not
+in the file, stays out. With no usable result at all, the draft leads with the offer and
+the background instead of a number, the normal case for a first profile.
 
 ## Step 2 · What is live, if anything
 
@@ -85,12 +85,14 @@ direction's main tool or role, `sort` `recency`, `limit` 10. Count the `skills` 
 those names are Upwork's own spelling and the client's vocabulary. Note the ones the
 profile lacks and any it carries that appeared in no posting.
 
-**Three role models, before any draft.** Ask for the addresses right after the plan so the member can fetch them while you read the skills; write no draft until they are in or declined, because the role models give the hook, structure, close and lengths. The connector cannot search for freelancers, and a freelancer login or web search surfaced no profiles. So the member adds a client profile to the same login (Account Settings, no job is posted) and uses Upwork's talent search with their country, the Top Rated filter and the direction's keywords, favouring high earnings, many finished jobs and recent work. Tell them to look at title, how the overview opens, skills and rate, and to paste three to five addresses (the `~` is the key) plus two or three newer freelancers from their country with few reviews, because a profile without reviews prices against those. If they decline, go on without role models. Read each with `get_profile` action `get` and its `profile_key`, rank by success (earnings bucket, then jobs and reviews), pick the three closest by shared skills and rate band, name the criteria and say job success score and hours are not visible. Give four chat lines per profile: title, how the overview opens, skills and rate band, and the one thing worth borrowing, with the URL. Take structure and ideas only, never sentences: copied text gets flagged. Keep no profile text in a file (Upwork content); only the numbers below.
+**Three role models, before any draft.** Ask for the addresses right after the plan so the member can fetch them while you read the skills; write no draft until they are in or declined, because the role models give the hook, structure, close and lengths. The connector cannot search for freelancers, and a freelancer login or web search surfaced no profiles. So the member adds a client profile to the same login (Account Settings, no job is posted) and uses Upwork's talent search with their country, the Top Rated filter and the direction's keywords, favouring high earnings, many finished jobs and recent work. Tell them to look at title, how the overview opens, skills and rate, and to paste three to five addresses (the `~` is the key) plus two or three newer freelancers from their country with few reviews, because a profile without reviews prices against those. If they decline, go on without role models. Read each one in full with `get_profile` action `get` and its `profile_key` (title, the whole overview, skills, portfolio titles, employment, rate, earnings, jobs), rank the top performers by success (earnings bucket, then jobs and reviews), pick the three closest by shared skills and rate band, name the criteria and say job success score and hours are not visible. Give four chat lines per profile as the summary of that full read: title, how the overview is built from open to close, skills and rate band, and the one thing worth borrowing, with the URL. Take structure and ideas only, never sentences: copied text gets flagged. Keep no profile text in a file (Upwork content); only the numbers below.
 
 **The rate.** After the role models, recommend a range and say it is a recommendation,
 built from the hourly ranges and fixed-price medians in the ten postings just read (with
-n and today's date), the rate bands of the role models and, for a starter, mainly of the newer profiles, the rates in
+n and today's date), the rates of the newer low-review profiles, the rates in
 [references/jobs.md](../../references/jobs.md) and the member's proof in `context/me.md`.
+Never base it on the Top Rated role models: they earned their rates, a starter at their
+level would price far too high.
 No reviews yet: starting near the bottom of the range and raising it with each review is
 fine. Where they live decides which clients and hours fit, never a discount. Label what is
 measured and what is a guess, then ask what they would actually quote: a number they

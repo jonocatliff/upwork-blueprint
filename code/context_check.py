@@ -134,6 +134,15 @@ def verified_proof(text):
                        and not re.search(r'\bpending\b', block, re.I))
 
 
+def usable_proof(text):
+    """Entries the member stated with a concrete figure, verified or not.
+
+    A client-facing profile may carry the member's own numbers. Only entries with
+    no figure, and the starter's instructions, stay out.
+    """
+    return '\n\n'.join(block for block in proof_entries(text) if re.search(r'\d', block))
+
+
 def status(text):
     """untouched, partial or complete, so /about-me knows which command it is.
 
