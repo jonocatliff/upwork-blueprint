@@ -218,10 +218,11 @@ without a deliverable and a price makes every later command invent one.
    marketing" as well as "SEO", and that one line is where `/find-jobs` gets it.
    Ask it even when the direction is still open, because it is usually the easiest
    question in this block to answer.
-6. **A niche is optional and comes later.** Never propose one in this interview. Only
-   when the member asks, or after the first ten applications, offer one their background
-   could support, labelled as an option. The default is the general track with its
-   services listed.
+6. **A strength from their background, only when it is clear.** A CV that shows years
+   or results in one field or service gets one line ("your strongest ground is X") and the
+   question whether to lead with it; their answer decides, and the branches they picked
+   stay as picked. Otherwise propose no niche: it comes later, on request or after the
+   first ten applications, labelled as an option. The default is the general track.
 7. **The tools and systems** they can name confidently, for search.
 
 ## Step 3 · Terms and voice
