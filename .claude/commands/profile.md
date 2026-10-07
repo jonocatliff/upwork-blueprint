@@ -76,7 +76,7 @@ experience from an empty profile.
 **Job Success Score and intro video** come from `context/me.md`. The connector returns
 neither, measured 12 September 2026. An unanswered field is not measured, never estimated.
 
-## Step 3 · Skills and role models
+## Step 3 · Skills, role models and rate
 
 **The skills clients type.** One `find_jobs` action `search` with `title` set to the
 direction's main tool or role, `sort` `recency`, `limit` 10. Count the `skills` arrays:
@@ -97,6 +97,19 @@ per profile: title, how the overview opens, skills and rate band, and the one th
 worth borrowing, with the URL. Take structure and ideas only, never sentences: copied
 text gets flagged. Keep no profile text in a file (Upwork content); only the numbers
 below.
+
+**The rate.** After the role models, recommend a range and say it is a recommendation,
+built from the hourly ranges and fixed-price medians in the ten postings just read (with
+n and today's date), the three role models' rate bands, the rates in
+[references/jobs.md](../../references/jobs.md) and the member's proof in `context/me.md`.
+No reviews yet: starting near the bottom of the range and raising it with each review is
+fine. Where they live decides which clients and hours fit, never a discount. Label what is
+measured and what is a guess, then ask what they would actually quote: a number they
+cannot defend on a call is worth nothing. After their yes write it into the
+`**Hourly rate:**` line of `context/me.md` as a number (a range is fine, the figure they
+quote first comes first), because `/pitch-page` prices every bid from it and stops without
+one, and `data/profile.json` is deleted after a day. If they gave a rate in `/context`,
+confirm it against this range instead of asking again.
 
 ## Step 4 · Write profile.md
 

@@ -237,28 +237,14 @@ without a deliverable and a price makes every later command invent one.
 
 ## Step 3 · Terms and voice
 
-The shortest block, and often one exchange. Open with the rate, because it is
-the only one here a member may want to think about. Points 2 and 3 are one
+The shortest block, and often one exchange. Points 2 and 3 are one
 message, and point 4 usually needs none at all, because this conversation has
 already shown how they write.
 
-1. **Hourly rate**, and the smallest project worth taking. Recommend a range, and
-   say it is a recommendation: built from their live Upwork rate, their years and
-   proof in the chosen branches, the rates in
-   [references/jobs.md](../../references/jobs.md) and one live search for those
-   branches (rows only, hourly ranges and fixed-price medians, with n and today's
-   date). Add a peer check: search the web for published rates of people doing the
-   same work from similar countries, and read the few public Upwork profiles you
-   find through `get_profile` with a `profile_key`. You read those pages; the
-   member gets a number, never a link or a page to read. Label what is measured
-   and what is guess, then ask what they would
-   actually quote: a number they cannot defend on a call is worth nothing. Where
-   they live decides which clients and hours fit, never a discount, and never talk
-   them down to compete. Whatever they land on goes into the `**Hourly rate:**` line as
-   a number, because `/pitch-page` prices every bid from it and stops without
-   one. The live rate sits in `data/profile.json` too, but `prune` deletes that
-   file after a day, so `context/me.md` is its only lasting home. A range is fine
-   as long as the figure they would actually quote comes first.
+1. **The smallest project worth taking**, and the **hourly rate** they have in mind,
+   if any. Never recommend a rate here: the market check needs the role models, so
+   `/profile` does it. A number they name goes into the `**Hourly rate:**` line; no
+   number leaves it open, and say that `/profile` settles it.
 2. **Timezone and the hours** they answer messages.
 3. **Applications per day** they can really carry.
 4. **How they want to sound**: the default is an approachable, professional sales
@@ -368,5 +354,4 @@ Then the completion report as CLAUDE.md defines it: how many questions stayed
 open and which single answer would be worth the most. Next step: `/profile`, which measures
 the live profile and then writes the one that fixes it.
 End with `Upwork calls: N`: the account check, the profile, its highlights and the
-closed contracts, plus one search per custom direction checked, one for the rate
-and one read per peer profile.
+closed contracts, plus one search per custom direction checked.
