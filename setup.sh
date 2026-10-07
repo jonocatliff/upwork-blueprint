@@ -93,8 +93,8 @@ if ! command -v google-chrome >/dev/null && ! command -v chromium >/dev/null \
   note "Google Chrome: /proposal checks the finished page on a phone screen with it, and /sales-call-proposal draws its sketch with it. Install it from google.com/chrome, or put the path in CHROME_BIN."
 fi
 
-if [ ! -d cockpit/node_modules ] && command -v npm >/dev/null; then
-  note "the cockpit installs its own packages on the first /dashboard run, which takes a few minutes once. Run 'cd cockpit && npm install' now if you would rather wait for it here."
+if [ ! -d website/node_modules ] && command -v npm >/dev/null; then
+  note "the cockpit installs its own packages on the first /dashboard run, which takes a few minutes once. Run 'cd website && npm install' now if you would rather wait for it here."
 fi
 
 if ! command -v vercel >/dev/null; then
