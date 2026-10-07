@@ -95,11 +95,12 @@ describes its own sample and period and nothing more.
 
 ## Title
 
-Two or three blocks divided by `|`, 55 to 70 characters, never padded to fill. **A position, not a
-keyword list**: the first block is the role a client types (tool or service plus a role noun), the
-next says who it is for or what the client gets ("CRM & Booking Automation for Clinics"). Use the
-client's own words, never a slogan. No verbs, no price, no years, no badge words, and never four
-stacked keywords in a row.
+Two or three blocks divided by `|`, 55 to 70 characters, never padded to fill. **A description of
+what you do plus the keywords clients search**: the first block is the role with its main keyword
+(tool or service plus a role noun), the next adds two or three more search terms joined with a
+description of who it is for or what the client gets ("Local SEO & Technical Audits for Small
+Businesses"). Take the terms from the skills in the fresh postings, never a slogan. No verbs, no
+price, no years, no badge words, and never a bare stack of keywords.
 
 ## Overview
 
