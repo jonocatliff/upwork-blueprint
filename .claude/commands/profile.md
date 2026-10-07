@@ -16,7 +16,9 @@ deliverable, never a report about an old one.
 Read first: [references/profile.md](../../references/profile.md), which holds every field, what finishes it, the filters a client can close, how strong profiles are written and what has to be on the table before you start; and the profile sections of [references/upwork.md](../../references/upwork.md) for what the connector may write. Then `context/me.md`.
 
 **Focus:** $ARGUMENTS. A focus writes only that section of `profile.md` and
-leaves the rest as it is. Every run writes something.
+leaves the rest as it is. Every run writes something. **`video`** is the script
+generator for the intro video: Steps 0 and 1 only, then the script from `context/me.md`
+and an existing `profile.md`, with no live read and no role models.
 
 ## Step 0 · The connector
 
