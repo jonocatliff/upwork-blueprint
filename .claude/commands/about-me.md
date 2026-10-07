@@ -155,8 +155,10 @@ The goal is one choice: a branch. Keep this step to one exchange.
    price and proposal counts with n and today's date. Flag low demand, let the member
    decide, never block. A no stays a no. If the CV shows a clear strength inside a branch,
    say it in one line and ask whether to lead with it. Propose no niche.
-4. **Industries:** one short question, written as `**Industries you want to work with:**`
-   in `context/me.md`; `/find-jobs` reads it. Do not ask what they will not do.
+4. **Industries, a preference only.** Infer the fitting ones from the CV and past work,
+   say them in one line and ask which they prefer ("any" is fine). Write the answer as
+   `**Industries you want to work with:**` in `context/me.md`; `/find-jobs` just adds
+   those words to its search. Do not ask what they will not do.
 
 ## Step 3 · Terms and voice
 
