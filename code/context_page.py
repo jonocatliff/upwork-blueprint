@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""The one clean page that shows a member what is now in their own file.
+"""The member's one-page CV, built from their own file.
 
     python3 code/context_page.py [--open]
 
 /context ends by reporting what it wrote. A report in a terminal scrolls away,
 and the file it wrote is markdown with starter lines still in it. This renders
-the short version as one full page: who you are, what you sell, your terms, what
-you can prove, and what is still open, in that order and nothing more.
+it as one page laid out like a CV, with the same sections as `context/me.md`:
+background, what you do, results on the left, how you work, credentials, reviews
+and what is still open on the right.
 
 Output is `context/overview.html`, which is gitignored like everything else in
-that folder. It is built from the files alone and reaches no service.
+that folder. It is built from the files alone and reaches no service. It prints
+on one A4 page.
 """
 import argparse
 import html
@@ -23,62 +25,58 @@ sys.path.insert(0, str(ROOT / 'code'))
 import context_check as cc  # noqa: E402
 
 OUT = ROOT / 'context' / 'overview.html'
-PLUME = ROOT / 'templates' / 'pitch' / 'ink-plume.png'
 STARTER = 'not answered yet'
-EMPTY = 'nothing recorded yet'
-SHOWN = 6        # entries listed per group, the rest become "and N more"
-CLIP = 220       # characters of a long answer before it is cut at a word
+EMPTY = ('nothing recorded yet', 'not filled in yet', STARTER)
+CLIP = 260       # characters of a long answer before it is cut at a word
+JOBS = 4         # background entries shown, the rest become "and N more"
 
-# The look of the Automatable landing page, as the pitch pages already use it:
-# warm cream, dark ink, one terracotta accent, a serif for the words that matter.
+# The Automatable look: ivory page, ink text, one clay accent, a serif for
+# headings and a small mono for labels.
 CSS = """
-  :root { color-scheme: light; --bg: #f3efe6; --card: #fbf9f4; --ink: #1c1712;
-          --text: #262019; --text-2: #5c5347; --text-3: #6f6656; --accent: #c1663e; --accent-on-ink: #e08a5c;
-          --on-ink: #f3efe6; --on-ink-2: #b8ad9c; --line: #e2d9c8;
+  :root { color-scheme: light; --ivory: #faf9f5; --ink: #141413; --clay: #c96442; --clay-deep: #a94f31;
+          --clay-soft: #f6e4dc; --sand: #e8e6dc; --stone: #d1cfc5; --muted: #5e5d59; --soft: #87867f;
+          --green: #2f5d2c; --green-soft: #e3efe2;
+          --display: "Tiempos Text", Georgia, "Iowan Old Style", "Times New Roman", ui-serif, serif;
           --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-          --serif: "Tiempos Text", Georgia, "Iowan Old Style", "Times New Roman", ui-serif, serif;
           --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace; }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 var(--sans);
-         -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
-  .wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 32px; }
-  header { position: relative; overflow: hidden; padding: 56px 0 44px; }
-  header .wrap { position: relative; z-index: 1; }
-  .plume { position: absolute; right: -40px; top: -20px; height: 130%; opacity: .55; mix-blend-mode: multiply;
-           pointer-events: none; }
-  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent);
-             margin: 0 0 14px; font-weight: 600; }
-  h1 { font: 500 clamp(40px, 6vw, 72px)/1.04 var(--serif); letter-spacing: -.02em; color: var(--ink);
-       margin: 0 0 14px; max-width: 14em; }
-  .lede { font-size: 19px; color: var(--text-2); margin: 0; max-width: 40em; }
-  main { flex: 1; padding: 8px 0 48px; }
-  .grid { display: grid; gap: 20px; grid-template-columns: repeat(12, 1fr); }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 26px 28px; }
-  .sells { grid-column: span 5; } .terms { grid-column: span 3; } .proof { grid-column: span 4; }
-  h2 { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3);
-       margin: 0 0 14px; font-weight: 600; }
-  .sells p { font: 400 21px/1.45 var(--serif); color: var(--ink); margin: 0; }
-  .terms dl { margin: 0; display: grid; gap: 14px; }
-  .terms dt { font-size: 12.5px; color: var(--text-3); }
-  .terms dd { margin: 2px 0 0; font: 400 20px/1.25 var(--serif); color: var(--ink); }
-  .stat { font: 400 54px/1 var(--serif); color: var(--ink); margin: 0 0 4px; }
-  .stat span { font-size: 17px; color: var(--text-2); font-family: var(--sans); margin-left: 6px; }
-  .muted { color: var(--text-3); font-size: 14px; margin: 0; }
-  ul { margin: 14px 0 0; padding-left: 18px; color: var(--ink); }
-  li { margin-bottom: 4px; }
-  footer { background: var(--ink); color: var(--on-ink); padding: 40px 0; }
-  footer .wrap { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; align-items: start; }
-  footer h2 { color: var(--on-ink-2); }
-  footer ul { margin: 0; columns: 2; column-gap: 32px; color: var(--on-ink); list-style: none; padding: 0; }
-  footer li { margin-bottom: 6px; break-inside: avoid; }
-  footer li::before { content: "\\2022"; color: var(--accent-on-ink); margin-right: 10px; }
-  footer .muted { color: var(--on-ink-2); }
-  .next p { font: 400 22px/1.35 var(--serif); margin: 0; color: var(--on-ink); }
-  .next p.muted { font: 14px/1.5 var(--sans); margin-top: 10px; }
-  .next strong { color: var(--accent-on-ink); font-weight: 400; }
-  @media (max-width: 900px) {
-    .sells, .terms, .proof { grid-column: span 12; } footer .wrap { grid-template-columns: 1fr; }
-    .plume { display: none; } header { padding: 40px 0 28px; } .wrap { padding: 0 20px; } footer ul { columns: 1; } }
+  body { margin: 0; background: var(--ivory); color: var(--muted); font: 15.5px/1.55 var(--sans);
+         -webkit-font-smoothing: antialiased; }
+  .page { max-width: 1040px; margin: 0 auto; padding: 48px 32px 56px; }
+  .eyebrow, h2, dt { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+                     color: var(--soft); font-weight: 400; }
+  .eyebrow { color: var(--clay-deep); margin: 0 0 14px; }
+  h1 { font: 500 clamp(30px, 4.6vw, 46px)/1.08 var(--display); letter-spacing: -1px; color: var(--ink);
+       margin: 0 0 10px; max-width: 20em; }
+  .lede { font-size: 17px; margin: 0; max-width: 40em; }
+  .cols { display: grid; grid-template-columns: 1.7fr 1fr; gap: 0 48px; margin-top: 30px;
+          border-top: 1px solid var(--stone); }
+  section { padding: 22px 0 6px; }
+  section + section { border-top: 1px solid var(--sand); }
+  h2 { margin: 0 0 12px; }
+  .entry { margin: 0 0 14px; }
+  .entry b, .entry strong { display: block; font: 500 17px/1.3 var(--display); color: var(--ink); margin-bottom: 2px; }
+  .entry p { margin: 0; }
+  .entry small { display: block; color: var(--soft); font-size: 13px; margin-top: 2px; }
+  .tag { display: inline-block; font: 400 10px/1 var(--mono); text-transform: uppercase; letter-spacing: 1.5px;
+         padding: 4px 8px; border-radius: 6px; margin-right: 8px; vertical-align: 2px; }
+  .tag.v { background: var(--green-soft); color: var(--green); } .tag.p { background: var(--clay-soft); color: var(--clay-deep); }
+  dl { margin: 0; display: grid; gap: 12px; }
+  dd { margin: 2px 0 0; font: 400 18px/1.25 var(--display); color: var(--ink); }
+  .rows p { margin: 0 0 10px; } .rows b { color: var(--ink); font-weight: 600; }
+  .muted { color: var(--soft); font-size: 14px; margin: 0; }
+  ul { margin: 0; padding-left: 18px; } li { margin-bottom: 3px; }
+  .open { background: var(--clay-soft); border-radius: 12px; padding: 16px 18px; margin-top: 22px; }
+  .open h2 { color: var(--clay-deep); }
+  .next { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--stone); font-size: 14px; }
+  .next code { font-family: var(--mono); background: var(--sand); padding: 1px 6px; border-radius: 5px; color: var(--ink); }
+  @media (max-width: 800px) { .cols { grid-template-columns: 1fr; } .page { padding: 32px 20px 40px; } }
+  @media print { @page { size: A4; margin: 10mm; } body { font-size: 10px; line-height: 1.45; background: #fff; }
+                 .page { padding: 0; max-width: none; } h1 { font-size: 24px; margin-bottom: 6px; }
+                 .lede { font-size: 12px; } .cols { margin-top: 12px; gap: 0 24px; } dd { font-size: 14px; }
+                 .entry strong { font-size: 13px; } .entry { margin-bottom: 8px; }
+                 section { padding: 8px 0 0; break-inside: avoid; } .open { margin-top: 8px; padding: 10px 12px; }
+                 .next { margin-top: 12px; padding-top: 8px; } }
 """
 
 
@@ -132,77 +130,104 @@ def short(label):
     return re.sub(r'\s*\(.*?\)', '', label).strip()
 
 
-def proof_blocks(body):
-    """(title, verified) for each `###` block. Verified only when no pending is in it."""
-    blocks, title, lines = [], None, []
+def blank(text):
+    return not text.strip() or any(mark in text.lower() for mark in EMPTY)
+
+
+def entries(body):
+    """Each `###` block as {title, text, place, status}. Empty starter blocks are dropped."""
+    found, title, lines = [], None, []
     for line in body + ['### ']:
         if line.startswith('### '):
             if title:
-                text = '\n'.join(lines)
-                if EMPTY not in text.lower():
-                    verified = bool(re.search(r'\bverified\b', text, re.I)) and not re.search(r'\bpending\b', text, re.I)
-                    blocks.append((title, verified))
+                text = [x.strip() for x in lines if x.strip() and not x.strip().startswith('- ')]
+                bullets = {m.group(1).lower(): m.group(2).strip() for x in lines
+                           for m in [re.match(r'^-\s*([^:]+):\s*(.*)$', x.strip())] if m}
+                place = next((v for k, v in bullets.items() if k.startswith('where')), '')
+                status = bullets.get('status', '').lower()
+                joined = ' '.join(text)
+                if joined and not blank(joined):
+                    found.append({'title': title, 'text': joined, 'place': place,
+                                  'verified': 'verified' in status and 'pending' not in status})
             title, lines = line[4:].strip(), []
         elif title is not None:
             lines.append(line)
-    return blocks
+    return found
 
 
-def listing(items):
-    shown = ''.join(f'<li>{esc(i)}</li>' for i in items[:SHOWN])
-    extra = len(items) - SHOWN
-    tail = f'<li class="muted">and {extra} more</li>' if extra > 0 else ''
-    return f'<ul>{shown}{tail}</ul>'
+def entry_html(item, tag=False):
+    badge = ''
+    if tag:
+        badge = '<span class="tag v">verified</span>' if item['verified'] else '<span class="tag p">pending</span>'
+    place = f'<small>Checked at: {esc(item["place"])}</small>' if item['place'] else ''
+    return f'<div class="entry"><strong>{badge}{esc(item["title"])}</strong><p>{esc(clip(item["text"]))}</p>{place}</div>'
+
+
+def block(title, inner):
+    return f'<section><h2>{esc(title)}</h2>{inner}</section>'
 
 
 def build(me_text, proof_text):
     me = dict(sections(me_text))
-    proof = dict(sections(proof_text))
     found = answers(me)
 
     who = pick(found, 'Profession')
     one = pick(found, 'The one thing')
     sells = pick(found, 'Services you sell')
+    avoid = pick(found, 'What you do NOT')
+    industries = pick(found, 'Industries')
+
+    jobs = entries(me.get('Your background', []))
+    background = ''.join(entry_html(j) for j in jobs[:JOBS])
+    if len(jobs) > JOBS:
+        background += f'<p class="muted">and {len(jobs) - JOBS} more</p>'
+    if not jobs:
+        plain = clip(' '.join(x.strip() for x in me.get('Your background', []) if x.strip() and not blank(x)))
+        background = f'<p>{esc(plain)}</p>' if plain else '<p class="muted">Still open.</p>'
+
+    rows = ''.join(f'<p><b>{label}</b> {esc(clip(value))}</p>' for label, value in (
+        ('Sells', sells), ('Does not do', avoid), ('Works with', industries)) if value)
+    do_html = rows and f'<div class="rows">{rows}</div>' or '<p class="muted">Still open.</p>'
+
+    results = entries(cc.proof_only(me_text) and dict(sections(proof_text)).get('Results', []))
+    results_html = ''.join(entry_html(r, tag=True) for r in results) or \
+        '<p class="muted">Nothing yet. The first delivered job fills this.</p>'
+
     terms = [(label, pick(found, key)) for label, key in (
         ('Hourly rate', 'Hourly rate'), ('Smallest project', 'Smallest project'),
-        ('Timezone', 'Timezone'), ('Applications a day', 'Applications per day'))]
+        ('Timezone and hours', 'Timezone'), ('Applications a day', 'Applications per day'),
+        ('Job Success Score', 'Job Success'), ('Intro video', 'Intro video'))]
+    dl = ''.join(f'<div><dt>{esc(label)}</dt><dd>{esc(clip(value, 70))}</dd></div>' for label, value in terms if value)
+    terms_html = f'<dl>{dl}</dl>' if dl else '<p class="muted">Still open.</p>'
 
-    blocks = []
-    for name in ('Results', 'Reviews', 'Credentials'):
-        blocks += proof_blocks(proof.get(name, []))
-    verified = [t for t, ok in blocks if ok]
-    pending = [t for t, ok in blocks if not ok]
+    proof = dict(sections(proof_text))
+    creds = entries(proof.get('Credentials', []))
+    creds_html = ''.join(entry_html(c, tag=True) for c in creds) or '<p class="muted">None recorded yet.</p>'
+    reviews = entries(proof.get('Reviews', []))
+    reviews_html = ''.join(entry_html(r) for r in reviews) or '<p class="muted">None recorded yet.</p>'
+
     gaps = [short(label) for label, value in found.items() if value is None]
-
-    plume = '<img class="plume" src="../templates/pitch/ink-plume.png" alt="">' if PLUME.is_file() else ''
-    headline = esc(one) if one else 'Your Upwork context'
-    lede = esc(clip(who)) if who else 'What every command reads before it writes for you.'
-    sells_html = f'<p>{esc(clip(sells, 300))}</p>' if sells else '<p class="muted">Still open.</p>'
-    rows = ''.join(f'<div><dt>{esc(label)}</dt><dd>{esc(clip(value, 70))}</dd></div>' for label, value in terms if value)
-    terms_html = f'<dl>{rows}</dl>' if rows else '<p class="muted">Still open.</p>'
-
-    proof_html = f'<p class="stat">{len(verified)}<span>verified</span></p>'
-    proof_html += listing(verified) if verified else '<p class="muted">Nothing verified yet. The first delivered job fills this.</p>'
-    if pending:
-        proof_html += (f'<p class="muted" style="margin-top:14px">{len(pending)} pending, never shown to a client '
-                       f'until you can say where it can be checked.</p>')
-    gaps_html = listing(gaps) if gaps else '<p class="muted">Nothing is open.</p>'
+    open_html = ''
+    if gaps:
+        shown = ''.join(f'<li>{esc(g)}</li>' for g in gaps[:6])
+        more = f'<li class="muted">and {len(gaps) - 6} more</li>' if len(gaps) > 6 else ''
+        open_html = f'<div class="open"><h2>Still open</h2><ul>{shown}{more}</ul></div>'
 
     return ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             '<title>Your Upwork context</title>\n<style>' + CSS + '</style>\n</head>\n<body>\n'
-            f'<header>{plume}<div class="wrap"><p class="eyebrow">Your Upwork context</p>'
-            f'<h1>{headline}</h1><p class="lede">{lede}</p></div></header>\n'
-            '<main><div class="wrap"><div class="grid">\n'
-            f'  <section class="card sells"><h2>What you sell</h2>{sells_html}</section>\n'
-            f'  <section class="card terms"><h2>Your terms</h2>{terms_html}</section>\n'
-            f'  <section class="card proof"><h2>What you can prove</h2>{proof_html}</section>\n'
-            '</div></div></main>\n'
-            '<footer><div class="wrap">\n'
-            f'  <div><h2>Still open</h2>{gaps_html}</div>\n'
-            '  <div class="next"><h2>Next</h2><p><strong>/profile</strong> measures your live profile and writes the one '
-            'that fixes it.</p><p class="muted">None of what is open blocks it. Built from context/me.md on this machine.</p></div>\n'
-            '</div></footer>\n</body>\n</html>\n')
+            '<div class="page">\n'
+            f'<p class="eyebrow">Your Upwork context</p><h1>{esc(one) if one else "Your Upwork context"}</h1>'
+            f'<p class="lede">{esc(clip(who)) if who else "What every command reads before it writes for you."}</p>\n'
+            '<div class="cols">\n<div>\n'
+            + block('Background', background) + block('What you do', do_html) + block('Results', results_html) +
+            '\n</div>\n<div>\n'
+            + block('How you work', terms_html) + block('Credentials', creds_html) + block('Reviews', reviews_html) +
+            open_html +
+            '\n</div>\n</div>\n'
+            '<p class="next">Next: <code>/profile</code> writes the profile from this page. '
+            'None of what is open blocks it. Built from context/me.md on this machine.</p>\n'
+            '</div>\n</body>\n</html>\n')
 
 
 def main(argv=None):
