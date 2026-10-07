@@ -136,28 +136,18 @@ Then these sections, with these exact headings. The gate reads `## Title`, `## O
 - **`## Skills`**: one `- Skill` line each, in Upwork's exact spelling, as many as the live editor offers (the skill for GoHighLevel is called HighLevel). Use the names Step 3 counted in real postings; mark any you could not confirm with "(check the spelling in Upwork's list)".
 - **`## Portfolio titles`**: one `- New title (was: old title)` line per project. A number goes in a title only when the proof ties it to that project.
 - **`## Reference averages`**: from the role models, `- title: N` and `- overview: N` in characters, the three URLs and today's date. The gate fails a title or overview more than 20 % over these; with no role models there is no ceiling beyond Upwork's limits.
-- **`## Video script`**: only the script to read, three parts of about 15 seconds, 45
-  seconds in total unless the member names another length. It is **derived from the
-  sections above, never invented next to them**: same direction, same results as the
-  overview. **Who am I?** (the name, three or four verified facts such as years, projects
-  and reviews, and one line on the goal, saving the client time and earning them more
-  money), **Why me?** (up to four verified results, each with its number, or the
-  background when there are none), **How it works** (four or five steps from the first
-  call to the quickest win, closing on "then rinse and repeat" or the member's own close).
-  Client first names only when the member gave them.
-
-  **The format, because it has to be readable while recording.** One block per part, in
-  this shape, and nothing else, no slide notes:
-
-  ```
-  ### 0:00 to 0:15 · Who am I?
-  The spoken words, one to four short sentences, as they are to be said.
-  ```
+- **`## Video script`**: one connected intro pitch, only the words to read, about 45
+  seconds (around 100 words) unless the member names another length. It is **derived from
+  the sections above, never invented next to them**: same direction, same results as the
+  overview. It runs in one piece, with no headings and no sentences that announce a
+  section: the name and who the member helps, then the verified results in one sentence
+  (up to three, each with its number; the background when there are none), then how
+  working together starts and one small invitation. Client first names only when the
+  member gave them.
 
   Write it the way you would explain your work to someone you just met: plain words,
-  contractions, examples instead of boasts, no pressure and no big promises, one small
-  invitation at the end. Open on what the member helps with, then the name and the
-  verified facts. Numbers as you would say them, no jargon a client would not use out loud.
+  contractions, one idea per sentence, examples instead of boasts, no pressure and no big
+  promises. Numbers as you would say them, no jargon a client would not use out loud.
   Close with "read it aloud once before recording; anything that trips your tongue gets
   cut". The member records it and gives a public YouTube link, which Step 6 sets; the
   video is worth 10% of completeness, and a profile goes live without it while a profile
