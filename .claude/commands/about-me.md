@@ -157,9 +157,10 @@ The goal is one choice: a branch. Keep this step to one exchange.
    decide, never block. A no stays a no. If the CV shows a clear strength inside a branch,
    say it in one line and ask whether to lead with it. Propose no niche.
 4. **Industries, a preference only.** Infer the fitting ones from the CV and past work,
-   say them in one line and ask them to pick one or two; "any" is not an answer. Write the
-   pick as `**Industries you want to work with:**` in `context/me.md`; `/find-jobs` just
-   adds those words to its search. Do not ask what they will not do.
+   say them in one line and ask them to pick one or two, and say that picking none for the
+   start is fine. Write the pick as `**Industries you want to work with:**` in
+   `context/me.md` (none: write "none yet"); `/find-jobs` just adds those words to its
+   search. Do not ask what they will not do.
 
 ## Step 3 · Terms and voice
 
