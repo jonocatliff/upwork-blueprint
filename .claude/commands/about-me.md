@@ -5,10 +5,7 @@ argument-hint: "[a CV file, a LinkedIn or portfolio URL, or focus: background | 
 
 # /about-me
 
-The first command, run once the Upwork connector is connected and before any text a
-client reads. It fills `context/me.md`, and every later command writes from
-it. Nothing here is public, and nothing is sent: it reads your own profile
-and the market, and writes one local file.
+The first command, run once the Upwork connector is connected and before any text a client reads. It fills `context/me.md`, which every later command writes from. Nothing is public or sent: it reads your own profile and the market and writes one local file.
 
 Follow `references/copy.md` for how to ask. Read
 [references/profile.md](../../references/profile.md) first: it says which facts
@@ -16,28 +13,9 @@ carry weight, so the questions stay in that order, what has to be on the table
 before a profile can be written, and what holds up for a member starting from
 zero.
 
-**What this is for.** Two things, and every question only makes sense against
-them. The first is to learn this person's history on two levels at once. The
-career: what they have done, for whom, for how long, and what they were trusted
-with. The skill: what they can actually do today, how well, and on which tools.
-Most members answer the first and skip the second, and a profile built on job
-titles alone reads like a CV nobody asked for.
+**What this is for.** Learn this person's history on two levels: the career (what they did, for whom, for how long, what they were trusted with) and the skill (what they can do today, how well, on which tools). Most members skip the second, and a profile built on job titles alone reads like a CV nobody asked for. Then lay the base for an Upwork career: one specific person solving one specific problem for one kind of client, at a price, with something behind the claim. A question that serves neither is dropped; an answer that opens a door to either is followed even when it is off the list.
 
-The second is to lay the base a freelance career on Upwork stands on. Upwork
-sells one specific person solving one specific problem for one kind of client, at
-a price, with something behind the claim. Every question below exists because
-some later command needs its answer to make that case.
-
-Hold both while asking. A question that serves neither is a question to drop. An
-answer that opens a door to either is worth following even when it is not on the
-list, and that judgement is the whole difference between an interview and a form.
-
-**Ask with the slots in mind.** Every answer here lands somewhere later: the
-title needs a position (the role a client types, then who it is for), the first 250
-characters of the overview need an outcome or a hard number, each portfolio title
-needs its own number, the video script needs up to three proofs, and
-`/find-jobs` needs the track, its services and the tool names. A loose answer is not a small
-loss; it is an empty slot that `/profile` cannot fill with anything but adjectives.
+**Ask with the slots in mind.** The title needs a position (the role a client types, then who it is for), the first 250 characters of the overview an outcome or hard number, each portfolio title its own number, the video script up to three proofs, and `/find-jobs` the track, its services and the tool names. A loose answer leaves an empty slot that `/profile` can only fill with adjectives.
 
 **Input:** $ARGUMENTS. A path to a CV or a URL is material to read, see Step 1.
 A focus value runs only that block and rewrites only its part of the files. An
@@ -111,10 +89,7 @@ quietly (safe at any time: it creates missing files, never overwrites).
    so `/profile` never has to ask: education, language level, timezone, and each claim
    in the overview (where can it be checked, or does it go).
 
-   This is material for the interview, not a shortcut past it. Somebody who has
-   written a profile has already decided what they sell, and asking them from
-   zero wastes their time and loses what they got right. Say what is there in a
-   few lines and ask what has changed since, rather than starting at nothing.
+Say what is there in a few lines and ask what has changed since, rather than starting at nothing.
 
    **Nothing in it is proof.** A result the member claimed in their own profile
    is a question to verify, recorded with the source "self-authored Upwork
@@ -122,19 +97,11 @@ quietly (safe at any time: it creates missing files, never overwrites).
    verified. A contract title proves they were hired, never that a number
    happened.
 
-   The connector answered in Step 0, so make all three calls.
-3. **Job Success Score and intro video** are not in these responses, measured
-   12 September 2026. Step 3 handles them; leave unknown values open.
-
-Never ask for anything one of these already answers.
+3. **Job Success Score and intro video** are not in these responses. Step 3 handles them; leave unknown values open.
 
 ## Step 1 · Background, the whole working life
 
-**Offer the search, then wait for the yes.** A CV, an old portfolio page or a
-pasted LinkedIn profile answers most of this in one go, so the first thing this
-command says is one question with three ways to answer: paste the text, name a
-file, or say yes and you look through their computer for CVs, portfolios and
-similar files.
+**Offer the search, then wait for the yes.** The first thing this command says is one question with three ways to answer: paste the text of a CV, old portfolio page or LinkedIn profile, name a file, or say yes and you look through their computer for CVs, portfolios and similar files.
 
 **Do not go looking before the yes.** Until they answer, open nothing outside this
 repository: no listing, globbing or grepping their folders. After a yes, or a
@@ -149,29 +116,21 @@ From that material, list back what you found, one line per job, and ask only
 what is missing or unclear. Everything a CV claims is the member's own wording:
 it becomes a fact with a source and a date, never verified proof by itself.
 
-Then open the block, and say why before you ask: a profession outside
-freelancing is usually the strongest thing a new profile has, and most members
-leave it out.
+Then open the block and say why: a profession outside freelancing is usually a new profile's strongest asset, and most members leave it out.
 
 Ask this, and only this, first:
 
 1. **Every job you have held**, with the years and what you actually did there.
    Trades, shifts, teaching, coaching, support, sales, anything. No filter yet.
 
-Their answer decides the rest. A missing year, a job described in three words, a
-side project mentioned and dropped: those are the follow-ups, and they are worth
-more than the next question on the list. Ask the three below only where the
-answer did not already carry them:
+Their answer decides the rest: a missing year, a three-word job or a dropped side project are the follow-ups. Ask the three below only where the answer did not already carry them:
 
 2. **What you were good at** in those jobs, in your words.
 3. **Education, certificates and languages**, with the year.
 4. **What you have built or delivered for someone**, paid or not, on or off
    Upwork.
 
-Then name, back to the member, which parts of that transfer to the work they
-want: the ones a client pays for, and the ones that are only biography. A gym
-floor teaches consultation and adherence; a call centre teaches objection
-handling. Say which is which and why, in two lines.
+Then say, in two lines, which parts of that transfer to the work they want (what a client pays for) and which are only biography.
 
 ## Step 2 · The offer
 
@@ -181,16 +140,7 @@ without a deliverable and a price makes every later command invent one.
 
 1. **The one thing you want to be hired for.** Their words. A whole track such as
    SEO counts, and it can hold several services.
-2. **What they actually sell.** What this block is after is
-   the expertise and the direction, not a price list. "GoHighLevel automation for
-   agencies" is a better answer than a catalogue of packages nobody has bought
-   yet, and a member who has never quoted a fixed price has not failed this
-   question. Ask what the client ends up with and which tool it runs on, because
-   `/find-jobs` searches on exactly those two. Price and duration are welcome
-   where they already exist and stay open where they do not: "not priced yet" is
-   a real answer, `/pitch-page` asks for the bid per job anyway, and pushing
-   someone into inventing a package to fill a line produces a number they will
-   have to defend on a call.
+2. **What they actually sell.** The expertise and the direction, not a price list: "GoHighLevel automation for agencies" beats a catalogue of packages nobody has bought. Ask what the client ends up with and which tool it runs on, because `/find-jobs` searches on exactly those two. Price and duration are welcome where they exist; "not priced yet" is a real answer, since `/pitch-page` asks for the bid per job. Never push anyone to invent a package.
 3. **How settled that direction is.** Ask it plainly and write the member's word,
    never inferred from a branch pick, because everything after this behaves differently:
    - **decided**, they name a track (SEO as a whole counts) or a narrower service in
@@ -220,12 +170,7 @@ without a deliverable and a price makes every later command invent one.
    today's date, next to the same figures for the lanes. Flag low demand and let
    the member decide; never block.
 4. **What you do not do.** One line. It protects every later proposal.
-5. **The industries they want to work with**, in their own words, written as
-   `**Industries you want to work with:**` in `context/me.md`. This is a preference,
-   not a specialization: somebody who sells SEO and loves gyms searches "gym
-   marketing" as well as "SEO", and that one line is where `/find-jobs` gets it.
-   Ask it even when the direction is still open, because it is usually the easiest
-   question in this block to answer.
+5. **The industries they want to work with**, in their own words, written as `**Industries you want to work with:**` in `context/me.md`. A preference, not a specialization (SEO plus gyms also searches "gym marketing"); `/find-jobs` reads this line. Ask it even when the direction is open.
 6. **A clear strength in their background.** If the CV shows one, say it in one line
    and ask whether to lead with it. Their answer decides; the branches stay as picked.
    Otherwise propose no niche.
@@ -248,11 +193,7 @@ another number into `**Applications per day:**` themselves. Mention that once.
    new member has neither, and `/profile` records the intro video: ask nothing.
 
 ## Step 4 · Proof, and go after the numbers
-
-This is the step the profile lives or dies on. The formula's first 250 characters
-carry the client's decision, and a hard number beats any adjective there, so a
-vague answer here costs the member work later. Nobody volunteers their numbers.
-Ask for them, per project, not once in general.
+The profile lives or dies here: a hard number in the first 250 characters beats any adjective, and nobody volunteers numbers. Ask for them per project, not once in general.
 
 **Walk every project, job or build from Step 1 and ask along this ladder.** Stop
 at the first rung that produces something real:
@@ -285,12 +226,7 @@ Every entry carries **where it can be checked**, the date and a status:
   place is vague.
 - **pending** for estimates and anything vague. A pending claim never reaches a client.
 
-**When there is nothing on the ladder at all**, help instead of pressing. Go
-looking with them: a system they built for the job they hold now, an unpaid build
-for a friend's business, a study or course project with a result, volunteer work,
-a process they improved where they work today. Most people have one and do not
-count it, because nobody paid for it. Name what it proves anyway, with its
-source, as pending.
+**When there is nothing on the ladder at all**, help instead of pressing. Look together for a system built for the current job, an unpaid build for a friend, a study or course project with a result, volunteer work, or a process improved at work. Name what it proves anyway, with its source, as pending.
 
 If that search comes up empty too, write "Nothing recorded yet" and move on.
 `/profile` then leads with the offer and the background instead of a number, and
@@ -321,9 +257,7 @@ and say which ones stay open. Never answer a question on the member's behalf.
 
 ## Step 7 · Report
 
-Before the completion report, the part the member sat through the interview for:
-show them what is now in their files. Not a list of filenames, the content, in
-their own words, so a wrong line is visible without opening anything.
+Before the completion report, show the member what is now in their files: the content, in their own words, so a wrong line is visible without opening anything.
 
 **What you are on record as.** The one thing they are hired for, each service
 with its price beside it, and what they do not do.
@@ -336,12 +270,7 @@ ones those are and what would move them to verified.
 command reads. Name any other file this run created or changed, and say that it is
 the member's own and is never touched by `git pull`.
 
-Then run `python3 code/context_page.py --open`. It renders that file into
-[context/overview.html](../../context/overview.html) and opens it: what they
-sell, how they work, what they can prove with verified and pending side by side,
-and every gap marked as a gap. A terminal report scrolls away and markdown with
-starter lines in it reads badly, so this is the thing they keep. Say it can be
-rebuilt any time with the same command.
+Then run `python3 code/context_page.py --open`. It renders that file into [context/overview.html](../../context/overview.html) and opens it: what they sell, how they work, proof verified and pending side by side, every gap marked as a gap. Say it can be rebuilt any time with the same command.
 
 Then the completion report as CLAUDE.md defines it: how many questions stayed
 open and which single answer would be worth the most. Next step: `/profile`, which measures
