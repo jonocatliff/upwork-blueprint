@@ -88,8 +88,11 @@ profile lacks and any it carries that appeared in no posting.
 member adds a client profile to the same login (Account Settings, no job is posted) and
 searches Upwork's talent search with their country, the Top Rated filter and the
 direction's keywords. Among the results favour high earnings, many finished jobs and
-recent work. They paste three to five profile addresses (the `~` in them is the key);
-if they will not, say so and go on without role models. Read each with `get_profile`
+recent work. Tell them what to look at (title, how the overview opens, skills, rate) and
+to paste three to five addresses (the `~` in them is the key), plus two or three
+newer freelancers from their own country with few reviews, because a profile without
+reviews prices against those, not against top earners. If they will not, say so and go
+on without role models. Read each with `get_profile`
 action `get` and its `profile_key`, rank by success, not badge (earnings bucket, then
 jobs and reviews), pick the three closest by skills in common and rate band, name the
 criteria and say the job success score and hours are not visible. Give four chat lines
@@ -100,16 +103,16 @@ below.
 
 **The rate.** After the role models, recommend a range and say it is a recommendation,
 built from the hourly ranges and fixed-price medians in the ten postings just read (with
-n and today's date), the three role models' rate bands, the rates in
+n and today's date), the rate bands of the role models and, for a starter, mainly of the newer profiles, the rates in
 [references/jobs.md](../../references/jobs.md) and the member's proof in `context/me.md`.
 No reviews yet: starting near the bottom of the range and raising it with each review is
 fine. Where they live decides which clients and hours fit, never a discount. Label what is
 measured and what is a guess, then ask what they would actually quote: a number they
-cannot defend on a call is worth nothing. After their yes write it into the
-`**Hourly rate:**` line of `context/me.md` as a number (a range is fine, the figure they
-quote first comes first), because `/pitch-page` prices every bid from it and stops without
-one, and `data/profile.json` is deleted after a day. If they gave a rate in `/context`,
-confirm it against this range instead of asking again.
+cannot defend on a call is worth nothing. Ask the **smallest project worth taking** in
+the same exchange. After their yes write both into `context/me.md`, the rate as a number
+in the `**Hourly rate:**` line (a range is fine, the figure they quote first comes first)
+and the project size in `**Smallest project worth taking:**`, because `/pitch-page` prices
+every bid from them and stops without one, and `data/profile.json` is deleted after a day.
 
 ## Step 4 · Write profile.md
 

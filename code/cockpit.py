@@ -155,13 +155,13 @@ def card(job):
 
 
 def daily_target():
-    """The member's applications-per-day goal from context/me.md, or None."""
+    """The member's applications-per-day goal from context/me.md, ten when they set none."""
     me = pathlib.Path(os.environ.get('BLUEPRINT_CONTEXT') or ROOT / 'context') / 'me.md'
     if me.is_file():
         m = re.search(r'Applications per day:\*\*\s*(\d+)', me.read_text(encoding='utf-8'))
         if m:
             return int(m.group(1))
-    return None
+    return 10
 
 
 FUNNEL = ('applied', 'replied', 'call', 'offer', 'won')

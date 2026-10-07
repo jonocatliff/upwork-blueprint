@@ -33,7 +33,6 @@ REQUIRED = (
     'Industries you want to work with',
     'Hourly rate',
     'Timezone and hours you answer messages',
-    'Applications per day',
 )
 STATUS = re.compile(r'\b(verified|pending)\b', re.I)
 CHECKABLE = re.compile(r'(where to check|where it can be checked|checked at|source:|https?://|upwork\.com)', re.I)

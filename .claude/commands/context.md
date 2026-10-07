@@ -237,22 +237,19 @@ without a deliverable and a price makes every later command invent one.
 
 ## Step 3 · Terms and voice
 
-The shortest block, and often one exchange. Points 2 and 3 are one
-message, and point 4 usually needs none at all, because this conversation has
-already shown how they write.
+The shortest block, and often one exchange. Point 2 usually needs no question,
+because this conversation has already shown how they write. Not asked here: the
+hourly rate and the smallest project, which `/profile` settles once it has seen what
+others charge, and the applications per day, which is ten until the member writes
+another number into `**Applications per day:**` themselves. Mention that once.
 
-1. **The smallest project worth taking**, and the **hourly rate** they have in mind,
-   if any. Never recommend a rate here: the market check needs the role models, so
-   `/profile` does it. A number they name goes into the `**Hourly rate:**` line; no
-   number leaves it open, and say that `/profile` settles it.
-2. **Timezone and the hours** they answer messages.
-3. **Applications per day** they can really carry.
-4. **How they want to sound**: the default is an approachable, professional sales
+1. **Timezone and the hours** they answer messages.
+2. **How they want to sound**: the default is an approachable, professional sales
    expert who makes the next decision easy. Ask only what deviates from it, and
    take the rest from how they write in this conversation.
-5. **Job Success Score and intro video**, only if still unanswered: the score is
+3. **Job Success Score and intro video**, only if still unanswered: the score is
    below their name on Upwork; ask whether a video exists. Save both in the starter fields.
-6. **Public Upwork profile URL**, copied from their profile, in `**Public Upwork profile URL:**`.
+4. **Public Upwork profile URL**, copied from their profile, in `**Public Upwork profile URL:**`.
 
 ## Step 4 · Proof, and go after the numbers
 
