@@ -36,7 +36,7 @@ list, and that judgement is the whole difference between an interview and a form
 title needs three or four words a client types into search, the first 250
 characters of the overview need an outcome or a hard number, each portfolio title
 needs its own number, the video script needs up to three proofs, and
-`/find-jobs` needs the niche and the tool names. A loose answer is not a small
+`/find-jobs` needs the track, its services and the tool names. A loose answer is not a small
 loss; it is an empty slot that `/profile` cannot fill with anything but adjectives.
 
 **Input:** $ARGUMENTS. A path to a CV or a URL is material to read, see Step 1.
@@ -171,7 +171,8 @@ A conversation, after Step 1 is answered. Open with the first question below and
 let the answer steer the rest. Point 2 is where the listening matters: a service
 without a deliverable and a price makes every later command invent one.
 
-1. **The one thing you want to be hired for.** Their words, not a category.
+1. **The one thing you want to be hired for.** Their words. A whole track such as
+   SEO counts, and it can hold several services.
 2. **What they actually sell.** What this block is after is
    the expertise and the direction, not a price list. "GoHighLevel automation for
    agencies" is a better answer than a catalogue of packages nobody has bought
@@ -182,10 +183,11 @@ without a deliverable and a price makes every later command invent one.
    a real answer, `/pitch-page` asks for the bid per job anyway, and pushing
    someone into inventing a package to fill a line produces a number they will
    have to defend on a call.
-3. **How settled that direction is.** Ask it plainly, because everything after
-   this behaves differently:
-   - **decided**, they name the specialization: `/profile` leads with the niche
-     and `/find-jobs` scores narrowly against it.
+3. **How settled that direction is.** Ask it plainly and write the member's word,
+   never inferred from a branch pick, because everything after this behaves differently:
+   - **decided**, they name a track (SEO as a whole counts) or a narrower service in
+     their own words: `/profile` leads with it and `/find-jobs` searches its services.
+     Record a narrower service only when the member says it.
    - **leaning**, they name two or three candidates: the profile leads with the
      strongest one, the search covers all of them, and the first ten
      applications decide instead of an opinion.
@@ -198,12 +200,12 @@ without a deliverable and a price makes every later command invent one.
    in the community, and their own direction works too. Say "branches", not
    "lanes". Show them with their services and ask which match what they can deliver
    today and which they could grow into. Keep it light: take their picks as given,
-   name the two or three to lead with in one line (all five is allowed when they
-   want it), and never audit what they left out or ask why. Say that the first ten
-   applications test the choice.
+   record the branch and never narrow within it: list only the services they name
+   (all five branches is allowed), and never audit what they left out or ask why.
+   Say that the first ten applications test the choice.
    **Custom additions come after the branches.** Ask once whether they want to add
    a branch or service of their own from their interests or profile, and offer one
-   or two ideas out of their background. Label each custom: no template, no
+   or two ideas out of their background. A no stays a no: never add it anyway. Label each custom: no template, no
    course, harder to sell. Search Upwork for it and for something
    similar (`find_jobs` search only, rows only, call budget stated first) and show
    postings in the last 7 days, median price and proposal counts, with n and
@@ -212,13 +214,14 @@ without a deliverable and a price makes every later command invent one.
 4. **What you do not do.** One line. It protects every later proposal.
 5. **The industries they want to work with**, in their own words, written as
    `**Industries you want to work with:**` in `context/me.md`. This is a preference,
-   not a specialization: somebody who sells local SEO and loves gyms searches "gym
-   marketing" as well as "local SEO", and that one line is where `/find-jobs` gets it.
+   not a specialization: somebody who sells SEO and loves gyms searches "gym
+   marketing" as well as "SEO", and that one line is where `/find-jobs` gets it.
    Ask it even when the direction is still open, because it is usually the easiest
    question in this block to answer.
-6. **The niche their background points at**, proposed by you with the reason,
-   then confirmed or corrected. A profile that serves everyone reads as serving
-   no one, and in most professions none of the top three owns a niche.
+6. **A niche is optional and comes later.** Never propose one in this interview. Only
+   when the member asks, or after the first ten applications, offer one their background
+   could support, labelled as an option. The default is the general track with its
+   services listed.
 7. **The tools and systems** they can name confidently, for search.
 
 ## Step 3 · Terms and voice
