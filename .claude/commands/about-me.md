@@ -103,6 +103,9 @@ quietly (safe at any time: it creates missing files, never overwrites).
    for. Three calls, and `/profile` reuses these files for a day rather than
    paying for them twice.
 
+   **No title and no overview?** The normal start: say so in one line, skip the rest
+   of this item and go to Step 1.
+
    This is material for the interview, not a shortcut past it. Somebody who has
    written a profile has already decided what they sell, and asking them from
    zero wastes their time and loses what they got right. Say what is there in a
