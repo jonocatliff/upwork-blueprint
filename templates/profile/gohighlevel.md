@@ -40,7 +40,7 @@ position (role, then who it is for), not a stack of keywords.
 HighLevel Expert | CRM & Marketing Automation for Small Business
 ```
 
-Other shape: `HighLevel | CRM Automation | Sales Funnel | Email Marketing` for funnel-led work.
+Other shape, only when the member brings that expertise: `HighLevel Expert | Sales Funnels Other shape: `HighLevel | CRM Automation | Sales Funnel | Email Marketing` for funnel-led work. Email Automation for Small Business` for funnel-led work.
 
 ## Overview
 

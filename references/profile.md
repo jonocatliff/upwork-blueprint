@@ -100,7 +100,9 @@ what you do plus the keywords clients search**: the first block is the role with
 (tool or service plus a role noun), the next adds two or three more search terms joined with a
 description of who it is for or what the client gets ("Local SEO & Technical Audits for Small
 Businesses"). Take the terms from the skills in the fresh postings, never a slogan. No verbs, no
-price, no years, no badge words, and never a bare stack of keywords.
+price, no years, no badge words, and never a bare stack of keywords. Orient on the role
+models' titles, and place the member as a general expert of the branch, not a niche
+role (auditor, local specialist) unless their background brings it.
 
 ## Overview
 

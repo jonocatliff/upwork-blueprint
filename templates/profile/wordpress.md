@@ -47,7 +47,7 @@ position (role, then who it is for), not a stack of keywords.
 WordPress Developer | Elementor & WooCommerce Sites for Shops
 ```
 
-Other shapes: `WordPress Maintenance Expert | Fixes and Security for Small Sites` for fix and
+Other shapes, only when the member brings that expertise: `WordPress Maintenance Expert | Fixes and Security for Small Sites` for fix and
 care work, `Webflow Developer | Landing Pages for Growing Businesses` for Webflow members.
 
 ## Overview

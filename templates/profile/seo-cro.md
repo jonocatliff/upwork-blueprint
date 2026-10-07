@@ -39,13 +39,13 @@ Pick one shape and change it to what the member really does. 55 to 70 characters
 position (role, then who it is for), not a stack of keywords.
 
 ```text
-SEO Specialist for Local Businesses | Google Business Profile
+SEO Expert | SEO Strategy & Rankings for Small Businesses
 ```
 
 Every block must also be one of the skills below: the `/profile` gate refuses a title
 word it cannot find there, and "CRO" is not an Upwork skill.
 
-Other shapes: `Technical SEO Auditor | Site Audits for Growing Websites` for audit-led work,
+Other shapes, only when the member brings that expertise: `Technical SEO Auditor | Site Audits for Growing Websites` for audit-led work,
 `Shopify SEO Expert | Technical SEO for Online Stores` for stores.
 Shopify SEO had the steadier demand of the two on 5 October: 5.6 new jobs a day, three of
 them still under ten proposals after a day, real fixed budgets of $1,000 to $2,000.
