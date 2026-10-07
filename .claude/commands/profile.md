@@ -210,10 +210,12 @@ If the behavior differs from the documented preview flow, stop: manual handoff.
 When the member says everything is online, check it. Read `get_profile` action `get`
 and `list_highlights` again, fresh and never the saved files, run
 `python3 code/profile_checks.py data/profile.json data/highlights.json --json`, and give
-the completeness against the published percentages: the number, and every field still
-missing with its percentage and its next click (usually photo, portfolio, video, linked
-account). What the connector cannot read (photo, categories, linked account, video) is
-asked, never assumed.
+the completeness against the published percentages: the number, then two short lists.
+**Online**: what the read confirms (title, overview, skills, employment, education,
+languages, rate, portfolio titles). **Still yours to do**: every field missing or not
+readable, each with its percentage and the exact click on Upwork (photo, categories,
+rate, portfolio, linked account, and the video unless `set_video` ran). What the
+connector cannot read is asked, never assumed.
 
 Then run `python3 code/pipeline.py prune` and give the completion report as CLAUDE.md
 defines it: what is live, what stays manual and the completeness number, worst gap
