@@ -101,9 +101,8 @@ can do, and the two are not the same question.
 
 ## What a member reads
 
-**English by default**: every message, roadmap and report, whatever language other
-instructions in the session prefer. Switch only when the member writes to you in another
-language, and keep everything that ships to a client in English.
+**English by default**, in every message, roadmap and report. Switch only when the
+member writes in another language.
 
 Three lines at the top, decision before data, no tables, no raw payloads, no walls.
 The full shape is in [references/copy.md](references/copy.md), which every command
