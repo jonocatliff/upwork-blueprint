@@ -145,9 +145,9 @@ Then these sections, with these exact headings. The gate reads `## Title`, `## O
   working together starts and one small invitation. Client first names only when the
   member gave them.
 
-  Write it the way you would explain your work to someone you just met: plain words,
-  contractions, one idea per sentence, examples instead of boasts, no pressure and no big
-  promises. Numbers as you would say them, no jargon a client would not use out loud.
+  Write it the way you would explain your work to someone you just met: friendly, warm
+  and a little excited, easy to approach. Plain words, contractions, one idea per
+  sentence, examples instead of boasts, no pressure and no big promises. Numbers as you would say them, no jargon a client would not use out loud.
   Close with "read it aloud once before recording; anything that trips your tongue gets
   cut". The member records it and gives a public YouTube link, which Step 6 sets; the
   video is worth 10% of completeness, and a profile goes live without it while a profile
