@@ -107,6 +107,10 @@ quietly (safe at any time: it creates missing files, never overwrites).
    few lines)? The normal start: say so in one line, skip the rest of this item and go to
    Step 1.
 
+   Settle every difference between the live profile and the CV here, one line each,
+   so `/profile` never has to ask: education, language level, timezone, and each claim
+   in the overview (where can it be checked, or does it go).
+
    This is material for the interview, not a shortcut past it. Somebody who has
    written a profile has already decided what they sell, and asking them from
    zero wastes their time and loses what they got right. Say what is there in a

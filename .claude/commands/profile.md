@@ -32,7 +32,10 @@ and an existing `profile.md`, with no live read and no role models.
 `context/me.md` holds the background, the offer, the terms and every result the
 member can back up. `/about-me` writes them; this command writes copy and interviews
 nobody. **The direction it recorded** (lead branch, offer, audience, country) is what
-everything below is built from.
+everything below is built from. Never reopen it and never suggest another lead branch:
+a mismatch between the proof and the direction is one line under "Decide first", not a
+question. The only questions here are the role-model addresses, the rate and a yes per
+field; claims, education, languages and timezone were settled in `/about-me`.
 
 Run `python3 code/context_check.py`. Open questions never stop this command: write
 the draft from what exists and name every gap under "# Decide first" at the top of
