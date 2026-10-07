@@ -19,6 +19,7 @@ STARTERS = ROOT / 'starters'
 def ensure(root=ROOT, starters=STARTERS):
     """Copies every starter whose target does not exist yet. Returns what it created."""
     created = []
+    (root / 'data').mkdir(exist_ok=True)  # the live profile and job files land here
     for source in sorted(p for p in starters.rglob('*') if p.is_file()):
         relative = source.relative_to(starters)
         # Shipped tool knowledge stays current. A member's explicit local copy
