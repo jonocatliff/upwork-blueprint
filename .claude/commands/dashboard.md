@@ -2,7 +2,7 @@
 description: Opens the cockpit: your leads as a list or board with the next command to copy into Claude Code, plus an Analytics tab with today's applications and the funnel. It never runs a command and sends nothing.
 ---
 
-# /cockpit
+# /dashboard
 
 Open with a two-line ROADMAP: check for an existing cockpit, start it if needed,
 then open it. The cockpit never runs a command. First start may need Node.js and a short install/build.
