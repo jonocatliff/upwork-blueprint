@@ -140,7 +140,7 @@ without a deliverable and a price makes every later command invent one.
 
 1. **The one thing you want to be hired for.** Their words. A whole track such as
    SEO counts, and it can hold several services.
-2. **What they actually sell.** The expertise and the direction, not a price list: "GoHighLevel automation for agencies" beats a catalogue of packages nobody has bought. Ask what the client ends up with and which tool it runs on, because `/find-jobs` searches on exactly those two. Price and duration are welcome where they exist; "not priced yet" is a real answer, since `/pitch-page` asks for the bid per job. Never push anyone to invent a package.
+2. **What they actually sell.** A branch they picked answers this: take its services from `templates/profile/lanes.md` as given and ask nothing about deliverables, tools or prices. Ask only for a custom addition or when no branch fits: what the client ends up with and which tool it runs on, because `/find-jobs` searches on exactly those two. "Not priced yet" is a real answer, since `/pitch-page` asks for the bid per job. Never push anyone to invent a package.
 3. **How settled that direction is.** Ask it plainly and write the member's word,
    never inferred from a branch pick, because everything after this behaves differently:
    - **decided**, they name a track (SEO as a whole counts) or a narrower service in
@@ -174,7 +174,7 @@ without a deliverable and a price makes every later command invent one.
 6. **A clear strength in their background.** If the CV shows one, say it in one line
    and ask whether to lead with it. Their answer decides; the branches stay as picked.
    Otherwise propose no niche.
-7. **The tools and systems** they can name confidently, for search.
+7. **The tools and systems**, for search: take them from the CV and the branch services; ask only what is still missing, and never after a branch pick alone.
 
 ## Step 3 · Terms and voice
 
