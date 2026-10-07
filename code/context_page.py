@@ -35,8 +35,9 @@ CSS = """
   :root { color-scheme: light; --bg: #f3efe6; --card: #fbf9f4; --ink: #1c1712;
           --text: #262019; --text-2: #5c5347; --text-3: #6f6656; --accent: #c1663e; --accent-on-ink: #e08a5c;
           --on-ink: #f3efe6; --on-ink-2: #b8ad9c; --line: #e2d9c8;
-          --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-          --serif: Georgia, "Iowan Old Style", "Times New Roman", ui-serif, serif; }
+          --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+          --serif: "Tiempos Text", Georgia, "Iowan Old Style", "Times New Roman", ui-serif, serif;
+          --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace; }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 var(--sans);
          -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
@@ -45,16 +46,16 @@ CSS = """
   header .wrap { position: relative; z-index: 1; }
   .plume { position: absolute; right: -40px; top: -20px; height: 130%; opacity: .55; mix-blend-mode: multiply;
            pointer-events: none; }
-  .eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent);
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent);
              margin: 0 0 14px; font-weight: 600; }
-  h1 { font: 400 clamp(40px, 6vw, 72px)/1.04 var(--serif); letter-spacing: -.02em; color: var(--ink);
+  h1 { font: 500 clamp(40px, 6vw, 72px)/1.04 var(--serif); letter-spacing: -.02em; color: var(--ink);
        margin: 0 0 14px; max-width: 14em; }
   .lede { font-size: 19px; color: var(--text-2); margin: 0; max-width: 40em; }
   main { flex: 1; padding: 8px 0 48px; }
   .grid { display: grid; gap: 20px; grid-template-columns: repeat(12, 1fr); }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 26px 28px; }
   .sells { grid-column: span 5; } .terms { grid-column: span 3; } .proof { grid-column: span 4; }
-  h2 { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3);
+  h2 { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3);
        margin: 0 0 14px; font-weight: 600; }
   .sells p { font: 400 21px/1.45 var(--serif); color: var(--ink); margin: 0; }
   .terms dl { margin: 0; display: grid; gap: 14px; }
