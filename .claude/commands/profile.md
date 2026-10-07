@@ -134,23 +134,22 @@ Then these sections, with these exact headings. The gate reads `## Title`, `## O
 - **`## Skills`**: one `- Skill` line each, in Upwork's exact spelling, as many as the live editor offers (the skill for GoHighLevel is called HighLevel). Use the names Step 3 counted in real postings; mark any you could not confirm with "(check the spelling in Upwork's list)".
 - **`## Portfolio titles`**: one `- New title (was: old title)` line per project. A number goes in a title only when the proof ties it to that project.
 - **`## Reference averages`**: from the role models, `- title: N` and `- overview: N` in characters, the three URLs and today's date. The gate fails a title or overview more than 20 % over these; with no role models there is no ceiling beyond Upwork's limits.
-- **`## Video script`**: the profile video, three slides of about 15 seconds, 45 seconds in
-  total unless the member names another length. It is **derived from the sections above,
-  never invented next to them**: same direction, same results as the overview. The slides:
-  **Who am I?** (the name, three or four verified facts such as years, projects and
-  reviews, and one line on the goal, saving the client time and earning them more money),
-  **Why me?** (up to four verified results, each with its number, or the background when
-  there are none), **How it works** (four or five steps from the first call to the quickest
-  win, closing on "then rinse and repeat" or the member's own close). Client first names
-  only when the member gave them.
+- **`## Video script`**: only the script to read, three parts of about 15 seconds, 45
+  seconds in total unless the member names another length. It is **derived from the
+  sections above, never invented next to them**: same direction, same results as the
+  overview. **Who am I?** (the name, three or four verified facts such as years, projects
+  and reviews, and one line on the goal, saving the client time and earning them more
+  money), **Why me?** (up to four verified results, each with its number, or the
+  background when there are none), **How it works** (four or five steps from the first
+  call to the quickest win, closing on "then rinse and repeat" or the member's own close).
+  Client first names only when the member gave them.
 
-  **The format, because it has to be readable while recording.** One block per slide, in
-  this shape, and nothing else between them:
+  **The format, because it has to be readable while recording.** One block per part, in
+  this shape, and nothing else, no slide notes:
 
   ```
   ### 0:00 to 0:15 · Who am I?
-  **Slide:** the heading and the short bullets, one per line.
-  **Say:** the spoken words, exactly as they are to be said, one sentence per line.
+  The spoken words, exactly as they are to be said, one sentence per line.
   ```
 
   Write contractions, the way people talk, no jargon a client would not use out loud.
