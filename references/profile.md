@@ -106,7 +106,7 @@ price, no years, no badge words, and never a bare stack of keywords.
 
 **Only the first 250 or so characters appear in the search results list** (360016252373), so the
 opening decides alone. **Open with the client's problem or an outcome**, no greeting, no biography, no
-restated job title, and put a **verified hard number inside those first 250 characters** when one
+restated job title, and put the **member's own hard number inside those first 250 characters** when one
 exists. **No markdown:** Upwork shows asterisks as asterisks. **Results carry numbers, not adjectives**, one line each:
 `BUILT/DELIVERED [what] for [kind of company], achieving [specific result with number] in [timeframe]`.
 
