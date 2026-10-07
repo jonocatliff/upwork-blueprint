@@ -83,34 +83,20 @@ proof entries carry a verified status. Then name what is still open as one list
 and ask which of it they want to fill now. Wait for that answer. A focus
 argument skips this question and goes straight to that block.
 
-## Step 0 · The machine, then what already exists
-
-This is the first command a member runs, so it is the one place where the state
-of their machine gets named before it costs them a run halfway through.
+## Step 0 · The connector, then what already exists
 
 Check the Upwork connector first: call `list_accounts`. With no answer, walk the
 member through connecting it as CLAUDE.md says and wait. Nothing below runs until
 it answers, because the interview reads the live profile and checks demand on
 Upwork.
 
-Then run `./setup.sh` (safe at any time: it creates missing files, never
-overwrites) and `python3 code/tools_status.py`.
+Say nothing about other tools: `/pitch-page`, `/lead-magnet` and the rest check their
+own needs when they run, and nothing else blocks this command. Run `./setup.sh`
+quietly (safe at any time: it creates missing files, never overwrites).
 
-Show the member what came back, in this order and in their words:
-
-- **What is ready**, as one line with the names in it. They do not need the
-  detail of something that already works.
-- **What is missing**, one line each: what it would buy them, which command wants
-  it, and what happens without it. Say that every one of these can be skipped,
-  and that skipping costs exactly the one thing named beside it.
-Then say plainly that none of that blocks this command: `/about-me` writes one local
-file and sends nothing. Never wait for an install, never ask which keys they
-should buy, and never hold back the questions below because one of them is missing.
-
-1. Run `python3 code/workspace.py`.
-2. Read `context/me.md`. A line reading "not answered yet"
+1. Read `context/me.md`. A line reading "not answered yet"
    is an open question, anything else is an answer to confirm, not to ask again.
-3. **Read the profile they already have.**
+2. **Read the profile they already have.**
    `get_profile` action `get` saved to `data/profile.json`, `get_profile` action
    `list_highlights` to `data/highlights.json`, and `list_contracts` action
    `search` on closed contracts, which names what clients actually hired them
@@ -129,8 +115,8 @@ should buy, and never hold back the questions below because one of them is missi
    happened.
 
    The connector answered in Step 0, so make all three calls.
-4. **Job Success Score and intro video** are not in these responses, measured
-   12 September 2026. Step 3 collects them once; leave unknown values open.
+3. **Job Success Score and intro video** are not in these responses, measured
+   12 September 2026. Step 3 handles them; leave unknown values open.
 
 Never ask for anything one of these already answers.
 
