@@ -151,12 +151,13 @@ Then these sections, with these exact headings. The gate reads `## Title`, `## O
 
   ```
   ### 0:00 to 0:15 · Who am I?
-  An opener line, then three or four items to read off, one per line.
+  The spoken words, one to four short sentences, as they are to be said.
   ```
 
-  Write it to be said as an enumeration: short parallel items that start with a verb or a
-  number, one idea each, no joining sentences, numbers as you would say them, contractions,
-  no jargon a client would not use out loud.
+  Write it as a pitch, one person talking to one client: open on the client's problem or
+  the outcome, then the name and the verified facts, results in a rhythm of three, a
+  small ask at the end. Direct address, contractions, numbers as you would say them, no
+  jargon a client would not use out loud.
   Close with "read it aloud once before recording; anything that trips your tongue gets
   cut". The member records it and gives a public YouTube link, which Step 6 sets; the
   video is worth 10% of completeness, and a profile goes live without it while a profile
