@@ -120,5 +120,5 @@ echo
 echo "Upwork is next. Start claude here and it walks you through connecting it."
 echo "(I'd tell you a joke about the connector, but it takes a few tries to get through.)"
 echo
-echo "Then /context. It reads this same list and tells you which of it you need"
+echo "Then /about-me. It reads this same list and tells you which of it you need"
 echo "now and which can wait, then asks about your background. After that: /profile"

@@ -133,7 +133,7 @@ def main(argv=None):
         print(line if e['state'] == 'ready' else f"{line}\n{'':<10} {'':<{width}}  {e['without_it']}")
     missing = [e['tool'] for e in entries if e['state'] == 'missing']
     print(f"\n{len(entries) - len(missing) - 1} ready, {len(missing)} missing, "
-          f"1 only Claude can see. Nothing here is required by /context.")
+          f"1 only Claude can see. Nothing here is required by /about-me.")
     return 0
 
 
