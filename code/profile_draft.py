@@ -63,6 +63,7 @@ def parse(text):
         'averages': reference_averages(text),
         'name': '', 'title': fenced(section(text, 'Title')),
         'overview': fenced(section(text, 'Overview')), 'rate': None,
+        'video': section(text, 'Video script').strip(),
         'skills': items(section(text, 'Skills')), 'employment': [], 'education': [],
         'languages': [], 'aggregates': {}, 'portfolio': portfolio or None, 'certificates': None,
     }
@@ -74,7 +75,7 @@ def unproven_numbers(draft, proof_text):
     proof_text = context_check.verified_proof(proof_text)
     proven = {re.search(r'\d[\d.,]*', match.group(0)).group(0).rstrip('.,')
               for match in pc.RESULT_NUMBER.finditer(proof_text)}
-    for text in [draft['title'], draft['overview']] + (draft['portfolio'] or []):
+    for text in [draft['title'], draft['overview'], draft.get('video', '')] + (draft['portfolio'] or []):
         for m in pc.RESULT_NUMBER.finditer(text):
             core = re.search(r'\d[\d.,]*', m.group(0)).group(0).rstrip('.,')
             if core not in proven:
@@ -122,7 +123,7 @@ def problems(draft, proof_text):
                          f'stay under {round(average * CEILING)}')
     if re.search(r'\*\*|^#', draft['overview'], re.M):
         found.append('overview uses markdown, which Upwork shows as raw symbols')
-    for field in ('title', 'overview'):
+    for field in ('title', 'overview', 'video'):
         if chr(0x2014) in draft[field]:  # the em-dash, written so this file carries none
             found.append(f'{field} has an em-dash')
 
@@ -139,6 +140,21 @@ def cmd_check(args):
     # count as a source, and an hourly rate of 40 would prove a claim of 40%.
     proof_text = (context_check.proof_only(proof.read_text(encoding='utf-8'))
                   if proof.is_file() else '')
+    if args.only == 'video':
+        # The script generator writes only `## Video script`, so a missing title and
+        # overview are not problems here: the numbers and the em-dash are what is checked.
+        found = []
+        if not draft['video']:
+            found.append('no "## Video script" section')
+        else:
+            if chr(0x2014) in draft['video']:
+                found.append('video script has an em-dash')
+            for n in unproven_numbers(dict(draft, title='', overview='', portfolio=None), proof_text):
+                found.append(f'"{n}" is not in the evidence sections of context/me.md: prove it there or cut it')
+        for f in found:
+            print(f'FAIL  {f}')
+        print(f'\n{"PASS" if not found else f"{len(found)} problem(s)."}  video script {len(draft["video"].split())} words')
+        return 1 if found else 0
     found = problems(draft, proof_text)
     for f in found:
         print(f'FAIL  {f}')
@@ -154,6 +170,7 @@ def main(argv=None):
     p = sub.add_parser('check')
     p.add_argument('file')
     p.add_argument('--proof', default=str(ROOT / 'context' / 'me.md'))
+    p.add_argument('--only', choices=('video',), help='check only the video script, for /profile video')
     p.set_defaults(func=cmd_check)
     args = ap.parse_args(argv)
     return args.func(args)

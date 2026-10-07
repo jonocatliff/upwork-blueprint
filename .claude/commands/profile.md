@@ -171,7 +171,7 @@ Then these sections, with these exact headings. The gate reads `## Title`, `## O
 
 ## Step 5 · The gate
 
-Run `python3 code/profile_draft.py check profile.md`. It re-runs the same checks on the draft, Upwork's limits, the length ceiling from `## Reference averages`, and looks up every number in the evidence sections of `context/me.md`. Exit 1 means fix and run it again. Never loosen the draft's claims to pass, and never add a number there to make the gate quiet: those sections change only with the member's word or the connector's.
+Run `python3 code/profile_draft.py check profile.md`. It re-runs the same checks on the draft, Upwork's limits, the length ceiling from `## Reference averages`, and looks up every number in the evidence sections of `context/me.md`, the video script included. With the `video` focus run it with `--only video`, which checks the script and nothing else. Exit 1 means fix and run it again. Never loosen the draft's claims to pass, and never add a number there to make the gate quiet: those sections change only with the member's word or the connector's.
 
 ## Step 6 · Put it live, one field at a time, and report
 
