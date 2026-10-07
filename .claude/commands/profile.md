@@ -86,7 +86,10 @@ direction's main tool or role, `sort` `recency`, `limit` 10. Count the `skills` 
 those names are Upwork's own spelling and the client's vocabulary. Note the ones the
 profile lacks and any it carries that appeared in no posting.
 
-**Three role models.** The connector cannot search for freelancers (checked 6 October
+**Three role models, before any draft.** Ask for the addresses right after the plan, so the
+member can fetch them while you read the skills, and write no draft until they are in or
+the member has declined: the role models give the hook, the structure, the close and the
+lengths, so a draft without them is a guess. The connector cannot search for freelancers (checked 6 October
 2026), and a freelancer login or a web search did not surface profiles either. So the
 member adds a client profile to the same login (Account Settings, no job is posted) and
 searches Upwork's talent search with their country, the Top Rated filter and the
@@ -118,6 +121,9 @@ without one, and `data/profile.json` is deleted after a day. Never ask for a sma
 project: a beginner has no basis for one.
 
 ## Step 4 · Write profile.md
+
+Start from the role models: borrow how their titles are built, how their overviews open and
+close and what they put in the first lines, as structure and never as sentences.
 
 For a member in SEO, Google Ads, WordPress or GoHighLevel, read the matching file in `templates/profile/` first: orientation and measured vocabulary, never text to paste. Title, hook, skills, portfolio titles and video are all built from the recorded direction and say the same thing; when a live profile points elsewhere, write for the recorded direction and say so.
 
