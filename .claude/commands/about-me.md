@@ -134,47 +134,32 @@ Then say, in two lines, which parts of that transfer to the work they want (what
 
 ## Step 2 · The offer
 
-A conversation, after Step 1 is answered. Open with the first question below and
-let the answer steer the rest. Point 2 is where the listening matters: a service
-without a deliverable and a price makes every later command invent one.
+The goal is one choice: a branch. Keep this step to one exchange.
 
-1. **The one thing you want to be hired for.** Their words. A whole track such as
-   SEO counts, and it can hold several services.
-2. **What they actually sell.** A branch they picked answers this: take its services and its Tools line from `templates/profile/lanes.md` as given, write both into `me.md` yourself, and ask nothing about deliverables, tools or prices. Ask only for a custom addition or when no branch fits: what the client ends up with and which tool it runs on, because `/find-jobs` searches on exactly those two. "Not priced yet" is a real answer, since `/pitch-page` asks for the bid per job. Never push anyone to invent a package.
-3. **How settled that direction is.** Ask it plainly and write the member's word,
-   never inferred from a branch pick, because everything after this behaves differently:
-   - **decided**, they name a track (SEO as a whole counts) or a narrower service in
-     their own words: `/profile` leads with it and `/find-jobs` searches its services.
-     Record a narrower service only when the member says it.
-   - **leaning**, they name two or three candidates: the profile leads with the
-     strongest one, the search covers all of them, and the first ten
-     applications decide instead of an opinion.
-   - **open**, no tendency yet: keep the search wide until replies say something.
-     Never write a specialization into a profile that the member has not chosen.
-
-   **Offer the five branches first, for every member.** Read
-   `templates/profile/lanes.md`. Frame them as our recommendation, never a menu they
-   must choose from: five branches with steady demand on Upwork, each with a course
-   in the community, and their own direction works too. Say "branches", not
-   "lanes". Show them with their services and ask which match what they can deliver
-   today and which they could grow into. Keep it light: take their picks as given,
-   record the branch and never narrow within it: list only the services they name
-   (all five branches is allowed), and never audit what they left out or ask why.
-   Say that the first ten applications test the choice.
-   **Custom additions come after the branches.** Ask once whether they want to add
-   a branch or service of their own from their interests or profile, and offer one
-   or two ideas out of their background. A no stays a no: never add it anyway. Label each custom: no template, no
-   course, harder to sell. Search Upwork for it and for something
-   similar (`find_jobs` search only, rows only, call budget stated first) and show
-   postings in the last 7 days, median price and proposal counts, with n and
-   today's date, next to the same figures for the lanes. Flag low demand and let
-   the member decide; never block.
-4. **What you do not do.** One line. It protects every later proposal.
-5. **The industries they want to work with**, in their own words, written as `**Industries you want to work with:**` in `context/me.md`. A preference, not a specialization (SEO plus gyms also searches "gym marketing"); `/find-jobs` reads this line. Ask it even when the direction is open.
-6. **A clear strength in their background.** If the CV shows one, say it in one line
-   and ask whether to lead with it. Their answer decides; the branches stay as picked.
-   Otherwise propose no niche.
-7. **The tools and systems**, for search: the Tools lines of the picked branches plus any the CV names; ask only about a custom addition, never after a branch pick alone.
+1. **Offer the five branches.** Read `templates/profile/lanes.md` and frame them as our
+   recommendation, not a menu: five branches with steady demand on Upwork, each with a
+   course in the community (say "branches", not "lanes"). Show each with its services
+   and ask which they can deliver today and which they could grow into. Take their picks
+   as given and write the branch, its services and its Tools line into `me.md` yourself.
+   Never narrow within a branch, never audit what they left out, and ask nothing about
+   deliverables, tools or prices. Say that the first ten applications test the choice.
+2. **Say back where they stand**, in one line: one branch means decided, two or three
+   mean leaning (the profile leads with the strongest, the search covers all), none means
+   open (keep the search wide). Let them correct it, and write their word, never a
+   narrower service they did not name.
+3. **Another expertise, only when it is clear.** The member names one, or the CV clearly
+   shows one that no branch covers. Add it as a custom addition (no template, no course,
+   harder to sell) and ask once what the client ends up with and which tool it runs on,
+   because `/find-jobs` searches on exactly those two. Check the demand with `find_jobs`
+   search only, rows only, call budget stated first: postings of the last 7 days, median
+   price and proposal counts with n and today's date. Flag low demand, let the member
+   decide, never block. A no stays a no. If the CV shows a clear strength inside a branch,
+   say it in one line and ask whether to lead with it. Propose no niche.
+4. **Two short questions in one message.** What they do not do (one line, it protects
+   every proposal), and the industries they want to work with, in their own words, written
+   as `**Industries you want to work with:**` in `context/me.md`. That is a preference, not
+   a specialization (SEO plus gyms also searches "gym marketing"), and `/find-jobs` reads
+   the line; ask it even when the direction is open.
 
 ## Step 3 · Terms and voice
 
