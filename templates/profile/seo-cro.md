@@ -35,11 +35,11 @@ not have, so copy the shape that transfers and leave the rest.
 
 ## Title
 
-Pick one shape and change the blocks to what the member really does. 55 to 70
-characters, every block a word a client types.
+Pick one shape and change it to what the member really does. 55 to 70 characters, a
+position (role, then who it is for), not a stack of keywords.
 
 ```text
-SEO Specialist | Local SEO | Google Business Profile | Landing Page
+SEO Specialist for Local Businesses | Google Business Profile
 ```
 
 Every block must also be one of the skills below: the `/profile` gate refuses a title

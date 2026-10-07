@@ -40,11 +40,11 @@ Promise the window only when the member can keep it.
 
 ## Title
 
-Pick one shape and change the blocks to what the member really does. 55 to 70
-characters, every block a word a client types and one of the skills below.
+Pick one shape and change it to what the member really does. 55 to 70 characters, a
+position (role, then who it is for), not a stack of keywords.
 
 ```text
-WordPress Developer | Elementor | WooCommerce | Website Maintenance
+WordPress Developer | Elementor & WooCommerce Sites for Shops
 ```
 
 Other shapes: `WordPress Bug Fix | WordPress Optimization | WordPress Security` for fix

@@ -33,11 +33,11 @@ $55. The lane is young, so a member with a clear offer can stand out quickly.
 
 ## Title
 
-Pick one shape and change the blocks to what the member really does. 55 to 70
-characters, every block a word a client types and one of the skills below.
+Pick one shape and change it to what the member really does. 55 to 70 characters, a
+position (role, then who it is for), not a stack of keywords.
 
 ```text
-HighLevel | Marketing Automation | CRM Automation | Email Automation
+HighLevel Expert | CRM & Marketing Automation for Small Business
 ```
 
 Other shape: `HighLevel | CRM Automation | Sales Funnel | Email Marketing` for funnel-led work.

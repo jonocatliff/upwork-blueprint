@@ -38,11 +38,11 @@ hour) and writes the most prose.
 
 ## Title
 
-Pick one shape and change the blocks to what the member really does. 55 to 70
-characters, every block a word a client types.
+Pick one shape and change it to what the member really does. 55 to 70 characters, a
+position (role, then who it is for), not a stack of keywords.
 
 ```text
-Google Ads Specialist | PPC | Conversion Tracking | Landing Page
+Google Ads Specialist | PPC & Tracking for Lead Generation
 ```
 
 Other shapes: `Google Ads Audit | PPC | Google Tag Manager | Conversion Tracking` for

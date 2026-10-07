@@ -95,9 +95,11 @@ describes its own sample and period and nothing more.
 
 ## Title
 
-Two to five blocks divided by `|`, 55 to 70 characters, never padded to fill. **Every block is a word
-a client types**: a service, a tool or an audience, never a slogan or a benefit phrase. Shape: tool,
-then a role noun, then a deliverable noun. No verbs, no price, no years, no badge words.
+Two or three blocks divided by `|`, 55 to 70 characters, never padded to fill. **A position, not a
+keyword list**: the first block is the role a client types (tool or service plus a role noun), the
+next says who it is for or what the client gets ("CRM & Booking Automation for Clinics"). Use the
+client's own words, never a slogan. No verbs, no price, no years, no badge words, and never four
+stacked keywords in a row.
 
 ## Overview
 
