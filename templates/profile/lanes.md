@@ -6,6 +6,7 @@ The five branches we recommend, offered to every member first. They are a recomm
 
 Course: "Sales: Turn Leads To Customers".
 Profile orientation: `gohighlevel.md`.
+Tools: HighLevel (GoHighLevel), Zapier, Make.
 
 - CRM build and clean-up: pipelines, custom fields, tags
 - Lead capture: forms, funnels, booking calendars
@@ -18,6 +19,7 @@ Profile orientation: `gohighlevel.md`.
 
 Course: "CRO: 2x Your Website Leads".
 Profile orientation: `wordpress.md`.
+Tools: WordPress, Elementor, WooCommerce.
 
 - Business websites on WordPress
 - Landing pages built to convert
@@ -29,6 +31,7 @@ Profile orientation: `wordpress.md`.
 
 Course: "SEO: How To Rank #1 On Google".
 Profile orientation: `seo-cro.md`.
+Tools: Ahrefs, Semrush, Screaming Frog, Google Search Console, Google Business Profile.
 
 - Technical SEO audit and fixes
 - Local SEO and Google Business Profile
@@ -40,6 +43,7 @@ Profile orientation: `seo-cro.md`.
 
 Courses: "Google Ads: 5+ Leads Daily" and "CRO: 2x Your Website Leads".
 Profile orientation: `google-ads-cro.md`.
+Tools: Google Ads, Google Tag Manager, Google Analytics 4.
 
 - Search campaign set-up
 - Account audit and clean-up
@@ -51,6 +55,7 @@ Profile orientation: `google-ads-cro.md`.
 
 Course: "Claude: Automate Anything".
 Profile orientation: none yet.
+Tools: n8n, Make, Zapier, Claude, OpenAI API.
 
 - Workflow automation with Make or n8n
 - Tools and scripts built with Claude Code
