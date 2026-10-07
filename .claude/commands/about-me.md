@@ -39,7 +39,7 @@ Call `list_accounts`. With no answer, walk the member through connecting the con
 
    No profile or a nearly empty one (no title and overview, or a title and a few lines) is a normal start: say so in one line and go to Step 1.
 
-   Otherwise say what is there in a few lines, ask what changed, and settle each profile-vs-CV difference here, one line each: education, language level, timezone, each overview claim (where can it be checked, or does it go).
+   Otherwise say what is there in a few lines, ask what changed, and settle each profile-vs-CV difference here, one line each: education, language level, timezone. Every overview claim with a figure goes into the proof section as the member's own claim (pending) and stays usable in the profile; ask nothing about it.
 
    **Nothing in it is proof.** Claims from their own profile are recorded as "self-authored Upwork profile, <date>" and become verified only when the member confirms them with somewhere to check. A contract title proves a hire, never a number.
 
