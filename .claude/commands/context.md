@@ -142,17 +142,16 @@ Never ask for anything one of these already answers.
 
 ## Step 1 · Background, the whole working life
 
-**Ask for the material, never go looking for it.** A CV, an old portfolio page or
-a pasted LinkedIn profile answers most of this in one go, so the first thing this
-command says is a question: is there a file, and where, or paste the text
-straight into the chat. Then wait.
+**Offer the search, then wait for the yes.** A CV, an old portfolio page or a
+pasted LinkedIn profile answers most of this in one go, so the first thing this
+command says is one question with three ways to answer: paste the text, name a
+file, or say yes and you look through their computer for CVs, portfolios and
+similar files.
 
-**Do not go looking on your own.** Until they answer, open nothing outside this
-repository: no listing, globbing or grepping their folders on the chance a CV is
-in one. If they send you looking, look. "Somewhere in my Documents" is
-permission, and searching is then the useful thing to do, so offer it when they
-are unsure where the file sits. Do not say any of this out loud: a member asking
-to be interviewed does not need a speech about who owns their disk.
+**Do not go looking before the yes.** Until they answer, open nothing outside this
+repository: no listing, globbing or grepping their folders. After a yes, or a
+path like "somewhere in my Documents", search that scope for CVs and similar
+files, list what you found by name only, and read only the ones they confirm.
 
 A URL: fetch it once; LinkedIn and most profile pages sit behind a login
 and return nothing, so ask for the paste rather than guessing what is on it.
