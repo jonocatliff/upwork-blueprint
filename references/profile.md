@@ -108,7 +108,7 @@ price, no years, no badge words, and never a bare stack of keywords.
 opening decides alone. **Open with the client's problem or an outcome**, no greeting, no biography, no
 restated job title, and put the **member's own hard number inside those first 250 characters** when one
 exists. **No markdown:** Upwork shows asterisks as asterisks. **Results carry numbers, not adjectives**, one line each:
-`BUILT/DELIVERED [what] for [kind of company], achieving [specific result with number] in [timeframe]`.
+`Built/Delivered [what] for [kind of company], achieving [specific result with number] in [timeframe]`.
 
 **Write prose that flows,** connected sentences and short paragraphs, with no sentence-length rule:
 the two top earners of 16 write long prose and lists sat with lower earnings (measured 26 September

@@ -199,7 +199,7 @@ as a range with its source. "Roughly 8 hours a week, from the client's weekly
 report" is proof. "Significant time savings" is nothing.
 
 Write each result in the shape the formula uses, so `/profile` can lift it
-without rewriting: BUILT or DELIVERED [what] for [kind of company], achieving
+without rewriting: Built or Delivered [what] for [kind of company], achieving
 [result with number] in [timeframe]. `/profile` leads with the results a client
 cares about most.
 
