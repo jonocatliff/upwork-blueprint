@@ -142,7 +142,8 @@ The goal is one choice: a branch. Keep this step to one exchange.
    and ask which they can deliver today and which they could grow into. Take their picks
    as given and write the branch, its services and its Tools line into `me.md` yourself.
    Never narrow within a branch, never audit what they left out, and ask nothing about
-   deliverables, tools or prices. Say that the first ten applications test the choice.
+   deliverables, tools or prices. If none fits, they name another kind of service
+   (point 3). Say that the first ten applications test the choice.
 2. **Say back where they stand**, in one line: one branch means decided, two or three
    mean leaning (the profile leads with the strongest, the search covers all), none means
    open (keep the search wide). Let them correct it, and write their word, never a
