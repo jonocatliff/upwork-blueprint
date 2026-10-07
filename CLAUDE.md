@@ -53,7 +53,7 @@ Upwork: its first half is what is allowed, its second what the connector can do.
 - **Prune after every run** (`python3 code/pipeline.py prune`): Upwork content is cached
   24 hours, saved chats 90 days; the member's own work stays.
 - **Every run ends with `Upwork calls: N`**, measured, never claimed.
-- **Connector writes need a yes per field** and a preview first. Title, overview, skills
+- **Connector writes need a preview with the exact before and after and the member's yes**; one yes may cover several fields shown together. Title, overview, skills
   and the video are writable (title tested 7 October 2026: at least 4 characters); rate,
   portfolio, photo and categories stay manual. Always give paste-ready text as fallback.
 

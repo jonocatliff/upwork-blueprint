@@ -93,8 +93,9 @@ def problems(draft, proof_text):
         return found
 
     skip = set(NOT_FOR_DRAFTS)
-    if draft['portfolio'] is None:
-        skip |= {'portfolio'}
+    # Portfolio count and numbers are a live-profile recommendation. The draft only
+    # retitles projects, so it never fails on them.
+    skip |= {'portfolio'}
     # A first profile has no verified result, and the command tells it to lead with
     # the offer and the background instead of a number. Demanding a number anyway
     # left exactly one way out, inventing one, which the next check would catch and
