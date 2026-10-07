@@ -52,9 +52,9 @@ then `list_highlights` to `data/highlights.json`; skip both when those files are
 24 hours old. The score always comes from what Upwork serves today, never from a draft
 this command wrote.
 
-**No title and no overview?** The normal start. Say so in one line, skip the rest of
-this step and let Step 5 list what has to be created. Never invent a score or infer
-experience from an empty profile.
+**No profile, or a nearly empty one** (no title and no overview, or just a title or a few
+lines)? The normal start. Say so in one line, skip the rest of this step and let Step 5
+list what has to be created. Never invent a score or infer experience from it.
 
 **With a live profile**, measure and judge it:
 - Run `python3 code/profile_checks.py data/profile.json data/highlights.json --json`.
