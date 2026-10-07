@@ -28,7 +28,6 @@ REQUIRED = (
     'Profession',
     'The one thing you want to be hired for',
     'Services you sell',
-    'What you do NOT do',
     'Tools and systems you can name confidently',
     'Industries you want to work with',
     'Hourly rate',

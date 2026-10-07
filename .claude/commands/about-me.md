@@ -1,5 +1,5 @@
 ---
-description: Everything about you, once: your work history, what you can do, what you will not do and every result you can prove. Every other command reads it.
+description: Everything about you, once: your work history, what you can do and every result you can prove. Every other command reads it.
 argument-hint: "[a CV file, a LinkedIn or portfolio URL, or focus: background | offer | terms | voice | proof]"
 ---
 
@@ -155,11 +155,8 @@ The goal is one choice: a branch. Keep this step to one exchange.
    price and proposal counts with n and today's date. Flag low demand, let the member
    decide, never block. A no stays a no. If the CV shows a clear strength inside a branch,
    say it in one line and ask whether to lead with it. Propose no niche.
-4. **Two short questions in one message.** What they do not do (one line, it protects
-   every proposal), and the industries they want to work with, in their own words, written
-   as `**Industries you want to work with:**` in `context/me.md`. That is a preference, not
-   a specialization (SEO plus gyms also searches "gym marketing"), and `/find-jobs` reads
-   the line; ask it even when the direction is open.
+4. **Industries:** one short question, written as `**Industries you want to work with:**`
+   in `context/me.md`; `/find-jobs` reads it. Do not ask what they will not do.
 
 ## Step 3 · Terms and voice
 
@@ -245,7 +242,7 @@ and say which ones stay open. Never answer a question on the member's behalf.
 Before the completion report, show the member what is now in their files: the content, in their own words, so a wrong line is visible without opening anything.
 
 **What you are on record as.** The one thing they are hired for, each service
-with its price beside it, and what they do not do.
+with its price beside it.
 
 **What you can prove.** Every proof entry, verified and pending kept apart,
 strongest first. A pending claim never reaches a client, so say plainly which
